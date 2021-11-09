@@ -1,11 +1,12 @@
 import { FunctionComponent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
-import { actionCreatorType } from './types'
+import { actionCreatorType,CastModalProps,dataType,combinedCreditsType,objType, reducerState } from './types'
 import { StyledComponent } from "styled-components";
+import { useHistory } from "react-router";
 import componentEntries from '../CastModal'
 import NoImage from "../NoImage/NoImage";
-import { useHistory } from "react-router";
+
 import Loading from "../Loading/Loading";
 
 const {
@@ -13,49 +14,16 @@ const {
     styles: { Show }
 }: {
     actionCreator: actionCreatorType
-    styles: { Show: StyledComponent<"div", any, {}, never> }
+    styles: { Show: StyledComponent<"div", any> }
 } = componentEntries
-
-interface CastModalProps {
-    postToggles:boolean
-    postId: number,
-    postSetCastModalToggle: Function
-}
-
-interface dataType {
-    id: number,
-    also_known_as: string[],
-    biography: string,
-    birthday: string,
-    name: string,
-    place_of_birth: string,
-    profile_path: string
-}
-
-interface combinedCreditsType {
-    id: number
-    title: string,
-    original_title: string,
-    character: string,
-    release_date: string,
-    poster_path: string,
-    media_type: string
-}
-
-interface objType {
-    data: any,
-    moviePostToggle: any,
-    loadingState:any,
-    postPath:any
-}
 
 const CastModal: FunctionComponent<CastModalProps> = ({ postToggles,postId, postSetCastModalToggle }: CastModalProps): JSX.Element => {
 
-    const { data, moviePostToggle,loadingState,postPath }: objType = useSelector((state: Immutable.Collection<unknown, unknown>): objType => ({
-        data: state.getIn(["castModal", "data"]),
-        moviePostToggle: state.getIn(["castModal", "moviePostToggle"]),
-        loadingState:state.getIn(['castModal','loadingState']),
-        postPath:state.getIn(['castModal','postPath'])
+    const { data, moviePostToggle,loadingState,postPath }: objType = useSelector((state: reducerState): objType => ({
+        data: state.getIn(["castModal", "data"]) as dataType,
+        moviePostToggle: state.getIn(["castModal", "moviePostToggle"]) as boolean,
+        loadingState:state.getIn(['castModal','loadingState']) as boolean,
+        postPath:state.getIn(['castModal','postPath']) as string
     }))
 
     const route = useHistory()
@@ -159,7 +127,7 @@ const CastModal: FunctionComponent<CastModalProps> = ({ postToggles,postId, post
                                                 <span>日期</span>
                                             </div>
                                             <div className="cast-movie-list">
-                                                {'combined_credits' in data && data.combined_credits.cast.sort((a: { release_date: string }, b: { release_date: string }) => {
+                                                {'combined_credits' in data && data.combined_credits?.cast.sort((a: { release_date: string }, b: { release_date: string }) => {
                                                     if ('release_date' in a && 'release_date' in b) {
                                                         return Number(b.release_date.replace(/-/g, '')) - Number(a.release_date.replace(/-/g, ''))
                                                     } else {

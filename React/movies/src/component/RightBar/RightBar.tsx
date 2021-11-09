@@ -1,30 +1,15 @@
 import { ChangeEventHandler, Dispatch, FunctionComponent, MouseEventHandler } from "react"
 import { useSelector, useDispatch } from 'react-redux'
-import { Collection } from 'immutable'
 import { StyledComponent } from "styled-components"
-import componentEntries from '../RightBar'
-import { actionCreatorType } from './types'
+import { actionCreatorType,reducerState,RightBarProps,objType } from './types'
 import { useHistory } from "react-router"
+import componentEntries from '../RightBar'
+
 
 const { actionCreator, styles: { Show } }: {
     actionCreator: actionCreatorType,
-    styles: { Show: StyledComponent<"div", any, {}, never> }
+    styles: { Show: StyledComponent<"div", any> }
 } = componentEntries
-
-interface RightBarProps {
-    toggleBar: boolean
-    postData: any,
-    postCurrentSelect: Function,
-    postCurrentSearch: Function,
-    currentHotItemType: string
-}
-
-interface objType {
-    rightBarSearchVal: any,
-    rightBarSelectVal: any,
-    searchBarToggleAnimate: any,
-    selectListItem: any
-}
 
 const RightBar: FunctionComponent<RightBarProps> = ({
     toggleBar,
@@ -33,14 +18,12 @@ const RightBar: FunctionComponent<RightBarProps> = ({
     postCurrentSearch,
     currentHotItemType
 }: RightBarProps): JSX.Element => {
-    const { selectListItem, rightBarSearchVal, rightBarSelectVal, searchBarToggleAnimate }: objType = useSelector((state: Collection.Keyed<any, any>): objType => ({
-        rightBarSearchVal: state.getIn(['rightBar', 'rightBarSearchVal']),
-        rightBarSelectVal: state.getIn(['rightBar', 'rightBarSelectVal']),
-        searchBarToggleAnimate: state.getIn(['rightBar', 'searchBarToggleAnimate']),
-        selectListItem: state.getIn(['rightBar', 'selectListItem'])
+    const { selectListItem, rightBarSearchVal, rightBarSelectVal, searchBarToggleAnimate }: objType = useSelector((state:reducerState): objType => ({
+        rightBarSearchVal: state.getIn(['rightBar', 'rightBarSearchVal']) as string,
+        rightBarSelectVal: state.getIn(['rightBar', 'rightBarSelectVal']) as string,
+        searchBarToggleAnimate: state.getIn(['rightBar', 'searchBarToggleAnimate']) as boolean,
+        selectListItem: state.getIn(['rightBar', 'selectListItem']).toJS() as { selectText:string,selectVal:string }[]
     }))
-
-    console.log(selectListItem)
 
     const route = useHistory()
 
@@ -84,10 +67,7 @@ const RightBar: FunctionComponent<RightBarProps> = ({
                 <div className={searchBarToggleAnimate ? "search-group search-group-toggle" : "search-group"}>
                     <input type="text" value={rightBarSearchVal} onChange={setRightBarSearchVal} />
                     <select defaultValue="" onChange={setRightBarSelectVal}>
-                        <option value="">--選擇類型--</option>
-                        <option value="movie">電影</option>
-                        <option value="tv">影集</option>
-                        <option value="actor">演員</option>
+                        {selectListItem.map(({ selectText,selectVal }:{ selectText:string,selectVal:string },index:number) => (<option key={index} value={selectVal}>{ selectText }</option>))}
                     </select>
                 </div>
                 <div className={searchBarToggleAnimate ? "search-btn search-btn-toggle" : "search-btn"} onClick={searching}>

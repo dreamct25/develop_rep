@@ -1,12 +1,12 @@
 import { Dispatch, FunctionComponent, useEffect, useRef, ChangeEventHandler, MutableRefObject, MouseEventHandler, MouseEvent } from 'react'
 import VideoJs, { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js'
 import { StyledComponent } from 'styled-components'
-import 'video.js/dist/video-js.css'
-import 'videojs-youtube/dist/Youtube.min.js'
 import { actionCreatorTypes } from './types'
-import componentEntries from '../Video'
 import { useDispatch, useSelector } from 'react-redux'
 import { Collection } from 'immutable'
+import componentEntries from '../Video'
+import 'video.js/dist/video-js.css'
+import 'videojs-youtube/dist/Youtube.min.js'
 
 const { actionCreator, styles: { Show } }: {
     actionCreator: actionCreatorTypes,
@@ -35,8 +35,11 @@ const Video: FunctionComponent<VideoProps> = ({ url }: VideoProps): JSX.Element 
         videoFooterBarAnimate: state.getIn(['video', 'videoFooterBarAnimate']),
         initialStatus: state.getIn(['video', 'initialStatus'])
     }))
+
     const timer: MutableRefObject<NodeJS.Timeout | null> = useRef<NodeJS.Timeout>(null)
+
     const dispatch: Dispatch<any> = useDispatch<Dispatch<any>>()
+    
     const playerOption: VideoJsPlayerOptions = {
         autoplay: false,
         controls: false,

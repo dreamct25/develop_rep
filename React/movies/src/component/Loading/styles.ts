@@ -1,7 +1,7 @@
 import styled, { StyledComponent } from 'styled-components'
 
 interface cssSetPropertys {
-    Show: StyledComponent<"div", any, {}, never>
+    Show: StyledComponent<"div", any>
 }
 
 const cssSet: cssSetPropertys = {

@@ -2,49 +2,28 @@ import { Dispatch, FunctionComponent, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { StyledComponent } from "styled-components";
+import { actionCreatorType,objType,dataType,resultsItemType,reducerState } from './types'
 import componentEntries from '../ComingSoonList'
 import Loading from "../Loading/Loading";
 import NoImage from "../NoImage/NoImage";
 import Pagination from "../Pagination/Pagination";
-import { actionCreatorType } from './types'
 
 const {
     actionCreator,
     styles:{ Show }
 }: { 
     actionCreator:actionCreatorType
-    styles:{ Show: StyledComponent<"div", any, {}, never> }
+    styles:{ Show: StyledComponent<"div", any> }
 } = componentEntries
 
-interface objType{
-    data:any,
-    movieTitle:any,
-    loadingState:any
-}
 
-interface dataType {
-    page: number,
-    total_pages: number
-    results: resultsItemType[],
-    total_results: number
-}
-
-interface resultsItemType {
-    id: number,
-    original_title: string,
-    poster_path: string,
-    release_date: string,
-    title: string,
-    vote_average: number,
-    media_type: string
-}
 
 const ComingSoonList:FunctionComponent<{}> = ():JSX.Element => {
 
-    const { data,movieTitle,loadingState }:objType = useSelector((state: Immutable.Collection<unknown, unknown>): objType => ({
-        data: state.getIn(["comingSoonList", "data"]),
-        movieTitle:state.getIn(["comingSoonList","movieTitle"]),
-        loadingState:state.getIn(["comingSoonList","loadingState"])
+    const { data,movieTitle,loadingState }:objType = useSelector((state: reducerState): objType => ({
+        data: state.getIn(["comingSoonList", "data"]) as dataType,
+        movieTitle:state.getIn(["comingSoonList","movieTitle"]) as string,
+        loadingState:state.getIn(["comingSoonList","loadingState"]) as boolean
     }))
 
     const refPos = useRef<HTMLDivElement>(null)

@@ -4,7 +4,8 @@ export interface actionTypes {
     setCurrentTimeText: string
     sethavePlay: string,
     setVideoFooterBarAnimate: string,
-    setInitialStatus: string
+    setInitialStatus: string,
+    setVolumnVal:string
 }
 
 export interface actionCreatorTypes {
@@ -13,5 +14,6 @@ export interface actionCreatorTypes {
     setCurrentTimeTexts: Function
     setHavePlays: Function,
     setVideoFooterBarAnimates: Function,
-    setInitialStatus: Function
+    setInitialStatus: Function,
+    setVolumnVal:Function
 }

@@ -25,6 +25,10 @@ const actionCreator: actionCreatorTypes = {
     setInitialStatus: (status: boolean): object => ({
         type: actionType.setInitialStatus,
         status
+    }),
+    setVolumnVal:(val:number):object => ({
+        type: actionType.setVolumnVal,
+        val
     })
 }
 

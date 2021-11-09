@@ -2,13 +2,9 @@ import { FunctionComponent } from "react";
 import { StyledComponent } from "styled-components";
 import styles from './styles'
 
-const { Show }: { Show: StyledComponent<"div", any, {}, never> } = styles
+const { Show }: { Show: StyledComponent<"div", any >} = styles
 
-interface LoadingProps {
-    haveOpen: boolean
-}
-
-const Loading: FunctionComponent<LoadingProps> = ({ haveOpen }: LoadingProps): JSX.Element => {
+const Loading: FunctionComponent<{ haveOpen: boolean }> = ({ haveOpen }: { haveOpen: boolean }): JSX.Element => {
     return (
         <Show>
             <div className={haveOpen ? "loading-outer loading-outer-active" : "loading-outer"}>
