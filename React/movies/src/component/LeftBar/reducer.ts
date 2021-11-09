@@ -1,0 +1,30 @@
+import actionType from './actionType'
+import { Collection, fromJS } from 'immutable'
+
+const dataState: Collection<unknown, unknown> = fromJS({
+    listItem: [{
+        titleName: '熱門電影',
+        titleVal:'movie'
+    }, {
+        titleName: '熱門影集',
+        titleVal:'tv'
+    }, {
+        titleName: '即將上映',
+        titleVal:'soon'
+    }],
+    listToggleAnimate:false,
+    selectText:'movie'
+})
+
+const callBackState = (state: Collection<unknown, unknown> = dataState, action: { [key: string]: any }) => {
+    switch (action.type) {
+        case actionType.setListToggleAnimate:
+            return state.toMap().set('listToggleAnimate', action.status)
+        case actionType.setSelectText:
+            return state.toMap().set('selectText',action.txt)
+        default:
+            return state
+    }
+}
+
+export default callBackState
