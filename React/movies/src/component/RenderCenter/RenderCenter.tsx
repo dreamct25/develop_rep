@@ -1,39 +1,29 @@
-import { Collection } from "immutable"
 import { FunctionComponent, useEffect, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useHistory, useLocation } from "react-router"
-import { StyledComponent } from "styled-components"
-import { actionCreatorType } from './types'
+import { actionCreatorType,objType,reducerState,cssSetPropertys } from './types'
 import componentEntries from '../RenderCenter'
 
 const {
     styles: { Show },
     actionCreator
 }: {
-    styles: { Show: StyledComponent<"div", any, {}, never> },
+    styles: cssSetPropertys,
     actionCreator: actionCreatorType
 } = componentEntries
 
-interface RenderCenterProps {
-
-}
-
-interface objType {
-    singleData: any,
-    changeBackPostSwitch: any,
-}
-
-const RenderCenter: FunctionComponent<RenderCenterProps> = (): JSX.Element => {
+const RenderCenter: FunctionComponent<{}> = (): JSX.Element => {
     const router = useHistory()
+
     const { state: { postData, postId,postHotItemType } }: { state: { [key: string]: any } } = useLocation()
-    const { singleData, changeBackPostSwitch }: objType = useSelector((state: Collection<unknown, unknown>): objType => {
-        const { renderCenter }: { [key: string]: any } = state.toJS()
-        return {
-            singleData: renderCenter.singleData,
-            changeBackPostSwitch: state.getIn(['renderCenter', 'changeBackPostSwitch'])
-        }
-    })
+
+    const { singleData, changeBackPostSwitch }: objType = useSelector((state: reducerState): objType => ({
+        singleData: state.getIn(['renderCenter', 'singleData']) as {[key:string]:any}[],
+        changeBackPostSwitch: state.getIn(['renderCenter', 'changeBackPostSwitch']) as boolean
+    }))
+
     const dispatch = useDispatch()
+    
     const renderCenterBannerRef = useRef<HTMLDivElement>(null)
 
     const filterSingleItem = () => {
@@ -59,8 +49,9 @@ const RenderCenter: FunctionComponent<RenderCenterProps> = (): JSX.Element => {
 
     useEffect(() => {
         setTimeout(() => {
-            if (singleData.length === 0) return
-            renderCenterBannerRef.current?.style.setProperty('background-image', `url('https://image.tmdb.org/t/p/original${singleData[0].backdrop_path}')`)
+            if (singleData.constructor.name !== 'Array') return
+            const [{ backdrop_path }] : {[key:string]:any}[] = singleData
+            renderCenterBannerRef.current?.style.setProperty('background-image', `url('https://image.tmdb.org/t/p/original${backdrop_path}')`)
         }, 300)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [changeBackPostSwitch])

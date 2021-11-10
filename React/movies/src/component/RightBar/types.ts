@@ -1,3 +1,6 @@
+import { StyledComponent } from 'styled-components';
+import store from '../../store'
+
 export interface actionType {
     setRightBarSearchVal: string,
     setRightBarSelectVal: string,
@@ -9,3 +12,24 @@ export interface actionCreatorType {
     setRightBarSelectVal: Function,
     setSearchBarToggleAnimate: Function
 }
+
+export interface RightBarProps {
+    toggleBar: boolean
+    postData: any,
+    postCurrentSelect: Function,
+    postCurrentSearch: Function,
+    currentHotItemType: string
+}
+
+export interface objType {
+    rightBarSearchVal: string,
+    rightBarSelectVal: string,
+    searchBarToggleAnimate: boolean,
+    selectListItem: { selectText:string,selectVal:string }[]
+}
+
+export interface cssSetPropertys {
+    Show: StyledComponent<"div", any, {}, never>
+}
+
+export interface reducerState extends ReturnType<typeof store.getState> {}

@@ -1,7 +1,8 @@
-import actionTypes from './actionType'
+import actionType from './actionType'
 import { Collection, fromJS } from 'immutable'
+import { Action, Reducer } from 'redux'
 
-const dataState: Collection<unknown, unknown> = fromJS({
+const dataState: Collection<any, any> = fromJS({
     volumn: 0,
     progress: 0,
     duration: 0,
@@ -12,19 +13,21 @@ const dataState: Collection<unknown, unknown> = fromJS({
     initialStatus: false
 })
 
-const callBackState = (state: Collection<unknown, unknown> = dataState, action: { [key: string]: any }) => {
+const callBackState:Reducer<Collection<any, any>, Action<{ [key: string]: any }>> = (state: Collection<any, any> = dataState, action: { [key: string]: any }) => {
     switch (action.type) {
-        case actionTypes.setDuration:
+        case actionType.setVolumnVal:
+            return state.toMap().set('volumn',action.val)
+        case actionType.setDuration:
             return state.toMap().set('duration', action.time)
-        case actionTypes.setTotalTime:
+        case actionType.setTotalTime:
             return state.toMap().set('totalTime', action.totalTime)
-        case actionTypes.setCurrentTimeText:
+        case actionType.setCurrentTimeText:
             return state.toMap().set('currentTimeText', action.currentTimeText)
-        case actionTypes.sethavePlay:
+        case actionType.sethavePlay:
             return state.toMap().set('havePlay', action.status)
-        case actionTypes.setVideoFooterBarAnimate:
+        case actionType.setVideoFooterBarAnimate:
             return state.toMap().set('videoFooterBarAnimate', action.status)
-        case actionTypes.setInitialStatus:
+        case actionType.setInitialStatus:
             return state.toMap().set('initialStatus', action.status)
         default:
             return state

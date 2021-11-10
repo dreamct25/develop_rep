@@ -1,11 +1,12 @@
-import { createStore, applyMiddleware, compose } from 'redux'
+import { createStore, applyMiddleware, compose, Store } from 'redux'
+import { Collection } from 'immutable'
 import reducer from '../store/reducer'
-import createSaga from 'redux-saga'
+import createSaga, { SagaMiddleware } from 'redux-saga'
 import sagas from '../store/saga'
-const sagaMiddleWare = createSaga()
+const sagaMiddleWare:SagaMiddleware<object> = createSaga()
 
 const composeEnhancers = (window && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose
-const store = createStore(
+const store:Store<Collection<any,any>> = createStore(
     reducer,
     composeEnhancers(applyMiddleware(sagaMiddleWare))
 )

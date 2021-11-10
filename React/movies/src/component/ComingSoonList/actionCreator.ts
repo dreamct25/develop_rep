@@ -1,14 +1,19 @@
 import actionType from "./actionType";
 import { actionCreatorType } from './types'
 
-const actionCreator:actionCreatorType = {
-    getItem:(page:number):object => ({
-        type:actionType.getItem,
-        page
+const actionCreator: actionCreatorType = {
+    getItem: (page: number, totalPage: number): object => ({
+        type: actionType.getItem,
+        page,
+        totalPage
     }),
-    setItem:(obj:object):object => ({
-        type:actionType.setItem,
+    setItem: (obj: object): object => ({
+        type: actionType.setItem,
         obj
+    }),
+    setFullItem: (item: { [key: string]: any }[]): object => ({
+        type: actionType.setFullItem,
+        item
     }),
     setMovieTitle: (title: string): object => ({
         type: actionType.setMovieTitle,

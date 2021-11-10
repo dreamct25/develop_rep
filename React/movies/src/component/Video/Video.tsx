@@ -1,42 +1,33 @@
 import { Dispatch, FunctionComponent, useEffect, useRef, ChangeEventHandler, MutableRefObject, MouseEventHandler, MouseEvent } from 'react'
+import { actionCreatorTypes,VideoProps,objType,reducerState,cssSetPropertys } from './types'
+import { useDispatch, useSelector } from 'react-redux'
 import VideoJs, { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js'
-import { StyledComponent } from 'styled-components'
 import 'video.js/dist/video-js.css'
 import 'videojs-youtube/dist/Youtube.min.js'
-import { actionCreatorTypes } from './types'
 import componentEntries from '../Video'
-import { useDispatch, useSelector } from 'react-redux'
-import { Collection } from 'immutable'
 
-const { actionCreator, styles: { Show } }: {
+const { 
+    actionCreator, 
+    styles: { Show } 
+}: {
     actionCreator: actionCreatorTypes,
-    styles: { Show: StyledComponent<"div", any, {}, never> }
+    styles: cssSetPropertys
 } = componentEntries
 
-interface VideoProps {
-    url: string
-}
-
-interface objType {
-    durationVal: any,
-    totalTime: any
-    currentTimeText: any,
-    havePlay: any,
-    videoFooterBarAnimate: any,
-    initialStatus: any
-}
-
 const Video: FunctionComponent<VideoProps> = ({ url }: VideoProps): JSX.Element => {
-    const { durationVal, totalTime, currentTimeText, havePlay, videoFooterBarAnimate, initialStatus }: objType = useSelector((state: Collection<unknown, unknown>) => ({
-        durationVal: state.getIn(['video', 'duration']),
-        totalTime: state.getIn(['video', 'totalTime']),
-        currentTimeText: state.getIn(['video', 'currentTimeText']),
-        havePlay: state.getIn(['video', 'havePlay']),
-        videoFooterBarAnimate: state.getIn(['video', 'videoFooterBarAnimate']),
-        initialStatus: state.getIn(['video', 'initialStatus'])
+    const { durationVal, totalTime, currentTimeText, havePlay, videoFooterBarAnimate, initialStatus }: objType = useSelector((state: reducerState) => ({
+        durationVal: state.getIn(['video', 'duration']) as number,
+        totalTime: state.getIn(['video', 'totalTime']) as number,
+        currentTimeText: state.getIn(['video', 'currentTimeText']) as string,
+        havePlay: state.getIn(['video', 'havePlay']) as boolean,
+        videoFooterBarAnimate: state.getIn(['video', 'videoFooterBarAnimate']) as boolean,
+        initialStatus: state.getIn(['video', 'initialStatus']) as boolean
     }))
+
     const timer: MutableRefObject<NodeJS.Timeout | null> = useRef<NodeJS.Timeout>(null)
+
     const dispatch: Dispatch<any> = useDispatch<Dispatch<any>>()
+    
     const playerOption: VideoJsPlayerOptions = {
         autoplay: false,
         controls: false,

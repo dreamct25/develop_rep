@@ -1,9 +1,7 @@
-import { Collection } from "immutable";
 import { Dispatch, FunctionComponent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
-import { StyledComponent } from "styled-components";
-import { actionCreatorType } from './types'
+import { actionCreatorType, objType, RenderSearchMovieProps,dataType,resultsItemType,reducerState,cssSetPropertys } from './types'
 import NoImage from "../NoImage/NoImage";
 import componentEntries from '../RenderSearchMovie'
 import Pagination from "../Pagination/Pagination";
@@ -14,39 +12,13 @@ const {
     styles: { Show }
 }: {
     actionCreator: actionCreatorType,
-    styles: { Show: StyledComponent<"div", any, {}, never> }
+    styles: cssSetPropertys
 } = componentEntries
 
-interface dataType {
-    page: number,
-    total_pages: number
-    results: resultsItemType[],
-    total_results: number
-}
-
-interface resultsItemType {
-    id: number,
-    original_title: string,
-    poster_path: string,
-    release_date: string,
-    title: string,
-    vote_average: number,
-    media_type: string
-}
-
-interface objType {
-    data: any,
-    loadingState: any
-}
-
-interface RenderSearchMovieProps {
-    postSearchVal: string
-}
-
 const RenderSearchMovie: FunctionComponent<RenderSearchMovieProps> = ({ postSearchVal }: RenderSearchMovieProps): JSX.Element => {
-    const { data, loadingState }: objType = useSelector((state: Collection<unknown, unknown>): objType => ({
-        data: state.getIn(['renderSearchMovie', 'data']),
-        loadingState: state.getIn(['renderSearchMovie', 'loadingState'])
+    const { data, loadingState }: objType = useSelector((state: reducerState): objType => ({
+        data: state.getIn(['renderSearchMovie', 'data']) as dataType,
+        loadingState: state.getIn(['renderSearchMovie', 'loadingState']) as boolean
     }))
 
     const route = useHistory()

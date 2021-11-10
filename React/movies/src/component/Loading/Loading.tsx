@@ -1,12 +1,8 @@
 import { FunctionComponent } from "react";
-import { StyledComponent } from "styled-components";
+import { LoadingProps,cssSetPropertys } from "./types";
 import styles from './styles'
 
-const { Show }: { Show: StyledComponent<"div", any, {}, never> } = styles
-
-interface LoadingProps {
-    haveOpen: boolean
-}
+const { Show }: cssSetPropertys = styles
 
 const Loading: FunctionComponent<LoadingProps> = ({ haveOpen }: LoadingProps): JSX.Element => {
     return (

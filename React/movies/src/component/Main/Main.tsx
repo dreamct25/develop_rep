@@ -1,35 +1,30 @@
 import { useEffect, FunctionComponent, Dispatch } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import { Switch, Route, useHistory, useLocation } from 'react-router-dom'
-import componentEntries from '../Main'
-import { StyledComponent } from "styled-components";
-import { actionCreatorType } from "./types";
+import { actionCreatorType,objType,reducerState,cssSetPropertys } from "./types";
 import RightBar from "../RightBar/RightBar";
 import LeftBar from "../LeftBar/LeftBar";
 import RenderCenter from "../RenderCenter/RenderCenter";
 import SingleVideoPreview from "../SingleVideoPreview/SingleVideoPreview";
 import RenderSearch from "../RenderSearch/RenderSearch";
 import ComingSoonList from "../ComingSoonList/ComingSoonList";
+import componentEntries from '../Main'
 
-const { actionCreator }: { actionCreator: actionCreatorType } = componentEntries
+const { 
+    actionCreator,
+    styles: { Show } 
+}: { 
+    actionCreator: actionCreatorType,
+    styles: cssSetPropertys
+} = componentEntries
 
-const { styles: { Show } }: { styles: { Show: StyledComponent<"div", any, {}, never> } } = componentEntries
-
-interface objType {
-    data: any,
-    imgId: any,
-    toggleBarAnim: any,
-    search: any,
-    hotItemType:any
-}
-
-const Main: FunctionComponent = (): JSX.Element => {
-    const { data, imgId, toggleBarAnim, search,hotItemType }: { [key: string]: any } = useSelector((state: Immutable.Collection<unknown, unknown>): objType => ({
-        data: state.getIn(["main", "data"]),
-        imgId: state.getIn(['main', 'imgId']),
-        toggleBarAnim: state.getIn(['main', 'toggleBarAnimate']),
-        search: state.getIn(['main', 'search']),
-        hotItemType:state.getIn(['main','hotItemType'])
+const Main: FunctionComponent<{}> = (): JSX.Element => {
+    const { data, imgId, toggleBarAnim, search,hotItemType }: objType = useSelector((state: reducerState): objType => ({
+        data: state.getIn(["main", "data"]) as {[key:string]:any},
+        imgId: state.getIn(['main', 'imgId']) as number,
+        toggleBarAnim: state.getIn(['main', 'toggleBarAnimate']) as boolean,
+        search: state.getIn(['main', 'search']) as { searchVal: string, selectVal: string },
+        hotItemType:state.getIn(['main','hotItemType']) as string
     }))
 
     const dispatch:Dispatch<any> = useDispatch()

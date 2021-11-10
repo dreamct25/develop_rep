@@ -1,70 +1,37 @@
-import { Collection } from "immutable"
 import { Dispatch, FunctionComponent, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useLocation } from "react-router"
-import { StyledComponent } from "styled-components"
-import { actionCreatorType } from './types'
+import { actionCreatorType,singleVideoItemType,singleVideoItemCastType,singleVideoItemReviewType,objType,reducerState,cssSetPropertys } from './types'
 import Video from '../Video/Video'
-import componentEntries from '../SingleVideoPreview'
 import NoVideo from "../NoVideo/NoVideo"
 import NoImage from "../NoImage/NoImage"
 import CastModal from "../CastModal/CastModal"
 import Loading from "../Loading/Loading"
+import componentEntries from '../SingleVideoPreview'
 
 const { actionCreator, styles: { Show } }: {
     actionCreator: actionCreatorType,
-    styles: { Show: StyledComponent<"div", any, {}, never> }
+    styles: cssSetPropertys
 } = componentEntries
 
-interface SingleVideoPreviewProps {
-
-}
-
-interface objType {
-    singleVideoItem: any,
-    singleVideoItemUrl: any,
-    singleVideoItemReview: any,
-    selectId: any,
-    castModalToggel: any,
-    loadingState: any
-}
-
-interface singleVideoItemType {
-    overview: string,
-    vote_average: number,
-    genres: string[]
-}
-
-interface singleVideoItemCastType {
-    id: number
-    profile_path: string,
-    original_name: string,
-    character: string
-}
-
-interface singleVideoItemReviewType {
-    author_details: {
-        username: string,
-        rating: number
-    },
-    updated_at: string
-}
-
-const SingleVideoPreview: FunctionComponent<SingleVideoPreviewProps> = (): JSX.Element => {
+const SingleVideoPreview: FunctionComponent<{}> = (): JSX.Element => {
+    
     const { search }: { search: string } = useLocation()
+
     const useQurey = ((): URLSearchParams => new URLSearchParams(search))()
-    const { singleVideoItem, singleVideoItemUrl, singleVideoItemReview, selectId, castModalToggel, loadingState }: objType = useSelector((state: Collection<unknown, unknown>): objType => ({
-        singleVideoItem: state.getIn(['singleVideoPreview', 'singleVideoItem']),
-        singleVideoItemUrl: state.getIn(['singleVideoPreview', 'singleVideoItemUrl']),
-        singleVideoItemReview: state.getIn(['singleVideoPreview', 'singleVideoItemReview']),
-        selectId: state.getIn(['singleVideoPreview', 'selectId']),
-        castModalToggel: state.getIn(['singleVideoPreview', 'castModalToggel']),
-        loadingState: state.getIn(['singleVideoPreview', 'loadingState'])
+
+    const { singleVideoItem, singleVideoItemUrl, singleVideoItemReview, selectId, castModalToggel, loadingState }: objType = useSelector((state: reducerState): objType => ({
+        singleVideoItem: state.getIn(['singleVideoPreview', 'singleVideoItem']) as singleVideoItemType | {[key:string]:any},
+        singleVideoItemUrl: state.getIn(['singleVideoPreview', 'singleVideoItemUrl']) as {[key:string]:any},
+        singleVideoItemReview: state.getIn(['singleVideoPreview', 'singleVideoItemReview']) as {[key:string]:any},
+        selectId: state.getIn(['singleVideoPreview', 'selectId']) as number,
+        castModalToggel: state.getIn(['singleVideoPreview', 'castModalToggel']) as boolean,
+        loadingState: state.getIn(['singleVideoPreview', 'loadingState']) as boolean
     }))
 
     const dispatch: Dispatch<any> = useDispatch()
 
-    const { overview, vote_average, genres }: singleVideoItemType = singleVideoItem
+    const { overview, vote_average, genres }: singleVideoItemType | {[key:string]:any} = singleVideoItem
 
     const renderStar: Function = (rate: number): JSX.Element => {
         let stars: number[] = []

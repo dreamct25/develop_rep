@@ -6,7 +6,8 @@ const actionType: actionTypes = {
     setCurrentTimeText: 'setCurrentTimeText',
     sethavePlay: 'sethavePlay',
     setVideoFooterBarAnimate: 'videoFooterBarAnimate',
-    setInitialStatus: 'setInitialStatus'
+    setInitialStatus: 'setInitialStatus',
+    setVolumnVal:'setVolumnVal'
 }
 
 export default actionType

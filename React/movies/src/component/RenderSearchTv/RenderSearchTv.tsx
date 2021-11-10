@@ -1,57 +1,24 @@
-import { Collection } from "immutable";
 import { Dispatch, FunctionComponent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
-import { StyledComponent } from "styled-components";
-import { actionCreatorType } from './types'
+import { actionCreatorType,RenderSearchTvProps, dataType, objType,reducerState,resultsItemType,cssSetPropertys } from './types'
 import NoImage from "../NoImage/NoImage";
 import componentEntries from '../RenderSearchTv'
 import Pagination from "../Pagination/Pagination";
 import Loading from "../Loading/Loading";
-
-
-interface RenderSearchTvProps {
-    postSearchVal: string
-}
 
 const {
     actionCreator,
     styles: { Show }
 }: {
     actionCreator: actionCreatorType,
-    styles: { Show: StyledComponent<"div", any, {}, never> }
+    styles: cssSetPropertys
 } = componentEntries
 
-interface dataType {
-    page: number,
-    total_pages: number
-    results: resultsItemType[],
-    total_results: number
-}
-
-interface resultsItemType {
-    id: number,
-    original_title: string,
-    poster_path: string,
-    first_air_date: string,
-    name: string,
-    vote_average: number,
-    media_type: string
-}
-
-interface objType {
-    data: any,
-    loadingState: any
-}
-
-interface RenderSearchTvProps {
-    postSearchVal: string
-}
-
 const RenderSearchTv: FunctionComponent<RenderSearchTvProps> = ({ postSearchVal }: RenderSearchTvProps): JSX.Element => {
-    const { data, loadingState }: objType = useSelector((state: Collection<unknown, unknown>): objType => ({
-        data: state.getIn(['renderSearchTv', 'data']),
-        loadingState: state.getIn(['renderSearchTv', 'loadingState'])
+    const { data, loadingState }: objType = useSelector((state: reducerState): objType => ({
+        data: state.getIn(['renderSearchTv', 'data']) as dataType,
+        loadingState: state.getIn(['renderSearchTv', 'loadingState']) as boolean
     }))
 
     const route = useHistory()

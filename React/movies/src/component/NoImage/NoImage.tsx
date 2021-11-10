@@ -1,19 +1,13 @@
 import { FunctionComponent } from "react";
-import { StyledComponent } from "styled-components";
+import { NoImageProps,cssSetPropertys } from "./types";
 import styles from './styles'
 
-const { NoImageItem }: { NoImageItem: StyledComponent<"div", any, {}, never> } = styles
+const { NoImageItem }: cssSetPropertys = styles
 
-interface NoImageProps {
-    text: string
-}
-
-const NoImage: FunctionComponent<NoImageProps> = ({ text }: NoImageProps): JSX.Element => {
-    return (
-        <NoImageItem>
-            {text}
-        </NoImageItem>
-    )
-}
+const NoImage: FunctionComponent<NoImageProps> = ({ text }: NoImageProps): JSX.Element => (
+    <NoImageItem>
+        {text}
+    </NoImageItem>
+)
 
 export default NoImage

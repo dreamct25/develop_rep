@@ -1,39 +1,23 @@
 import { Dispatch, FunctionComponent, useEffect } from "react"
 import { useDispatch, useSelector } from 'react-redux'
-import { Collection } from 'immutable'
-import { StyledComponent } from "styled-components"
-import { actionCreatorType } from './types'
-import componentEntries from '../LeftBar'
 import { useHistory } from "react-router"
+import { actionCreatorType, LeftBarProps, objType, reducerState, cssSetPropertys } from './types'
+import componentEntries from '../LeftBar'
 
 const {
     actionCreator,
     styles: { Show }
 }: {
     actionCreator: actionCreatorType
-    styles: { Show: StyledComponent<"div", any, {}, never> }
+    styles: cssSetPropertys
 } = componentEntries
 
-interface LeftBarProps {
-    toggleBar: boolean,
-    postCurrentSelectAtLeftBarType: Function
-}
-
-interface objType {
-    listItem: { titleName: string, titleVal: string }[],
-    listToggleAnimate: any,
-    selectText: any
-}
-
 const LeftBar: FunctionComponent<LeftBarProps> = ({ toggleBar, postCurrentSelectAtLeftBarType }: LeftBarProps): JSX.Element => {
-    const { listItem, listToggleAnimate, selectText }: objType = useSelector((state: Collection<unknown, unknown>): objType => {
-        let { leftBar }: { [key: string]: any } = state.toJS()
-        return {
-            listItem: leftBar.listItem,
-            listToggleAnimate: state.getIn(['leftBar', 'listToggleAnimate']),
-            selectText: state.getIn(['leftBar', 'selectText'])
-        }
-    })
+    const { listItem, listToggleAnimate, selectText }: objType = useSelector((state: reducerState): objType => ({
+        listItem: state.getIn(['leftBar', 'listItem']).toJS() as { titleName: string, titleVal: string }[],
+        listToggleAnimate: state.getIn(['leftBar', 'listToggleAnimate']) as boolean,
+        selectText: state.getIn(['leftBar', 'selectText']) as string
+    }))
 
     const dispatch: Dispatch<any> = useDispatch()
 
@@ -56,7 +40,7 @@ const LeftBar: FunctionComponent<LeftBarProps> = ({ toggleBar, postCurrentSelect
         dispatch(actionCreator.setSelectText('movie'))
         dispatch(actionCreator.setListToggleAnimate(true))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
+    }, [])
 
     return (
         <Show>

@@ -1,13 +1,11 @@
-import React from 'react';
+import { FunctionComponent } from 'react';
 import './App.css';
 import Main from './component/Main/Main';
 
-function App() {
-  return (
-    <div className="App">
-      <Main />
-    </div>
-  );
-}
+const App:FunctionComponent<{}> = ():JSX.Element => (
+  <div className="App">
+    <Main />
+  </div>
+)
 
 export default App;

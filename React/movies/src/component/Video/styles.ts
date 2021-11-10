@@ -1,8 +1,5 @@
-import styled, { StyledComponent } from 'styled-components'
-
-interface cssSetPropertys {
-    Show: StyledComponent<"div", any, {}, never>
-}
+import styled from 'styled-components'
+import { cssSetPropertys } from './types'
 
 const cssSet: cssSetPropertys = {
     Show: styled.div`

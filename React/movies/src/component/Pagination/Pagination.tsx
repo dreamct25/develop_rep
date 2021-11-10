@@ -1,23 +1,8 @@
 import { FunctionComponent } from "react";
-import { StyledComponent } from "styled-components";
+import { PaginationProps,paginationObjType,cssSetPropertys } from './types'
 import styles from './styles'
 
-const { Show }: { Show: StyledComponent<"div", any, {}, never> } = styles
-
-interface paginationObjType {
-    hasPrev: boolean,
-    hasNext: boolean,
-    currentPage: number,
-    totalLength?: number,
-    partPage?: number,
-    pageTotal: number,
-    pageSize: number,
-    postNext:(currentPage:number) => void
-}
-
-interface PaginationProps {
-    paginationObjProps:paginationObjType
-}
+const { Show }: cssSetPropertys = styles
 
 const Pagination:FunctionComponent<PaginationProps> = ({ paginationObjProps }:PaginationProps):JSX.Element => {
 

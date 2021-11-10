@@ -1,52 +1,26 @@
 import { Dispatch, FunctionComponent, useEffect } from "react";
-import { StyledComponent } from "styled-components";
-import { actionCreatorType } from './types'
-import componentEntries from '../RenderSearchActor'
 import { useDispatch, useSelector } from "react-redux";
-import { Collection } from "immutable";
+import { actionCreatorType,RenderSearchActorProps,resultsItemType,dataType,reducerState,objType,cssSetPropertys } from './types'
 import NoImage from "../NoImage/NoImage";
 import Pagination from "../Pagination/Pagination";
 import Loading from "../Loading/Loading";
 import CastModal from "../CastModal/CastModal";
-
-interface RenderSearchActorProps {
-    postSearchVal: string
-}
+import componentEntries from '../RenderSearchActor'
 
 const {
     actionCreator,
     styles: { Show }
 }: {
     actionCreator: actionCreatorType
-    styles: { Show: StyledComponent<"div", any, {}, never> }
+    styles: cssSetPropertys
 } = componentEntries
 
-interface objType {
-    data: any,
-    loadingState: any,
-    selectId: any,
-    castModalToggle: any
-}
-
-interface dataType {
-    page: number,
-    total_pages: number
-    results: resultsItemType[],
-    total_results: number
-}
-
-interface resultsItemType {
-    id: number,
-    name: string,
-    profile_path: string,
-}
-
 const RenderSearchActor: FunctionComponent<RenderSearchActorProps> = ({ postSearchVal }: RenderSearchActorProps): JSX.Element => {
-    const { data, loadingState, selectId, castModalToggle }: objType = useSelector((state: Collection<unknown, unknown>): objType => ({
-        data: state.getIn(['renderSearchActor', 'data']),
-        loadingState: state.getIn(['renderSearchActor', 'loadingState']),
-        selectId: state.getIn(['renderSearchActor', 'selectId']),
-        castModalToggle: state.getIn(['renderSearchActor', 'castModalToggle'])
+    const { data, loadingState, selectId, castModalToggle }: objType = useSelector((state: reducerState): objType => ({
+        data: state.getIn(['renderSearchActor', 'data']) as dataType,
+        loadingState: state.getIn(['renderSearchActor', 'loadingState']) as boolean,
+        selectId: state.getIn(['renderSearchActor', 'selectId']) as number,
+        castModalToggle: state.getIn(['renderSearchActor', 'castModalToggle']) as boolean
     }))
 
     const dispatch: Dispatch<any> = useDispatch()

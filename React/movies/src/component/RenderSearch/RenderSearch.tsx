@@ -1,12 +1,12 @@
 import { FunctionComponent } from "react";
 import { useLocation } from "react-router";
-import { StyledComponent } from "styled-components";
+import { cssSetPropertys } from './types'
 import styles from './styles'
 import RenderSearchActor from "../RenderSearchActor/RenderSearchActor";
 import RenderSearchMovie from "../RenderSearchMovie/RenderSearchMovie";
 import RenderSearchTv from "../RenderSearchTv/RenderSearchTv";
 
-const { Show }:{ Show: StyledComponent<"div", any, {}, never> } = styles
+const { Show }: cssSetPropertys = styles
 
 const RenderSearch: FunctionComponent<{}> = (): JSX.Element => {
 

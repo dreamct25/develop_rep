@@ -1,12 +1,13 @@
 import actionTypes from './actionType'
 import { Collection, fromJS } from 'immutable'
+import { Action, Reducer } from 'redux'
 
-const dataState: Collection<unknown, unknown> = fromJS({
+const dataState: Collection<any, any> = fromJS({
     data: [],
     loadingState: false
 })
 
-const callBackState = (state: Collection<unknown, unknown> = dataState, action: { [key: string]: any }) => {
+const callBackState:Reducer<Collection<any, any>, Action<{ [key: string]: any }>> = (state: Collection<any, any> = dataState, action: { [key: string]: any }) => {
     switch (action.type) {
         case actionTypes.setSearchTvItem:
             return state.toMap().set('data', action.obj)

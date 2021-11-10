@@ -1,7 +1,9 @@
 import actionType from './actionType'
 import { Collection, fromJS } from 'immutable'
+import { Reducer } from 'redux'
+import { Action } from 'redux'
 
-const dataState: Collection<unknown, unknown> = fromJS({
+const dataState: Collection<any, any> = fromJS({
     listItem: [{
         titleName: '熱門電影',
         titleVal:'movie'
@@ -16,7 +18,7 @@ const dataState: Collection<unknown, unknown> = fromJS({
     selectText:'movie'
 })
 
-const callBackState = (state: Collection<unknown, unknown> = dataState, action: { [key: string]: any }) => {
+const callBackState:Reducer<Collection<any, any>, Action<{ [key: string]: any }>> = (state: Collection<any, any> = dataState, action: { [key: string]: any }) => {
     switch (action.type) {
         case actionType.setListToggleAnimate:
             return state.toMap().set('listToggleAnimate', action.status)

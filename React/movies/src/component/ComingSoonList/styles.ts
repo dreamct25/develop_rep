@@ -1,8 +1,5 @@
-import styled, { StyledComponent } from 'styled-components'
-
-interface cssSetPropertys {
-    Show: StyledComponent<"div", any, {}, never>
-}
+import styled from 'styled-components'
+import { cssSetPropertys } from './types'
 
 const cssSet: cssSetPropertys = {
     Show: styled.div`
@@ -27,6 +24,7 @@ const cssSet: cssSetPropertys = {
                     border-radius:5px;
                     margin:12px;
                     color:white;
+                    height:450px;
                     .poster-card-fram {
                         display:flex;
                         flex-direction:column;
@@ -49,12 +47,12 @@ const cssSet: cssSetPropertys = {
                         opacity:1;
                     }
                     .poster-img{
-                        height:380px;
+                        height:100%;
                         .img{
                             background-position:top center;
                             background-repeat:no-repeat;
                             background-size:cover;
-                            min-height:380px;
+                            min-height:100%;
                         }
                     }
                     .poster-title{

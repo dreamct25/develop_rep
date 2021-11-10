@@ -1,20 +1,19 @@
 import { FunctionComponent } from "react";
-import { StyledComponent } from "styled-components";
+import { cssSetPropertys } from './types'
 import styles from './style'
 
-const { Show }: { Show: StyledComponent<"div", any, {}, never> } = styles
+const { Show }: cssSetPropertys = styles
 
-const NoVideo: FunctionComponent<{}> = () => {
-    return (
-        <Show>
-            <div className="no-video">
-                <div className="no-video-title">
-                    - No Trailer -
-                </div>
-                <div className="no-video-frame"></div>
+const NoVideo: FunctionComponent<{}> = ():JSX.Element => (
+    <Show>
+        <div className="no-video">
+            <div className="no-video-title">
+                - No Trailer -
             </div>
-        </Show>
-    )
-}
+            <div className="no-video-frame"></div>
+        </div>
+    </Show>
+)
+
 
 export default NoVideo

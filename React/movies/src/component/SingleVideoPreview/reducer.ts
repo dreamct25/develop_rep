@@ -1,8 +1,8 @@
-import actionTypes from './actionType'
-import { Collection, fromJS } from 'immutable'
 import actionType from './actionType'
+import { Collection, fromJS } from 'immutable'
+import { Action, Reducer } from 'redux'
 
-const dataState: Collection<unknown, unknown> = fromJS({
+const dataState: Collection<any, any> = fromJS({
     singleVideoItem: {},
     singleVideoItemUrl: {},
     singleVideoItemReview: {},
@@ -11,13 +11,13 @@ const dataState: Collection<unknown, unknown> = fromJS({
     loadingState:false
 })
 
-const callBackState = (state: Collection<unknown, unknown> = dataState, action: { [key: string]: any }) => {
+const callBackState:Reducer<Collection<any, any>, Action<{ [key: string]: any }>> = (state: Collection<any, any> = dataState, action: { [key: string]: any }) => {
     switch (action.type) {
-        case actionTypes.getSingleVideos:
+        case actionType.getSingleVideos:
             return state.toMap().set('singleVideoItem', action.obj)
-        case actionTypes.getSingleVideosUrl:
+        case actionType.getSingleVideosUrl:
             return state.toMap().set('singleVideoItemUrl', action.obj)
-        case actionTypes.getSingleReview:
+        case actionType.getSingleReview:
             return state.toMap().set('singleVideoItemReview', action.obj)
         case actionType.setCurrentSelectId:
             return state.toMap().set('selectId', action.id)
