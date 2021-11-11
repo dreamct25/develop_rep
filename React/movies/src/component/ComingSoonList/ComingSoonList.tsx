@@ -2,6 +2,7 @@ import { Dispatch, FunctionComponent, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { actionCreatorType, objType, dataType, resultsItemType, reducerState, cssSetPropertys } from './types'
+// import { paginations } from '../../class/paginationMethod/paginationMethod'
 import componentEntries from '../ComingSoonList'
 import Loading from "../Loading/Loading";
 import NoImage from "../NoImage/NoImage";

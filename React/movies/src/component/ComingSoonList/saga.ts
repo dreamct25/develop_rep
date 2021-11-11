@@ -19,8 +19,7 @@ function* getItem(action: object) {
     })
 
     if (totalPage !== undefined) {
-        temp = []
-        const [year, month, date, hour] = new Date(+new Date() + (8 * 60 * 60 * 1000)).toJSON().replace(/T/g, '-').replace(/:/g, '-').split('.')[0].split('-')
+        const date:number = Number(new Date(+new Date() + (8 * 60 * 60 * 1000)).toJSON().split('T')[0].split('-').join(''))
         for (let x: number = 1; x <= totalPage; x++) {
             yield axios.get("https://api.themoviedb.org/3/movie/upcoming", {
                 params: {
@@ -38,8 +37,8 @@ function* getItem(action: object) {
             })
         }
 
-        // newData.filter(({ release_date }:{ release_date:string }) =>  )
-
+        newData = newData.filter(({ release_date }:{[key:string]:any}) => Number(release_date.replace(/-/g,'')) > date)
+        console.log(newData)
         yield put(actionCreater.setFullItem(newData))
     }
 
