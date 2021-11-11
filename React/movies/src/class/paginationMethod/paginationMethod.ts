@@ -1,10 +1,29 @@
-import { paginationType, paginationReturnParams } from "./types"
+export interface paginationType {
+    totalLength: number,
+    partPage: number,
+    pageTotal: number,
+    currentPage: number,
+    hasPrev: boolean,
+    hasNext: boolean,
+    pageSize: number
+}
+
+export interface paginationReturnParams {
+    pageObj: paginationType,
+    renderItem: { [key: string]: any }[]
+}
+
+export interface paginationOptions {
+    pages: number | undefined,
+    partPage: number,
+    pageSize: number
+}
+
 class PaginationMethod {
     public pagination: paginationType = {
         totalLength: 0,
         partPage: 0,
         pageTotal: 0,
-        pageTotalToArray: [],
         currentPage: 1,
         hasPrev: false,
         hasNext: true,
@@ -13,40 +32,42 @@ class PaginationMethod {
 
     constructor() { }
 
-    public paginations = (currentItem: {[key:string]:any}[], pages: number | undefined, partPage: number, pageSize: number): paginationReturnParams => {
-        const { pagination } = this
-        pagination.totalLength = currentItem.length;
-        pagination.partPage = partPage
-        pagination.pageTotal = Math.ceil(
-            pagination.totalLength / pagination.partPage
+    public paginations = (currentItem: { [key: string]: any }[], pages: number | undefined, partPage: number, pageSize: number): paginationReturnParams => {
+        this.pagination.totalLength = currentItem.length;
+        this.pagination.partPage = partPage
+        this.pagination.pageTotal = Math.ceil(
+            this.pagination.totalLength / this.pagination.partPage
         );
-        pagination.pageSize = pageSize
+        this.pagination.pageSize = pageSize
         pages = pages === undefined ? 1 : pages
 
-        pagination.currentPage = pages;
-        pagination.hasPrev = pagination.currentPage > 1;
-        pagination.hasNext = pagination.currentPage < pagination.totalLength;
+        this.pagination.currentPage = pages;
+        this.pagination.hasPrev = this.pagination.currentPage > 1;
+        this.pagination.hasNext = this.pagination.currentPage < this.pagination.totalLength;
 
-        if (pagination.currentPage === pagination.pageTotal) pagination.hasNext = false
-        if (pagination.currentPage > pagination.pageTotal) pagination.currentPage = pagination.pageTotal
-        const minPage = pagination.currentPage * pagination.partPage - pagination.partPage + 1;
-        const maxPage = pagination.currentPage * pagination.partPage;
+        if (this.pagination.currentPage === this.pagination.pageTotal) this.pagination.hasNext = false
+        if (this.pagination.currentPage > this.pagination.pageTotal) this.pagination.currentPage = this.pagination.pageTotal
+        const minPage = this.pagination.currentPage * this.pagination.partPage - this.pagination.partPage + 1;
+        const maxPage = this.pagination.currentPage * this.pagination.partPage;
 
-        let currentItemTemp: {[key:string]:any}[] = currentItem
+        let currentItemTemp: { [key: string]: any }[] = currentItem
         currentItem = []
-        currentItemTemp.forEach((item:{[key:string]:any}, index:number) => {
+        currentItemTemp.forEach((item: { [key: string]: any }, index: number) => {
             let num = index + 1;
             if (num >= minPage && num <= maxPage) currentItem = [...currentItem, item];
         });
-        return { pageObj: pagination, renderItem: currentItem }
+
+        return { pageObj: this.pagination, renderItem: currentItem }
     }
 }
 
 export function paginations(
-        currentItem: {[key:string]:any}[], 
-        pages: number | undefined, 
-        partPage: number, 
-        pageSize: number
-    ):paginationReturnParams { return new PaginationMethod().paginations(
-        currentItem,pages, partPage, pageSize
-    )}
+    currentItem: { [key: string]: any }[],
+    pages: number | undefined,
+    partPage: number,
+    pageSize: number
+): paginationReturnParams {
+    return new PaginationMethod().paginations(
+        currentItem, pages, partPage, pageSize
+    )
+}

@@ -1,11 +1,12 @@
 import { Dispatch, FunctionComponent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
-import { actionCreatorType,RenderSearchTvProps, dataType, objType,reducerState,resultsItemType,cssSetPropertys } from './types'
+import { actionCreatorType, RenderSearchTvProps, dataType, objType, reducerState, resultsItemType, cssSetPropertys } from './types'
 import NoImage from "../NoImage/NoImage";
 import componentEntries from '../RenderSearchTv'
 import Pagination from "../Pagination/Pagination";
 import Loading from "../Loading/Loading";
+import { paginationOptions } from "../../class/paginationMethod/paginationMethod";
 
 const {
     actionCreator,
@@ -40,12 +41,12 @@ const RenderSearchTv: FunctionComponent<RenderSearchTvProps> = ({ postSearchVal 
         route.push({ ...obj })
     }
 
-    const changePage = (page: number) => {
-        let obj = {
-            searchVal: postSearchVal,
-            page: page
-        }
-        dispatch(actionCreator.getSearchTvItem({ ...obj }))
+    const changePage = (pageObj: paginationOptions) => {
+        // let obj = {
+        //     searchVal: postSearchVal,
+        //     page: page
+        // }
+        // dispatch(actionCreator.getSearchTvItem({ ...obj }))
         dispatch(actionCreator.setLoadingState(true))
     }
 

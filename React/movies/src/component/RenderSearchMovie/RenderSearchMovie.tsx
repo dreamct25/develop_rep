@@ -1,11 +1,12 @@
 import { Dispatch, FunctionComponent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
-import { actionCreatorType, objType, RenderSearchMovieProps,dataType,resultsItemType,reducerState,cssSetPropertys } from './types'
+import { actionCreatorType, objType, RenderSearchMovieProps, dataType, resultsItemType, reducerState, cssSetPropertys } from './types'
 import NoImage from "../NoImage/NoImage";
 import componentEntries from '../RenderSearchMovie'
 import Pagination from "../Pagination/Pagination";
 import Loading from "../Loading/Loading";
+import { paginationOptions } from "../../class/paginationMethod/paginationMethod";
 
 const {
     actionCreator,
@@ -40,12 +41,12 @@ const RenderSearchMovie: FunctionComponent<RenderSearchMovieProps> = ({ postSear
         route.push({ ...obj })
     }
 
-    const changePage = (page: number) => {
-        let obj = {
-            searchVal: postSearchVal,
-            page: page
-        }
-        dispatch(actionCreator.getSearchMovieItem({ ...obj }))
+    const changePage = (pageObj: paginationOptions) => {
+        // let obj = {
+        //     searchVal: postSearchVal,
+        //     page: page
+        // }
+        // dispatch(actionCreator.getSearchMovieItem({ ...obj }))
         dispatch(actionCreator.setLoadingState(true))
     }
 

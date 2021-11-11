@@ -1,5 +1,6 @@
 import actionType from "./actionType";
 import { actionCreatorType } from './types'
+import { paginationOptions, paginationType } from '../../class/paginationMethod/paginationMethod'
 
 const actionCreator: actionCreatorType = {
     getItem: (page: number, totalPage: number): object => ({
@@ -27,6 +28,14 @@ const actionCreator: actionCreatorType = {
     setLoadingState: (status: boolean): object => ({
         type: actionType.setLoadingState,
         status
+    }),
+    setPaginationOption: (options: paginationOptions): object => ({
+        type: actionType.setPaginationOption,
+        options
+    }),
+    setPaginationObj: (obj: paginationType): object => ({
+        type: actionType.setPaginationObj,
+        obj
     })
 }
 

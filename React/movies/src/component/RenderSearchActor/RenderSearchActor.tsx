@@ -1,11 +1,12 @@
 import { Dispatch, FunctionComponent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { actionCreatorType,RenderSearchActorProps,resultsItemType,dataType,reducerState,objType,cssSetPropertys } from './types'
+import { actionCreatorType, RenderSearchActorProps, resultsItemType, dataType, reducerState, objType, cssSetPropertys } from './types'
 import NoImage from "../NoImage/NoImage";
 import Pagination from "../Pagination/Pagination";
 import Loading from "../Loading/Loading";
 import CastModal from "../CastModal/CastModal";
 import componentEntries from '../RenderSearchActor'
+import { paginationOptions } from "../../class/paginationMethod/paginationMethod";
 
 const {
     actionCreator,
@@ -37,12 +38,12 @@ const RenderSearchActor: FunctionComponent<RenderSearchActorProps> = ({ postSear
         dispatch(actionCreator.setCastModalToggel(true))
     }
 
-    const changePage = (page: number): void => {
-        let obj = {
-            searchVal: postSearchVal,
-            page: page
-        }
-        dispatch(actionCreator.getSearchActorItem({ ...obj }))
+    const changePage = (pageObj: paginationOptions): void => {
+        // let obj = {
+        //     searchVal: postSearchVal,
+        //     page: page
+        // }
+        // dispatch(actionCreator.getSearchActorItem({ ...obj }))
         dispatch(actionCreator.setLoadingState(true))
     }
 

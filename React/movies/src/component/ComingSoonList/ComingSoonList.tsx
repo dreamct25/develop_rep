@@ -2,11 +2,11 @@ import { Dispatch, FunctionComponent, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { actionCreatorType, objType, dataType, resultsItemType, reducerState, cssSetPropertys } from './types'
-// import { paginations } from '../../class/paginationMethod/paginationMethod'
 import componentEntries from '../ComingSoonList'
 import Loading from "../Loading/Loading";
 import NoImage from "../NoImage/NoImage";
 import Pagination from "../Pagination/Pagination";
+import { paginations, paginationOptions, paginationType } from "../../class/paginationMethod/paginationMethod";
 
 const {
     actionCreator,
@@ -18,11 +18,13 @@ const {
 
 const ComingSoonList: FunctionComponent<{}> = (): JSX.Element => {
 
-    const { data, newData, movieTitle, loadingState }: objType = useSelector((state: reducerState): objType => ({
+    const { data, newData, movieTitle, loadingState, paginationOption, paginationObj }: objType = useSelector((state: reducerState): objType => ({
         data: state.getIn(["comingSoonList", "data"]) as dataType,
         newData: state.getIn(["comingSoonList", "newData"]) as resultsItemType[],
         movieTitle: state.getIn(["comingSoonList", "movieTitle"]) as string,
-        loadingState: state.getIn(["comingSoonList", "loadingState"]) as boolean
+        loadingState: state.getIn(["comingSoonList", "loadingState"]) as boolean,
+        paginationOption: state.getIn(["comingSoonList", "paginationOption"]).toJS() as paginationOptions,
+        paginationObj: state.getIn(["comingSoonList", "paginationObj"]) as paginationType
     }))
 
     const refPos = useRef<HTMLDivElement>(null)
@@ -32,11 +34,17 @@ const ComingSoonList: FunctionComponent<{}> = (): JSX.Element => {
     const dispatch: Dispatch<any> = useDispatch()
 
     const {
-        page,
         total_pages,
-        results,
         total_results
     }: dataType = data
+
+    const {
+        pageTotal,
+        currentPage,
+        hasPrev,
+        hasNext,
+        pageSize
+    }: paginationType = paginationObj
 
     const goSingleVideo: Function = (id: number) => {
         let obj: { [key: string]: any } = {
@@ -53,15 +61,19 @@ const ComingSoonList: FunctionComponent<{}> = (): JSX.Element => {
         }
     }
 
-    const changePage = (page: number) => {
-        dispatch(actionCreator.getItem(page))
+    const changePage = (pageObj: paginationOptions) => {
+        dispatch(actionCreator.setPaginationOption(pageObj))
         dispatch(actionCreator.setLoadingState(true))
     }
 
     useEffect(() => {
+        const { pages, partPage, pageSize }: paginationOptions = paginationOption
+        const { pageObj, renderItem } = paginations(newData, pages, partPage, pageSize)
+        // console.log(pageObj, renderItem)
+        dispatch(actionCreator.setPaginationObj(pageObj))
         dispatch(actionCreator.setLoadingState(false))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data])
+    }, [newData])
 
     useEffect(() => {
         dispatch(actionCreator.getItem(1, total_pages))
@@ -98,12 +110,12 @@ const ComingSoonList: FunctionComponent<{}> = (): JSX.Element => {
                 </div>
                 <div className="coming-soon-movie-footer">
                     <div className="page-group">
-                        {'results' in data && <Pagination paginationObjProps={{
-                            hasPrev: page === 1 ? false : true,
-                            hasNext: page === total_pages ? false : true,
-                            pageTotal: total_pages,
-                            pageSize: 10,
-                            currentPage: page,
+                        {newData.length !== 0 && <Pagination paginationObjProps={{
+                            hasPrev: hasPrev,
+                            hasNext: hasNext,
+                            pageTotal: pageTotal,
+                            pageSize: pageSize,
+                            currentPage: currentPage,
                             postNext: changePage
                         }} />}
                     </div>

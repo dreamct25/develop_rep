@@ -1,4 +1,5 @@
 import { StyledComponent } from "styled-components";
+import { paginationOptions, paginationType } from '../../class/paginationMethod/paginationMethod'
 import store from "../../store";
 
 export interface actionTypes {
@@ -7,7 +8,9 @@ export interface actionTypes {
     setFullItem: string
     setMovieTitle: string,
     getItemPage: string,
-    setLoadingState: string
+    setLoadingState: string,
+    setPaginationOption: string,
+    setPaginationObj: string
 }
 
 export interface actionCreatorType {
@@ -16,14 +19,18 @@ export interface actionCreatorType {
     setFullItem: Function
     setMovieTitle: Function,
     getItemPage: Function,
-    setLoadingState: Function
+    setLoadingState: Function,
+    setPaginationOption: Function,
+    setPaginationObj: Function
 }
 
 export interface objType {
     data: dataType,
     newData: resultsItemType[]
     movieTitle: string,
-    loadingState: boolean
+    loadingState: boolean,
+    paginationOption: paginationOptions,
+    paginationObj: paginationType
 }
 
 export interface dataType {

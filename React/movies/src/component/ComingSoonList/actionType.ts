@@ -6,7 +6,9 @@ const actionType: actionTypes = {
     setFullItem: 'setFullItem',
     setMovieTitle: 'setMovieTitle',
     getItemPage: 'getItemPage',
-    setLoadingState: 'setLoadingState'
+    setLoadingState: 'setLoadingState',
+    setPaginationOption: 'setPaginationOption',
+    setPaginationObj: 'setPaginationObj'
 }
 
 export default actionType

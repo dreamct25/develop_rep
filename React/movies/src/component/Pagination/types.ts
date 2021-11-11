@@ -1,18 +1,17 @@
 import { StyledComponent } from "styled-components";
+import { paginationOptions } from '../../class/paginationMethod/paginationMethod'
 
 export interface paginationObjType {
     hasPrev: boolean,
     hasNext: boolean,
     currentPage: number,
-    totalLength?: number,
-    partPage?: number,
     pageTotal: number,
     pageSize: number,
-    postNext:(currentPage:number) => void
+    postNext: (paginationOption: paginationOptions) => void
 }
 
 export interface PaginationProps {
-    paginationObjProps:paginationObjType
+    paginationObjProps: paginationObjType
 }
 
 export interface cssSetPropertys {
