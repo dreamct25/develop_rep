@@ -19,8 +19,14 @@ export interface paginationOptions {
     pageSize: number
 }
 
-class PaginationMethod {
-    public pagination: paginationType = {
+
+export type paginationsParamsType = [{ [key: string]: any }[],number | undefined,number,number]
+
+const PaginationMethod:{
+    pagination:paginationType,
+    paginations:(...params:paginationsParamsType) => paginationReturnParams
+} = {
+    pagination:{
         totalLength: 0,
         partPage: 0,
         pageTotal: 0,
@@ -28,11 +34,9 @@ class PaginationMethod {
         hasPrev: false,
         hasNext: true,
         pageSize: 0
-    }
-
-    constructor() { }
-
-    public paginations = (currentItem: { [key: string]: any }[], pages: number | undefined, partPage: number, pageSize: number): paginationReturnParams => {
+    },
+    paginations(...params:paginationsParamsType): paginationReturnParams {
+        let [currentItem, pages, partPage, pageSize] = params
         this.pagination.totalLength = currentItem.length;
         this.pagination.partPage = partPage
         this.pagination.pageTotal = Math.ceil(
@@ -61,13 +65,4 @@ class PaginationMethod {
     }
 }
 
-export function paginations(
-    currentItem: { [key: string]: any }[],
-    pages: number | undefined,
-    partPage: number,
-    pageSize: number
-): paginationReturnParams {
-    return new PaginationMethod().paginations(
-        currentItem, pages, partPage, pageSize
-    )
-}
+export const paginations:(...params:paginationsParamsType) => paginationReturnParams = (...params:paginationsParamsType): paginationReturnParams => PaginationMethod.paginations(...params)

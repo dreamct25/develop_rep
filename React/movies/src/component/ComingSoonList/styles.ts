@@ -99,6 +99,9 @@ const cssSet: cssSetPropertys = {
                     }
                 }
             }
+            .coming-soon-movie-footer{
+                margin:20px ;
+            }
             .show-movie-title{
                 position:fixed;
                 display: none;

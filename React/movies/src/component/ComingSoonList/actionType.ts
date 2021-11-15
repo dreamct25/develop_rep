@@ -4,11 +4,11 @@ const actionType: actionTypes = {
     getItem: 'getItem',
     setItem: 'setItem',
     setFullItem: 'setFullItem',
-    setMovieTitle: 'setMovieTitle',
-    getItemPage: 'getItemPage',
     setLoadingState: 'setLoadingState',
+    setCurrentPageTemp: 'setCurrentPageTemp',
     setPaginationOption: 'setPaginationOption',
-    setPaginationObj: 'setPaginationObj'
+    setPaginationObj: 'setPaginationObj',
+    setRenderData:'setRenderData'
 }
 
 export default actionType

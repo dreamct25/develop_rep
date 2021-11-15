@@ -1,12 +1,14 @@
 import { Dispatch, FunctionComponent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { List } from "immutable";
 import { useHistory } from "react-router";
-import { actionCreatorType, objType, RenderSearchMovieProps, dataType, resultsItemType, reducerState, cssSetPropertys } from './types'
+import { paginationOptions, paginations,paginationType } from "../../class/paginationMethod/paginationMethod";
+import { paginationObjType } from "../Pagination/types";
+import { actionCreatorType, objType, RenderSearchMovieProps, dataType, resultsItemType, reducerState, cssSetPropertys, filterPropsType } from './types'
 import NoImage from "../NoImage/NoImage";
 import componentEntries from '../RenderSearchMovie'
 import Pagination from "../Pagination/Pagination";
 import Loading from "../Loading/Loading";
-import { paginationOptions } from "../../class/paginationMethod/paginationMethod";
 
 const {
     actionCreator,
@@ -17,68 +19,163 @@ const {
 } = componentEntries
 
 const RenderSearchMovie: FunctionComponent<RenderSearchMovieProps> = ({ postSearchVal }: RenderSearchMovieProps): JSX.Element => {
-    const { data, loadingState }: objType = useSelector((state: reducerState): objType => ({
+    const { data,newData,renderData,loadingState,currentPageTemp,paginationOption,paginationObj,filterListItem,filterValue,filterListToggle }: objType = useSelector((state: reducerState): objType => ({
         data: state.getIn(['renderSearchMovie', 'data']) as dataType,
-        loadingState: state.getIn(['renderSearchMovie', 'loadingState']) as boolean
+        newData: state.getIn(['renderSearchMovie', 'newData']) as resultsItemType[],
+        renderData: state.getIn(['renderSearchMovie', 'renderData']) as resultsItemType[],
+        currentPageTemp: state.getIn(['renderSearchMovie', 'currentPageTemp']) as number,
+        paginationOption: state.getIn(['renderSearchMovie', 'paginationOption']) as paginationOptions,
+        paginationObj: state.getIn(['renderSearchMovie', 'paginationObj']) as paginationType,
+        loadingState: state.getIn(['renderSearchMovie', 'loadingState']) as boolean,
+        filterListItem: state.getIn(['renderSearchMovie', 'filterListItem']).toJS() as filterPropsType[],
+        filterValue: state.getIn(['renderSearchMovie', 'filterValue']) as {[key:string]:any},
+        filterListToggle: state.getIn(['renderSearchMovie', 'filterListToggle']) as boolean
     }))
 
-    const route = useHistory()
+    const route = useHistory<any>()
 
     const dispatch: Dispatch<any> = useDispatch()
 
-    const {
-        page,
-        total_pages,
-        results,
-        total_results
-    }: dataType = data
+    const { page,total_pages }: dataType = data
 
-    const goSingleVideo: Function = (id: number) => {
-        let obj: { [key: string]: any } = {
-            pathname: '/single_preview',
-            search: `id=${id}&type=movie`
+    const {
+        pageTotal,
+        currentPage,
+        hasPrev,
+        hasNext,
+        pageSize,
+        partPage
+    }: paginationType = paginationObj
+
+    const paginationProps:paginationObjType = {
+        hasPrev: hasPrev,
+        hasNext: hasNext,
+        pageTotal: pageTotal,
+        pageSize: pageSize,
+        partPage: partPage,
+        currentPage: currentPage,
+        postNext: pageObj => {
+            renderPage(pageObj)
+            dispatch(actionCreator.setLoadingState(true))
         }
-        route.push({ ...obj })
     }
 
-    const changePage = (pageObj: paginationOptions) => {
-        // let obj = {
-        //     searchVal: postSearchVal,
-        //     page: page
-        // }
-        // dispatch(actionCreator.getSearchMovieItem({ ...obj }))
+    const goSingleVideo: (id: number) => void = (id: number):void => route.push({ pathname: '/single_preview',search: `id=${id}&type=movie` })
+
+    const renderPage:(pageOption:paginationOptions) => void = (pageOption:paginationOptions):void => dispatch(actionCreator.setPaginationOption(pageOption))
+
+    const initalData:(haveAdult:boolean) => void = haveAdult => {
+        dispatch(actionCreator.setPaginationOption({ pages: currentPageTemp,partPage: 20,pageSize: 10 }))
+        dispatch(actionCreator.getSearchMovieItem({ searchVal: postSearchVal,page: page,totalPage:total_pages,haveAdult:haveAdult }))
         dispatch(actionCreator.setLoadingState(true))
     }
 
-    useEffect(() => {
-        dispatch(actionCreator.setLoadingState(false))
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data])
+    const setFilterValue:Function | ((value:string) => void) = value => {
+        let filterValueTemp:{ [key:string]:any } = filterValue
+        filterValueTemp[value] = !filterValueTemp[value]
+        dispatch(actionCreator.setFilterValue(filterValueTemp))
+        changeData(value)
+    }
+
+    const setFilterListToggleAnimate:Function | (() => void) = () => dispatch(actionCreator.setFilterListToggleAnimate(!filterListToggle))
+
+    const changeData:(value:string) => void = value => {
+        switch(value){
+            case 'adult':
+                initalData(filterValue[value]) 
+                break;
+            case 'date':
+                if(filterValue[value]){
+                    dispatch(actionCreator.setLoadingState(true))
+                    setTimeout(() => {
+                        dispatch(actionCreator.setFullSearchMovieItem(
+                            newData.filter(
+                                ({ release_date }:{ release_date:string }) => release_date !== undefined && release_date !== ''
+                            ).sort(
+                                (a:{ release_date:string },b:{ release_date:string }) => Number(b.release_date.split("-").join("")) - Number(a.release_date.split("-").join(""))
+                            )
+                        ))
+                    }, 300);
+                } else {
+                    dispatch(actionCreator.setLoadingState(true))
+                    setTimeout(() => initalData(false),300)
+                }
+                break;
+            case 'rate':
+                if(filterValue[value]){
+                    dispatch(actionCreator.setLoadingState(true))
+                    setTimeout(() => {
+                        renderPage({...paginationOption})
+                        dispatch(actionCreator.setFullSearchMovieItem(
+                            newData.sort((a:{ vote_average:number },b:{ vote_average:number }) => b.vote_average - a.vote_average)
+                        ))
+                    }, 300);
+                } else {
+                    dispatch(actionCreator.setLoadingState(true))
+                    setTimeout(() => initalData(false), 300);
+                }
+                break;
+        }
+    }
 
     useEffect(() => {
-        let obj = {
-            searchVal: postSearchVal,
-            page: page
-        }
-        dispatch(actionCreator.getSearchMovieItem({ ...obj }))
+        const { pages,partPage,pageSize } = paginationOption
+        const { pageObj, renderItem } = paginations(newData, pages, partPage, pageSize)
+        dispatch(actionCreator.setCurrentPageTemp(pages))
+        dispatch(actionCreator.setPaginationObj(pageObj))
+        dispatch(actionCreator.setRenderData(renderItem))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [postSearchVal])
+    },[paginationOption])
+
+    useEffect(() => {
+        renderPage({ pages: currentPageTemp,partPage: 20,pageSize: 10 })
+        dispatch(actionCreator.setLoadingState(true))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [newData])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(():any => renderData.length !== 0 && dispatch(actionCreator.setLoadingState(false)),[renderData])
+
+    useEffect(() => {
+        newData.constructor.name === 'List' && initalData(false)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [postSearchVal,data])
+
+    
+    useEffect(() => {
+        dispatch(actionCreator.setFilterValue({ adult:false,date:false,rate:false }))
+        return () => {
+            dispatch(actionCreator.setFullSearchMovieItem(List([])))
+            route.location.pathname === '/main' && dispatch(actionCreator.setCurrentPageTemp(1))
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
 
     return (
         <Show>
             <div className="search-movie">
                 <div className="search-movie-header">
                     <div className="search-movie-title">電影</div>
-                    <div className="search-movie-totals">共 {total_results} 搜尋結果</div>
+                    <div className="search-movie-totals">共 {newData.length} 個搜尋結果</div>
+                    <div className="filter-group-outer">
+                        <div className="filter-group">
+                            <div className={filterListToggle ? "filter-btn filter-btn-toggle" : "filter-btn"} onClick={setFilterListToggleAnimate.bind(this)}>進階篩選</div>
+                            <div className={filterListToggle ? "filter-list filter-list-toggle" : "filter-list"}>
+                                {filterListItem.map(({ title,disTitle,value }:filterPropsType,index:number) => (
+                                    <div key={index} className="filter-list-item" onClick={setFilterValue.bind(this,value)}>{filterValue[value] ? disTitle : title}</div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div className="search-movie-body">
                     <div className="row g-0">
-                        {'results' in data && total_pages !== 0 ? results.map(({ id, original_title, poster_path, release_date, title, vote_average }: resultsItemType, index: number) => (
+                        {renderData.length !== 0 ? renderData.map(({ id, original_title, poster_path, release_date, title, vote_average }: resultsItemType, index: number) => (
                             <div key={index} className="col-md-3">
                                 <div className="poster-card"
                                     onClick={goSingleVideo.bind(this, id)}
                                 >
-                                    <div className="poster-card-fram">查看詳情</div>
+                                    <div className="poster-card-fram">更多簡介</div>
                                     <div className="poster-img">
                                         {typeof poster_path === 'string' ? <div className="img" style={{ backgroundImage: `url('https://image.tmdb.org/t/p/original${poster_path}')` }}></div> : <NoImage text={'No Poster Image'} />}
                                     </div>
@@ -92,14 +189,7 @@ const RenderSearchMovie: FunctionComponent<RenderSearchMovieProps> = ({ postSear
                 </div>
                 <div className="search-movie-footer">
                     <div className="page-group">
-                        {'results' in data && <Pagination paginationObjProps={{
-                            hasPrev: page === 1 ? false : true,
-                            hasNext: page === total_pages ? false : true,
-                            pageTotal: total_pages,
-                            pageSize: 10,
-                            currentPage: page,
-                            postNext: changePage
-                        }} />}
+                        {renderData.length !== 0 && <Pagination paginationObjProps={paginationProps} />}
                     </div>
                 </div>
                 <Loading haveOpen={loadingState} />

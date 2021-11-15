@@ -50,7 +50,7 @@ const cssSet: cssSetPropertys = {
                     position: absolute;
                     bottom:0%;
                     left:0;
-                    transform:translate(21%,-15%);
+                    transform:translate(180px,-15px);
                     overflow:hidden;
                     width:700px;
                     span{

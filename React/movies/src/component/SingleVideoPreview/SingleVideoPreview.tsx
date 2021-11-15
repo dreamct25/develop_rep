@@ -102,7 +102,7 @@ const SingleVideoPreview: FunctionComponent<{}> = (): JSX.Element => {
 
     return (
         <Show>
-            {'id' in singleVideoItemUrl && 'results' in singleVideoItemUrl ? <Video url={`https://www.youtube.com/watch?v=${singleVideoItemUrl.results[0].key}&autoplay=1`} /> : <NoVideo />}
+            {'id' in singleVideoItemUrl && singleVideoItemUrl.results.length !== 0 ? <Video url={`https://www.youtube.com/watch?v=${singleVideoItemUrl.results[0].key}&autoplay=1`} /> : <NoVideo />}
             {'id' in singleVideoItem && <div className="single-container">
                 <div className="container">
                     <div className="single-title">

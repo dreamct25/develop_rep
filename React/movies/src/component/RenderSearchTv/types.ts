@@ -1,16 +1,31 @@
 import { StyledComponent } from "styled-components";
+import { paginationOptions, paginationType } from "../../class/paginationMethod/paginationMethod";
 import store from "../../store";
 
 export interface actionType {
     setSearchTvItem: string,
+    setFullSearchTvItem:string
     getSearchTvItem: string,
-    setLoadingState: string
+    setLoadingState: string,
+    setCurrentPageTemp:string,
+    setPaginationOption: string,
+    setPaginationObj: string,
+    setRenderData:string,
+    setFilterValue:string,
+    setFilterListToggleAnimate:string
 }
 
 export interface actionCreatorType {
     setSearchTvItem: Function,
+    setFullSearchTvItem:Function,
     getSearchTvItem: Function,
-    setLoadingState: Function
+    setLoadingState: Function,
+    setCurrentPageTemp:Function,
+    setPaginationOption: Function,
+    setPaginationObj: Function,
+    setRenderData:Function,
+    setFilterValue:Function,
+    setFilterListToggleAnimate:Function
 }
 
 export interface paramsObjType {
@@ -19,6 +34,12 @@ export interface paramsObjType {
     page?: number,
     query?: string,
     include_adult?: boolean
+}
+
+export interface filterPropsType {
+    title:string,
+    disTitle:string
+    value:string
 }
 
 export interface dataType {
@@ -40,7 +61,15 @@ export interface resultsItemType {
 
 export interface objType {
     data: dataType,
-    loadingState: boolean
+    newData:resultsItemType[],
+    renderData:resultsItemType[]
+    loadingState: boolean,
+    currentPageTemp:number,
+    paginationOption:paginationOptions
+    paginationObj:paginationType,
+    filterListItem:filterPropsType[],
+    filterValue:{[key:string]:any},
+    filterListToggle:boolean
 }
 
 export interface RenderSearchTvProps {

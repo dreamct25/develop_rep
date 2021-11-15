@@ -1,12 +1,13 @@
-import { Dispatch, FunctionComponent, useEffect, useRef } from "react";
+import { Dispatch, FunctionComponent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { actionCreatorType, objType, dataType, resultsItemType, reducerState, cssSetPropertys } from './types'
-import componentEntries from '../ComingSoonList'
+import { paginations, paginationOptions, paginationType } from "../../class/paginationMethod/paginationMethod";
+import { paginationObjType } from "../Pagination/types";
 import Loading from "../Loading/Loading";
 import NoImage from "../NoImage/NoImage";
 import Pagination from "../Pagination/Pagination";
-import { paginations, paginationOptions, paginationType } from "../../class/paginationMethod/paginationMethod";
+import componentEntries from '../ComingSoonList'
 
 const {
     actionCreator,
@@ -18,16 +19,15 @@ const {
 
 const ComingSoonList: FunctionComponent<{}> = (): JSX.Element => {
 
-    const { data, newData, movieTitle, loadingState, paginationOption, paginationObj }: objType = useSelector((state: reducerState): objType => ({
+    const { data, newData,renderData, loadingState,currentPageTemp, paginationOption, paginationObj }: objType = useSelector((state: reducerState): objType => ({
         data: state.getIn(["comingSoonList", "data"]) as dataType,
         newData: state.getIn(["comingSoonList", "newData"]) as resultsItemType[],
-        movieTitle: state.getIn(["comingSoonList", "movieTitle"]) as string,
+        renderData: state.getIn(["comingSoonList","renderData"]) as resultsItemType[],
         loadingState: state.getIn(["comingSoonList", "loadingState"]) as boolean,
-        paginationOption: state.getIn(["comingSoonList", "paginationOption"]).toJS() as paginationOptions,
+        currentPageTemp: state.getIn(["comingSoonList", "currentPageTemp"]) as number,
+        paginationOption: state.getIn(["comingSoonList", "paginationOption"]) as paginationOptions,
         paginationObj: state.getIn(["comingSoonList", "paginationObj"]) as paginationType
     }))
-
-    const refPos = useRef<HTMLDivElement>(null)
 
     const route = useHistory()
 
@@ -35,7 +35,6 @@ const ComingSoonList: FunctionComponent<{}> = (): JSX.Element => {
 
     const {
         total_pages,
-        total_results
     }: dataType = data
 
     const {
@@ -43,7 +42,8 @@ const ComingSoonList: FunctionComponent<{}> = (): JSX.Element => {
         currentPage,
         hasPrev,
         hasNext,
-        pageSize
+        pageSize,
+        partPage
     }: paginationType = paginationObj
 
     const goSingleVideo: Function = (id: number) => {
@@ -54,49 +54,68 @@ const ComingSoonList: FunctionComponent<{}> = (): JSX.Element => {
         route.push({ ...obj })
     }
 
-    const setMovieTitle: Function = (title: string, toggle: boolean, { screenX, screenY }: React.MouseEvent) => {
-        if (title !== undefined) {
-            dispatch(actionCreator.setMovieTitle(toggle ? title : ''))
-            if (refPos.current !== null) refPos.current!.style.cssText = `top:${screenY - 125}px;left:${screenX - 18}px;`
-        }
+    const renderPage:(pageOption:paginationOptions) => void = (pageOption:paginationOptions):void => {
+        dispatch(actionCreator.setPaginationOption(pageOption))
     }
 
-    const changePage = (pageObj: paginationOptions) => {
-        dispatch(actionCreator.setPaginationOption(pageObj))
+    const changePage:(pageObj: paginationOptions) => void = (pageObj: paginationOptions):void => {
+        renderPage(pageObj)
         dispatch(actionCreator.setLoadingState(true))
     }
 
+    const paginationProps:paginationObjType = {
+        hasPrev: hasPrev,
+        hasNext: hasNext,
+        pageTotal: pageTotal,
+        pageSize: pageSize,
+        partPage: partPage,
+        currentPage: currentPage,
+        postNext: changePage
+    }
+
     useEffect(() => {
-        const { pages, partPage, pageSize }: paginationOptions = paginationOption
+        const { pages,partPage,pageSize } = paginationOption
         const { pageObj, renderItem } = paginations(newData, pages, partPage, pageSize)
-        // console.log(pageObj, renderItem)
+        dispatch(actionCreator.setCurrentPageTemp(pages))
         dispatch(actionCreator.setPaginationObj(pageObj))
-        dispatch(actionCreator.setLoadingState(false))
+        dispatch(actionCreator.setRenderData(renderItem))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[paginationOption])
+
+    useEffect(() => {
+        renderPage({ pages: currentPageTemp,partPage: 20,pageSize: 10 })
+        dispatch(actionCreator.setLoadingState(true))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [newData])
 
     useEffect(() => {
-        dispatch(actionCreator.getItem(1, total_pages))
+        renderData.length !== 0 && dispatch(actionCreator.setLoadingState(false))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    },[renderData])
+
+    useEffect(() => {
+        if(newData.constructor.name === 'List'){
+            dispatch(actionCreator.setPaginationOption({ pages: currentPageTemp,partPage: 20,pageSize: 10 }))
+            dispatch(actionCreator.getItem(1, total_pages))
+            dispatch(actionCreator.setLoadingState(true))
+        }
+        return () => { route.location.pathname === '/main' && dispatch(actionCreator.setCurrentPageTemp(1)) }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data])
 
     return (
         <Show>
             <div className="coming-soon-movie-outer">
                 <div className="coming-soon-movie-header">
                     <div className="title">即將上映</div>
-                    <div className="totals">共 {total_results} 電影</div>
+                    <div className="totals">共 {newData.length} 部電影</div>
                 </div>
                 <div className="coming-soon-movie-body">
                     <div className="row g-0">
-                        {newData.map(({ id, original_title, poster_path, release_date, title, vote_average }: resultsItemType, index: number) => (
+                        {renderData.length !== 0 && renderData.map(({ id, poster_path, release_date, title, vote_average }: resultsItemType, index: number) => (
                             <div key={index} className="col-md-3">
-                                <div className="poster-card"
-                                    onClick={goSingleVideo.bind(this, id)}
-                                    onMouseMove={setMovieTitle.bind(this, title, true)}
-                                    onMouseLeave={setMovieTitle.bind(this, title, false)}
-                                >
-                                    <div className="poster-card-fram">查看詳情</div>
+                                <div className="poster-card" onClick={goSingleVideo.bind(this, id)}>
+                                    <div className="poster-card-fram">更多簡介</div>
                                     <div className="poster-img">
                                         {typeof poster_path === 'string' ? <div className="img" style={{ backgroundImage: `url('https://image.tmdb.org/t/p/original${poster_path}')` }}></div> : <NoImage text={'No Poster Image'} />}
                                     </div>
@@ -110,17 +129,9 @@ const ComingSoonList: FunctionComponent<{}> = (): JSX.Element => {
                 </div>
                 <div className="coming-soon-movie-footer">
                     <div className="page-group">
-                        {newData.length !== 0 && <Pagination paginationObjProps={{
-                            hasPrev: hasPrev,
-                            hasNext: hasNext,
-                            pageTotal: pageTotal,
-                            pageSize: pageSize,
-                            currentPage: currentPage,
-                            postNext: changePage
-                        }} />}
+                        {renderData.length !== 0 && <Pagination paginationObjProps={paginationProps} />}
                     </div>
                 </div>
-                {movieTitle !== '' && <div ref={refPos} className={movieTitle !== "" ? "show-movie-title show-movie-title-toggle" : "show-movie-title"}>{movieTitle}</div>}
                 <Loading haveOpen={loadingState} />
             </div>
         </Show>

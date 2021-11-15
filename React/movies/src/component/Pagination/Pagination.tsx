@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 import { PaginationProps, paginationObjType, cssSetPropertys } from './types'
 import styles from './styles'
 
@@ -12,20 +12,16 @@ const Pagination: FunctionComponent<PaginationProps> = ({ paginationObjProps }: 
         currentPage,
         pageTotal,
         pageSize,
+        partPage,
         postNext
     }: paginationObjType = paginationObjProps
 
-    const current: Function = (currentPage: number, e: Event): void => {
-        const paginationOption = {
-            pages: currentPage,
-            partPage: 10,
-            pageSize: 10
-        }
+    const current: (currentPage: number, e: React.MouseEvent) => void = (currentPage: number, e: React.MouseEvent): void => {
         e.preventDefault()
-        postNext({ ...paginationOption })
+        postNext({ pages:currentPage,partPage:partPage,pageSize:pageSize })
     }
 
-    const renderPage: Function = (): JSX.Element[] => {
+    const renderPageTags: () => JSX.Element[] = (): JSX.Element[] => {
         let pageTotalToArray: number[] = []
 
         if (paginationObjProps !== undefined) {
@@ -73,13 +69,14 @@ const Pagination: FunctionComponent<PaginationProps> = ({ paginationObjProps }: 
                             <span aria-hidden="true"><i className="far fa-chevron-double-left"></i></span>
                         </a>
                     </li>
-                    {renderPage()}
+                    {renderPageTags()}
                     <li className={!hasNext ? "page-item disabled" : "page-item"}>
                         <a className={hasNext ? "page-link page-link-active" : "page-link"} href="/#" onClick={current.bind(this, currentPage + 1)}>
                             <span aria-hidden="true"><i className="far fa-chevron-double-right"></i></span>
                         </a>
                     </li>
                 </ul>
+                <div className="page-text">第 { currentPage } / { pageTotal } 頁</div>
             </nav>
         </Show>
     )

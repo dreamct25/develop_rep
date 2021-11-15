@@ -17,6 +17,52 @@ const cssSet: cssSetPropertys = {
                     margin:5px 12px;
                     font-size:18px;
                 }
+                .filter-group-outer{
+                    display:flex;
+                    justify-content:flex-end;
+                    margin:0 12px;
+                    .filter-group{
+                        position: relative;
+                        text-align:center;
+                        .filter-btn{
+                            padding:2px 20px;
+                            background-color:rgb(41,198,188);
+                            position: relative;
+                            z-index:3;
+                            cursor: pointer;
+                            user-select:none;
+                            border-radius:5px;
+                            transition:.7s ease;
+                        }
+                        .filter-btn-toggle{
+                            border-radius:5px 5px 0 0;
+                        }
+                        .filter-list{
+                            background-color:rgba(41,198,188,.4);
+                            position: absolute;
+                            top:28px;
+                            left:0;
+                            right:0;
+                            bottom:0;
+                            z-index:8;
+                            overflow:hidden;
+                            height:0;
+                            opacity:0;
+                            backdrop-filter:blur(2px);
+                            transition:.7s ease;
+                            border-radius:0 0 5px 5px;
+                            .filter-list-item{
+                                padding:2px 0;
+                                cursor: pointer;
+                                user-select:none;
+                            }
+                        }
+                        .filter-list-toggle{
+                            opacity:1;
+                            height:85px;
+                        }
+                    }
+                }
             }
             .search-movie-body{
                 min-height: 100vh;
@@ -109,19 +155,8 @@ const cssSet: cssSetPropertys = {
                     text-align:center;
                 }
             }
-            .show-movie-title{
-                position:fixed;
-                z-index: -1;
-                opacity:0;
-                color:white;
-                background-color:rgba(0,0,0,.7);
-                padding:2px 8px;
-                box-shadow:0 0 2px 1px rgba(255,255,255,.7);
-                border-radius:5px;
-            }
-            .show-movie-title-toggle{
-                opacity:1;
-                z-index: 7;
+            .search-movie-footer{
+                margin:20px 0;
             }
         }
     `,

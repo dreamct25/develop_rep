@@ -7,6 +7,7 @@ export interface paginationObjType {
     currentPage: number,
     pageTotal: number,
     pageSize: number,
+    partPage: number,
     postNext: (paginationOption: paginationOptions) => void
 }
 

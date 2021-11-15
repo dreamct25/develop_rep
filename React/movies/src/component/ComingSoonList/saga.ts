@@ -3,7 +3,7 @@ import { takeEvery, put, PutEffect, ForkEffect } from 'redux-saga/effects'
 import actionTypes from './actionType'
 import actionCreater from './actionCreator'
 
-function* getItem(action: object) {
+function* getItem(action: object):Generator<Promise<void | { error_code: any,reason: any }> | PutEffect<any>, void> {
     let temp: { [key: string]: any } = {}
     let newData: { [key: string]: any }[] = []
     const { page, totalPage }: { [key: string]: any } = action
@@ -27,10 +27,12 @@ function* getItem(action: object) {
                     language: "zh-TW",
                     page: x,
                 }
+            // eslint-disable-next-line no-loop-func
             }).then((res: AxiosResponse<{ results: { [key: string]: any }[] }>) => {
                 let newDataTemp: { [key: string]: any }[] = []
                 res.data.results.forEach((item: object) => newDataTemp.push(item))
                 newDataTemp.forEach((item: object) => newData.push(item))
+            // eslint-disable-next-line no-loop-func
             }).catch((ex: any) => temp = {
                 error_code: ex.response.status,
                 reason: ex.response.data.status_message
@@ -38,7 +40,7 @@ function* getItem(action: object) {
         }
 
         newData = newData.filter(({ release_date }:{[key:string]:any}) => Number(release_date.replace(/-/g,'')) > date)
-        console.log(newData)
+
         yield put(actionCreater.setFullItem(newData))
     }
 
@@ -49,7 +51,7 @@ function* getItem(action: object) {
     }
 }
 
-function* allSagas(): Generator<ForkEffect<never>, void, unknown> {
+function* allSagas(): Generator<ForkEffect<never>, void> {
     yield takeEvery(actionTypes.getItem, getItem)
 }
 

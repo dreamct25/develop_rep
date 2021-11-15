@@ -6,13 +6,9 @@ const dataState: Collection<any, any> = fromJS({
     data: [],
     newData: [],
     renderData: [],
-    movieTitle: '',
     loadingState: false,
-    paginationOption: {
-        pages: 1,
-        partPage: 10,
-        pageSize: 10
-    },
+    currentPageTemp:1,
+    paginationOption: {},
     paginationObj: {
         totalLength: 0,
         partPage: 0,
@@ -30,10 +26,12 @@ const callBackState: Reducer<Collection<any, any>, Action<{ [key: string]: any }
             return state.toMap().set('data', action.obj)
         case actionType.setFullItem:
             return state.toMap().set('newData', action.item)
-        case actionType.setMovieTitle:
-            return state.toMap().set('movieTitle', action.title)
+        case actionType.setRenderData:
+            return state.toMap().set('renderData',action.item)
         case actionType.setLoadingState:
             return state.toMap().set('loadingState', action.status)
+        case actionType.setCurrentPageTemp:
+            return state.toMap().set('currentPageTemp',action.page)
         case actionType.setPaginationOption:
             return state.toMap().set('paginationOption', action.options)
         case actionType.setPaginationObj:

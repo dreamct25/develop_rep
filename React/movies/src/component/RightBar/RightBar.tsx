@@ -3,11 +3,13 @@ import { useSelector, useDispatch } from 'react-redux'
 import { actionCreatorType, reducerState, RightBarProps, objType, cssSetPropertys } from './types'
 import { useHistory } from "react-router"
 import componentEntries from '../RightBar'
-import { StyledComponent } from "styled-components"
 
-const { actionCreator, styles: { Show } }: {
+const { 
+    actionCreator, 
+    styles: { Show } 
+}: {
     actionCreator: actionCreatorType,
-    styles: { Show: StyledComponent<"div", any> }
+    styles: cssSetPropertys
 } = componentEntries
 
 const RightBar: FunctionComponent<RightBarProps> = ({

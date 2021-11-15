@@ -26,6 +26,9 @@ const cssSet: cssSetPropertys = {
             }
             .single-else{
                 margin-top:20px;
+                span{
+                    padding:3px 0;
+                }
                 .release-date{
                     display:grid;
                     grid-template-columns:30% 70%;

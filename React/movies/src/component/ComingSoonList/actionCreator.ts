@@ -16,18 +16,13 @@ const actionCreator: actionCreatorType = {
         type: actionType.setFullItem,
         item
     }),
-    setMovieTitle: (title: string): object => ({
-        type: actionType.setMovieTitle,
-        title
-    }),
-    getItemPage: ({ searchVal, page }: { searchVal: string, page: number }): object => ({
-        type: actionType.getItemPage,
-        searchVal,
-        page
-    }),
     setLoadingState: (status: boolean): object => ({
         type: actionType.setLoadingState,
         status
+    }),
+    setCurrentPageTemp:(page:number):object => ({
+        type: actionType.setCurrentPageTemp,
+        page
     }),
     setPaginationOption: (options: paginationOptions): object => ({
         type: actionType.setPaginationOption,
@@ -36,6 +31,10 @@ const actionCreator: actionCreatorType = {
     setPaginationObj: (obj: paginationType): object => ({
         type: actionType.setPaginationObj,
         obj
+    }),
+    setRenderData:(item:{[key:string]:any}[]):object => ({
+        type: actionType.setRenderData,
+        item
     })
 }
 

@@ -1,7 +1,7 @@
 import { FunctionComponent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
-import { actionCreatorType,CastModalProps,dataType,combinedCreditsType,objType, reducerState,cssSetPropertys } from './types'
+import { actionCreatorType,CastModalProps,dataType,combinedCreditsCastType,combinedCreditsCrewType,objType, reducerState,cssSetPropertys } from './types'
 import { useHistory } from "react-router";
 import componentEntries from '../CastModal'
 import NoImage from "../NoImage/NoImage";
@@ -52,7 +52,8 @@ const CastModal: FunctionComponent<CastModalProps> = ({ postToggles,postId, post
         const filterWord:string[] = item.filter((name: string) => new RegExp('^[\u4E00-\u9FA5]+$').test(name.replace(/·/g, '').trim()))
         const openCC = require('opencc-js')
         const convert = openCC.Converter({ from: 'cn', to: 'tw' })
-        return filterWord.map((word:string) => convert(word))[0]
+        const exportStr:string = filterWord.length !== 0 ? filterWord.map((word:string) => convert(word))[0] : ''
+        return exportStr
     }
 
 
@@ -70,9 +71,30 @@ const CastModal: FunctionComponent<CastModalProps> = ({ postToggles,postId, post
     }
 
     const showMoviePost:Function = (postPath:string):void => {
-        dispatch(actionCreator.setPostPath(postPath))
-        setTimeout(() => moviePostToggles(true),500)
-    } 
+        if(postPath === '' || postPath === null || postPath === undefined){
+            alert('無封面')
+        } else {
+            dispatch(actionCreator.setPostPath(postPath))
+            setTimeout(() => moviePostToggles(true),500)
+        }
+    }
+
+    const repackArr:(arr:{[key:string]:any}[]) => any = arr => {
+        let arrTemp:{[key:string]:any}[] = []
+        arr.forEach((item:{[key:string]:any}) => arrTemp.push('first_air_date' in item ? {...item,release_date:item.first_air_date} : item ))
+        arrTemp = arrTemp.sort((a: {[key:string]:any}, b: {[key:string]:any}):any => {
+            if('release_date' in a && 'release_date' in b) { return Number(b.release_date.replace(/-/g, '')) - Number(a.release_date.replace(/-/g, ''))}
+        })
+        return arrTemp
+    }
+
+    const filterTheSame:(arr:combinedCreditsCrewType[]) => combinedCreditsCrewType[] = arr => {
+        const arrTemp:combinedCreditsCrewType[] = []
+        arr.forEach((item:combinedCreditsCrewType) => arrTemp.findIndex((find:combinedCreditsCrewType) => find.id === item.id) === -1 && arrTemp.push(item))
+        return repackArr(arrTemp)
+    }
+
+    
 
     useEffect(() => {
         if(postToggles){
@@ -88,81 +110,88 @@ const CastModal: FunctionComponent<CastModalProps> = ({ postToggles,postId, post
 
     useEffect(() => {
         'name' in data && setLoadingState(false)
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[data])
 
     return (
         <Show>
-            <div className={postToggles ? "cast-modal-outer cast-modal-outer-toggle" : "cast-modal-outer"}>
-                <div className="cast-modal">
-                    <div className="close" onClick={modalSwitch.bind(this, false)}>
-                        <i className="fal fa-times"></i>
-                    </div>
-                    <div className="cast-modal-body">
-                        <div className="cast-profile">
-                            <div className="row g-0">
-                                <div className="col-md-2">
-                                    <div className="cast-profile-left">
-                                        <div className="img-outer">
-                                            {profile_path !== null && profile_path !== undefined ? <img src={`https://image.tmdb.org/t/p/original${profile_path}`} alt="" /> : <NoImage text={'No Poster Image'} />}
-                                        </div>
-                                        <div className="cast-details">
-                                            <span>{also_known_as !== undefined && filterTranditionalChineseName(also_known_as)}</span>
-                                            <span>{name}</span>
-                                            <span>生日：{birthday}</span>
-                                            <span>出生地：{place_of_birth}</span>
-                                        </div>
+            <div className={postToggles ? "cast-modal cast-modal-toggle" : "cast-modal"}>
+                <div className="close" onClick={modalSwitch.bind(this, false)}>
+                    <i className="fal fa-times"></i>
+                </div>
+                <div className="cast-modal-body">
+                    <div className="cast-profile">
+                        <div className="row g-0">
+                            <div className="col-md-4">
+                                <div className="img-outer">
+                                    {profile_path !== null && profile_path !== undefined ? <img src={`https://image.tmdb.org/t/p/original${profile_path}`} alt="" /> : <NoImage text={'No Cast Image'} />}
+                                </div>
+                            </div>
+                            <div className="col-md-8">
+                                <div className="cast-details-outer">
+                                    <div className="cast-details">
+                                        <span>{also_known_as !== undefined && filterTranditionalChineseName(also_known_as) !== '' ? filterTranditionalChineseName(also_known_as) : name}</span>
+                                        <span>{name}</span>
+                                        <span>生日：{birthday === null ? '暫無出生資訊' : birthday}</span>
+                                        <span>出生地：{place_of_birth === null ? '暫無出生地資訊' : place_of_birth}</span>
                                     </div>
                                 </div>
-                                <div className="col-md-10">
-                                    <div className="cast-profile-right">
-                                        <div className="cast-movie-list-outer">
-                                            <div className="title">主演</div>
-                                            <div className="cast-movie-list-title">
-                                                <span>電影</span>
-                                                <span></span>
-                                                <span>飾演角色</span>
-                                                <span>日期</span>
-                                            </div>
-                                            <div className="cast-movie-list">
-                                                {'combined_credits' in data && data.combined_credits?.cast.sort((a: { release_date: string }, b: { release_date: string }) => {
-                                                    if ('release_date' in a && 'release_date' in b) {
-                                                        return Number(b.release_date.replace(/-/g, '')) - Number(a.release_date.replace(/-/g, ''))
-                                                    } else {
-                                                        return a
-                                                    }
-                                                }).map(({ id, title, original_title, character, release_date, poster_path, media_type }: combinedCreditsType, index: number) => (
-                                                    <div key={index} className="list-item">
-                                                        <div className="title" onClick={goSingleVideo.bind(this, id, media_type)}>
-                                                            <span>{title}</span>
-                                                            <span>{original_title}</span>
-                                                        </div>
-                                                        <div className="movie-post" onClick={showMoviePost.bind(this,poster_path)}>電影封面</div>
-                                                        <div>{character === '' ? '暫無飾演角色' : character}</div>
-                                                        <div>{release_date === '' ? '暫無日期' : release_date}</div>
+                                <div className="cast-famous-video-outer">
+                                    <div className="cast-famous-video-title">著名影視</div>
+                                    <div className="cast-famous-video-list">
+                                        {'combined_credits' in data && data.combined_credits?.crew.length !== 0 ? filterTheSame(data.combined_credits?.crew).map(({ id, title,name,original_title,original_name,poster_path, media_type }: combinedCreditsCrewType, index: number) => (
+                                            <div key={index} className="cast-famous-video-list-item" onClick={goSingleVideo.bind(this, id, media_type)}>
+                                                {poster_path !== null && poster_path !== undefined ? <img src={`https://image.tmdb.org/t/p/original${poster_path}`} alt="" /> : <NoImage text={'No Image'} />}
+                                                <div className="famous-title">
+                                                    <div className="title-group">
+                                                        <span>{media_type === "movie" ? title : name}</span>
+                                                        <span>{media_type === "movie" ? original_title : original_name}</span>
                                                     </div>
-                                                ))}
+                                                </div>
                                             </div>
-                                        </div>
+                                        )) : <div className="no-cast-famous-video">-- 暫無著名影視 --</div>}
                                     </div>
                                 </div>
-                                <div className="col-md-12">
-                                    <div className="cast-descript-outer">
-                                        <div className="cast-descript-title">個人簡介</div>
-                                        {biography === '' ? <div className="cast-no-descript">-- 暫無個人簡介 --</div> : <div className="cast-descript">{biography}</div>}
+                            </div>
+                            <div className="col-md-12">
+                                <div className="cast-descript-outer">
+                                    <div className="cast-descript-title">個人簡介</div>
+                                    {biography === '' ? <div className="cast-no-descript">-- 暫無個人簡介 --</div> : <div className="cast-descript">{biography}</div>}
+                                </div>
+                            </div>
+                            <div className="col-md-12">
+                                <div className="cast-movie-list-outer">
+                                    <div className="title">主演</div>
+                                    <div className="cast-movie-list-title">
+                                        <span>電影</span>
+                                        <span></span>
+                                        <span>飾演角色</span>
+                                        <span>日期</span>
+                                    </div>
+                                    <div className="cast-movie-list">
+                                        {'combined_credits' in data && repackArr(data.combined_credits?.cast).map(({ id, title,name,original_title,original_name, character, release_date,poster_path, media_type }: combinedCreditsCastType, index: number) => (
+                                            <div key={index} className="list-item">
+                                                <div className="title" onClick={goSingleVideo.bind(this, id, media_type)}>
+                                                    <span>{media_type === "movie" ? title : name}</span>
+                                                    <span>{media_type === "movie" ? original_title : original_name}</span>
+                                                </div>
+                                                <div className="movie-post" onClick={showMoviePost.bind(this,poster_path)}>{ media_type === "movie" ? "電影封面" : "影集封面" }</div>
+                                                <div>{character === '' ? '暫無飾演角色' : character}</div>
+                                                <div>{release_date === '' || release_date === undefined ? '暫無日期' : release_date}</div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <Loading haveOpen={loadingState} />
-                <div className={moviePostToggle ? "post-img-outer post-img-outer-toggle" : "post-img-outer"}>
-                    { postPath !== '' || postPath !== undefined ? <img src={`https://image.tmdb.org/t/p/original${postPath}`} alt="" /> : <NoImage text={'No Poster Image'} />}
-                    <div className="close-img" onClick={moviePostToggles.bind(this,false)}>
-                        <i className="fal fa-times"></i>
-                    </div>
+            </div>
+            <Loading haveOpen={loadingState} />
+            <div className={moviePostToggle ? "post-img-outer post-img-outer-toggle" : "post-img-outer"}>
+                { postPath !== '' && <img src={`https://image.tmdb.org/t/p/original${postPath}`} alt="" />}
+                <div className="close-img" onClick={moviePostToggles.bind(this,false)}>
+                    <i className="fal fa-times"></i>
                 </div>
             </div>
         </Show>

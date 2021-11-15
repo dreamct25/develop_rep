@@ -6,29 +6,30 @@ export interface actionTypes {
     getItem: string,
     setItem: string,
     setFullItem: string
-    setMovieTitle: string,
-    getItemPage: string,
     setLoadingState: string,
+    setCurrentPageTemp:string
     setPaginationOption: string,
-    setPaginationObj: string
+    setPaginationObj: string,
+    setRenderData:string
 }
 
 export interface actionCreatorType {
     getItem: Function,
     setItem: Function,
     setFullItem: Function
-    setMovieTitle: Function,
-    getItemPage: Function,
     setLoadingState: Function,
+    setCurrentPageTemp:Function,
     setPaginationOption: Function,
-    setPaginationObj: Function
+    setPaginationObj: Function,
+    setRenderData:Function
 }
 
 export interface objType {
     data: dataType,
-    newData: resultsItemType[]
-    movieTitle: string,
+    newData: resultsItemType[],
+    renderData:resultsItemType[],
     loadingState: boolean,
+    currentPageTemp:number,
     paginationOption: paginationOptions,
     paginationObj: paginationType
 }

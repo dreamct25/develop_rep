@@ -31,17 +31,35 @@ export interface dataType {
     name: string,
     place_of_birth: string,
     profile_path: string,
-    combined_credits?:{ cast:{[key:string]:any}[] | any }
+    combined_credits?:{ 
+        cast:{[key:string]:any}[] | any,
+        crew:{[key:string]:any}[] | any
+    }
 }
 
-export interface combinedCreditsType {
+export interface combinedCreditsCastType {
     id: number
     title: string,
+    name:string,
     original_title: string,
+    original_name: string,
     character: string,
     release_date: string,
+    first_air_date:string,
     poster_path: string,
     media_type: string
+}
+
+export interface combinedCreditsCrewType {
+    id: number
+    title: string,
+    name:string,
+    original_title: string,
+    original_name: string,
+    poster_path: string,
+    media_type: string,
+    first_air_date:string,
+    release_date: string,
 }
 
 export interface objType {
