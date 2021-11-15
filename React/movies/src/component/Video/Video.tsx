@@ -1,4 +1,4 @@
-import { Dispatch, FunctionComponent, useEffect, useRef, ChangeEventHandler, MutableRefObject, MouseEventHandler, MouseEvent } from 'react'
+import { Dispatch, FunctionComponent, useEffect, useRef, ChangeEventHandler, MutableRefObject, MouseEventHandler, MouseEvent, useCallback } from 'react'
 import { actionCreatorTypes,VideoProps,objType,reducerState,cssSetPropertys } from './types'
 import { useDispatch, useSelector } from 'react-redux'
 import VideoJs, { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js'
@@ -15,13 +15,14 @@ const {
 } = componentEntries
 
 const Video: FunctionComponent<VideoProps> = ({ url }: VideoProps): JSX.Element => {
-    const { durationVal, totalTime, currentTimeText, havePlay, videoFooterBarAnimate, initialStatus }: objType = useSelector((state: reducerState) => ({
+    const { durationVal, totalTime, currentTimeText, havePlay, videoFooterBarAnimate, initialStatus,volume }: objType = useSelector((state: reducerState) => ({
         durationVal: state.getIn(['video', 'duration']) as number,
-        totalTime: state.getIn(['video', 'totalTime']) as number,
+        totalTime: state.getIn(['video', 'totalTime']) as string,
         currentTimeText: state.getIn(['video', 'currentTimeText']) as string,
         havePlay: state.getIn(['video', 'havePlay']) as boolean,
         videoFooterBarAnimate: state.getIn(['video', 'videoFooterBarAnimate']) as boolean,
-        initialStatus: state.getIn(['video', 'initialStatus']) as boolean
+        initialStatus: state.getIn(['video', 'initialStatus']) as boolean,
+        volume:state.getIn(['video', 'volume']) as string
     }))
 
     const timer: MutableRefObject<NodeJS.Timeout | null> = useRef<NodeJS.Timeout>(null)
@@ -29,6 +30,7 @@ const Video: FunctionComponent<VideoProps> = ({ url }: VideoProps): JSX.Element 
     const dispatch: Dispatch<any> = useDispatch<Dispatch<any>>()
     
     const playerOption: VideoJsPlayerOptions = {
+        defaultVolume:Number(volume) / 100,
         autoplay: false,
         controls: false,
         sources: [{ src: url, type: 'video/youtube' }],
@@ -100,6 +102,11 @@ const Video: FunctionComponent<VideoProps> = ({ url }: VideoProps): JSX.Element 
         clearInterval(timer.current!)
     }
 
+    const volumeChange: any = ({ target: { value } }: { target: { value: string } }) => {
+        dispatch(actionCreator.setVolumeVal(value))
+        players.current.volume(Number(value) / 100)
+    }
+
     const videoTimeTrans: Function = (curTime: any): string => {
         curTime = isNaN(curTime) === true ? 0 : curTime;
         let min: number | string = Math.floor(curTime / 60);
@@ -118,7 +125,7 @@ const Video: FunctionComponent<VideoProps> = ({ url }: VideoProps): JSX.Element 
         const player: VideoJsPlayer = VideoJs(video.current!, playerOption)
         initialVideo(player)
         return () => {
-            player.dispose()
+            video.current !== null && player.dispose()
             clearInterval(timer.current!)
             dispatch(actionCreator.setTotalTimes(0))
             dispatch(actionCreator.setDurations(0))
@@ -143,6 +150,10 @@ const Video: FunctionComponent<VideoProps> = ({ url }: VideoProps): JSX.Element 
                     </div>
                     <div className="video-progress">
                         <input ref={progress} className="progress-custom" type="range" min="0" max={totalTime} value={durationVal} onChange={videoDurationChange} />
+                    </div>
+                    <div className="video-volume">
+                        <input type="range" className="volume" min="0" max="100" value={volume} onInput={volumeChange} />
+                        <div className="texts" style={{ color:'white' }}>{volume}</div>
                     </div>
                     <div className="video-time">{currentTimeText} / {videoTimeTrans(totalTime)}</div>
                 </div>}

@@ -8,7 +8,7 @@ export interface actionTypes {
     sethavePlay: string,
     setVideoFooterBarAnimate: string,
     setInitialStatus: string,
-    setVolumnVal:string
+    setVolumeVal:string
 }
 
 export interface actionCreatorTypes {
@@ -18,7 +18,7 @@ export interface actionCreatorTypes {
     setHavePlays: Function,
     setVideoFooterBarAnimates: Function,
     setInitialStatus: Function,
-    setVolumnVal:Function
+    setVolumeVal:Function
 }
 
 export interface VideoProps {
@@ -26,8 +26,9 @@ export interface VideoProps {
 }
 
 export interface objType {
+    volume:string,
     durationVal: number,
-    totalTime: number
+    totalTime: string
     currentTimeText: string,
     havePlay: boolean,
     videoFooterBarAnimate: boolean,

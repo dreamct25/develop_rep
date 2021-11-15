@@ -5,8 +5,11 @@ import { actionCreatorType,CastModalProps,dataType,combinedCreditsCastType,combi
 import { useHistory } from "react-router";
 import componentEntries from '../CastModal'
 import NoImage from "../NoImage/NoImage";
-
 import Loading from "../Loading/Loading";
+
+const openCC = require('opencc-js')
+
+const convert = openCC.Converter({ from: 'cn', to: 'tw' })
 
 const {
     actionCreator,
@@ -50,8 +53,6 @@ const CastModal: FunctionComponent<CastModalProps> = ({ postToggles,postId, post
 
     const filterTranditionalChineseName: Function = (item: string[]):string => {
         const filterWord:string[] = item.filter((name: string) => new RegExp('^[\u4E00-\u9FA5]+$').test(name.replace(/·/g, '').trim()))
-        const openCC = require('opencc-js')
-        const convert = openCC.Converter({ from: 'cn', to: 'tw' })
         const exportStr:string = filterWord.length !== 0 ? filterWord.map((word:string) => convert(word))[0] : ''
         return exportStr
     }

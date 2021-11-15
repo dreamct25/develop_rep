@@ -8,13 +8,18 @@ import NoImage from "../NoImage/NoImage"
 import CastModal from "../CastModal/CastModal"
 import Loading from "../Loading/Loading"
 import componentEntries from '../SingleVideoPreview'
+import React from "react"
+
+const openCC = require('opencc-js')
+
+const convert = openCC.Converter({ from: 'cn', to: 'tw' })
 
 const { actionCreator, styles: { Show } }: {
     actionCreator: actionCreatorType,
     styles: cssSetPropertys
 } = componentEntries
 
-const SingleVideoPreview: FunctionComponent<{}> = (): JSX.Element => {
+const SingleVideoPreview: FunctionComponent<{}> = React.memo((): JSX.Element => {
     
     const { search }: { search: string } = useLocation()
 
@@ -51,11 +56,7 @@ const SingleVideoPreview: FunctionComponent<{}> = (): JSX.Element => {
         return (<span className="time"><span>{dates}</span><span>{times.split('.')[0].replace(/:/g, '：')}</span></span>)
     }
 
-    const renderVideoDetailsType: Function = (item: { [key: string]: any }[]): string => item.map(({ name }: { [key: string]: any }) => {
-        const openCC = require('opencc-js')
-        const convert = openCC.Converter({ from: 'cn', to: 'tw' })
-        return convert(name)
-    }).join('、')
+    const renderVideoDetailsType: Function = (item: { [key: string]: any }[]): string => item.map(({ name }: { [key: string]: any }) => convert(name)).join('、')
 
     const getSingleItems: Function = (): void => dispatch(actionCreator.postCurrentId(useQurey.get('id'), useQurey.get('type')))
 
@@ -189,6 +190,6 @@ const SingleVideoPreview: FunctionComponent<{}> = (): JSX.Element => {
             </div>}
         </Show>
     )
-}
+})
 
 export default SingleVideoPreview

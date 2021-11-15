@@ -7,7 +7,7 @@ const actionType: actionTypes = {
     sethavePlay: 'sethavePlay',
     setVideoFooterBarAnimate: 'videoFooterBarAnimate',
     setInitialStatus: 'setInitialStatus',
-    setVolumnVal:'setVolumnVal'
+    setVolumeVal:'setVolumeVal'
 }
 
 export default actionType

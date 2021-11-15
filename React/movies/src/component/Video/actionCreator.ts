@@ -2,7 +2,7 @@ import { actionCreatorTypes } from './types'
 import actionType from './actionType'
 
 const actionCreator: actionCreatorTypes = {
-    setTotalTimes: (totalTime: number): object => ({
+    setTotalTimes: (totalTime: string): object => ({
         type: actionType.setTotalTime,
         totalTime
     }),
@@ -26,8 +26,8 @@ const actionCreator: actionCreatorTypes = {
         type: actionType.setInitialStatus,
         status
     }),
-    setVolumnVal:(val:number):object => ({
-        type: actionType.setVolumnVal,
+    setVolumeVal:(val:string):object => ({
+        type: actionType.setVolumeVal,
         val
     })
 }
