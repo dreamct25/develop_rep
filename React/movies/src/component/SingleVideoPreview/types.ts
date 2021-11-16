@@ -8,9 +8,9 @@ export interface actionTypes {
     restUrlObj: string,
     getSingleReview: string,
     setCurrentSelectId: string,
-    setCastModalToggel:string,
-    setLoadingState:string,
-    restAllObj:string
+    setCastModalToggel: string,
+    setLoadingState: string,
+    restAllObj: string
 }
 
 export interface actionCreatorType {
@@ -20,18 +20,19 @@ export interface actionCreatorType {
     restUrl: Function,
     getSingleReview: Function,
     setCurrentSelectId: Function
-    setCastModalToggel:Function,
-    setLoadingState:Function,
-    restAllObj:Function
+    setCastModalToggel: Function,
+    setLoadingState: Function,
+    restAllObj: Function
 }
 
 export interface objType {
-    singleVideoItem: singleVideoItemType | {[key:string]:any},
-    singleVideoItemUrl: {[key:string]:any},
-    singleVideoItemReview: {[key:string]:any},
+    singleVideoItem: singleVideoItemType | { [key: string]: any },
+    singleVideoItemUrl: { [key: string]: any },
+    singleVideoItemReview: { [key: string]: any },
     selectId: number,
     castModalToggel: boolean,
-    loadingState: boolean
+    loadingState: boolean,
+    currentPostType: { [key: string]: any }
 }
 
 export interface singleVideoItemType {
@@ -59,4 +60,4 @@ export interface cssSetPropertys {
     Show: StyledComponent<"div", any>
 }
 
-export interface reducerState extends ReturnType<typeof store.getState> {}
+export interface reducerState extends ReturnType<typeof store.getState> { }

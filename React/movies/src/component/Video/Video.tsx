@@ -1,36 +1,36 @@
 import { Dispatch, FunctionComponent, useEffect, useRef, ChangeEventHandler, MutableRefObject, MouseEventHandler, MouseEvent, useCallback } from 'react'
-import { actionCreatorTypes,VideoProps,objType,reducerState,cssSetPropertys } from './types'
+import { actionCreatorTypes, VideoProps, objType, reducerState, cssSetPropertys } from './types'
 import { useDispatch, useSelector } from 'react-redux'
 import VideoJs, { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js'
 import 'video.js/dist/video-js.css'
 import 'videojs-youtube/dist/Youtube.min.js'
 import componentEntries from '../Video'
 
-const { 
-    actionCreator, 
-    styles: { Show } 
+const {
+    actionCreator,
+    styles: { Show }
 }: {
     actionCreator: actionCreatorTypes,
     styles: cssSetPropertys
 } = componentEntries
 
 const Video: FunctionComponent<VideoProps> = ({ url }: VideoProps): JSX.Element => {
-    const { durationVal, totalTime, currentTimeText, havePlay, videoFooterBarAnimate, initialStatus,volume }: objType = useSelector((state: reducerState) => ({
+    const { durationVal, totalTime, currentTimeText, havePlay, videoFooterBarAnimate, initialStatus, volume }: objType = useSelector((state: reducerState) => ({
         durationVal: state.getIn(['video', 'duration']) as number,
         totalTime: state.getIn(['video', 'totalTime']) as string,
         currentTimeText: state.getIn(['video', 'currentTimeText']) as string,
         havePlay: state.getIn(['video', 'havePlay']) as boolean,
         videoFooterBarAnimate: state.getIn(['video', 'videoFooterBarAnimate']) as boolean,
         initialStatus: state.getIn(['video', 'initialStatus']) as boolean,
-        volume:state.getIn(['video', 'volume']) as string
+        volume: state.getIn(['video', 'volume']) as string
     }))
 
     const timer: MutableRefObject<NodeJS.Timeout | null> = useRef<NodeJS.Timeout>(null)
 
     const dispatch: Dispatch<any> = useDispatch<Dispatch<any>>()
-    
+
     const playerOption: VideoJsPlayerOptions = {
-        defaultVolume:Number(volume) / 100,
+        defaultVolume: Number(volume) / 100,
         autoplay: false,
         controls: false,
         sources: [{ src: url, type: 'video/youtube' }],
@@ -42,7 +42,7 @@ const Video: FunctionComponent<VideoProps> = ({ url }: VideoProps): JSX.Element 
     const players = useRef<any>(null)
     const progress = useRef<HTMLInputElement>(null)
 
-    const initialVideo: Function = (player: VideoJsPlayer) => {
+    const initialVideo: (player: VideoJsPlayer) => void = player => {
         players.current = player
         setTimeout(() => {
             dispatch(actionCreator.setTotalTimes(player.duration()))
@@ -62,7 +62,7 @@ const Video: FunctionComponent<VideoProps> = ({ url }: VideoProps): JSX.Element 
         }, 2000)
     }
 
-    const timeAction: Function = (player: VideoJsPlayer) => {
+    const timeAction: (player: VideoJsPlayer) => void = player => {
         dispatch(actionCreator.setDurations(player.currentTime()))
         dispatch(actionCreator.setCurrentTimeTexts(videoTimeTrans(player.currentTime() + 1)))
         clearInterval(timer.current!)
@@ -79,21 +79,16 @@ const Video: FunctionComponent<VideoProps> = ({ url }: VideoProps): JSX.Element 
         }, 1000)
     }
 
-    const playSwitch: MouseEventHandler<HTMLDivElement> = () => {
-        havePlay ? players.current.pause() : players.current.play()
-    }
+    const playSwitch: MouseEventHandler<HTMLDivElement> = (): void => havePlay ? players.current.pause() : players.current.play()
 
-    const toggleVideoFooterBar: Function = (status: boolean) => {
-        dispatch(actionCreator.setVideoFooterBarAnimates(status))
-    }
+    const toggleVideoFooterBar: (status: boolean) => void = status => dispatch(actionCreator.setVideoFooterBarAnimates(status))
 
-    const initalPlay: MouseEventHandler<HTMLDivElement> = () => {
+    const initalPlay: MouseEventHandler<HTMLDivElement> = (): void => {
         dispatch(actionCreator.setInitialStatus(true))
         setTimeout(() => players.current.play(), 1000)
-
     }
 
-    const progressAnimte = (val: number, dur: number) => progress.current?.style.setProperty("background-image", `-webkit-linear-gradient(left,red 0%,red ${(val / dur) * 100}%,white ${(val / dur) * 100}%,white 100%)`)
+    const progressAnimte: (val: number, dur: number) => void = (val, dur) => progress.current?.style.setProperty("background-image", `-webkit-linear-gradient(left,red 0%,red ${(val / dur) * 100}%,white ${(val / dur) * 100}%,white 100%)`)
 
     const videoDurationChange: ChangeEventHandler<HTMLInputElement> = ({ target: { value } }: { target: { value: string } }) => {
         dispatch(actionCreator.setDurations(Number(value)))
@@ -102,12 +97,12 @@ const Video: FunctionComponent<VideoProps> = ({ url }: VideoProps): JSX.Element 
         clearInterval(timer.current!)
     }
 
-    const volumeChange: any = ({ target: { value } }: { target: { value: string } }) => {
+    const volumeChange: ChangeEventHandler<HTMLInputElement> = ({ target: { value } }: { target: { value: string } }) => {
         dispatch(actionCreator.setVolumeVal(value))
         players.current.volume(Number(value) / 100)
     }
 
-    const videoTimeTrans: Function = (curTime: any): string => {
+    const videoTimeTrans: (curTime: any) => string = curTime => {
         curTime = isNaN(curTime) === true ? 0 : curTime;
         let min: number | string = Math.floor(curTime / 60);
         let sec: number | string = Math.floor(curTime) - min * 60;
@@ -138,22 +133,27 @@ const Video: FunctionComponent<VideoProps> = ({ url }: VideoProps): JSX.Element 
     return (
         <Show>
             <div className="video-outer">
-                <div onMouseEnter={(el: MouseEvent) => toggleVideoFooterBar(true)} onMouseLeave={(el: MouseEvent) => toggleVideoFooterBar(false)}>
+                <div onMouseEnter={toggleVideoFooterBar.bind(this, true)} onMouseLeave={toggleVideoFooterBar.bind(this, false)}>
                     <video ref={video} className='video-js' />
                 </div>
                 <div className={initialStatus ? 'inital-play inital-play-hide' : 'inital-play'} onClick={initalPlay}>
                     <i className="fal fa-play fa-6x"></i>
                 </div>
-                {initialStatus === true && <div className={videoFooterBarAnimate ? 'video-footer video-footer-active' : 'video-footer'} onMouseEnter={(el: MouseEvent) => toggleVideoFooterBar(true)} onMouseLeave={(el: MouseEvent) => toggleVideoFooterBar(false)}>
+                {initialStatus === true && <div className={videoFooterBarAnimate ? 'video-footer video-footer-active' : 'video-footer'} onMouseEnter={toggleVideoFooterBar.bind(this, true)} onMouseLeave={toggleVideoFooterBar.bind(this, false)}>
                     <div className="video-play" onClick={playSwitch}>
                         <i className={havePlay ? 'fas fa-pause' : 'fas fa-play'}></i>
                     </div>
                     <div className="video-progress">
                         <input ref={progress} className="progress-custom" type="range" min="0" max={totalTime} value={durationVal} onChange={videoDurationChange} />
                     </div>
-                    <div className="video-volume">
-                        <input type="range" className="volume" min="0" max="100" value={volume} onInput={volumeChange} />
-                        <div className="texts" style={{ color:'white' }}>{volume}</div>
+                    <div className="video-volume-group">
+                        <div className="video-volume-btn">
+                            <i className="fas fa-volume-down"></i>
+                        </div>
+                        <div className="video-volume-slider">
+                            <input type="range" className="volume" min="0" max="100" value={volume} onInput={volumeChange} />
+                        </div>
+                        {/* <div className="texts" style={{ color: 'white' }}>{volume}</div> */}
                     </div>
                     <div className="video-time">{currentTimeText} / {videoTimeTrans(totalTime)}</div>
                 </div>}

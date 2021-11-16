@@ -16,12 +16,12 @@ const Pagination: FunctionComponent<PaginationProps> = ({ paginationObjProps }: 
         postNext
     }: paginationObjType = paginationObjProps
 
-    const current: (currentPage: number, e: React.MouseEvent) => void = (currentPage: number, e: React.MouseEvent): void => {
+    const current: (currentPage: number, e: React.MouseEvent) => void = (currentPage, e) => {
         e.preventDefault()
         postNext({ pages:currentPage,partPage:partPage,pageSize:pageSize })
     }
 
-    const renderPageTags: () => JSX.Element[] = (): JSX.Element[] => {
+    const renderPageTags: () => JSX.Element[] = () => {
         let pageTotalToArray: number[] = []
 
         if (paginationObjProps !== undefined) {

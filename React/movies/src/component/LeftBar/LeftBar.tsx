@@ -23,7 +23,7 @@ const LeftBar: FunctionComponent<LeftBarProps> = ({ toggleBar, postCurrentSelect
 
     const route = useHistory()
 
-    const currentSelectType: Function = (val: string): void => {
+    const currentSelectType: (val: string) => void = val => {
         if (val === 'soon') {
             route.push({
                 pathname: 'coming_soon_list'

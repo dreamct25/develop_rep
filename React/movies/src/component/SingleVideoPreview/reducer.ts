@@ -7,11 +7,15 @@ const dataState: Collection<any, any> = fromJS({
     singleVideoItemUrl: {},
     singleVideoItemReview: {},
     selectId: 0,
-    castModalToggel:false,
-    loadingState:false
+    castModalToggel: false,
+    loadingState: false,
+    currentPostType: {
+        movie: ['title', 'original_title', 'release_date'],
+        tv: ['name', 'original_name', 'first_air_date']
+    }
 })
 
-const callBackState:Reducer<Collection<any, any>, Action<{ [key: string]: any }>> = (state: Collection<any, any> = dataState, action: { [key: string]: any }) => {
+const callBackState: Reducer<Collection<any, any>, Action<{ [key: string]: any }>> = (state: Collection<any, any> = dataState, action: { [key: string]: any }) => {
     switch (action.type) {
         case actionType.getSingleVideos:
             return state.toMap().set('singleVideoItem', action.obj)
@@ -22,14 +26,14 @@ const callBackState:Reducer<Collection<any, any>, Action<{ [key: string]: any }>
         case actionType.setCurrentSelectId:
             return state.toMap().set('selectId', action.id)
         case actionType.setCastModalToggel:
-            return state.toMap().set('castModalToggel',action.status)
+            return state.toMap().set('castModalToggel', action.status)
         case actionType.setLoadingState:
-            return state.toMap().set('loadingState',action.status)
+            return state.toMap().set('loadingState', action.status)
         case actionType.restAllObj:
             return state.toMap().merge({
-                singleVideoItem:{},
-                singleVideoItemUrl:{},
-                singleVideoItemReview:{}
+                singleVideoItem: {},
+                singleVideoItemUrl: {},
+                singleVideoItemReview: {}
             })
         default:
             return state

@@ -17,6 +17,10 @@ const dataState: Collection<any, any> = fromJS({
         selectText: '演員',
         selectVal: 'actor'
     }],
+    currentPostType: {
+        movie: ['title', 'original_title'],
+        tv: ['name', 'original_name']
+    },
     rightBarSearchVal: '',
     rightBarSelectVal: '',
     searchBarToggleAnimate: false

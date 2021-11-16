@@ -12,23 +12,23 @@ const RenderSearch: FunctionComponent<{}> = (): JSX.Element => {
 
     const { search }: { search: string } = useLocation()
 
-    const useQurey = ((): URLSearchParams => new URLSearchParams(search))()
+    const useQuery: URLSearchParams = ((): URLSearchParams => new URLSearchParams(search))()
 
-    const renderPage: Function = (type: string): JSX.Element | void => {
+    const renderPage: (type: string) => JSX.Element | undefined = type => {
         switch (type) {
             case 'movie':
-                return <RenderSearchMovie postSearchVal={useQurey.get('query')!} />
+                return <RenderSearchMovie postSearchVal={useQuery.get('query')!} />
             case 'tv':
-                return <RenderSearchTv postSearchVal={useQurey.get('query')!} />
+                return <RenderSearchTv postSearchVal={useQuery.get('query')!} />
             case 'actor':
-                return <RenderSearchActor postSearchVal={useQurey.get('query')!} />
+                return <RenderSearchActor postSearchVal={useQuery.get('query')!} />
         }
     }
     return (
         <Show>
             <div className="container">
                 <div className="search-item-outer">
-                    {renderPage(useQurey.get('type'))}
+                    {renderPage(useQuery.get('type')!)}
                 </div>
             </div>
         </Show>

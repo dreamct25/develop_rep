@@ -19,7 +19,7 @@ const {
 } = componentEntries
 
 const RenderSearchActor: FunctionComponent<RenderSearchActorProps> = ({ postSearchVal }: RenderSearchActorProps): JSX.Element => {
-    const { data,newData,renderData, loadingState, selectId, castModalToggle,currentPageTemp,paginationOption,paginationObj }: objType = useSelector((state: reducerState): objType => ({
+    const { data, newData, renderData, loadingState, selectId, castModalToggle, currentPageTemp, paginationOption, paginationObj }: objType = useSelector((state: reducerState): objType => ({
         data: state.getIn(['renderSearchActor', 'data']) as dataType,
         newData: state.getIn(['renderSearchActor', 'newData']) as resultsItemType[],
         renderData: state.getIn(['renderSearchActor', 'renderData']) as resultsItemType[],
@@ -33,7 +33,7 @@ const RenderSearchActor: FunctionComponent<RenderSearchActorProps> = ({ postSear
 
     const dispatch: Dispatch<any> = useDispatch()
 
-    const { page,total_pages }: dataType = data
+    const { page, total_pages }: dataType = data
 
     const {
         pageTotal,
@@ -44,39 +44,39 @@ const RenderSearchActor: FunctionComponent<RenderSearchActorProps> = ({ postSear
         partPage
     }: paginationType = paginationObj
 
-    const paginationProps:paginationObjType = {
+    const paginationProps: paginationObjType = {
         hasPrev: hasPrev,
         hasNext: hasNext,
         pageTotal: pageTotal,
         pageSize: pageSize,
         partPage: partPage,
         currentPage: currentPage,
-        postNext: (pageObj: paginationOptions):void => {
+        postNext: pageObj => {
             renderPage(pageObj)
             dispatch(actionCreator.setLoadingState(true))
         }
     }
 
-    const setCastModalToggle: (status: number) => void = (status: number): void => dispatch(actionCreator.setCastModalToggel(status))
+    const setCastModalToggle: (status: number) => void = status => dispatch(actionCreator.setCastModalToggel(status))
 
-    const goSingleActor:(id: number) => void = (id: number): void => {
+    const goSingleActor: (id: number) => void = id => {
         dispatch(actionCreator.setCurrentSelectId(id))
         dispatch(actionCreator.setCastModalToggel(true))
     }
 
-    const renderPage:(pageOption:paginationOptions) => void = (pageOption:paginationOptions):void => dispatch(actionCreator.setPaginationOption(pageOption))
+    const renderPage: (pageOption: paginationOptions) => void = pageOption => dispatch(actionCreator.setPaginationOption(pageOption))
 
     useEffect(() => {
-        const { pages,partPage,pageSize } = paginationOption
+        const { pages, partPage, pageSize } = paginationOption
         const { pageObj, renderItem } = paginations(newData, pages, partPage, pageSize)
         dispatch(actionCreator.setCurrentPageTemp(pages))
         dispatch(actionCreator.setPaginationObj(pageObj))
         dispatch(actionCreator.setRenderData(renderItem))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[paginationOption])
+    }, [paginationOption])
 
     useEffect(() => {
-        renderPage({ pages: currentPageTemp,partPage: 20,pageSize: 10 })
+        renderPage({ pages: currentPageTemp, partPage: 20, pageSize: 10 })
         dispatch(actionCreator.setLoadingState(true))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [newData])
@@ -84,15 +84,15 @@ const RenderSearchActor: FunctionComponent<RenderSearchActorProps> = ({ postSear
     useEffect(() => {
         renderData.length !== 0 && dispatch(actionCreator.setLoadingState(false))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[renderData])
+    }, [renderData])
 
     useEffect(() => {
-        if(newData.constructor.name === 'List'){
-            dispatch(actionCreator.setPaginationOption({ pages: currentPageTemp,partPage: 20,pageSize: 10 }))
-            dispatch(actionCreator.getSearchActorItem({ searchVal: postSearchVal,page: page,totalPage:total_pages }))
+        if (newData.constructor.name === 'List') {
+            dispatch(actionCreator.setPaginationOption({ pages: currentPageTemp, partPage: 20, pageSize: 10 }))
+            dispatch(actionCreator.getSearchActorItem({ searchVal: postSearchVal, page: page, totalPage: total_pages }))
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [postSearchVal,data])
+    }, [postSearchVal, data])
 
     useEffect(() => () => {
         dispatch(actionCreator.setCastModalToggel(false))

@@ -4,9 +4,9 @@ import { actionCreatorType, reducerState, RightBarProps, objType, cssSetProperty
 import { useHistory } from "react-router"
 import componentEntries from '../RightBar'
 
-const { 
-    actionCreator, 
-    styles: { Show } 
+const {
+    actionCreator,
+    styles: { Show }
 }: {
     actionCreator: actionCreatorType,
     styles: cssSetPropertys
@@ -19,18 +19,19 @@ const RightBar: FunctionComponent<RightBarProps> = ({
     postCurrentSearch,
     currentHotItemType
 }: RightBarProps): JSX.Element => {
-    const { selectListItem, rightBarSearchVal, rightBarSelectVal, searchBarToggleAnimate }: objType = useSelector((state: reducerState): objType => ({
+    const { selectListItem, currentPostType, rightBarSearchVal, rightBarSelectVal, searchBarToggleAnimate }: objType = useSelector((state: reducerState): objType => ({
         rightBarSearchVal: state.getIn(['rightBar', 'rightBarSearchVal']) as string,
         rightBarSelectVal: state.getIn(['rightBar', 'rightBarSelectVal']) as string,
         searchBarToggleAnimate: state.getIn(['rightBar', 'searchBarToggleAnimate']) as boolean,
-        selectListItem: state.getIn(['rightBar', 'selectListItem']).toJS() as { selectText: string, selectVal: string }[]
+        selectListItem: state.getIn(['rightBar', 'selectListItem']).toJS() as { selectText: string, selectVal: string }[],
+        currentPostType: state.getIn(['rightBar', 'currentPostType']).toJS() as { [key: string]: any }
     }))
 
     const route = useHistory()
 
     const dispatch: Dispatch<any> = useDispatch()
 
-    const currentSelect: Function = (url: string): void => postCurrentSelect(url)
+    const currentSelect: (url: string) => void = url => postCurrentSelect(url)
 
     const setRightBarSearchVal: ChangeEventHandler<HTMLInputElement> = ({ target: { value } }: { target: { value: string } }): void => dispatch(actionCreator.setRightBarSearchVal(value))
 
@@ -53,14 +54,7 @@ const RightBar: FunctionComponent<RightBarProps> = ({
         }
     }
 
-    const renderTextSwitch: Function = (val: string): string[] | undefined => {
-        switch (val) {
-            case 'movie':
-                return ['title', 'original_title']
-            case 'tv':
-                return ['name', 'original_name']
-        }
-    }
+    const renderTextSwitch: (val: string) => string[] | undefined = val => currentPostType[val]
 
     return (
         <Show>
@@ -86,8 +80,8 @@ const RightBar: FunctionComponent<RightBarProps> = ({
                             </div>
                             <div className="poster-card-body">
                                 <div className="title-group">
-                                    <span>{item[renderTextSwitch(currentHotItemType)[0]]}</span>
-                                    <span>{item[renderTextSwitch(currentHotItemType)[1]]}</span>
+                                    <span>{item[renderTextSwitch(currentHotItemType)![0]]}</span>
+                                    <span>{item[renderTextSwitch(currentHotItemType)![1]]}</span>
                                 </div>
                             </div>
                         </div>

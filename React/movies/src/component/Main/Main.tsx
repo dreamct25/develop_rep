@@ -35,17 +35,17 @@ const Main: FunctionComponent<{}> = (): JSX.Element => {
 
     const { searchVal, selectVal }: { searchVal: string, selectVal: string } = search
 
-    const currentSelect: Function = (id: number) => dispatch(actionCreator.getCurrentSelect(id))
+    const currentSelect: (id: number) => void = id => dispatch(actionCreator.getCurrentSelect(id))
 
-    const currentSearch: Function = (val: { [key: string]: any }) => dispatch(actionCreator.setSearchVal(val))
+    const currentSearch:(val: { [key: string]: any }) => void = val => dispatch(actionCreator.setSearchVal(val))
 
-    const currentSelectAtLeftBarType:Function = (val:string) => dispatch(actionCreator.setHotItemType(val))
+    const currentSelectAtLeftBarType:(val:string) => void = val => dispatch(actionCreator.setHotItemType(val))
 
-    const toggleBarAnimate = (status: boolean) => dispatch(actionCreator.setToggleBarAnimate(status))
+    const toggleBarAnimate:(status: boolean) => void = status => dispatch(actionCreator.setToggleBarAnimate(status))
 
-    const pushMainPage = (obj: object): void => { "results" in data && route.push({ ...obj }) }
+    const pushMainPage:(obj: object) => void = obj => "results" in data && route.push({ ...obj })
 
-    const pushSearchPage = (obj: object): void => { 'searchVal' in search && route.push({ ...obj }) }
+    const pushSearchPage:(obj: object) => void = obj => 'searchVal' in search && route.push({ ...obj })
 
     useEffect(() => {
         currentSelectAtLeftBarType('movie')

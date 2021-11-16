@@ -19,7 +19,7 @@ const {
 } = componentEntries
 
 const RenderSearchTv: FunctionComponent<RenderSearchTvProps> = ({ postSearchVal }: RenderSearchTvProps): JSX.Element => {
-    const { data,newData,renderData,loadingState,currentPageTemp,paginationOption,paginationObj,filterListItem,filterValue,filterListToggle }: objType = useSelector((state: reducerState): objType => ({
+    const { data, newData, renderData, loadingState, currentPageTemp, paginationOption, paginationObj, filterListItem, filterValue, filterListToggle }: objType = useSelector((state: reducerState): objType => ({
         data: state.getIn(['renderSearchTv', 'data']) as dataType,
         newData: state.getIn(['renderSearchTv', 'newData']) as resultsItemType[],
         renderData: state.getIn(['renderSearchTv', 'renderData']) as resultsItemType[],
@@ -28,7 +28,7 @@ const RenderSearchTv: FunctionComponent<RenderSearchTvProps> = ({ postSearchVal 
         paginationOption: state.getIn(['renderSearchTv', 'paginationOption']) as paginationOptions,
         paginationObj: state.getIn(['renderSearchTv', 'paginationObj']) as paginationType,
         filterListItem: state.getIn(['renderSearchTv', 'filterListItem']).toJS() as filterPropsType[],
-        filterValue: state.getIn(['renderSearchTv', 'filterValue']) as {[key:string]:any},
+        filterValue: state.getIn(['renderSearchTv', 'filterValue']) as { [key: string]: any },
         filterListToggle: state.getIn(['renderSearchTv', 'filterListToggle']) as boolean
     }))
 
@@ -36,7 +36,7 @@ const RenderSearchTv: FunctionComponent<RenderSearchTvProps> = ({ postSearchVal 
 
     const dispatch: Dispatch<any> = useDispatch()
 
-    const { page,total_pages }: dataType = data
+    const { page, total_pages }: dataType = data
 
     const {
         pageTotal,
@@ -47,7 +47,7 @@ const RenderSearchTv: FunctionComponent<RenderSearchTvProps> = ({ postSearchVal 
         partPage
     }: paginationType = paginationObj
 
-    const paginationProps:paginationObjType = {
+    const paginationProps: paginationObjType = {
         hasPrev: hasPrev,
         hasNext: hasNext,
         pageTotal: pageTotal,
@@ -60,54 +60,54 @@ const RenderSearchTv: FunctionComponent<RenderSearchTvProps> = ({ postSearchVal 
         }
     }
 
-    const goSingleVideo: (id: number) => void = (id: number):void => route.push({ pathname: '/single_preview',search: `id=${id}&type=tv` })
+    const goSingleVideo: (id: number) => void = id => route.push({ pathname: '/single_preview', search: `id=${id}&type=tv` })
 
-    const renderPage:(pageOption:paginationOptions) => void = (pageOption:paginationOptions):void => dispatch(actionCreator.setPaginationOption(pageOption))
+    const renderPage: (pageOption: paginationOptions) => void = pageOption => dispatch(actionCreator.setPaginationOption(pageOption))
 
-    const initalData:(haveAdult:boolean) => void = haveAdult => {
-        dispatch(actionCreator.setPaginationOption({ pages: currentPageTemp,partPage: 20,pageSize: 10 }))
-        dispatch(actionCreator.getSearchTvItem({ searchVal: postSearchVal,page: page,totalPage:total_pages,haveAdult:haveAdult }))
+    const initalData: (haveAdult: boolean) => void = haveAdult => {
+        dispatch(actionCreator.setPaginationOption({ pages: currentPageTemp, partPage: 20, pageSize: 10 }))
+        dispatch(actionCreator.getSearchTvItem({ searchVal: postSearchVal, page: page, totalPage: total_pages, haveAdult: haveAdult }))
         dispatch(actionCreator.setLoadingState(true))
     }
 
-    const setFilterValue:Function | ((value:string) => void) = value => {
-        let filterValueTemp:{ [key:string]:any } = filterValue
+    const setFilterValue: Function | ((value: string) => void) = value => {
+        let filterValueTemp: { [key: string]: any } = filterValue
         filterValueTemp[value] = !filterValueTemp[value]
         dispatch(actionCreator.setFilterValue(filterValueTemp))
         changeData(value)
     }
 
-    const setFilterListToggleAnimate:Function | (() => void) = () => dispatch(actionCreator.setFilterListToggleAnimate(!filterListToggle))
+    const setFilterListToggleAnimate: Function | (() => void) = () => dispatch(actionCreator.setFilterListToggleAnimate(!filterListToggle))
 
-    const changeData:(value:string) => void = value => {
-        switch(value){
+    const changeData: (value: string) => void = value => {
+        switch (value) {
             case 'adult':
-                initalData(filterValue[value]) 
+                initalData(filterValue[value])
                 break;
             case 'date':
-                if(filterValue[value]){
+                if (filterValue[value]) {
                     dispatch(actionCreator.setLoadingState(true))
                     setTimeout(() => {
                         dispatch(actionCreator.setFullSearchTvItem(
                             newData.filter(
-                                ({ first_air_date }:{ first_air_date:string }) => first_air_date !== undefined && first_air_date !== ''
+                                ({ first_air_date }: { first_air_date: string }) => first_air_date !== undefined && first_air_date !== ''
                             ).sort(
-                                (a:{ first_air_date:string },b:{ first_air_date:string }) => Number(b.first_air_date.split("-").join("")) - Number(a.first_air_date.split("-").join(""))
+                                (a: { first_air_date: string }, b: { first_air_date: string }) => Number(b.first_air_date.split("-").join("")) - Number(a.first_air_date.split("-").join(""))
                             )
                         ))
                     }, 300);
                 } else {
                     dispatch(actionCreator.setLoadingState(true))
-                    setTimeout(() => initalData(false),300)
+                    setTimeout(() => initalData(false), 300)
                 }
                 break;
             case 'rate':
-                if(filterValue[value]){
+                if (filterValue[value]) {
                     dispatch(actionCreator.setLoadingState(true))
                     setTimeout(() => {
-                        renderPage({...paginationOption})
+                        renderPage({ ...paginationOption })
                         dispatch(actionCreator.setFullSearchTvItem(
-                            newData.sort((a:{ vote_average:number },b:{ vote_average:number }) => b.vote_average - a.vote_average)
+                            newData.sort((a: { vote_average: number }, b: { vote_average: number }) => b.vote_average - a.vote_average)
                         ))
                     }, 300);
                 } else {
@@ -119,16 +119,16 @@ const RenderSearchTv: FunctionComponent<RenderSearchTvProps> = ({ postSearchVal 
     }
 
     useEffect(() => {
-        const { pages,partPage,pageSize } = paginationOption
+        const { pages, partPage, pageSize } = paginationOption
         const { pageObj, renderItem } = paginations(newData, pages, partPage, pageSize)
         dispatch(actionCreator.setCurrentPageTemp(pages))
         dispatch(actionCreator.setPaginationObj(pageObj))
         dispatch(actionCreator.setRenderData(renderItem))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[paginationOption])
+    }, [paginationOption])
 
     useEffect(() => {
-        renderPage({ pages: currentPageTemp,partPage: 20,pageSize: 10 })
+        renderPage({ pages: currentPageTemp, partPage: 20, pageSize: 10 })
         dispatch(actionCreator.setLoadingState(true))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [newData])
@@ -136,18 +136,18 @@ const RenderSearchTv: FunctionComponent<RenderSearchTvProps> = ({ postSearchVal 
     useEffect(() => {
         renderData.length !== 0 && dispatch(actionCreator.setLoadingState(false))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[renderData])
+    }, [renderData])
 
     useEffect(() => {
         newData.constructor.name === 'List' && initalData(false)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [postSearchVal,data])
-    
+    }, [postSearchVal, data])
+
     useEffect(() => () => {
         dispatch(actionCreator.setFullSearchTvItem(List([])))
         route.location.pathname === '/main' && dispatch(actionCreator.setCurrentPageTemp(1))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
+    }, [])
 
     return (
         <Show>
@@ -159,8 +159,8 @@ const RenderSearchTv: FunctionComponent<RenderSearchTvProps> = ({ postSearchVal 
                         <div className="filter-group">
                             <div className={filterListToggle ? "filter-btn filter-btn-toggle" : "filter-btn"} onClick={setFilterListToggleAnimate.bind(this)}>進階篩選</div>
                             <div className={filterListToggle ? "filter-list filter-list-toggle" : "filter-list"}>
-                                {filterListItem.map(({ title,disTitle,value }:filterPropsType,index:number) => (
-                                    <div key={index} className="filter-list-item" onClick={setFilterValue.bind(this,value)}>{filterValue[value] ? disTitle : title}</div>
+                                {filterListItem.map(({ title, disTitle, value }: filterPropsType, index: number) => (
+                                    <div key={index} className="filter-list-item" onClick={setFilterValue.bind(this, value)}>{filterValue[value] ? disTitle : title}</div>
                                 ))}
                             </div>
                         </div>

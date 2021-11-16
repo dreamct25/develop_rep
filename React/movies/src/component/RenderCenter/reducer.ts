@@ -4,7 +4,11 @@ import { Action, Reducer } from 'redux'
 
 const dataState: Collection<any, any> = fromJS({
     singleData: [],
-    changeBackPostSwitch: false
+    changeBackPostSwitch: false,
+    currentPostType:{
+        movie:'title',
+        tv:'name'
+    }
 })
 
 const callBackState:Reducer<Collection<any, any>, Action<{ [key: string]: any }>> = (state: Collection<any, any> = dataState, action: { [key: string]: any }) => {

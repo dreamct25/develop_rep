@@ -41,37 +41,27 @@ const CastModal: FunctionComponent<CastModalProps> = ({ postToggles,postId, post
 
     const dispatch: Dispatch<any> = useDispatch()
 
-    const modalSwitch: Function = (status: boolean): void => {
+    const modalSwitch:(status: boolean) => void = status => {
         postSetCastModalToggle(status)
         !status && dispatch(actionCreator.setSingleCastItem({}))
     }
 
-    const moviePostToggles: Function = (haveOpen: boolean): void => {
+    const moviePostToggles:(haveOpen: boolean) => void = haveOpen => {
         dispatch(actionCreator.setMoviePostToggle(haveOpen))
         !haveOpen && setTimeout(() => dispatch(actionCreator.setPostPath('')),700) 
     }
 
-    const filterTranditionalChineseName: Function = (item: string[]):string => {
+    const filterTranditionalChineseName:(item: string[]) => string = item => {
         const filterWord:string[] = item.filter((name: string) => new RegExp('^[\u4E00-\u9FA5]+$').test(name.replace(/·/g, '').trim()))
         const exportStr:string = filterWord.length !== 0 ? filterWord.map((word:string) => convert(word))[0] : ''
         return exportStr
     }
 
+    const goSingleVideo:([id, type]:[number,string]) => void = ([id, type]) => route.push({ pathname: '/single_preview',search: `id=${id}&type=${type}` })
 
-    const goSingleVideo: Function = (...item: any[]): void => {
-        const [id, type]: number[] | string[] = item
-        let obj: { [key: string]: any } = {
-            pathname: '/single_preview',
-            search: `id=${id}&type=${type}`
-        }
-        route.push({ ...obj })
-    }
+    const setLoadingState:(status:boolean) => void = status => dispatch(actionCreator.setLoadingState(status))
 
-    const setLoadingState:Function = (status:boolean):void => {
-        dispatch(actionCreator.setLoadingState(status))
-    }
-
-    const showMoviePost:Function = (postPath:string):void => {
+    const showMoviePost:(postPath:string) => void = postPath => {
         if(postPath === '' || postPath === null || postPath === undefined){
             alert('無封面')
         } else {
@@ -141,7 +131,7 @@ const CastModal: FunctionComponent<CastModalProps> = ({ postToggles,postId, post
                                     <div className="cast-famous-video-title">著名影視</div>
                                     <div className="cast-famous-video-list">
                                         {'combined_credits' in data && data.combined_credits?.crew.length !== 0 ? filterTheSame(data.combined_credits?.crew).map(({ id, title,name,original_title,original_name,poster_path, media_type }: combinedCreditsCrewType, index: number) => (
-                                            <div key={index} className="cast-famous-video-list-item" onClick={goSingleVideo.bind(this, id, media_type)}>
+                                            <div key={index} className="cast-famous-video-list-item" onClick={goSingleVideo.bind(this, [id, media_type])}>
                                                 {poster_path !== null && poster_path !== undefined ? <img src={`https://image.tmdb.org/t/p/original${poster_path}`} alt="" /> : <NoImage text={'No Image'} />}
                                                 <div className="famous-title">
                                                     <div className="title-group">
@@ -172,7 +162,7 @@ const CastModal: FunctionComponent<CastModalProps> = ({ postToggles,postId, post
                                     <div className="cast-movie-list">
                                         {'combined_credits' in data && repackArr(data.combined_credits?.cast).map(({ id, title,name,original_title,original_name, character, release_date,poster_path, media_type }: combinedCreditsCastType, index: number) => (
                                             <div key={index} className="list-item">
-                                                <div className="title" onClick={goSingleVideo.bind(this, id, media_type)}>
+                                                <div className="title" onClick={goSingleVideo.bind(this, [id, media_type])}>
                                                     <span>{media_type === "movie" ? title : name}</span>
                                                     <span>{media_type === "movie" ? original_title : original_name}</span>
                                                 </div>

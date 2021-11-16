@@ -46,22 +46,9 @@ const ComingSoonList: FunctionComponent<{}> = (): JSX.Element => {
         partPage
     }: paginationType = paginationObj
 
-    const goSingleVideo: Function = (id: number) => {
-        let obj: { [key: string]: any } = {
-            pathname: '/single_preview',
-            search: `id=${id}&type=movie`
-        }
-        route.push({ ...obj })
-    }
+    const goSingleVideo: (id: number) => void = id => route.push({ pathname: '/single_preview',search: `id=${id}&type=movie` })
 
-    const renderPage:(pageOption:paginationOptions) => void = (pageOption:paginationOptions):void => {
-        dispatch(actionCreator.setPaginationOption(pageOption))
-    }
-
-    const changePage:(pageObj: paginationOptions) => void = (pageObj: paginationOptions):void => {
-        renderPage(pageObj)
-        dispatch(actionCreator.setLoadingState(true))
-    }
+    const renderPage:(pageOption:paginationOptions) => void = pageOption => dispatch(actionCreator.setPaginationOption(pageOption))
 
     const paginationProps:paginationObjType = {
         hasPrev: hasPrev,
@@ -70,7 +57,10 @@ const ComingSoonList: FunctionComponent<{}> = (): JSX.Element => {
         pageSize: pageSize,
         partPage: partPage,
         currentPage: currentPage,
-        postNext: changePage
+        postNext: pageObj => {
+            renderPage(pageObj)
+            dispatch(actionCreator.setLoadingState(true))
+        }
     }
 
     useEffect(() => {

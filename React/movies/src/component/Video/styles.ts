@@ -37,8 +37,9 @@ const cssSet: cssSetPropertys = {
                 user-select:none;
             }
             .video-footer{
-                display:flex;
-                justify-content:space-between;
+                display:grid;
+                grid-template-columns:3% 86% 3% 8%;
+                align-items:center;
                 position: absolute;
                 left:0;
                 right:0;
@@ -76,6 +77,20 @@ const cssSet: cssSetPropertys = {
                         background-color: red;
                         cursor: pointer;
                         user-select: none;
+                    }
+                }
+                .video-volume-group{
+                    position: relative;
+                    .video-volume-btn{
+                        text-align:center;
+                        font-size:18px;
+                    }
+                    .video-volume-slider{
+                        position: absolute;
+                        bottom:0;
+                        right:0;
+                        left:0;
+                        transform:translate(0px,-50px) rotate(-90deg);
                     }
                 }
                 .video-time{

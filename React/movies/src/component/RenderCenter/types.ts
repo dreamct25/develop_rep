@@ -14,6 +14,7 @@ export interface actionCreatorType {
 export interface objType {
     singleData: {[key:string]:any}[],
     changeBackPostSwitch: boolean,
+    currentPostType:{[key:string]:any}
 }
 
 export interface cssSetPropertys {
