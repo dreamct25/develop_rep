@@ -8,7 +8,8 @@ export interface actionTypes {
     sethavePlay: string,
     setVideoFooterBarAnimate: string,
     setInitialStatus: string,
-    setVolumeVal:string
+    setVolumeVal:string,
+    setVolumeSliderToggle:string
 }
 
 export interface actionCreatorTypes {
@@ -18,7 +19,8 @@ export interface actionCreatorTypes {
     setHavePlays: Function,
     setVideoFooterBarAnimates: Function,
     setInitialStatus: Function,
-    setVolumeVal:Function
+    setVolumeVal:Function,
+    setVolumeSliderToggle:Function
 }
 
 export interface VideoProps {
@@ -32,7 +34,8 @@ export interface objType {
     currentTimeText: string,
     havePlay: boolean,
     videoFooterBarAnimate: boolean,
-    initialStatus: boolean
+    initialStatus: boolean,
+    volumeSliderToggle:boolean
 }
 
 export interface cssSetPropertys {

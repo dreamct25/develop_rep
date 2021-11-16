@@ -16,7 +16,7 @@ const cssSet: cssSetPropertys = {
                 position: absolute;
                 top:50%;
                 left:50%;
-                z-index:15;
+                z-index:16;
                 opacity:1;
                 transform:translate(-50%,-50%) scale(1);
                 color:white;
@@ -32,42 +32,35 @@ const cssSet: cssSetPropertys = {
             }
             .video-play{
                 color:white;
-                margin:0 15px;
                 cursor: pointer;
                 user-select:none;
             }
             .video-footer{
                 display:grid;
-                grid-template-columns:3% 86% 3% 8%;
+                grid-template-columns:1% auto auto auto;
                 align-items:center;
                 position: absolute;
                 left:0;
                 right:0;
                 bottom:0;
-                z-index:15;
-                padding:30px 0 10px 0;
+                z-index:14;
+                padding:30px 0px 10px 15px;
                 opacity:0;
                 transform:translateY(100px);
                 background:linear-gradient(0deg,rgba(30,30,30,1),rgba(30,30,30,.9),rgba(30,30,30,.6),rgba(30,30,30,0));
                 transition:.7s ease;
                 .video-progress{
                     display:flex;
-                    align-items:center;
+                    justify-content:center;
                     .progress-custom{
-                        width:86vw;
+                        width:87vw;
                         position: relative;
                         -webkit-appearance: none;
                         border-radius: 5px;
                         height: 8px;
                         cursor: pointer;
                         user-select: none;
-                        background-image: -webkit-linear-gradient(
-                        left,
-                        #f22 0%,
-                        #f22 0%,
-                        #fff 0%,
-                        #fff 100%
-                        );
+                        background-image: -webkit-linear-gradient(left,#f22 0%,#f22 0%,#fff 0%,#fff 100%);
                         outline: none;
                     }
                     .progress-custom::-webkit-slider-thumb {
@@ -83,19 +76,47 @@ const cssSet: cssSetPropertys = {
                     position: relative;
                     .video-volume-btn{
                         text-align:center;
-                        font-size:18px;
+                        font-size:25px;
+                        color:white;
                     }
                     .video-volume-slider{
                         position: absolute;
                         bottom:0;
-                        right:0;
-                        left:0;
-                        transform:translate(0px,-50px) rotate(-90deg);
+                        opacity:0;
+                        transform:translate(-54px,-78px) rotate(-90deg);
+                        transition:.7s ease;
+                        box-shadow:inset 0 0 2px 0 rgba(255,255,255,.7);
+                        background-color:rgba(0,0,0,.7);
+                        padding:2px 8px 5px 8px;
+                        border-radius:20px;
+                        .volume{
+                            -webkit-appearance: none;
+                            border-radius: 5px;
+                            height: 8px;
+                            cursor: pointer;
+                            user-select: none;
+                            background-image: -webkit-linear-gradient(left,#f22 0%,#f22 0%,#fff 0%,#fff 100%);
+                            outline: none;
+                            text-align:center;
+                        }
+                        .volume::-webkit-slider-thumb {
+                            -webkit-appearance: none;
+                            width: 20px;
+                            height: 20px;
+                            border-radius: 50%;
+                            background-color: red;
+                            cursor: pointer;
+                            user-select: none;
+                        }
+                    }
+                    .video-volume-slider-toggle{
+                        opacity:1;
+                        transform:translate(-54px,-88px) rotate(-90deg);
                     }
                 }
                 .video-time{
                     color:white;
-                    margin:0 15px;
+                    margin-left:5px;
                 }
             }
             .video-footer-active{
@@ -109,7 +130,7 @@ const cssSet: cssSetPropertys = {
                 right:0;
                 bottom:0;
                 opacity:1;
-                z-index:1;
+                z-index:15;
                 background:linear-gradient(0deg,rgba(28,28,28,1),rgba(28,28,28,.6),rgba(28,28,28,.3),rgba(28,28,28,0));
                 transition:.7s ease;
             }

@@ -29,6 +29,10 @@ const actionCreator: actionCreatorTypes = {
     setVolumeVal:(val:string):object => ({
         type: actionType.setVolumeVal,
         val
+    }),
+    setVolumeSliderToggle:(status:boolean):object => ({
+        type: actionType.setVolumeSliderToggle,
+        status
     })
 }
 

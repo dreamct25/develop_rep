@@ -10,7 +10,8 @@ const dataState: Collection<any, any> = fromJS({
     currentTimeText: '',
     havePlay: false,
     videoFooterBarAnimate: false,
-    initialStatus: false
+    initialStatus: false,
+    volumeSliderToggle:false
 })
 
 const callBackState:Reducer<Collection<any, any>, Action<{ [key: string]: any }>> = (state: Collection<any, any> = dataState, action: { [key: string]: any }) => {
@@ -29,6 +30,8 @@ const callBackState:Reducer<Collection<any, any>, Action<{ [key: string]: any }>
             return state.toMap().set('videoFooterBarAnimate', action.status)
         case actionType.setInitialStatus:
             return state.toMap().set('initialStatus', action.status)
+        case actionType.setVolumeSliderToggle:
+            return state.toMap().set('volumeSliderToggle', action.status)
         default:
             return state
     }
