@@ -89,7 +89,7 @@ const RenderSearchActor: FunctionComponent<RenderSearchActorProps> = ({ postSear
     }, [renderData])
 
     useEffect(() => {
-        if (newData.constructor.name === 'List') {
+        if (newData.constructor.name === 'List' || newData.constructor.name === 't') {
             dispatch(actionCreator.setPaginationOption(pageOptionAuto))
             dispatch(actionCreator.getSearchActorItem({ searchVal: postSearchVal, page: page, totalPage: total_pages }))
         }

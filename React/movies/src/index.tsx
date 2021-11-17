@@ -3,14 +3,15 @@ import App from './App';
 import store from './store'
 import { Provider } from 'react-redux'
 import { createBrowserHistory } from 'history'
-import { Router, BrowserRouter, } from 'react-router-dom'
+import { Router, HashRouter,Redirect } from 'react-router-dom'
 
 const AppJSX: JSX.Element = (
   <Provider store={store}>
     <Router history={createBrowserHistory()}>
-      <BrowserRouter>
+      <HashRouter>
+        <Redirect to="/" />
         <App />
-      </BrowserRouter>
+      </HashRouter>
     </Router>
   </Provider>
 )

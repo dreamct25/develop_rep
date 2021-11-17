@@ -26,7 +26,7 @@ const LeftBar: FunctionComponent<LeftBarProps> = ({ toggleBar, postCurrentSelect
     const currentSelectType: (val: string) => void = val => {
         if (val === 'soon') {
             route.push({
-                pathname: 'coming_soon_list'
+                pathname: '/coming_soon_list'
             })
         } else {
             dispatch(actionCreator.setSelectText(val))

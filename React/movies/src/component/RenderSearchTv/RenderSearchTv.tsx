@@ -141,7 +141,7 @@ const RenderSearchTv: FunctionComponent<RenderSearchTvProps> = ({ postSearchVal 
     }, [renderData])
 
     useEffect(() => {
-        newData.constructor.name === 'List' && initalData(false)
+        newData.constructor.name === 'List' || newData.constructor.name === 't' && initalData(false)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [postSearchVal, data])
 

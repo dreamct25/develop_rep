@@ -1,7 +1,7 @@
 import { FunctionComponent, useEffect, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useHistory, useLocation } from "react-router"
-import { actionCreatorType,objType,reducerState,cssSetPropertys } from './types'
+import { useHistory } from "react-router"
+import { actionCreatorType,objType,reducerState,RenderCenterProps,cssSetPropertys } from './types'
 import componentEntries from '../RenderCenter'
 
 const {
@@ -12,15 +12,14 @@ const {
     actionCreator: actionCreatorType
 } = componentEntries
 
-const RenderCenter: FunctionComponent<{}> = (): JSX.Element => {
+const RenderCenter: FunctionComponent<RenderCenterProps> = ({ postData,postId,postHotItemType }:RenderCenterProps): JSX.Element => {
+    
     const router = useHistory()
-
-    const { state: { postData, postId,postHotItemType } }: { state: { [key: string]: any } } = useLocation()
 
     const { singleData, changeBackPostSwitch,currentPostType }: objType = useSelector((state: reducerState): objType => ({
         singleData: state.getIn(['renderCenter', 'singleData']) as {[key:string]:any}[],
         changeBackPostSwitch: state.getIn(['renderCenter', 'changeBackPostSwitch']) as boolean,
-        currentPostType: state.getIn([]).toJS() as {[key:string]:any}
+        currentPostType: state.getIn(['renderCenter', 'currentPostType']).toJS() as {[key:string]:any}
     }))
 
     const dispatch = useDispatch()
@@ -31,7 +30,7 @@ const RenderCenter: FunctionComponent<{}> = (): JSX.Element => {
 
     const goSinglePreviewVideo:(id: number) => void = id => router.push({ pathname: '/single_preview',search: `id=${id}&type=${postHotItemType}` })
 
-    const renderTextSwitch:(val:string) => string | undefined = val => currentPostType[val]
+    const renderTextSwitch:(val:string) => string = val => currentPostType[val]
 
     useEffect(() => {
         setTimeout(() => {
@@ -56,7 +55,7 @@ const RenderCenter: FunctionComponent<{}> = (): JSX.Element => {
                     <div ref={renderCenterBannerRef} className={changeBackPostSwitch ? 'render-center-banner render-center-banner-toggle' : 'render-center-banner'}>
                         {!changeBackPostSwitch && <div className="render-center-banner-body">
                             <div className="title">
-                                <span className="preview-title">{item[renderTextSwitch(postHotItemType)!]}</span>
+                                <span className="preview-title">{item[renderTextSwitch(postHotItemType)]}</span>
                                 <span className="preview-video" onClick={goSinglePreviewVideo.bind(this, item.id)}>預告片<i className="far fa-play-circle play-icon"></i></span>
                             </div>
                             <span>{item.overview === "" ? '無解說。' : item.overview}</span>

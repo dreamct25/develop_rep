@@ -86,7 +86,7 @@ const ComingSoonList: FunctionComponent<{}> = (): JSX.Element => {
     },[renderData])
 
     useEffect(() => {
-        if(newData.constructor.name === 'List'){
+        if(newData.constructor.name === 'List' || newData.constructor.name === 't'){
             dispatch(actionCreator.setPaginationOption(pageOptionAuto))
             dispatch(actionCreator.getItem(1, total_pages))
             dispatch(actionCreator.setLoadingState(true))
