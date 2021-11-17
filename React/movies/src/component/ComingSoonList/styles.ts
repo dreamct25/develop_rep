@@ -15,6 +15,7 @@ const cssSet: cssSetPropertys = {
                     text-align:center;
                     font-size:35px;
                     font-weight:bold;
+                    margin-bottom:25px;
                 }
             }
             .coming-soon-movie-body{

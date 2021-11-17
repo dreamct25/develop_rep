@@ -50,7 +50,7 @@ const RenderCenter: FunctionComponent<{}> = (): JSX.Element => {
     }, [postId])
 
     return (
-        <Show>
+         <Show>
             {singleData.length !== 0 && singleData.map((item: { [key: string]: any }, index: number) => (
                 <div className="render-center-outer" key={index}>
                     <div ref={renderCenterBannerRef} className={changeBackPostSwitch ? 'render-center-banner render-center-banner-toggle' : 'render-center-banner'}>

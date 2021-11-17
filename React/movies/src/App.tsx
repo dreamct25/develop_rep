@@ -1,10 +1,14 @@
 import { FunctionComponent } from 'react';
-import './App.css';
+import styles,{ cssSetPropertys } from './styles' ;
 import Main from './component/Main/Main';
+
+const { Show }:cssSetPropertys = styles
 
 const App:FunctionComponent<{}> = ():JSX.Element => (
   <div className="App">
-    <Main />
+    <Show>
+      <Main />
+    </Show>
   </div>
 )
 

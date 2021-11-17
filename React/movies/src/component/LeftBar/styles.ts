@@ -12,7 +12,6 @@ const cssSet: cssSetPropertys = {
             opacity:1;
             transform:translateX(0);
             transition:.7s ease;
-            box-shadow:0 0 2px 1px rgba(0,0,0,.3);
             background-color:rgba(0,0,0,.3);
             backdrop-filter:blur(10px);
             .left-list{
@@ -41,6 +40,28 @@ const cssSet: cssSetPropertys = {
         .outer-active{
             opacity:0;
             transform:translateX(-400px);
+        }
+
+        @media screen and (max-width: 415px) {
+            .left-list-outer{
+                top:unset;
+                right:0;
+                opacity:1;
+                transform:translateY(0px);
+                z-index: 11;
+                .left-list{
+                    min-height:10vh;
+                    flex-direction:unset;
+                    align-items:center;
+                    .list-item{
+                        padding:0 30px;
+                    }
+                }
+            }
+            .outer-active{
+                opacity:0;
+                transform:translateY(400px);
+            }
         }
     `,
 }

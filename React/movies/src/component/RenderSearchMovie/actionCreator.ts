@@ -1,48 +1,47 @@
 import { actionCreatorType } from './types'
 import actionType from './actionType'
-import { paginationOptions, paginationType } from '../../class/paginationMethod/paginationMethod'
 
 const actionCreator: actionCreatorType = {
-    getSearchMovieItem: ({ searchVal, page,totalPage,haveAdult }: {[key:string]:string | number | boolean}): object => ({
+    getSearchMovieItem: ({ searchVal, page, totalPage, haveAdult }) => ({
         type: actionType.getSearchMovieItem,
         searchVal,
         page,
         totalPage,
         haveAdult
     }),
-    setSearchMovieItem: (obj: { [key: string]: any }): object => ({
+    setSearchMovieItem: obj => ({
         type: actionType.setSearchMovieItem,
         obj
     }),
-    setFullSearchMovieItem: (item: { [key: string]: any }[]): object => ({
+    setFullSearchMovieItem: item => ({
         type: actionType.setFullSearchMovieItem,
         item
     }),
-    setLoadingState: (status: boolean): object => ({
+    setLoadingState: status => ({
         type: actionType.setLoadingState,
         status
     }),
-    setCurrentPageTemp:(page:number):object => ({
+    setCurrentPageTemp: page => ({
         type: actionType.setCurrentPageTemp,
         page
     }),
-    setPaginationOption: (options: paginationOptions): object => ({
+    setPaginationOption: options => ({
         type: actionType.setPaginationOption,
         options
     }),
-    setPaginationObj: (obj: paginationType): object => ({
+    setPaginationObj: obj => ({
         type: actionType.setPaginationObj,
         obj
     }),
-    setRenderData:(item:{[key:string]:any}[]):object => ({
+    setRenderData: item => ({
         type: actionType.setRenderData,
         item
     }),
-    setFilterValue:(obj:{[key:string]:any}):object => ({
+    setFilterValue: obj => ({
         type: actionType.setFilterValue,
         obj
     }),
-    setFilterListToggleAnimate:(status:boolean) => ({
+    setFilterListToggleAnimate: status => ({
         type: actionType.setFilterListToggleAnimate,
         status
     })

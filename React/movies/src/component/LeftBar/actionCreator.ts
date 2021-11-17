@@ -2,14 +2,14 @@ import { actionCreatorType } from './types'
 import actionType from './actionType'
 
 const actionCreator: actionCreatorType = {
-    getListItem: (): object => ({
+    getListItem: () => ({
         type: actionType.getListItem
     }),
-    setListToggleAnimate:(status:boolean):object => ({
+    setListToggleAnimate: status => ({
         type: actionType.setListToggleAnimate,
         status
     }),
-    setSelectText:(txt:string):object => ({
+    setSelectText:txt => ({
         type: actionType.setSelectText,
         txt
     })

@@ -60,12 +60,14 @@ const RenderSearchMovie: FunctionComponent<RenderSearchMovieProps> = ({ postSear
         }
     }
 
+    const pageOptionAuto: paginationOptions = window.innerWidth > 414 ? { pages: currentPageTemp, partPage: 20, pageSize: 10 } : { pages: currentPageTemp, partPage: 10, pageSize: 6 }
+
     const goSingleVideo: (id: number) => void = id => route.push({ pathname: '/single_preview', search: `id=${id}&type=movie` })
 
     const renderPage: (pageOption: paginationOptions) => void = pageOption => dispatch(actionCreator.setPaginationOption(pageOption))
 
     const initalData: (haveAdult: boolean) => void = haveAdult => {
-        dispatch(actionCreator.setPaginationOption({ pages: currentPageTemp, partPage: 20, pageSize: 10 }))
+        dispatch(actionCreator.setPaginationOption(pageOptionAuto))
         dispatch(actionCreator.getSearchMovieItem({ searchVal: postSearchVal, page: page, totalPage: total_pages, haveAdult: haveAdult }))
         dispatch(actionCreator.setLoadingState(true))
     }
@@ -105,7 +107,7 @@ const RenderSearchMovie: FunctionComponent<RenderSearchMovieProps> = ({ postSear
                 if (filterValue[value]) {
                     dispatch(actionCreator.setLoadingState(true))
                     setTimeout(() => {
-                        renderPage({ ...paginationOption })
+                        renderPage(pageOptionAuto)
                         dispatch(actionCreator.setFullSearchMovieItem(
                             newData.sort((a: { vote_average: number }, b: { vote_average: number }) => b.vote_average - a.vote_average)
                         ))
@@ -121,14 +123,14 @@ const RenderSearchMovie: FunctionComponent<RenderSearchMovieProps> = ({ postSear
     useEffect(() => {
         const { pages, partPage, pageSize } = paginationOption
         const { pageObj, renderItem } = paginations(newData, pages, partPage, pageSize)
-        dispatch(actionCreator.setCurrentPageTemp(pages))
+        dispatch(actionCreator.setCurrentPageTemp(pages!))
         dispatch(actionCreator.setPaginationObj(pageObj))
         dispatch(actionCreator.setRenderData(renderItem))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [paginationOption])
 
     useEffect(() => {
-        renderPage({ pages: currentPageTemp, partPage: 20, pageSize: 10 })
+        renderPage(pageOptionAuto)
         dispatch(actionCreator.setLoadingState(true))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [newData])

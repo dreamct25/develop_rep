@@ -1,47 +1,46 @@
 import { actionCreatorType } from './types'
 import actionType from './actionType'
-import { paginationOptions, paginationType } from '../../class/paginationMethod/paginationMethod'
 
 const actionCreator: actionCreatorType = {
-    getSearchActorItem: ({ searchVal, page,totalPage }: { [key:string]:string | number }): object => ({
+    getSearchActorItem: ({ searchVal, page,totalPage }) => ({
         type: actionType.getSearchActorItem,
         searchVal,
         page,
         totalPage
     }),
-    setSearchActorItem: (obj: object): object => ({
+    setSearchActorItem: obj => ({
         type: actionType.setSearchActorItem,
         obj
     }),
-    setFullSearchActorItem: (item: { [key: string]: any }[]): object => ({
+    setFullSearchActorItem: item => ({
         type: actionType.setFullSearchActorItem,
         item
     }),
-    setLoadingState: (status: boolean): object => ({
+    setLoadingState: status => ({
         type: actionType.setLoadingState,
         status
     }),
-    setCurrentSelectId: (id: number): object => ({
+    setCurrentSelectId: id => ({
         type: actionType.setCurrentSelectId,
         id
     }),
-    setCastModalToggel: (status: boolean): object => ({
+    setCastModalToggel: status => ({
         type: actionType.setCastModalToggel,
         status
     }),
-    setCurrentPageTemp:(page:number):object => ({
+    setCurrentPageTemp: page => ({
         type: actionType.setCurrentPageTemp,
         page
     }),
-    setPaginationOption: (options: paginationOptions): object => ({
+    setPaginationOption: options => ({
         type: actionType.setPaginationOption,
         options
     }),
-    setPaginationObj: (obj: paginationType): object => ({
+    setPaginationObj: obj => ({
         type: actionType.setPaginationObj,
         obj
     }),
-    setRenderData:(item:{[key:string]:any}[]):object => ({
+    setRenderData: item => ({
         type: actionType.setRenderData,
         item
     })

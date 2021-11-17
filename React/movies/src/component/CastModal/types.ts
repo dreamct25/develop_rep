@@ -1,3 +1,4 @@
+import { Action } from "redux";
 import { StyledComponent } from "styled-components";
 import store from "../../store";
 
@@ -10,11 +11,11 @@ export interface actionType {
 }
 
 export interface actionCreatorType {
-    getSingleCastItem: Function,
-    setSingleCastItem: Function,
-    setMoviePostToggle: Function,
-    setLoadingState:Function,
-    setPostPath:Function
+    getSingleCastItem: (val: number) => Action<any>,
+    setSingleCastItem: (obj: object) => Action<any>,
+    setMoviePostToggle: (status: boolean) => Action<any>,
+    setLoadingState:(status:boolean) => Action<any>,
+    setPostPath:(path:string) => Action<any>
 }
 
 export interface CastModalProps {

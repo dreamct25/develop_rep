@@ -226,13 +226,7 @@ const cssSet: cssSetPropertys = {
                             text-align:right;
                             .time{
                                 span{
-                                    display:inline;
-                                }
-                                span:nth-of-type(1){
-                                    margin-right:6px;
-                                }
-                                span:nth-of-type(2){
-                                    margin-left:6px;
+                                    margin:0 6px;
                                 }
                             }
                         }
@@ -241,6 +235,40 @@ const cssSet: cssSetPropertys = {
                         text-align: center;
                         margin: 30px 0 20px 0;
                         font-size: 18px;
+                    }
+                }
+
+                @media screen and (max-width:415px){
+                    .single-review-item-outer{
+                        .single-review-item-title{
+                            grid-template-columns:33.33% 33.33% 33.33%;
+                            span{
+                                display:block;
+                            }
+                            span:nth-of-type(2){
+                                text-align:center;
+                            }
+                            span:nth-of-type(3){
+                                text-align:right;
+                            }
+                        }
+                        .single-review-item{
+                            grid-template-columns:33.33% 33.33% 33.33%;
+                            span{
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                display: -webkit-box;
+                                -webkit-line-clamp: 1;
+                                -webkit-box-orient: vertical;
+                            }
+                            span:nth-of-type(2){
+                                text-align:center;
+                            }
+                            span:nth-of-type(3){
+                                text-align:right;
+                                
+                            }
+                        }
                     }
                 }
             }

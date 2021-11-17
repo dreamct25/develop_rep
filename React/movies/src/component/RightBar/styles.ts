@@ -158,6 +158,23 @@ const cssSet: cssSetPropertys = {
             opacity:0;
             transform:translateX(400px);
         }
+        @media screen and (max-width: 415px) {
+            .right-list-outer{
+                bottom:unset;
+                opacity:1;
+                transform:translateY(0px);
+                .right-list{
+                    height:90vh;
+                    .poster-card{
+                        width:100%
+                    }
+                }
+            }
+            .outer-active{
+                opacity:0;
+                transform:translateY(-400px);
+            }
+        }
     `,
 }
 

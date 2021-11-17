@@ -1,28 +1,28 @@
 import actionType from './actionType'
 import { actionCreatorType } from './types'
 const actionCreator: actionCreatorType = {
-    postItemVal: (obj: object,val:string): object => ({
+    postItemVal: (obj,val) => ({
         type: actionType.postItem,
         obj,
         val
     }),
-    getSingleMovie: (id: number): object => ({
+    getSingleMovie: id => ({
         type: actionType.getSingleItem,
         id
     }),
-    getCurrentSelect: (id: number): object => ({
+    getCurrentSelect: id => ({
         type: actionType.currentSelect,
         id
     }),
-    setToggleBarAnimate: (status: boolean): object => ({
+    setToggleBarAnimate: status => ({
         type: actionType.toggleBarAnimate,
         status
     }),
-    setSearchVal: (val: { [key: string]: any }): object => ({
+    setSearchVal: val => ({
         type: actionType.setSearchVal,
         val
     }),
-    setHotItemType:(val:string):object => ({
+    setHotItemType: val => ({
         type: actionType.setHotItemType,
         val
     })

@@ -46,6 +46,8 @@ const ComingSoonList: FunctionComponent<{}> = (): JSX.Element => {
         partPage
     }: paginationType = paginationObj
 
+    const pageOptionAuto:paginationOptions = window.innerWidth > 414 ? { pages: currentPageTemp, partPage: 20, pageSize: 10 } : { pages: currentPageTemp, partPage: 10, pageSize: 6 }
+
     const goSingleVideo: (id: number) => void = id => route.push({ pathname: '/single_preview',search: `id=${id}&type=movie` })
 
     const renderPage:(pageOption:paginationOptions) => void = pageOption => dispatch(actionCreator.setPaginationOption(pageOption))
@@ -66,14 +68,14 @@ const ComingSoonList: FunctionComponent<{}> = (): JSX.Element => {
     useEffect(() => {
         const { pages,partPage,pageSize } = paginationOption
         const { pageObj, renderItem } = paginations(newData, pages, partPage, pageSize)
-        dispatch(actionCreator.setCurrentPageTemp(pages))
+        dispatch(actionCreator.setCurrentPageTemp(pages!))
         dispatch(actionCreator.setPaginationObj(pageObj))
         dispatch(actionCreator.setRenderData(renderItem))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[paginationOption])
 
     useEffect(() => {
-        renderPage({ pages: currentPageTemp,partPage: 20,pageSize: 10 })
+        renderPage(pageOptionAuto)
         dispatch(actionCreator.setLoadingState(true))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [newData])
@@ -85,7 +87,7 @@ const ComingSoonList: FunctionComponent<{}> = (): JSX.Element => {
 
     useEffect(() => {
         if(newData.constructor.name === 'List'){
-            dispatch(actionCreator.setPaginationOption({ pages: currentPageTemp,partPage: 20,pageSize: 10 }))
+            dispatch(actionCreator.setPaginationOption(pageOptionAuto))
             dispatch(actionCreator.getItem(1, total_pages))
             dispatch(actionCreator.setLoadingState(true))
         }

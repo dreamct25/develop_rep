@@ -1,3 +1,4 @@
+import { Action } from "redux";
 import { StyledComponent } from "styled-components";
 import { paginationOptions, paginationType } from '../../class/paginationMethod/paginationMethod'
 import store from "../../store";
@@ -14,14 +15,14 @@ export interface actionTypes {
 }
 
 export interface actionCreatorType {
-    getItem: Function,
-    setItem: Function,
-    setFullItem: Function
-    setLoadingState: Function,
-    setCurrentPageTemp:Function,
-    setPaginationOption: Function,
-    setPaginationObj: Function,
-    setRenderData:Function
+    getItem:  (page: number, totalPage: number) => Action<any>,
+    setItem: (obj: object) => Action<any>,
+    setFullItem: (item: { [key: string]: any }[]) => Action<any>
+    setLoadingState: (status: boolean) => Action<any>,
+    setCurrentPageTemp:(page:number) => Action<any>,
+    setPaginationOption: (options: paginationOptions) => Action<any>,
+    setPaginationObj: (obj: paginationType) => Action<any>,
+    setRenderData:(item:{[key:string]:any}[]) => Action<any>
 }
 
 export interface objType {

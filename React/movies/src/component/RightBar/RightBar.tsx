@@ -31,7 +31,10 @@ const RightBar: FunctionComponent<RightBarProps> = ({
 
     const dispatch: Dispatch<any> = useDispatch()
 
-    const currentSelect: (url: string) => void = url => postCurrentSelect(url)
+    const currentSelect: (id: number) => void = id => {
+        postCurrentSelect(id)
+        window.innerWidth <= 414 && setTimeout(() => goSinglePreviewVideo(id),1700)
+    }
 
     const setRightBarSearchVal: ChangeEventHandler<HTMLInputElement> = ({ target: { value } }: { target: { value: string } }): void => dispatch(actionCreator.setRightBarSearchVal(value))
 
@@ -56,6 +59,8 @@ const RightBar: FunctionComponent<RightBarProps> = ({
 
     const renderTextSwitch: (val: string) => string[] | undefined = val => currentPostType[val]
 
+    const goSinglePreviewVideo:(id: number) => void = id => route.push({ pathname: '/single_preview',search: `id=${id}&type=${currentHotItemType}` })
+
     return (
         <Show>
             <div className={toggleBar ? "search-group-outer search-group-outer-toggle" : "search-group-outer"}>
@@ -72,7 +77,7 @@ const RightBar: FunctionComponent<RightBarProps> = ({
             <div className={toggleBar ? "right-list-outer outer-active" : "right-list-outer"}>
                 <div className="right-list">
                     {postData !== false && postData.map((item: { [key: string]: any }, index: number) => (
-                        <div className="poster-card" key={index} onClick={currentSelect.bind(this, item.id)}>
+                        <div className="poster-card" key={index} onClick={currentSelect.bind(this, item.id,item.media_type)}>
                             <div className="poster-img">
                                 <img src={`https://image.tmdb.org/t/p/original${item.poster_path}`} alt="" />
                                 <div className="rate">{item.vote_average}<i className="fas fa-star stars"></i></div>

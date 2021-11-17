@@ -1,3 +1,4 @@
+import { Action } from "redux";
 import { StyledComponent } from "styled-components";
 import store from "../../store";
 
@@ -14,15 +15,15 @@ export interface actionTypes {
 }
 
 export interface actionCreatorType {
-    getSingleVideo: Function,
-    postCurrentId: Function,
-    getSingleVideoUrl: Function
-    restUrl: Function,
-    getSingleReview: Function,
-    setCurrentSelectId: Function
-    setCastModalToggel: Function,
-    setLoadingState: Function,
-    restAllObj: Function
+    getSingleVideo: (obj: { [key: string]: any }) => Action<any>,
+    postCurrentId: (id: number, types: string) => Action<any>,
+    getSingleVideoUrl: (obj: { [key: string]: any }) => Action<any>,
+    restUrl: (obj: object) => Action<any>,
+    getSingleReview: (obj: { [key: string]: any }) => Action<any>,
+    setCurrentSelectId: (id: number) => Action<any>,
+    setCastModalToggel: (status: boolean) => Action<any>,
+    setLoadingState: (status: boolean) => Action<any>,
+    restAllObj: () => Action<any>
 }
 
 export interface objType {

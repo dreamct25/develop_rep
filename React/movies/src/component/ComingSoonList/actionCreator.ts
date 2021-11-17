@@ -1,38 +1,37 @@
 import actionType from "./actionType";
 import { actionCreatorType } from './types'
-import { paginationOptions, paginationType } from '../../class/paginationMethod/paginationMethod'
 
 const actionCreator: actionCreatorType = {
-    getItem: (page: number, totalPage: number): object => ({
+    getItem: (page,totalPage) => ({
         type: actionType.getItem,
         page,
         totalPage
     }),
-    setItem: (obj: object): object => ({
+    setItem: obj => ({
         type: actionType.setItem,
         obj
     }),
-    setFullItem: (item: { [key: string]: any }[]): object => ({
+    setFullItem: item => ({
         type: actionType.setFullItem,
         item
     }),
-    setLoadingState: (status: boolean): object => ({
+    setLoadingState: status => ({
         type: actionType.setLoadingState,
         status
     }),
-    setCurrentPageTemp:(page:number):object => ({
+    setCurrentPageTemp: page => ({
         type: actionType.setCurrentPageTemp,
         page
     }),
-    setPaginationOption: (options: paginationOptions): object => ({
+    setPaginationOption: options => ({
         type: actionType.setPaginationOption,
         options
     }),
-    setPaginationObj: (obj: paginationType): object => ({
+    setPaginationObj: obj => ({
         type: actionType.setPaginationObj,
         obj
     }),
-    setRenderData:(item:{[key:string]:any}[]):object => ({
+    setRenderData:item => ({
         type: actionType.setRenderData,
         item
     })

@@ -2,40 +2,40 @@ import { actionCreatorType } from './types'
 import actionType from './actionType'
 
 const actionCreator: actionCreatorType = {
-    postCurrentId: (id: number, types: string) => ({
+    getSingleVideo: obj => ({
+        type: actionType.getSingleVideos,
+        obj
+    }),
+    postCurrentId: (id, types) => ({
         type: actionType.postId,
         id,
         types
     }),
-    getSingleVideo: (obj: { [key: string]: any }[]): object => ({
-        type: actionType.getSingleVideos,
-        obj
-    }),
-    getSingleVideoUrl: (obj: { [key: string]: any }): object => ({
+    getSingleVideoUrl: obj => ({
         type: actionType.getSingleVideosUrl,
         obj
     }),
-    restUrl: (obj: object): object => ({
+    restUrl: obj => ({
         type: actionType.restUrlObj,
         obj
     }),
-    getSingleReview: (obj: { [key: string]: any }): object => ({
+    getSingleReview: obj => ({
         type: actionType.getSingleReview,
         obj
     }),
-    setCurrentSelectId: (id: number): object => ({
+    setCurrentSelectId: id => ({
         type: actionType.setCurrentSelectId,
         id
     }),
-    setCastModalToggel:(status:boolean):object => ({
+    setCastModalToggel: status => ({
         type: actionType.setCastModalToggel,
         status
     }),
-    setLoadingState:(status:boolean):object => ({
+    setLoadingState: status => ({
         type: actionType.setLoadingState,
         status
     }),
-    restAllObj:():object => ({
+    restAllObj: () => ({
         type: actionType.restAllObj,
     })
 }

@@ -1,3 +1,4 @@
+import { Action } from "redux";
 import { StyledComponent } from "styled-components";
 import store from "../../store";
 
@@ -8,9 +9,9 @@ export interface actionType {
 }
 
 export interface actionCreatorType {
-    getListItem: Function,
-    setListToggleAnimate:Function,
-    setSelectText:Function
+    getListItem: () => Action<any>,
+    setListToggleAnimate:(status:boolean) => Action<any>,
+    setSelectText:(txt:string) => Action<any>
 }
 
 export interface LeftBarProps {

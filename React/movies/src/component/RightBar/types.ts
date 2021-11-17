@@ -1,3 +1,4 @@
+import { Action } from 'redux';
 import { StyledComponent } from 'styled-components';
 import store from '../../store'
 
@@ -8,9 +9,9 @@ export interface actionType {
 }
 
 export interface actionCreatorType {
-    setRightBarSearchVal: Function,
-    setRightBarSelectVal: Function,
-    setSearchBarToggleAnimate: Function
+    setRightBarSearchVal: (val: string) => Action<any>,
+    setRightBarSelectVal: (val: string) => Action<any>,
+    setSearchBarToggleAnimate: (status: boolean) => Action<any>
 }
 
 export interface RightBarProps {

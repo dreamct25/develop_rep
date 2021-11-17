@@ -1,3 +1,4 @@
+import { Action } from "redux";
 import { StyledComponent } from "styled-components";
 import store from "../../store";
 
@@ -8,17 +9,21 @@ export interface actionTypes {
     sethavePlay: string,
     setVideoFooterBarAnimate: string,
     setInitialStatus: string,
-    setVolumeVal:string
+    setVolumeVal:string,
+    setVolumeSliderToggle:string,
+    setVolumeTextToggle:string
 }
 
 export interface actionCreatorTypes {
-    setTotalTimes: Function
-    setDurations: Function
-    setCurrentTimeTexts: Function
-    setHavePlays: Function,
-    setVideoFooterBarAnimates: Function,
-    setInitialStatus: Function,
-    setVolumeVal:Function
+    setTotalTimes: (totalTime: string) => Action<any>
+    setDurations: (time: number) => Action<any>
+    setCurrentTimeTexts: (currentTimeText: string) => Action<any>
+    setHavePlays: (status: boolean) => Action<any>,
+    setVideoFooterBarAnimates: (status: boolean) => Action<any>,
+    setInitialStatus: (status: boolean) => Action<any>,
+    setVolumeVal:(val:string) => Action<any>,
+    setVolumeSliderToggle:(status:boolean) => Action<any>,
+    setVolumeTextToggle:(status:boolean) => Action<any>
 }
 
 export interface VideoProps {
@@ -32,7 +37,9 @@ export interface objType {
     currentTimeText: string,
     havePlay: boolean,
     videoFooterBarAnimate: boolean,
-    initialStatus: boolean
+    initialStatus: boolean,
+    volumeSliderToggle:boolean,
+    volumeTextToggle:boolean
 }
 
 export interface cssSetPropertys {

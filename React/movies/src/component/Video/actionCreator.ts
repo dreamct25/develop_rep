@@ -2,33 +2,41 @@ import { actionCreatorTypes } from './types'
 import actionType from './actionType'
 
 const actionCreator: actionCreatorTypes = {
-    setTotalTimes: (totalTime: string): object => ({
+    setTotalTimes: totalTime => ({
         type: actionType.setTotalTime,
         totalTime
     }),
-    setDurations: (time: number): object => ({
+    setDurations: time => ({
         type: actionType.setDuration,
         time
     }),
-    setCurrentTimeTexts: (currentTimeText: string): object => ({
+    setCurrentTimeTexts: currentTimeText => ({
         type: actionType.setCurrentTimeText,
         currentTimeText
     }),
-    setHavePlays: (status: boolean): object => ({
+    setHavePlays: status => ({
         type: actionType.sethavePlay,
         status
     }),
-    setVideoFooterBarAnimates: (status: boolean): object => ({
+    setVideoFooterBarAnimates: status => ({
         type: actionType.setVideoFooterBarAnimate,
         status
     }),
-    setInitialStatus: (status: boolean): object => ({
+    setInitialStatus: status => ({
         type: actionType.setInitialStatus,
         status
     }),
-    setVolumeVal:(val:string):object => ({
+    setVolumeVal: val => ({
         type: actionType.setVolumeVal,
         val
+    }),
+    setVolumeSliderToggle: status => ({
+        type: actionType.setVolumeSliderToggle,
+        status
+    }),
+    setVolumeTextToggle: status => ({
+        type: actionType.setVolumeTextToggle,
+        status
     })
 }
 

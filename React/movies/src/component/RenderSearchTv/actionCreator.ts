@@ -1,47 +1,46 @@
 import { actionCreatorType } from './types'
 import actionType from './actionType'
-import { paginationOptions, paginationType } from '../../class/paginationMethod/paginationMethod'
 
 const actionCreator: actionCreatorType = {
-    getSearchTvItem: ({ searchVal, page,totalPage }: {[key:string]:string | number}): object => ({
+    getSearchTvItem: ({ searchVal, page, totalPage }) => ({
         type: actionType.getSearchTvItem,
         searchVal,
         page,
         totalPage
     }),
-    setFullSearchTvItem: (item: { [key: string]: any }[]): object => ({
-        type: actionType.setFullSearchTvItem,
-        item
-    }),
-    setSearchTvItem: (obj: { [key: string]: any }): object => ({
+    setSearchTvItem: obj => ({
         type: actionType.setSearchTvItem,
         obj
     }),
-    setLoadingState: (status: boolean): object => ({
+    setFullSearchTvItem: item => ({
+        type: actionType.setFullSearchTvItem,
+        item
+    }),
+    setLoadingState: status => ({
         type: actionType.setLoadingState,
         status
     }),
-    setCurrentPageTemp:(page:number):object => ({
+    setCurrentPageTemp: page => ({
         type: actionType.setCurrentPageTemp,
         page
     }),
-    setPaginationOption: (options: paginationOptions): object => ({
+    setPaginationOption: options => ({
         type: actionType.setPaginationOption,
         options
     }),
-    setPaginationObj: (obj: paginationType): object => ({
+    setPaginationObj: obj => ({
         type: actionType.setPaginationObj,
         obj
     }),
-    setRenderData:(item:{[key:string]:any}[]):object => ({
+    setRenderData: item => ({
         type: actionType.setRenderData,
         item
     }),
-    setFilterValue:(obj:{[key:string]:any}):object => ({
+    setFilterValue: obj => ({
         type: actionType.setFilterValue,
         obj
     }),
-    setFilterListToggleAnimate:(status:boolean) => ({
+    setFilterListToggleAnimate: status => ({
         type: actionType.setFilterListToggleAnimate,
         status
     })

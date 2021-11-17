@@ -53,13 +53,13 @@ const SingleVideoPreview: FunctionComponent<{}> = React.memo((): JSX.Element => 
     }
 
     const timeFormat: (time: string) => JSX.Element = time => {
-        const [dates, times]: string[] = new Date(time).toJSON().split('T')
-        return (<span className="time"><span>{dates}</span><span>{times.split('.')[0].replace(/:/g, '：')}</span></span>)
+        const [dates]: string[] = new Date(time).toJSON().split('T')
+        return (<span className="time"><span>{dates}</span></span>)
     }
 
     const renderVideoDetailsType: (item: { [key: string]: any }[]) => string = item => item.map(({ name }: { [key: string]: any }) => convert(name)).join('、')
 
-    const getSingleItems: () => void = () => dispatch(actionCreator.postCurrentId(useQuery.get('id'), useQuery.get('type')))
+    const getSingleItems: () => void = () => dispatch(actionCreator.postCurrentId(Number(useQuery.get('id')), useQuery.get('type')!))
 
     const setCurrentSelectId: (id: number) => void = id => {
         dispatch(actionCreator.setCurrentSelectId(id))
@@ -108,7 +108,7 @@ const SingleVideoPreview: FunctionComponent<{}> = React.memo((): JSX.Element => 
                         <div className="descript">{overview}</div>
                     </div>
                     <div className="single-else">
-                        <div className="row g-0">
+                        <div className={window.innerWidth > 414 ? 'row g-0' : 'row g-2'}>
                             <div className="col-md-4">
                                 <div className="release-date">
                                     <span>{useQuery.get('type') === 'movie' ? '上映日期' : '首播日期'}</span>
@@ -157,7 +157,7 @@ const SingleVideoPreview: FunctionComponent<{}> = React.memo((): JSX.Element => 
                         <div className="single-review-item-outer">
                             <div className="single-review-item-title">
                                 <span>用戶</span>
-                                <span>評價</span>
+                                {window.innerWidth > 414 && <span>評價</span>}
                                 <span>級分</span>
                                 <span>留言時間</span>
                             </div>
@@ -167,7 +167,7 @@ const SingleVideoPreview: FunctionComponent<{}> = React.memo((): JSX.Element => 
                             }: singleVideoItemReviewType, index: number) => (
                                 <div className="single-review-item" key={index}>
                                     <span>{username}</span>
-                                    <span>{rating === null ? '無評價' : renderStar(rating)}</span>
+                                    {window.innerWidth > 414 && <span>{rating === null ? '無評價' : renderStar(rating)}</span>}
                                     <span>{rating === null ? '無評分' : `${rating} / 10`}</span>
                                     <span>{timeFormat(updated_at)}</span>
                                 </div>)

@@ -57,7 +57,9 @@ const RenderSearchActor: FunctionComponent<RenderSearchActorProps> = ({ postSear
         }
     }
 
-    const setCastModalToggle: (status: number) => void = status => dispatch(actionCreator.setCastModalToggel(status))
+    const pageOptionAuto:paginationOptions = window.innerWidth > 414 ? { pages: currentPageTemp, partPage: 20, pageSize: 10 } : { pages: currentPageTemp, partPage: 10, pageSize: 6 }
+
+    const setCastModalToggle: (status: boolean) => void = status => dispatch(actionCreator.setCastModalToggel(status))
 
     const goSingleActor: (id: number) => void = id => {
         dispatch(actionCreator.setCurrentSelectId(id))
@@ -69,14 +71,14 @@ const RenderSearchActor: FunctionComponent<RenderSearchActorProps> = ({ postSear
     useEffect(() => {
         const { pages, partPage, pageSize } = paginationOption
         const { pageObj, renderItem } = paginations(newData, pages, partPage, pageSize)
-        dispatch(actionCreator.setCurrentPageTemp(pages))
+        dispatch(actionCreator.setCurrentPageTemp(pages!))
         dispatch(actionCreator.setPaginationObj(pageObj))
         dispatch(actionCreator.setRenderData(renderItem))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [paginationOption])
 
     useEffect(() => {
-        renderPage({ pages: currentPageTemp, partPage: 20, pageSize: 10 })
+        renderPage(pageOptionAuto)
         dispatch(actionCreator.setLoadingState(true))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [newData])
@@ -88,7 +90,7 @@ const RenderSearchActor: FunctionComponent<RenderSearchActorProps> = ({ postSear
 
     useEffect(() => {
         if (newData.constructor.name === 'List') {
-            dispatch(actionCreator.setPaginationOption({ pages: currentPageTemp, partPage: 20, pageSize: 10 }))
+            dispatch(actionCreator.setPaginationOption(pageOptionAuto))
             dispatch(actionCreator.getSearchActorItem({ searchVal: postSearchVal, page: page, totalPage: total_pages }))
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

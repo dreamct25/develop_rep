@@ -2,23 +2,23 @@ import { actionCreatorType } from './types'
 import actionType from './actionType'
 
 const actionCreator: actionCreatorType = {
-    getSingleCastItem: (val: number): object => ({
+    getSingleCastItem: val => ({
         type: actionType.getSingleCastItem,
         val
     }),
-    setSingleCastItem: (obj: object): object => ({
+    setSingleCastItem: obj => ({
         type: actionType.setSingleCastItem,
         obj
     }),
-    setMoviePostToggle: (status: boolean): object => ({
+    setMoviePostToggle: status => ({
         type: actionType.setMoviePostToggle,
         status
     }),
-    setLoadingState:(status:boolean):object => ({
+    setLoadingState: status => ({
         type: actionType.setLoadingState,
         status
     }),
-    setPostPath:(path:string):object => ({
+    setPostPath: path => ({
         type: actionType.setPostPath,
         path
     })

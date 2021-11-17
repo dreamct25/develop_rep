@@ -1,3 +1,4 @@
+import { Action } from "redux";
 import { StyledComponent } from "styled-components";
 import store from "../../store";
 
@@ -12,12 +13,12 @@ export interface actionType {
 }
 
 export interface actionCreatorType {
-    postItemVal: Function,
-    getSingleMovie: Function,
-    getCurrentSelect: Function
-    setToggleBarAnimate: Function,
-    setSearchVal: Function,
-    setHotItemType:Function
+    postItemVal: (obj: object,val:string) => Action<any>,
+    getSingleMovie: (id: number) => Action<any>,
+    getCurrentSelect: (id: number) => Action<any>
+    setToggleBarAnimate: (status: boolean) => Action<any>,
+    setSearchVal: (val: { [key: string]: any }) => Action<any>,
+    setHotItemType:(val:string) => Action<any>
 }
 
 export interface objType {

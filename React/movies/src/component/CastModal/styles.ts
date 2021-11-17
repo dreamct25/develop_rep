@@ -289,6 +289,51 @@ const cssSet: cssSetPropertys = {
             z-index: 25;
             transform:translate(-50%,0) scale(1);
         }
+
+        @media screen and (max-width:415px){
+            .cast-modal{
+                width:unset;
+                transform: translate(0, -5%);
+                .cast-modal-body{
+                    .cast-profile{
+                        .img-outer{
+                            height: 600px;
+                        }
+                        .cast-details-outer{
+                            .cast-details{
+                                padding:12px;
+                            }
+                        }
+                        .cast-famous-video-outer{
+                            padding-left:unset;
+                            padding:0 12px;
+                        }
+                        .cast-movie-list-outer{
+                            .cast-movie-list-title{
+                                grid-template-columns: 37% 20% 20% 23%;
+                            }
+                            .cast-movie-list{
+                                .list-item{
+                                    grid-template-columns: 37% 20% 20% 23%;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .cast-modal-toggle{
+                transform: translate(0, 0);
+            }
+            .post-img-outer{
+                left:0;
+                right:0;
+                margin:75px 25px;
+                transform:translate(0,0) scale(0.5);
+            }
+            .post-img-outer-toggle{
+                transform:translate(0,0) scale(1);
+            }
+        }
     `,
 }
 
