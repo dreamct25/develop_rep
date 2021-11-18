@@ -17,7 +17,7 @@ const cssSet: cssSetPropertys = {
             box-shadow:0 0 4px 0 rgba(0,0,0,.3);
             .search-group{
                 display:flex;
-                margin-right:-300px;
+                margin-right:-282px;
                 transition:.7s ease;
                 input{
                     border:none;
@@ -169,6 +169,9 @@ const cssSet: cssSetPropertys = {
                 .search-group-toggle{
                     margin-right:0px;
                 }
+            }
+            .search-group-outer-toggle{
+                top:-100%;
             }
             .right-list-outer{
                 bottom:unset;

@@ -13,7 +13,7 @@ const cssSet: cssSetPropertys = {
                     font-weight:bold;
                     margin-bottom: 20px;
                 }
-                .search-movie-header-middle-group{
+                .search-tv-header-middle-group{
                     display:flex;
                     justify-content:space-between;
                     align-items:center;
@@ -78,6 +78,9 @@ const cssSet: cssSetPropertys = {
                             }
                         }
                     }
+                }
+                .search-tv-header-middle-group-toggle{
+                    display:block;
                 }
             }
             .search-tv-body{
@@ -173,6 +176,14 @@ const cssSet: cssSetPropertys = {
             }
             .search-tv-footer{
                 margin:20px 0;
+                .icon{
+                    color: white;
+                    text-align: center;
+                    margin-top: 20px;
+                    i{
+                        margin-right:3px;
+                    }
+                }
             }
         }
     `,

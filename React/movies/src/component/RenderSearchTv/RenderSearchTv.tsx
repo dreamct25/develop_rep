@@ -156,7 +156,7 @@ const RenderSearchTv: FunctionComponent<RenderSearchTvProps> = ({ postSearchVal 
             <div className="search-tv">
                 <div className="search-tv-header">
                     <div className="search-tv-title">影集</div>
-                    <div className="search-tv-header-middle-group">
+                    <div className={postSearchVal !== 'popular_tv' ? 'search-tv-header-middle-group' : 'search-tv-header-middle-group search-tv-header-middle-group-toggle' }>
                         <div className="search-tv-totals">共 {newData.length} 個搜尋結果</div>
                         {postSearchVal !== 'popular_tv' && <div className="filter-group-outer">
                             <div className="filter-group">
@@ -191,6 +191,7 @@ const RenderSearchTv: FunctionComponent<RenderSearchTvProps> = ({ postSearchVal 
                     <div className="page-group">
                         {renderData.length !== 0 && <Pagination paginationObjProps={paginationProps} />}
                     </div>
+                    <div className="icon"><i className="far fa-copyright"></i>Copy Right By Chen</div>
                 </div>
                 <Loading haveOpen={loadingState} />
             </div>

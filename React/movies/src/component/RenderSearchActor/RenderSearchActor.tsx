@@ -131,6 +131,7 @@ const RenderSearchActor: FunctionComponent<RenderSearchActorProps> = ({ postSear
                     <div className="page-group">
                         {renderData.length !== 0 && <Pagination paginationObjProps={paginationProps} />}
                     </div>
+                    <div className="icon"><i className="far fa-copyright"></i>Copy Right By Chen</div>
                 </div>
                 <Loading haveOpen={loadingState} />
                 <CastModal postToggles={castModalToggle} postId={selectId} postSetCastModalToggle={setCastModalToggle} />

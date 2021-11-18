@@ -79,6 +79,9 @@ const cssSet: cssSetPropertys = {
                         }
                     }
                 }
+                .search-movie-header-middle-group-toggle{
+                    display:block;
+                }
             }
             .search-movie-body{
                 min-height: 100vh;
@@ -173,6 +176,14 @@ const cssSet: cssSetPropertys = {
             }
             .search-movie-footer{
                 margin:20px 0;
+                .icon{
+                    color: white;
+                    text-align: center;
+                    margin-top: 20px;
+                    i{
+                        margin-right:3px;
+                    }
+                }
             }
         }
     `,

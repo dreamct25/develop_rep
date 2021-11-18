@@ -160,7 +160,7 @@ const RenderSearchMovie: FunctionComponent<RenderSearchMovieProps> = ({ postSear
             <div className="search-movie">
                 <div className="search-movie-header">
                     <div className="search-movie-title">電影</div>
-                    <div className="search-movie-header-middle-group">
+                    <div className={postSearchVal !== 'popular_movie' ? 'search-movie-header-middle-group' : 'search-movie-header-middle-group search-movie-header-middle-group-toggle' }>
                         <div className="search-movie-totals">共 {newData.length} 個搜尋結果</div>
                         {postSearchVal !== 'popular_movie' && <div className="filter-group-outer">
                             <div className="filter-group">
@@ -197,6 +197,7 @@ const RenderSearchMovie: FunctionComponent<RenderSearchMovieProps> = ({ postSear
                     <div className="page-group">
                         {renderData.length !== 0 && <Pagination paginationObjProps={paginationProps} />}
                     </div>
+                    <div className="icon"><i className="far fa-copyright"></i>Copy Right By Chen</div>
                 </div>
                 <Loading haveOpen={loadingState} />
             </div>

@@ -109,19 +109,16 @@ const cssSet: cssSetPropertys = {
                     text-align:center;
                 }
             }
-            .show-actor-title{
-                position:fixed;
-                z-index: -1;
-                opacity:0;
-                color:white;
-                background-color:rgba(0,0,0,.7);
-                padding:2px 8px;
-                box-shadow:0 0 2px 1px rgba(255,255,255,.7);
-                border-radius:5px;
-            }
-            .show-actor-title-toggle{
-                opacity:1;
-                z-index: 7;
+            .search-actor-footer{
+                margin:20px 0;
+                .icon{
+                    color: white;
+                    text-align: center;
+                    margin-top: 20px;
+                    i{
+                        margin-right:3px;
+                    }
+                }
             }
         }
     `,

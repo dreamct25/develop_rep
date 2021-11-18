@@ -6,7 +6,7 @@ const cssSet: cssSetPropertys = {
         min-height:100vh;
         background-color:rgb(28,28,28);
         .single-container{
-            padding:40px 0;
+            padding:25px 0;
             .title{
                 display:flex;
                 justify-content:space-between;
@@ -269,6 +269,21 @@ const cssSet: cssSetPropertys = {
                                 
                             }
                         }
+                    }
+                }
+            }
+            .single-preview-footer{
+                .icon{
+                    color: white;
+                    text-align: center;
+                    margin: 20px 0 0 0;
+                    i{
+                        margin-right:3px;
+                    }
+                }
+                @media screen and (max-width:415px){
+                    .icon{
+                        margin: 20px 0;
                     }
                 }
             }

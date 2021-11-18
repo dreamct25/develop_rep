@@ -76,6 +76,7 @@ const SingleVideoPreview: FunctionComponent<{}> = React.memo((): JSX.Element => 
     useEffect(() => () => dispatch(actionCreator.restAllObj()),[])
 
     useEffect(() => {
+        dispatch(actionCreator.restAllObj())
         getSingleItems()
         return () => {
             dispatch(actionCreator.setLoadingState(false))
@@ -89,6 +90,7 @@ const SingleVideoPreview: FunctionComponent<{}> = React.memo((): JSX.Element => 
     }, [])
 
     useEffect(() => {
+
         setLoadingState(!('results' in singleVideoItemUrl))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [singleVideoItemUrl])
@@ -175,6 +177,9 @@ const SingleVideoPreview: FunctionComponent<{}> = React.memo((): JSX.Element => 
                                 </div>)
                             ) : <div className="no-review">-- 暫無評論 --</div>}
                         </div>
+                    </div>
+                    <div className="single-preview-footer">
+                        <div className="icon"><i className="far fa-copyright"></i>Copy Right By Chen</div>
                     </div>
                 </div>
                 <Loading haveOpen={loadingState} />
