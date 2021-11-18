@@ -43,10 +43,10 @@ const Main: FunctionComponent<{}> = (): JSX.Element => {
 
     const toggleBarAnimate:(status: boolean) => void = status => dispatch(actionCreator.setToggleBarAnimate(status))
 
-    const pushMainPage:(obj: object) => void = obj => "results" in data && route.push({ ...obj })
+    const pushMainPage:(obj: object) => void = obj => "results" in data && route.push(obj)
 
-    const pushSearchPage:(obj: object) => void = obj => 'searchVal' in search && route.push({ ...obj })
-
+    const pushSearchPage:(obj: object) => void = obj => 'searchVal' in search && route.push(obj)
+    
     useEffect(() => {
         currentSelectAtLeftBarType('movie')
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -60,16 +60,6 @@ const Main: FunctionComponent<{}> = (): JSX.Element => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search])
 
-    useEffect(() => pushMainPage({
-        pathname: "/main",
-        state: {
-            postData: data.results,
-            postId: imgId,
-            postHotItemType:hotItemType
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }), [imgId])
-
     useEffect(() => {
         toggleBarAnimate(pathname === "/main" || pathname === "/" ? false : true)
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -78,11 +68,6 @@ const Main: FunctionComponent<{}> = (): JSX.Element => {
     useEffect(() => {
         'results' in data && pushMainPage({
             pathname: "/main",
-            state: {
-                postData: data.results,
-                postId: data.results[0].id,
-                postHotItemType:'movie'
-            }
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[data])
@@ -94,7 +79,7 @@ const Main: FunctionComponent<{}> = (): JSX.Element => {
                 postCurrentSelectAtLeftBarType={currentSelectAtLeftBarType} 
             />
             <Switch>
-                <Route exact path="/main" component={RenderCenter} />
+                <Route exact path="/main" render={() => 'results' in data && <RenderCenter postData={data.results} postId={imgId === 0 ? data.results[0].id : imgId} postHotItemType={hotItemType === '' ? 'movie':hotItemType} />} />
                 <Route exact path="/single_preview" component={SingleVideoPreview} />
                 <Route exact path="/search" component={RenderSearch} />
                 <Route exact path="/coming_soon_list" component={ComingSoonList} />

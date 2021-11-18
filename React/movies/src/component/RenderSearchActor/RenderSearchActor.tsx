@@ -57,7 +57,7 @@ const RenderSearchActor: FunctionComponent<RenderSearchActorProps> = ({ postSear
         }
     }
 
-    const pageOptionAuto:paginationOptions = window.innerWidth > 414 ? { pages: currentPageTemp, partPage: 20, pageSize: 10 } : { pages: currentPageTemp, partPage: 10, pageSize: 6 }
+    const pageOptionAuto: paginationOptions = window.innerWidth > 414 ? { pages: currentPageTemp, partPage: 20, pageSize: 10 } : { pages: currentPageTemp, partPage: 10, pageSize: 6 }
 
     const setCastModalToggle: (status: boolean) => void = status => dispatch(actionCreator.setCastModalToggel(status))
 
@@ -89,7 +89,7 @@ const RenderSearchActor: FunctionComponent<RenderSearchActorProps> = ({ postSear
     }, [renderData])
 
     useEffect(() => {
-        if (newData.constructor.name === 'List') {
+        if (newData.constructor.name === 'List' || newData.constructor.name === 't') {
             dispatch(actionCreator.setPaginationOption(pageOptionAuto))
             dispatch(actionCreator.getSearchActorItem({ searchVal: postSearchVal, page: page, totalPage: total_pages }))
         }
@@ -108,7 +108,7 @@ const RenderSearchActor: FunctionComponent<RenderSearchActorProps> = ({ postSear
             <div className="search-actor">
                 <div className="search-actor-header">
                     <div className="search-actor-title">演員</div>
-                    <div className="search-actor-totals">共 {newData.length} 搜尋結果</div>
+                    <div className="search-actor-totals">共 {newData.length} 個搜尋結果</div>
                 </div>
                 <div className="search-actor-body">
                     <div className="row g-0">
@@ -117,7 +117,7 @@ const RenderSearchActor: FunctionComponent<RenderSearchActorProps> = ({ postSear
                                 <div className="poster-card"
                                     onClick={goSingleActor.bind(this, id)}
                                 >
-                                    <div className="poster-card-fram">查看詳情</div>
+                                    <div className="poster-card-fram">更多簡介</div>
                                     <div className="poster-img">
                                         {typeof profile_path === 'string' ? <div className="img" style={{ backgroundImage: `url('https://image.tmdb.org/t/p/original${profile_path}')` }}></div> : <NoImage text={'No Poster Image'} />}
                                     </div>

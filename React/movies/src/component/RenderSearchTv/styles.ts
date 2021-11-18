@@ -11,55 +11,71 @@ const cssSet: cssSetPropertys = {
                     text-align:center;
                     font-size:35px;
                     font-weight:bold;
+                    margin-bottom: 20px;
                 }
-                .search-tv-totals{
-                    text-align:right;
-                    margin:5px 12px;
-                    font-size:18px;
-                }
-                .filter-group-outer{
+                .search-movie-header-middle-group{
                     display:flex;
-                    justify-content:flex-end;
-                    margin:0 12px;
-                    .filter-group{
-                        position: relative;
-                        text-align:center;
-                        .filter-btn{
-                            padding:2px 20px;
-                            background-color:rgb(41,198,188);
+                    justify-content:space-between;
+                    align-items:center;
+                    .search-tv-totals{
+                        text-align:right;
+                        margin:5px 12px;
+                        font-size:18px;
+                    }
+                    .filter-group-outer{
+                        display:flex;
+                        justify-content:flex-end;
+                        margin:0 12px;
+                        .filter-group{
                             position: relative;
-                            z-index:3;
-                            cursor: pointer;
-                            user-select:none;
-                            border-radius:5px;
-                            transition:.7s ease;
-                        }
-                        .filter-btn-toggle{
-                            border-radius:5px 5px 0 0;
-                        }
-                        .filter-list{
-                            background-color:rgba(41,198,188,.4);
-                            position: absolute;
-                            top:28px;
-                            left:0;
-                            right:0;
-                            bottom:0;
-                            z-index:8;
-                            overflow:hidden;
-                            height:0;
-                            opacity:0;
-                            backdrop-filter:blur(2px);
-                            transition:.7s ease;
-                            border-radius:0 0 5px 5px;
-                            .filter-list-item{
-                                padding:2px 0;
+                            text-align:center;
+                            .filter-btn{
+                                padding:5px 20px;
+                                background-color:rgba(0,0,0,.7);
+                                position: relative;
+                                z-index:3;
                                 cursor: pointer;
                                 user-select:none;
+                                border-radius:5px;
+                                transition:.7s ease;
+                                box-shadow:inset 0 0 2px 0 rgba(255,255,255,.7);
                             }
-                        }
-                        .filter-list-toggle{
-                            opacity:1;
-                            height:85px;
+                            .filter-btn-toggle{
+                                border-radius:5px 5px 0 0;
+                            }
+                            .filter-list{
+                                background-color:rgba(0,0,0,.7);
+                                position: absolute;
+                                top:34px;
+                                left:0;
+                                right:0;
+                                bottom:0;
+                                z-index:8;
+                                overflow:hidden;
+                                height:0;
+                                opacity:0;
+                                backdrop-filter:blur(2px);
+                                transition:.7s ease;
+                                border-radius:0 0 5px 5px;
+                                box-shadow:inset 0 0 2px 0 rgba(255,255,255,.7);
+                                .filter-list-item{
+                                    cursor: pointer;
+                                    user-select:none;
+                                }
+                                .filter-list-item:nth-of-type(1){
+                                    padding-top:6px;
+                                }
+                                .filter-list-item:nth-of-type(2){
+                                    padding:3px 0;
+                                }
+                                .filter-list-item:nth-of-type(3){
+                                    padding-bottom:6px;
+                                }
+                            }
+                            .filter-list-toggle{
+                                opacity:1;
+                                height:92px;
+                            }
                         }
                     }
                 }

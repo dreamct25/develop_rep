@@ -17,7 +17,7 @@ const cssSet: cssSetPropertys = {
             box-shadow:0 0 4px 0 rgba(0,0,0,.3);
             .search-group{
                 display:flex;
-                margin-right:-298px;
+                margin-right:-300px;
                 transition:.7s ease;
                 input{
                     border:none;
@@ -28,6 +28,7 @@ const cssSet: cssSetPropertys = {
                 select{
                     border: none;
                     outline: none;
+                    -webkit-appearance: none;
                 }
             }
             .search-group-toggle{
@@ -159,20 +160,32 @@ const cssSet: cssSetPropertys = {
             transform:translateX(400px);
         }
         @media screen and (max-width: 415px) {
+            .search-group-outer{
+                top:4%;
+                transform:translateX(-15px);
+                .search-group{
+                    margin-right:-322px;
+                }
+                .search-group-toggle{
+                    margin-right:0px;
+                }
+            }
             .right-list-outer{
                 bottom:unset;
                 opacity:1;
-                transform:translateY(0px);
+                transform:translateY(0);
                 .right-list{
-                    height:90vh;
                     .poster-card{
                         width:100%
+                    }
+                    .more-info{
+                        margin-bottom:180px;
                     }
                 }
             }
             .outer-active{
                 opacity:0;
-                transform:translateY(-400px);
+                transform:translateY(-100%);
             }
         }
     `,

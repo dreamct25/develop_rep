@@ -141,7 +141,7 @@ const RenderSearchMovie: FunctionComponent<RenderSearchMovieProps> = ({ postSear
     }, [renderData])
 
     useEffect(() => {
-        newData.constructor.name === 'List' && initalData(false)
+        (newData.constructor.name === 'List' || newData.constructor.name === 't') && initalData(false)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [postSearchVal, data])
 
@@ -160,16 +160,18 @@ const RenderSearchMovie: FunctionComponent<RenderSearchMovieProps> = ({ postSear
             <div className="search-movie">
                 <div className="search-movie-header">
                     <div className="search-movie-title">電影</div>
-                    <div className="search-movie-totals">共 {newData.length} 個搜尋結果</div>
-                    <div className="filter-group-outer">
-                        <div className="filter-group">
-                            <div className={filterListToggle ? "filter-btn filter-btn-toggle" : "filter-btn"} onClick={setFilterListToggleAnimate.bind(this)}>進階篩選</div>
-                            <div className={filterListToggle ? "filter-list filter-list-toggle" : "filter-list"}>
-                                {filterListItem.map(({ title, disTitle, value }: filterPropsType, index: number) => (
-                                    <div key={index} className="filter-list-item" onClick={setFilterValue.bind(this, value)}>{filterValue[value] ? disTitle : title}</div>
-                                ))}
+                    <div className="search-movie-header-middle-group">
+                        <div className="search-movie-totals">共 {newData.length} 個搜尋結果</div>
+                        {postSearchVal !== 'popular_movie' && <div className="filter-group-outer">
+                            <div className="filter-group">
+                                <div className={filterListToggle ? "filter-btn filter-btn-toggle" : "filter-btn"} onClick={setFilterListToggleAnimate.bind(this)}>進階篩選</div>
+                                <div className={filterListToggle ? "filter-list filter-list-toggle" : "filter-list"}>
+                                    {filterListItem.map(({ title, disTitle, value }: filterPropsType, index: number) => (
+                                        <div key={index} className="filter-list-item" onClick={setFilterValue.bind(this, value)}>{filterValue[value] ? disTitle : title}</div>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
+                        </div>}
                     </div>
                 </div>
                 <div className="search-movie-body">

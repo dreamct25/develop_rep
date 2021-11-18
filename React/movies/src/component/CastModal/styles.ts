@@ -327,7 +327,7 @@ const cssSet: cssSetPropertys = {
             .post-img-outer{
                 left:0;
                 right:0;
-                margin:75px 25px;
+                margin:50px 25px;
                 transform:translate(0,0) scale(0.5);
             }
             .post-img-outer-toggle{

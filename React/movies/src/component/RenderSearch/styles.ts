@@ -8,6 +8,9 @@ const cssSet: cssSetPropertys = {
         .search-item-outer{
             padding:35px 12px;
         }
+        @media screen and (max-width:415px){
+            padding:35px 0px;
+        }
     `,
 }
 

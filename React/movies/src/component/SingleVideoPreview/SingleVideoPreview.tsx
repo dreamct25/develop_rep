@@ -72,10 +72,12 @@ const SingleVideoPreview: FunctionComponent<{}> = React.memo((): JSX.Element => 
 
     const setLoadingState: (status: boolean) => void = status => dispatch(actionCreator.setLoadingState(status))
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => () => dispatch(actionCreator.restAllObj()),[])
+
     useEffect(() => {
         getSingleItems()
         return () => {
-            dispatch(actionCreator.restAllObj())
             dispatch(actionCreator.setLoadingState(false))
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

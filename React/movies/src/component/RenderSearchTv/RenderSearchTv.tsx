@@ -141,7 +141,7 @@ const RenderSearchTv: FunctionComponent<RenderSearchTvProps> = ({ postSearchVal 
     }, [renderData])
 
     useEffect(() => {
-        newData.constructor.name === 'List' && initalData(false)
+        (newData.constructor.name === 'List' || newData.constructor.name === 't') && initalData(false)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [postSearchVal, data])
 
@@ -156,21 +156,23 @@ const RenderSearchTv: FunctionComponent<RenderSearchTvProps> = ({ postSearchVal 
             <div className="search-tv">
                 <div className="search-tv-header">
                     <div className="search-tv-title">影集</div>
-                    <div className="search-tv-totals">共 {newData.length} 個搜尋結果</div>
-                    <div className="filter-group-outer">
-                        <div className="filter-group">
-                            <div className={filterListToggle ? "filter-btn filter-btn-toggle" : "filter-btn"} onClick={setFilterListToggleAnimate.bind(this)}>進階篩選</div>
-                            <div className={filterListToggle ? "filter-list filter-list-toggle" : "filter-list"}>
-                                {filterListItem.map(({ title, disTitle, value }: filterPropsType, index: number) => (
-                                    <div key={index} className="filter-list-item" onClick={setFilterValue.bind(this, value)}>{filterValue[value] ? disTitle : title}</div>
-                                ))}
+                    <div className="search-tv-header-middle-group">
+                        <div className="search-tv-totals">共 {newData.length} 個搜尋結果</div>
+                        {postSearchVal !== 'popular_tv' && <div className="filter-group-outer">
+                            <div className="filter-group">
+                                <div className={filterListToggle ? "filter-btn filter-btn-toggle" : "filter-btn"} onClick={setFilterListToggleAnimate.bind(this)}>進階篩選</div>
+                                <div className={filterListToggle ? "filter-list filter-list-toggle" : "filter-list"}>
+                                    {filterListItem.map(({ title, disTitle, value }: filterPropsType, index: number) => (
+                                        <div key={index} className="filter-list-item" onClick={setFilterValue.bind(this, value)}>{filterValue[value] ? disTitle : title}</div>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
+                        </div>}
                     </div>
                 </div>
                 <div className="search-tv-body">
                     <div className="row g-0">
-                        {renderData.length !== 0 ? renderData.map(({ id, original_title, poster_path, first_air_date, name, vote_average }: resultsItemType, index: number) => (
+                        {renderData.length !== 0 ? renderData.map(({ id, poster_path, first_air_date, name, vote_average }: resultsItemType, index: number) => (
                             <div key={index} className="col-md-3">
                                 <div className="poster-card" onClick={goSingleVideo.bind(this, id)}>
                                     <div className="poster-card-fram">更多簡介</div>

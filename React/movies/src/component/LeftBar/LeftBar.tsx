@@ -26,7 +26,7 @@ const LeftBar: FunctionComponent<LeftBarProps> = ({ toggleBar, postCurrentSelect
     const currentSelectType: (val: string) => void = val => {
         if (val === 'soon') {
             route.push({
-                pathname: 'coming_soon_list'
+                pathname: '/coming_soon_list'
             })
         } else {
             dispatch(actionCreator.setSelectText(val))
@@ -46,9 +46,13 @@ const LeftBar: FunctionComponent<LeftBarProps> = ({ toggleBar, postCurrentSelect
         <Show>
             <div className={toggleBar ? "left-list-outer outer-active" : "left-list-outer"}>
                 <div className="left-list">
+                    {window.innerWidth > 414 && <div className="header">
+                        <h1 className="title">Movies</h1>
+                    </div>}
                     {listItem.map((item: { titleName: string, titleVal: string }, index: number) => (
                         <div className={selectText === item.titleVal && listToggleAnimate ? "list-item list-item-active" : "list-item"} key={index} onClick={currentSelectType.bind(this, item.titleVal)}>{item.titleName}</div>
                     ))}
+                    <div className="footer"><i className="far fa-copyright icon"></i>Copy Right By Chen</div>
                 </div>
             </div>
         </Show>

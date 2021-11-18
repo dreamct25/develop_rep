@@ -18,6 +18,12 @@ export interface objType {
     currentPostType:{[key:string]:any}
 }
 
+export interface RenderCenterProps {
+    postData:any[],
+    postId:number,
+    postHotItemType:string
+}
+
 export interface cssSetPropertys {
     Show: StyledComponent<"div", any, {}, never>
 }
