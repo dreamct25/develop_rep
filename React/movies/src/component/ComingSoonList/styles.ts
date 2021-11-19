@@ -6,7 +6,7 @@ const cssSet: cssSetPropertys = {
         min-height:100vh;
         background-color:rgb(30,30,30);
         .coming-soon-movie-outer{
-            padding:35px 12px;
+            padding:35px 12px 15px 12px;
             .coming-soon-movie-header{
                 color:white;
                 text-align:right;
@@ -102,6 +102,14 @@ const cssSet: cssSetPropertys = {
             }
             .coming-soon-movie-footer{
                 margin:20px ;
+                .icon{
+                    color: white;
+                    text-align: center;
+                    margin-top: 20px;
+                    i{
+                        margin-right:3px;
+                    }
+                }
             }
             .show-movie-title{
                 position:fixed;
