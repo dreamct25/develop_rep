@@ -8,12 +8,11 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@types/node": "^16.11.10",
+    "body-parser": "^1.19.0",
     "core-js": "^3.6.5",
-    "fast-xml-parser": "^4.0.0-beta.2",
-    "python-shell": "^3.0.1",
+    "cors": "^2.8.5",
+    "python-shell": "^1.0.8",
     "rss-parser": "^3.12.0",
-    "rss-url-parser": "^2.2.2",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0"
   },
