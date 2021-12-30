@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    html {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+    }
+    html body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: rgb(30,30,30);
+    }
+    html body .remain-title,
+    html body .remain-text {
+        font-size: 50px;
+        margin-bottom: 10px;
+        color: white;
+    }
+    html body .language-option {
+        display: flex;
+        overflow: hidden;
+        border-radius: 20px;
+    }
+    html body .language-option .options {
+        background-color: rgb(0,0,0);
+        color: white;
+        width: 220px;
+        text-align: center;
+        padding: 5px;
+        box-shadow: inset 0 0 2px 1px rgba(255,255,255,.7);
+        cursor: pointer;
+        user-select: none;
+        transition: .5s ease;
+    }
+    html body .language-option .options:nth-of-type(1) {
+        border-radius: 20px 0 0 20px;
+    }
+    html body .language-option .options:nth-of-type(2) {
+        border-radius: 0 20px 20px 0;
+    }
+    html body .language-option .options.active {
+        background-color: rgb(255,255,255);
+        color: black;
+        box-shadow: inset 0 0 2px 1px rgba(0,0,0,.7);
+    }
+</style>
+<body>
+    <div class="remain-title">跨年倒數</div>
+    <div class="remain-text"></div>
+    <div class="language-option">
+        <div class="options" data-num="0">ZH</div>
+        <div class="options active" data-num="1">EN</div>
+    </div>
+</body>
+<script>
+    let timer = null
+    const addZero = num => num > 10 ? num : `0${num}`
+
+    const changeSomthing = (time,el) => {
+        const [day,hour,minute,secode] = time
+
+        if(el !== undefined){
+            const currentText = document.querySelector('.remain-text').textContent
+            const currentTarget = Number(el.target.dataset.num)
+            document.querySelectorAll('.options').forEach(item => Number(item.dataset.num) === currentTarget ? item.classList.add('active') : item.classList.remove('active'))
+            if(currentTarget == true){
+                document.querySelector('.remain-title').textContent = 'To New Year Count Down'
+                document.querySelector('.remain-text').textContent = currentText.replace('天',day).replace('小時',hour).replace('分',minute).replace('秒',secode)
+            } else {
+                document.querySelector('.remain-title').textContent = '跨年倒數'
+                document.querySelector('.remain-text').textContent = currentText.replace('day',day).replace('h',hour).replace('m',minute).replace('s',secode)
+            }
+        }
+
+        clearInterval(timer)
+        
+        timer = setInterval(() => {
+            const endTime = +new Date('2022/01/01')
+            const startTime = +new Date()
+            const timeRange = endTime - startTime
+            const remainDay = timeRange / (24 * 60 * 60 * 1000)
+            const remainDayFix = Math.floor(remainDay)
+            const remainHour = (remainDay - remainDayFix) * 24
+            const remainHourFix = Math.floor(remainHour)
+            const remainMinute = (remainHour - remainHourFix) * 60
+            const remainMinuteFix = Math.floor((remainHour - remainHourFix) * 60)
+            const remainSecFix = Math.floor((remainMinute-remainMinuteFix) * 60)
+            const bindRemainTime = `${remainDayFix} ${day} ${addZero(remainHourFix)} ${hour} ${addZero(remainMinuteFix)} ${minute} ${addZero(remainSecFix)} ${secode}` 
+
+            document.querySelector('.remain-text').textContent = bindRemainTime
+            if(timeRange === 0) clearInterval(timer)
+        },1000)
+    }
+
+    changeSomthing(['day','h','m','s'])
+
+    document.querySelectorAll('.options').forEach(item => item.addEventListener('click',changeSomthing.bind(this,Number(item.dataset.num) === 0 ? ['天','小時','分','秒'] : ['day','h','m','s'])))
+</script>
+</html>
