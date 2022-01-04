@@ -4,9 +4,57 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
     <title>Document</title>
 </head>
 <body>
-    123
+    <div class="container-outer">
+        <div class="container">
+            <div class="path-group">
+                <input class="path-temp" type="text" readonly>
+                <div class="open-path">Browers...</div>
+            </div>
+            <div class="change-view-group">
+                <div class="change-view view-short-img">顯示縮圖</div>
+                <div class="change-view view-details-list">顯示詳細資訊</div>
+            </div>
+            <div class="close-btn">close</div>
+            <div class="render-item"></div>
+            <div class="modal">
+                <div class="modal-body">
+                    <div class="modal-header">
+                        <span></span>
+                    </div>
+                    <div class="modal-content">
+                        <div class="content-img-outer">
+                            <img src="" alt="" />
+                            <div class="zoom-controller">
+                                <div class="zoom-plus">+</div>
+                                <div class="zoom-subs">-</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="close">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-alert">
+                <div class="modal-body-alert">
+                    <div class="modal-header-alert">
+                        <span></span>
+                    </div>
+                    <div class="modal-content-alert"></div>
+                    <div class="modal-footer-alert">
+                        <div class="confirm">確定</div>
+                        <div class="cancel">取消</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

@@ -1,0 +1,125 @@
+html{
+    background-color: rgb(35,35,35);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.wrapper {
+    margin: 0;
+    padding:0 10px 10px 10px;
+}
+
+.wrapper h1 {
+    color: white;
+    font-size: 35px;
+    text-align: center;
+    padding:0px 0 5px 0 ;
+}
+
+.item-list{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+    background-color: rgb(255, 255, 255);
+    border-radius: 40px;
+    padding-left: 15px;
+    overflow: hidden;
+    transform: scale(1);
+    transition: .7s ease;
+}
+
+.item-list:hover{
+    transform: scale(1.04);
+}
+
+.item-list-outer .empty-data-outer {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translate(0%,-50%);
+    font-size: 30px;
+    text-align: center;
+    color: white;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.item-list .item-btn-group {
+    display: flex;
+}
+
+.item-list .item-btn-group .item-modify-btn {
+    background-color: rgb(255, 0, 255);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.item-list .item-btn-group .item-delete-btn {
+    background-color: rgb(255, 0, 0);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.add-input-outer {
+    position: fixed;
+    z-index: 2;
+    bottom:0;
+    right: 0;
+    transform: translate(-30%,-30%);
+}
+
+.add-input-outer .add-item {
+    position: relative;
+    background-color: rgba(0, 162, 255,.7);
+    font-weight: bold;
+    color: white;
+    padding: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    user-select: none;
+    transition: .7s ease;
+}
+
+.add-input-outer .add-item:hover{
+    background-color: rgba(0, 162, 255,1);
+}
+
+.add-input-outer .add-item .line {
+    position: absolute;
+    top:50%;
+    left: 50%;
+    width: 20px;
+    height: 3px;
+    background-color: rgba(255, 255, 255,.7);
+    transition: .7s ease;
+}
+
+.add-input-outer .add-item:hover .line{
+    background-color: rgba(255, 255, 255,1);
+}
+
+.add-input-outer .add-item .line:nth-of-type(1) {
+    transform:translate(-50%,-50%) rotate(0deg);
+}
+
+.add-input-outer .add-item .line:nth-of-type(2) {
+    transform:translate(-50%,-50%) rotate(90deg);
+   
+}
+.modal-input-outer {
+    display: grid;
+    grid-template-columns: 15% 85%;
+}
+.modal-input{
+    border-radius: 0;
+    background-color: transparent;
+    outline: none;
+    border: none;
+}
