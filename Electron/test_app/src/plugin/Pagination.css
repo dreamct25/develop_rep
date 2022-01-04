@@ -1,0 +1,69 @@
+.pagination-outer .pagination-item-group {
+    display: flex;
+    justify-content: center;
+}
+
+.pagination-outer .pagination-item-group .page-item {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(30,30,30);
+    border-radius: 10px;
+    width: 33px;
+    height: 25px;
+    color: white;
+    margin: 0 3px;
+    box-shadow: inset 0 0 2px 0 rgba(0,0,0,0);
+    cursor: pointer;
+    user-select: none;
+    transition: .5s ease;
+}
+
+.pagination-outer .pagination-item-group .page-item .page-link .arrow-left-outer,
+.pagination-outer .pagination-item-group .page-item .page-link .arrow-right-outer{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    pointer-events: none;
+}
+
+.pagination-outer .pagination-item-group .page-item .page-link .arrow-left-outer .arrow-top {
+    width: 10px;
+    height: 2px;
+    background-color: white;
+    transform: translate(-1px,-2px) rotate(-45deg);
+}
+
+.pagination-outer .pagination-item-group .page-item .page-link .arrow-left-outer .arrow-bottom {
+    width: 10px;
+    height: 2px;
+    background-color: white;
+    transform: translate(-1px,2px) rotate(45deg);
+}
+
+.pagination-outer .pagination-item-group .page-item .page-link .arrow-right-outer .arrow-top {
+    width: 10px;
+    height: 2px;
+    background-color: white;
+    transform: translate(1px,-2px) rotate(45deg);
+}
+
+.pagination-outer .pagination-item-group .page-item .page-link .arrow-right-outer .arrow-bottom {
+    width: 10px;
+    height: 2px;
+    background-color: white;
+    transform: translate(1px,2px) rotate(-45deg);
+}
+
+.pagination-outer .pagination-item-group .page-item.active {
+    color: black;
+    background-color: white;
+    box-shadow: inset 0 0 2px 1px rgba(0,0,0,.7);
+}
+
+.pagination-outer .pagination-item-group .page-item.dis-active {
+    background-color: rgb(130,130,130,.7);
+}
