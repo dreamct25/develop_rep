@@ -1,5 +1,6 @@
 import CrossProcessExports, { ipcRenderer } from 'electron'
 import { createPaginationReturnType, paginationType } from '../plugin/Pagination'
+import '../plugin/Modal.scss'
 import '../plugin/Pagination.scss'
 
 import '../plugin/Modal.ts'
@@ -22,13 +23,26 @@ interface dataItem {
     searchItem?:fileDataType[]
 }
 
+// 解決動態事件 on 問題
+declare global {
+    interface Window {
+        removeFileModifyList:() => void
+        currentChoose:(num:number) => void
+        getRight:(targetIndex:number) => void
+        showImage:(url:string,fileName:string) => void
+        showImageDetails:(postfileNum:number) => void
+        showModalAlert:(actionName:string,fileName:string,filePath:string) => void
+        orderByRule:(ruleText:string,serialNum:number) => void
+    }
+}
+
 const remote = require('@electron/remote')
 const win:CrossProcessExports.BrowserWindow = remote.getCurrentWindow()
 let baseX:number
 let baseY:number
 let fileDataTemp:dataItem
-let currentSelectNum:number[] = []
 let currentSelectFileNum:number[] = []
+let currentSelectNum:number[] = []
 let sortType:string = ""
 let sortRevers:boolean = false
 
@@ -148,13 +162,13 @@ const renderSearchItem = (isViewShortImg:boolean,page?:number,serialNum?:number)
                     fileType,
                     fileRealPath
                 }:fileDataType,index:number) => `
-                <div class="image-card" onmouseleave="removeFileModifyList()">
+                <div class="image-card" (mouseleave)="removeFileModifyList()">
                     <div class="image-outer" oncontextmenu="getRight(${index})">
                         <div class="image" style="background-image:url(${fileRealPath});"></div>
                     </div>
                     <div class="image-details-group">
                         <div class="file-title">檔名：${fileName}</div>
-                        <div class="circle-group" onclick="currentChoose(${index})">
+                        <div class="circle-group" onclick="currentChoose(${index})"}>
                             <div class="circle"></div>
                             <div class="circle"></div>
                             <div class="circle"></div>
@@ -241,7 +255,7 @@ const renderSearchItem = (isViewShortImg:boolean,page?:number,serialNum?:number)
     $('.path-temp').val(searchPath)
 }
 
-const orderByRule = (ruleText:string,serialNum:number) => {
+Window.prototype.orderByRule = (ruleText:string,serialNum:number) => {
     console.log(ruleText,serialNum)
     sortRevers = sortType === ruleText ? sortRevers : false
     sortType = ruleText
@@ -255,7 +269,7 @@ const usePagination = (pagination:createPaginationReturnType,isViewShortImg:bool
     }
 }
 
-const showModalAlert = (actionName:string,fileName:string,filePath:string) => {
+Window.prototype.showModalAlert = (actionName:string,fileName:string,filePath:string) => {
     $('.modal-content-alert').removeChildDom()
     $.localData('set','selectAction',{ action:actionName,path:filePath })
     $('.modal-body-alert').styles('set','transform',)
@@ -273,7 +287,7 @@ const showModalAlert = (actionName:string,fileName:string,filePath:string) => {
     modalAlert.showModal()
 }
 
-const getRight = (targetIndex:number) => {
+Window.prototype.getRight = (targetIndex:number) => {
     const { offsetX,offsetY }:any = window.event
     $.each($('.file-modify-list'),((item:HTMLElement) => {
         if($.convert($(item).attr('data-right'),'number') === targetIndex){
@@ -335,9 +349,9 @@ const cancelExecute = () => {
     modalAlert.closeModal(() => $.localData('set','selectAction',{}))
 }
 
-const removeFileModifyList = () => $.each($('.file-modify-list'),(item:HTMLElement) => $(item).removeClass('active'))
+Window.prototype.removeFileModifyList = () => $.each($('.file-modify-list'),(item:HTMLElement) => $(item).removeClass('active'))
 
-const currentChoose = (num:number) => {
+Window.prototype.currentChoose = (num:number) => {
     if($.indexOf(currentSelectNum,num) === -1){
         currentSelectNum.push(num)
         $.each(currentSelectNum,(selectNum:number) => {
@@ -350,15 +364,15 @@ const currentChoose = (num:number) => {
         $($('.option-list')[num]).removeClass('active')
         currentSelectNum.splice(index,1)
     }
-}
+};
 
-const showImage = (url:string,fileName:string) => {
+Window.prototype.showImage = (url:string,fileName:string) => {
     $('.modal-header span').texts(fileName)
     $('.content-img-outer img').attr('src',url)
     modal.showModal()
 }
 
-const showImageDetails = (postfileNum:number) => {
+Window.prototype.showImageDetails = (postfileNum:number) => {
     if($.indexOf(currentSelectFileNum,postfileNum) === -1){
         currentSelectFileNum.push(postfileNum)
         $.each(currentSelectFileNum,(selectNum:number) => {
@@ -402,13 +416,20 @@ const changeListView = ({ target }:{ target:HTMLElement }) => {
     }
 }
 
+const closeApp = () => {
+    if(confirm('Do you want to close app ?')){
+        win.close()
+    }
+}
+
 $('.zoom-plus').listener('click',zoomPlusOrSubs)
 $('.zoom-subs').listener('click',zoomPlusOrSubs)
 $('.open-path').listener('click',getPath.bind(this,true))
 $('.close').listener('click',() => modal.closeModal(() => $('.content-img-outer img').attr('src','')))
 $('.modal-footer-alert .confirm').listener('click',confirmExecute)
 $('.modal-footer-alert .cancel').listener('click',cancelExecute)
+$('.close-app').listener('click',closeApp)
 $.each($('.change-view'),(element:HTMLElement) => $(element).listener('click',changeListView))
 
-// $(document).listener('mousedown',dragStart)
-// $(document).listener('mouseup',dragEnd)
+$(document).listener('mousedown',dragStart)
+$(document).listener('mouseup',dragEnd)

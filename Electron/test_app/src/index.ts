@@ -24,8 +24,8 @@ const createWindow = (): void => {
         width: 1280, 
         height: 700,
         resizable: false, 
-        frame: true,
-        transparent:false,
+        frame: false,
+        transparent:true,
         webPreferences: {
             nodeIntegration: true, 
             contextIsolation:false,
