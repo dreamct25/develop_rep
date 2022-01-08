@@ -1,99 +1,128 @@
 html {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 98vh;
     body {
         margin: 0;
         .container-outer {
             overflow: hidden;
-            height: 690px;
+            height: 98.5vh;
             margin: 5px;
             box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.7);
             border-radius: 15px;
             background-color: white;
+            transition: .2s ease;
             .title-bar{
                 display: flex;
                 justify-content: space-between;
                 background-color: rgb(60,60,60);
-                padding:5px 5px;
+                padding:7px 5px;
                 .app-title{
                     color: white;
+                    margin-left: 5px;
+                    font-size: 18px;
                 }
                 .right-controll-group{
                     display: flex;
                     align-items: center;
+                    color: white;
                     .circle{
                         border-radius: 50%;
-                        width: 10px;
-                        height: 10px;
-                        background-color: red;
                         margin: 0 3px;
                     }
+                    .dark-mode {
+                        background-color: white;
+                        color: black;
+                        padding: 2.5px 4px 2.5px 4px;
+                        box-shadow: 0 0 1px 1px rgba(255,255,255,0);
+                        font-size: 10px;
+                        &.active{
+                            background-color: black;
+                            color: yellow;
+                            box-shadow: 0 0 1px 1px rgba(255,255,255,.7);
+                        }
+                    }
                     .small{
-                        background-color: rgb(255, 230, 0);
+                        background-color: #ffe600;
+                        padding: 6px 5.5px 5px 4.5px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: 6px;
                     }
                     .full-screen{
                         background-color: rgb(0, 200, 0);
+                        padding: 2.2px 5px 3.2px 5px;
+                        font-size: 9px;
                     }
                     .close-app{
                         background-color: red;
+                        padding: 2.5px 5.9px 2.6px 5.5px;
+                        font-size: 9px;
                     }
                 }
             }
             .container {
                 overflow-y: scroll;
                 overflow-x: hidden;
-                height: 690px;
-                .path-group{
+                height: 660px;
+                .top-block{
                     display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    .path-temp{
-                        border: none;
-                        outline: none;
-                        box-shadow:inset 0 0 1px 1px rgba(0,0,0,.7);
-                        border-radius: 7px 0 0 7px;
-                        padding: 6.5px 7px 6.5px 7px;
-                        text-align: center;
-                        &::placeholder{
+                    justify-content: space-between;
+                    margin: 10px 10px 0 10px;
+                    .path-group{
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        .path-temp{
+                            border: none;
+                            outline: none;
+                            box-shadow:inset 0 0 1px 1px rgba(0,0,0,.7);
+                            border-radius: 7px 0 0 7px;
+                            padding: 6.5px 7px 6.5px 7px;
                             text-align: center;
+                            &::placeholder{
+                                text-align: center;
+                            }
+                        }
+                        
+                        .open-path{
+                            background-color: black;
+                            color: white;
+                            padding: 2px 8px 5.5px 8px;
+                            border-radius: 0 7px 7px 0;
+                            user-select: none;
+                            cursor: pointer;
                         }
                     }
-                    
-                    .open-path{
-                        background-color: black;
-                        color: white;
-                        padding: 2px 8px 6px 8px;
-                        border-radius: 0 7px 7px 0;
-                        user-select: none;
-                        cursor: pointer;
-                    }
-                }
-                .change-view-group{
-                    display: flex;
-                    width: 270px;
-                    overflow: hidden;
-                    border-radius: 20px;
-                    .view-short-img,
-                    .view-details-list{
-                        cursor: pointer;
-                        user-select: none;
-                        background-color: rgb(30,30,30);
-                        color: white;
-                        text-align: center;
-                        padding: 4px 0;
-                        width: 50%;
-                        box-shadow: inset 0 0 0 0.5px rgba(255,255,255,.7);
-                        transition: .5s ease;
-                    }
-                    .view-short-img{
-                        border-radius: 20px 0 0 20px;
-                    }
-                    .view-details-list{
-                        border-radius: 0 20px 20px 0;
-                    }
-                    .active{
-                        color: black;
-                        background-color: rgb(255,255,255);
-                        box-shadow: inset 0 0 2px 0.5px rgba(0,0,0,.7);
+                    .change-view-group{
+                        display: flex;
+                        width: 270px;
+                        overflow: hidden;
+                        border-radius: 20px;
+                        .view-short-img,
+                        .view-details-list{
+                            cursor: pointer;
+                            user-select: none;
+                            background-color: rgb(30,30,30);
+                            color: white;
+                            text-align: center;
+                            padding: 4px 0;
+                            width: 50%;
+                            box-shadow: inset 0 0 0 0.5px rgba(255,255,255,.7);
+                            transition: .5s ease;
+                        }
+                        .view-short-img{
+                            border-radius: 20px 0 0 20px;
+                        }
+                        .view-details-list{
+                            border-radius: 0 20px 20px 0;
+                        }
+                        .active{
+                            color: black;
+                            background-color: rgb(255,255,255);
+                            box-shadow: inset 0 0 2px 0.5px rgba(0,0,0,.7);
+                        }
                     }
                 }
                 .render-item {
@@ -101,8 +130,9 @@ html {
                         display: grid;
                         justify-content: center;
                         grid-template-columns: 25% 25% 25% 25%;
+                        grid-gap: 15px;
+                        padding:15px 35px;
                         .image-card{
-                            margin: 10px;
                             overflow: hidden;
                             box-shadow: 0 0 2px 1px rgba(0,0,0,.7);
                             border-radius: 7px;
@@ -218,7 +248,8 @@ html {
                         overflow: hidden;
                         border-radius: 10px;
                         box-shadow: 0 0 2px 0px rgba(0,0,0,.5);
-                        margin: 10px 0;
+                        margin-top: 10px;
+                        min-height:100vh ;
                         .grid-header {
                             display: grid;
                             grid-template-columns: 20% 10% 20% 25% 25%;
@@ -290,6 +321,10 @@ html {
                     border-radius: 20px;
                     box-shadow: inset 0 0 2px 1px rgba(255,255,255,.7);
                 }
+            }
+            &.dark {
+                color: white;
+                background-color: rgb(30,30,30);
             }
         }
     }

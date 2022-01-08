@@ -5,26 +5,37 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-    <title>Document</title>
+    <title>Photo Manager</title>
 </head>
 <body>
     <div class="container-outer">
         <div class="title-bar">
-            <div class="app-title">title</div>
+            <div class="app-title">Photo Manager</div>
             <div class="right-controll-group">
-                <div class="circle small"></div>
-                <div class="circle full-screen"></div>
-                <div class="circle close-app"></div>
+                <div class="circle dark-mode">
+                    <i class="far fa-moon"></i>
+                </div>
+                <div class="circle small">
+                    <i class="fas fa-horizontal-rule"></i>
+                </div>
+                <div class="circle full-screen">
+                    <i class="fas fa-expand-alt"></i>
+                </div>
+                <div class="circle close-app">
+                    <i class="fas fa-times"></i>
+                </div>
             </div>
         </div>
         <div class="container">
-            <div class="path-group">
-                <input class="path-temp" type="text" readonly>
-                <div class="open-path">Browers...</div>
-            </div>
-            <div class="change-view-group">
-                <div class="change-view view-short-img">顯示縮圖</div>
-                <div class="change-view view-details-list">顯示詳細資訊</div>
+            <div class="top-block">
+                <div class="change-view-group">
+                    <div class="change-view view-short-img">Photo</div>
+                    <div class="change-view view-details-list">Photo Details</div>
+                </div>
+                <div class="path-group">
+                    <input class="path-temp" type="text" readonly>
+                    <div class="open-path">Browers...</div>
+                </div>
             </div>
             <div class="render-item"></div>
             <div class="modal">
@@ -62,6 +73,7 @@
                 </div>
             </div>
         </div>
+        <!-- <div class="srcolll" style="position: fixed;bottom: 5%;left: 2%;z-index: 100;">123</div> -->
     </div>
 </body>
 </html>

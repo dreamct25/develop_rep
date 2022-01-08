@@ -7,6 +7,8 @@ require('@electron/remote/main').initialize()
 // whether you're running in development or production).
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 
+let mainWindow:BrowserWindow
+
 let mainMenuSet:MenuItem[] | MenuItemConstructorOptions[] = [{
     label:'File', // 程式上方選單文字
     accelerator:process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q', // 快捷鍵，darwin 是 Mac 平台，win32 是 Windows 平台
@@ -20,10 +22,10 @@ let mainMenuSet:MenuItem[] | MenuItemConstructorOptions[] = [{
 
 const createWindow = (): void => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
         width: 1280, 
         height: 700,
-        resizable: false, 
+        resizable: true,
         frame: false,
         transparent:true,
         webPreferences: {

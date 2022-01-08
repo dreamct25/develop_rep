@@ -45,12 +45,15 @@ let currentSelectFileNum:number[] = []
 let currentSelectNum:number[] = []
 let sortType:string = ""
 let sortRevers:boolean = false
+let haveCloseWindow:boolean = false
+let windowPositionTemp:number[] = []
+let haveFullScreen:boolean = false
 
 const dragStart:({ button,x,y }:MouseEvent) => void = ({ button,x,y }) => {
     // 滑鼠點擊後移動視窗開始
     // button 0 為左鍵，2 為右鍵
     if(button === 0){
-        win.resizable = true // 開啟可調整視窗，因拖動時會造成視窗放大
+        // win.setResizable(true) // 開啟可調整視窗，因拖動時會造成視窗放大
         baseX = x; // 紀錄移動起始座標點 x
         baseY = y; // 紀錄移動起始座標點 y
         $(document).listener('mousemove', moveEvent);
@@ -64,7 +67,7 @@ const dragEnd:() => void = () => {
     baseX = 0; // 歸零起始座標點 x
     baseY = 0; // 歸零起始座標點 x
     $(document).removeListener('mousemove', moveEvent);
-    win.resizable = false // 關閉可調整視窗
+    // win.setResizable(false) // 關閉可調整視窗
 }
 
 const moveEvent:({ screenX,screenY }:MouseEvent) =>void = ({ screenX,screenY }) => {
@@ -167,7 +170,7 @@ const renderSearchItem = (isViewShortImg:boolean,page?:number,serialNum?:number)
                         <div class="image" style="background-image:url(${fileRealPath});"></div>
                     </div>
                     <div class="image-details-group">
-                        <div class="file-title">檔名：${fileName}</div>
+                        <div class="file-title">${fileName}</div>
                         <div class="circle-group" onclick="currentChoose(${index})"}>
                             <div class="circle"></div>
                             <div class="circle"></div>
@@ -179,11 +182,11 @@ const renderSearchItem = (isViewShortImg:boolean,page?:number,serialNum?:number)
                         <div onclick="showImageDetails(${index})">檔案詳情</div>
                     </div>
                     <div class="files-details" data-details="${index}">
-                        <span>檔名：${fileName}</span>
-                        <span>建檔日期：${$.formatDateTime({ formatDate:fileCreateTime,formatType:'date' })}</span>
-                        <span>修改日期：${$.formatDateTime({ formatDate:fileModifyTime,formatType:'date' })}</span>
-                        <span>檔案大小：${Math.round($.convert(fileSize,'number') / 1024)} KB</span>
-                        <span>檔案類型：${fileType}</span>
+                        <span>File Name：${fileName}</span>
+                        <span>Create Date：${$.formatDateTime({ formatDate:fileCreateTime,formatType:'date' })}</span>
+                        <span>Modify Date：${$.formatDateTime({ formatDate:fileModifyTime,formatType:'date' })}</span>
+                        <span>File Size：${Math.round($.convert(fileSize,'number') / 1024)} KB</span>
+                        <span>File Type：${fileType}</span>
                     </div>
                     <div class="file-modify-list" data-right="${index}">
                         <div onclick="showModalAlert('rename','${fileName}','${fileRealPath}')">重新命名</div>
@@ -192,12 +195,13 @@ const renderSearchItem = (isViewShortImg:boolean,page?:number,serialNum?:number)
                 </div>`).join("")}
             </div>
         `
+        $('.container').styles('set','height',`${window.innerHeight - 50}px`)
         $('.render-item').easyAppendDom('beforeDom',dom)
     } else {
         const pagination:createPaginationReturnType = $.createPagination({
             currentItem:sortItem || searchItem,
             pages:page || 1,
-            partViewPage:3,
+            partViewPage:10,
             pageSize:10,
             isActiveDom:true
         })
@@ -207,18 +211,18 @@ const renderSearchItem = (isViewShortImg:boolean,page?:number,serialNum?:number)
         dom = `
             <div class="grid-outer">
                 <div class="grid-header">
-                    <div class="order-title">檔名</div>
-                    <div class="order-title">檔案類型</div>
+                    <div class="order-title">File Name</div>
+                    <div class="order-title">File Type</div>
                     <div class="order-title" onclick="orderByRule('bySize',2)">
-                        檔案大小
+                        File Size
                         <i class="${ serialNum === 2 ? "fas fa-angle-up order-arrow active" : "fas fa-angle-up order-arrow"}"></i>
                     </div>
                     <div class="order-title" onclick="orderByRule('byModifyDate',3)">
-                        修改日期
+                        Modify Date
                         <i class="${ serialNum === 3 ? "fas fa-angle-up order-arrow active" : "fas fa-angle-up order-arrow"}"></i>
                     </div>
                     <div class="order-title" onclick="orderByRule('byCreateDate',4)">
-                        建檔日期
+                        Create Date
                         <i class="${ serialNum === 4 ? "fas fa-angle-up order-arrow active" : "fas fa-angle-up order-arrow"}"></i>
                     </div>
                 </div>
@@ -248,6 +252,7 @@ const renderSearchItem = (isViewShortImg:boolean,page?:number,serialNum?:number)
                 </div>
             </div>`
 
+            $('.container').styles('remove','height')
             $('.render-item').easyAppendDom('beforeDom',dom)
             $('.pagination-item-group').on('click',usePagination.bind(this,pagination,isViewShortImg))
     }
@@ -269,19 +274,21 @@ const usePagination = (pagination:createPaginationReturnType,isViewShortImg:bool
     }
 }
 
-Window.prototype.showModalAlert = (actionName:string,fileName:string,filePath:string) => {
+Window.prototype.showModalAlert = (actionName:string,fileName?:string,filePath?:string) => {
     $('.modal-content-alert').removeChildDom()
-    $.localData('set','selectAction',{ action:actionName,path:filePath })
-    $('.modal-body-alert').styles('set','transform',)
+    actionName !== 'close-window' && $.localData('set','selectAction',{ action:actionName,path:filePath })
     switch(actionName){
         case 'rename':
-            $('.modal-header-alert span').texts('重新命名')
+            $('.modal-header-alert span').texts('Rename')
             $('.modal-content-alert').easyAppendDom('beforeDom',`<input type="text" class="rename-input" value="${fileName}" />`)
             break;
         case 'delete':
-            $('.modal-header-alert span').texts('訊息')
-            $('.modal-content-alert').easyAppendDom('beforeDom',`<span>確定要刪除 ${fileName} ?</span>`)
+            $('.modal-header-alert span').texts('Message')
+            $('.modal-content-alert').easyAppendDom('beforeDom',`<span>Do you want to delete ${fileName} ?</span>`)
             break;
+        case 'close-window':
+            $('.modal-header-alert span').texts('Message')
+            $('.modal-content-alert').texts('Do you want to close the application ?')
     }
 
     modalAlert.showModal()
@@ -337,15 +344,20 @@ const deleteFile = (fileLink:string) => {
 }
 
 const confirmExecute = () => {
-    const { action,path } = $.localData('get','selectAction')
-    const [{ fileBasicPath,fileName,fileType,fileRealPath }] = $.filter(fileDataTemp.searchItem,({ fileRealPath }:fileDataType) => fileRealPath === path)
-    console.log(fileBasicPath,fileRealPath)
-    action === "rename" && renameFile({ basicPath:fileBasicPath,name:fileName,type:fileType })
-    action === "delete" && deleteFile(fileRealPath)
-    modalAlert.closeModal(() => $.localData('set','selectAction',{}))
+    if(!haveCloseWindow){
+        const { action,path } = $.localData('get','selectAction')
+        const [{ fileBasicPath,fileName,fileType,fileRealPath }] = $.filter(fileDataTemp.searchItem,({ fileRealPath }:fileDataType) => fileRealPath === path)
+        console.log(fileBasicPath,fileRealPath)
+        action === "rename" && renameFile({ basicPath:fileBasicPath,name:fileName,type:fileType })
+        action === "delete" && deleteFile(fileRealPath)
+        modalAlert.closeModal(() => $.localData('set','selectAction',{}))
+    } else {
+        setTimeout(() => win.close(), 450);
+    }
 }
 
 const cancelExecute = () => {
+    if(haveCloseWindow) haveCloseWindow = false
     modalAlert.closeModal(() => $.localData('set','selectAction',{}))
 }
 
@@ -408,18 +420,31 @@ const changeListView = ({ target }:{ target:HTMLElement }) => {
     if(currentClass === 'view-short-img'){
         $(`.${currentClass}`).addClass('active')
         $('.view-details-list').removeClass('active')
+        $('.container').styles('set','overflow-y','scroll')
         renderSearchItem(true)
     } else {
         $(`.${currentClass}`).addClass('active')
         $('.view-short-img').removeClass('active')
+        $('.container').styles('set','overflow-y','hidden')
         renderSearchItem(false)
     }
 }
 
 const closeApp = () => {
-    if(confirm('Do you want to close app ?')){
-        win.close()
-    }
+    haveCloseWindow = true
+    window.showModalAlert('close-window',undefined,undefined)
+}
+
+const fullScreenToggle = () => {
+    haveFullScreen = !haveFullScreen
+    win.setFullScreen(haveFullScreen)
+}
+
+const darkModeToggle = () => {
+    const currentClass = $.indexOf($('.container-outer').attr('class').split(" "),'dark')
+    const classMethod = currentClass === -1 ? 'addClass' : 'removeClass'
+    $('.dark-mode')[classMethod]('active')
+    $('.container-outer')[classMethod]('dark')
 }
 
 $('.zoom-plus').listener('click',zoomPlusOrSubs)
@@ -429,7 +454,16 @@ $('.close').listener('click',() => modal.closeModal(() => $('.content-img-outer 
 $('.modal-footer-alert .confirm').listener('click',confirmExecute)
 $('.modal-footer-alert .cancel').listener('click',cancelExecute)
 $('.close-app').listener('click',closeApp)
+$('.small').listener('click',() => win.minimize())
+$('.full-screen').listener('click',fullScreenToggle)
+$('.dark-mode').listener('click',darkModeToggle)
 $.each($('.change-view'),(element:HTMLElement) => $(element).listener('click',changeListView))
 
-$(document).listener('mousedown',dragStart)
-$(document).listener('mouseup',dragEnd)
+$('.title-bar').listener('mousedown',dragStart)
+$('.title-bar').listener('mouseup',dragEnd)
+
+// $('.srcolll').listener('click',() => {
+//     $('.container').scrollToTop({ scrollTop:0,duration:2000 })
+// })
+
+document.body.style.overflow = 'hidden';
