@@ -4,7 +4,7 @@ import { cssSetPropertys } from './types'
 const { Container }: cssSetPropertys = {
     Container: styled.div`
         .alert-bage-text-outer{
-            position:fixed;
+            position:absolute;
             bottom: -10%;
             left: 0;
             right: 0;

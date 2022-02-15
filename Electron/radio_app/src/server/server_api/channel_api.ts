@@ -1,5 +1,10 @@
 import { Router, Request, Response } from "express"
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+
+import internetAvailable from 'internet-available'
+
 const { HiNetHichannel } = require('hinet-hichannel-taiwan-radio')
 const route: Router = Router()
 
@@ -51,10 +56,12 @@ export interface channelRankItemType {
 }
 
 route.get('/get_channel', (req: Request, res: Response) => {
-    const hichannel = new HiNetHichannel
-    hichannel.getChannels().then((channels: channelItemType[]) => {
-        hichannel.getRankingChannels().then((rankItem: channelRankItemType[]) => {
-            res.json({ data: { channels, rankItem } })
+    internetAvailable().then(() => {
+        const hichannel = new HiNetHichannel
+        hichannel.getChannels().then((channels: channelItemType[]) => {
+            hichannel.getRankingChannels().then((rankItem: channelRankItemType[]) => {
+                res.json({ data: { channels, rankItem } })
+            })
         })
     })
 })
@@ -66,19 +73,21 @@ route.post('/get_single_channel', (req: Request, res: Response) => {
         radioInfoList: [],
     };
 
-    const hichannel = new HiNetHichannel
+    internetAvailable().then(() => {
+        const hichannel = new HiNetHichannel
 
-    postBackItem.radioName = req.body.selectChannelName
-
-    hichannel.setChannel(req.body.selectChannelName)
-    hichannel.getChannelM3u8Url().then((m3u8Url: string) => {
-        postBackItem.radioUrl = m3u8Url
-        // console.log(`m3u8 串流網址：${m3u8Url}`)
-        hichannel.getChannelProgramInfo().then((info: radioInfoListType) => {
-            // console.log('電台頻道節目資訊：')
-            postBackItem.radioInfoList = [info]
-        }).then(() => res.json({ data: postBackItem }))
-    }).catch((err: any) => res.json({ data: err }))
+        postBackItem.radioName = req.body.selectChannelName
+    
+        hichannel.setChannel(req.body.selectChannelName)
+        hichannel.getChannelM3u8Url().then((m3u8Url: string) => {
+            postBackItem.radioUrl = m3u8Url
+            // console.log(`m3u8 串流網址：${m3u8Url}`)
+            hichannel.getChannelProgramInfo().then((info: radioInfoListType) => {
+                // console.log('電台頻道節目資訊：')
+                postBackItem.radioInfoList = [info]
+            }).then(() => res.json({ data: postBackItem }))
+        }).catch((err: any) => res.json({ data: err }))
+    })
 })
 
 module.exports = route

@@ -43,16 +43,12 @@ const Main: FunctionComponent = (): JSX.Element => {
         if (button === 0) {
             // win.setResizable(true) // 開啟可調整視窗，因拖動時會造成視窗放大
             setMoveXY({ baseX: x, baseY: y })
-        } else if (button === 2) {
-            ipcRenderer.send('closeApp'); // 呼叫後端 ipcMain 事件，出現選單
         }
     }
 
     useEffect(() => {
-        const { baseX, baseY } = moveXY
-        if (baseX !== -1 && baseY !== -1) {
-            $(document).on('mousemove', moveEvent);
-        }
+        const { baseX, baseY } = moveXY;
+        (baseX !== -1 && baseY !== -1) && $(document).on('mousemove', moveEvent);
     }, [moveXY])
 
     const dragEnd: () => void = () => {
@@ -98,8 +94,9 @@ const Main: FunctionComponent = (): JSX.Element => {
     return (
         <Container>
             <div className="top-bar" onMouseDown={dragStart} onMouseUp={dragEnd}>
-                <div className="top-bar-title">廣播電台</div>
+                <div className="top-bar-title">{formatLang('radio')}</div>
                 <div className="top-bar-controller">
+                    {process.platform !== 'darwin' && <div className="abount-text" onClick={setToggleModalFn.bind(this,true, 'copyRight')}>{formatLang('about')}</div>}
                     <div className="min" onClick={minScreen}>
                         <i className="fas fa-horizontal-rule min-icon"></i>
                     </div>
@@ -131,10 +128,10 @@ const Main: FunctionComponent = (): JSX.Element => {
                 <Route exact path="/wrong" component={NetworkWrong} />
             </Switch>
             <Modal modalProps={{
-                modalTitle: toggleCopyRightModal ? '' : '提示',
+                modalTitle: toggleCopyRightModal ? '' : formatLang('prompt'),
                 toggleModal: toggleModal,
                 setToggleModal: setToggleModalFn,
-                renderText: toggleCopyRightModal ? 'CopyRight By Chen 2022-02' : '確定要關閉應用程式嗎 ?',
+                renderText: toggleCopyRightModal ? formatLang('copyRight') : formatLang('doYouWantToCloseApplication'),
                 showCopyRightInfo: toggleCopyRightModal
             }} />
         </Container>

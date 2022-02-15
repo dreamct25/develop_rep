@@ -11,6 +11,10 @@ import Loading from "../Loading/Loading";
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import AlertBageText from "../AlertBageText/AlertBageText";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import internetAvailable from 'internet-available'
+
 const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateStatus }: RadioProps): JSX.Element => {
     const [initState, setInitState] = useState<initStateType>({
         player: null,
@@ -135,7 +139,6 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
                     } else {
                         setInitState({ ...initState, currentChannel: currentChannel })
                         setLoadingState(false)
-                        alert("please select again.")
                     }
 
                 },
@@ -202,7 +205,7 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
                 if (data.message === 'search success') {
                     data.haveTheSame ? setInitState({
                         ...initState,
-                        alertBageText: '已在收藏中',
+                        alertBageText: formatLang('alreadyInCollection'),
                         toggleAlertBageText: true
                     }) : addItem()
                 } else {
@@ -230,7 +233,7 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
                 if (message === 'add success') {
                     setInitState({
                         ...initState,
-                        alertBageText: '新增成功',
+                        alertBageText: formatLang('addSuccess'),
                         toggleAlertBageText: true
                     })
                 } else {
@@ -330,7 +333,7 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
                     <input
                         type="text"
                         value={currentSearch}
-                        placeholder={'搜尋電台'}
+                        placeholder={formatLang('searchRadio')}
                         onChange={setCurrentSearchs}
                         onFocus={whenInputTypeing.bind(this, true)}
                         onBlur={whenInputTypeing.bind(this, false)}
@@ -367,7 +370,7 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
                             </div>
                         </div>
                     )) : <div className="no-data">
-                        <div>-- 無搜尋電台 --</div>
+                        <div>-- {formatLang('noSearchResults')} --</div>
                     </div>}
                 </div>
             </div>
@@ -406,7 +409,7 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
                             onMouseLeave={toggleTooltip.bind(this, false)}
                         >
                             <div className={showfilterRadioList ? "toggle-button active" : "toggle-button"}></div>
-                            <div className={showTooltip ? "tooltip active" : "tooltip"}>{showfilterRadioList ? '關閉功能列' : '開啟功能列'}</div>
+                            <div className={showTooltip ? "tooltip active" : "tooltip"}>{formatLang(showfilterRadioList ? 'closeFunctionList':'openFunctionList')}</div>
                         </div>
                     </div>
                     <div className="single-radio-body">
@@ -427,8 +430,8 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
                         <span>{singleRadioSelect.desc}</span>
                         {'programList' in singleRadioSelect && <div className="current-play-time-list-outer">
                             <div className="current-play-time-list-title">
-                                <span>廣播節目表</span>
-                                <span className="current-program-name">{$.maps(singleRadioSelect.programList, ({ start_time, end_time, name, on }: programListType) => (countCurrentTimeIsPlay(start_time, end_time) && on && `當前節目：${name}`))}</span>
+                                <span>{formatLang('radioProgramList')}</span>
+                                <span className="current-program-name">{$.maps(singleRadioSelect.programList, ({ start_time, end_time, name, on }: programListType) => (countCurrentTimeIsPlay(start_time, end_time) && on && formatLang('currentProgram',{ program : name })))}</span>
                             </div>
                             <div className="current-play-time-list">
                                 {$.maps(singleRadioSelect.programList, ({ start_time, end_time, name, on }: programListType, index: number) => (

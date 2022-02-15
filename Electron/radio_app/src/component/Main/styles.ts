@@ -3,16 +3,40 @@ import { cssSetPropertys } from './types'
 
 const { Container }: cssSetPropertys = {
     Container: styled.div`
-        margin-top: 30px;
-        .top-bar{
-            position: fixed;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: white;
+        position: relative;
+        min-height: 98.5vh;
+        background-image: url('./main-bg.jpg');
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        user-select: none;
+        &::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 30px;
+            bottom: 0;
+            backdrop-filter: blur(3px);
+            z-index: -1;
+        }
+        margin: 5px;
+        border-radius: 5.5px;
+        overflow: hidden;
+        box-shadow: 0 0 5px 0 rgba(0,0,0,.7);
+        .top-bar{
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 33px;
             background-color: rgb(60,60,60);
             z-index: 20;
-            padding: 8px 7px;
+            padding: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -21,6 +45,12 @@ const { Container }: cssSetPropertys = {
             }
             .top-bar-controller{
                 display: flex;
+                .abount-text{
+                    margin:0 8px;
+                    font-size: 14px;
+                    cursor: pointer;
+                    user-select: none;
+                }
                 .min{
                     background-color: rgb(255,214,10);
                     height:13px;
@@ -72,7 +102,7 @@ const { Container }: cssSetPropertys = {
         }
         .change-language-list{
             text-align:center;
-            position: fixed;
+            position: absolute;
             top: 32px;
             right: 0;
             z-index: 0;
@@ -85,7 +115,7 @@ const { Container }: cssSetPropertys = {
             user-select: none;
         }
         .top-option-group{
-            position: fixed;
+            position: absolute;
             left: 0;
             right: 0;
             top: -10%;

@@ -4,8 +4,8 @@ import { cssSetPropertys } from './types'
 const { Container }: cssSetPropertys = {
     Container: styled.div`
         .loading-outer{
-            position: fixed;
-            top: 0;
+            position: absolute;
+            top: 33px;
             left: 0;
             right: 0;
             bottom: 0;

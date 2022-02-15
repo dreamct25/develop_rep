@@ -112,7 +112,7 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
 
                     setTimeout(() => {
                         setAlertBageGroup({
-                            alertBageText: '刪除成功',
+                            alertBageText: formatLang('deleteSuccess'),
                             toggleAlertBageText: true
                         })
                         getCollectData()
@@ -296,7 +296,7 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
                             onMouseLeave={toggleTooltip.bind(this, false)}
                         >
                             <div className={showCollectList ? "toggle-button active" : "toggle-button"}></div>
-                            <div className={showTooltip ? "tooltip active" : "tooltip"}>{showCollectList ? '關閉功能列' : '開啟功能列'}</div>
+                            <div className={showTooltip ? "tooltip active" : "tooltip"}>{ formatLang(showCollectList ? 'openFunctionList' : 'closeFunctionList')}</div>
                         </div>
                     </div>
                     <div className="colletct-single-radio-body">
@@ -319,8 +319,8 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
                         <span>{singleRadioSelect.desc}</span>
                         {'programList' in singleRadioSelect && <div className="current-play-time-list-outer">
                             <div className="current-play-time-list-title">
-                                <span>廣播節目表</span>
-                                <span className="current-program-name">{$.maps(singleRadioSelect.programList, ({ start_time, end_time, name, on }: programListType) => (countCurrentTimeIsPlay(start_time, end_time) && on && `當前節目：${name}`))}</span>
+                                <span>{formatLang('radioProgramList')}</span>
+                                <span className="current-program-name">{$.maps(singleRadioSelect.programList, ({ start_time, end_time, name, on }: programListType) => (countCurrentTimeIsPlay(start_time, end_time) && on && formatLang('currentProgram',{ program : name})))}</span>
                             </div>
                             <div className="current-play-time-list">
                                 {$.maps(singleRadioSelect.programList, ({ start_time, end_time, name, on }: programListType, index: number) => (
@@ -349,7 +349,7 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
                     <input
                         type="text"
                         value={currentSearch}
-                        placeholder={'搜尋收藏電台'}
+                        placeholder={formatLang('searchCollectionRadio')}
                         onChange={setCurrentSearchs}
                         onFocus={whenInputTypeing.bind(this, true)}
                         onBlur={whenInputTypeing.bind(this, false)}
@@ -370,15 +370,15 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
                             </div>
                         </div>
                     )) : <div className="no-data">
-                        <div>-- 無蒐藏 --</div>
+                        <div>-- {formatLang('noSearchResults')} --</div>
                     </div>}
                 </div>
             </div>
             <Modal modalProps={{
-                modalTitle: '訊息',
+                modalTitle: formatLang('message'),
                 toggleModal: toggleModal,
                 setToggleModal: setToggleModalFn,
-                renderText: `確定要刪除 ${deleteItemTextTemp} 電台嗎 ?`
+                renderText: formatLang('doYouWantToDelete',{ itemName: deleteItemTextTemp})
             }} />
             <AlertBageText text={alertBageText} toggleState={toggleAlertBageText} />
             <Loading loadingState={loadingState} />

@@ -140,32 +140,6 @@ const GlobalStyle = createGlobalStyle`
     }
     html{
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
-        body{
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            color: white;
-            position: relative;
-            min-height: 97vh;
-            background-image: url('https://unsplash.com/photos/i2BcaGXomv0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjB8fHJhZGlvJTIwc3R1ZGlvfHwwfHx8fDE2NDMzMTk1MjQ&force=true&w=1920');
-            background-position: center center;
-            background-repeat: no-repeat;
-            background-size: cover;
-            margin: 10px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 0 5px 0 rgba(0,0,0,.7);
-            &::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                backdrop-filter: blur(3px);
-                z-index: -1;
-            }
-        }
     }
 `
 export { GlobalStyle }

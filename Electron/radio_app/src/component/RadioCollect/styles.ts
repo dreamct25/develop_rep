@@ -14,6 +14,7 @@ const { Container }: cssSetPropertys = {
                 position: relative;
                 z-index: 2;
                 padding: 15px;
+                margin-top: 33px;
                 .colletct-single-radio-header{
                     font-size: 25px;
                     display: flex;
@@ -136,8 +137,8 @@ const { Container }: cssSetPropertys = {
             }
         }
         .collect-list-outer-frame{
-            position: fixed;
-            top:30px;
+            position: absolute;
+            top:33px;
             left: 0;
             bottom: 0;
             width: 250px;

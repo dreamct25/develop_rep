@@ -4,8 +4,8 @@ import { cssSetPropertys } from './types'
 const { Container }: cssSetPropertys = {
     Container: styled.div`
         .radio-list-outer-frame{
-            position: fixed;
-            top:4%;
+            position: absolute;
+            top:33px;
             left: 0;
             bottom: 0;
             width: 250px;
@@ -31,7 +31,7 @@ const { Container }: cssSetPropertys = {
             .radio-list-outer{
                 overflow-x: hidden;
                 overflow-y: scroll;
-                height: 95.5vh;
+                height: 88vh;
                 .radio-list-item{
                     padding: 15px 11px 0 15px;
                     .img-outer{
@@ -154,8 +154,8 @@ const { Container }: cssSetPropertys = {
             }
         }
         .radio-rank-list-outer-frame{
-            position: fixed;
-            top:4%;
+            position: absolute;
+            top:33px;
             right: 0;
             bottom: 0;
             width: 250px;
@@ -174,7 +174,7 @@ const { Container }: cssSetPropertys = {
                 .radio-rank-list-item-outer{
                     overflow-y: scroll;
                     overflow-x: hidden;
-                    height: 92.5vh;
+                    height: 87.5vh;
                     .radio-rank-list-item {
                         padding: 8px 0px 8px 12px;
                         transition: .7s ease;
@@ -227,6 +227,7 @@ const { Container }: cssSetPropertys = {
                 position: relative;
                 z-index: 2;
                 padding: 15px;
+                margin-top:33px;
                 .single-radio-header{
                     font-size: 25px;
                     display: flex;

@@ -3,8 +3,8 @@ import styled, { StyledComponent } from "styled-components";
 const { Container }: { Container: StyledComponent<"div", any> } = {
     Container: styled.div`
         .modal-outer-fram{
-            position: fixed;
-            top: 30px;
+            position: absolute;
+            top: 33px;
             left: 0;
             right: 0;
             bottom: 0;
