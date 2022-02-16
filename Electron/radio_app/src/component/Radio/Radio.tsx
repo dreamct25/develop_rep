@@ -1,5 +1,4 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { TFunction, useTranslation } from 'react-i18next'
 import VideoJs, { VideoJsPlayer } from 'video.js'
 import 'video.js/dist/video-js.min.css'
@@ -11,12 +10,25 @@ import Loading from "../Loading/Loading";
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import AlertBageText from "../AlertBageText/AlertBageText";
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import internetAvailable from 'internet-available'
-
-const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateStatus }: RadioProps): JSX.Element => {
-    const [initState, setInitState] = useState<initStateType>({
+const Radio: FunctionComponent<RadioProps> = ({ 
+    routeProps,
+    language, 
+    setMainInitStateStatus 
+}: RadioProps): JSX.Element => {
+    const [{
+        player,
+        radioList,
+        radioRankList,
+        filterRadioList,
+        showfilterRadioList,
+        showTooltip,
+        playerVoice,
+        currentChannel,
+        currentSearch,
+        singleRadioSelect,
+        alertBageText,
+        toggleAlertBageText,
+    }, setInitState] = useState<initStateType>({
         player: null,
         radioList: [],
         filterRadioList: [],
@@ -46,29 +58,12 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
 
     const { t }: { t: TFunction<"translation", undefined> } = useTranslation()
 
-    const formatLang: TFunction<"translation", undefined> = t
-
-    const route = useHistory()
+    const formatLanguage: TFunction<"translation", undefined> = t
 
     if (!navigator.onLine) {
-        route.push({ pathname: '/wrong' })
+        routeProps.history.push({ pathname: '/wrong' })
         return
     }
-
-    const {
-        player,
-        radioList,
-        radioRankList,
-        filterRadioList,
-        showfilterRadioList,
-        showTooltip,
-        playerVoice,
-        currentChannel,
-        currentSearch,
-        singleRadioSelect,
-        alertBageText,
-        toggleAlertBageText,
-    } = initState
 
     const getAllChannel: () => void = () => {
         $.fetch({
@@ -82,21 +77,21 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
                 } | string
             }) => {
                 if (typeof data !== 'string') {
-                    setInitState({
+                    setInitState(initState => ({
                         ...initState,
                         radioList: data.channels,
                         filterRadioList: data.channels,
                         radioRankList: $.sort(data.rankItem, (a: channelRankItemType, b: channelRankItemType) => $.convert(a.channel_rank, 'number') - $.convert(b.channel_rank, 'number')),
                         showfilterRadioList: true
-                    })
+                    }))
 
                     setLoadingState(false)
 
-                    setMainInitStateStatus({
+                    setMainInitStateStatus(mainInitState => ({
                         ...mainInitState,
                         topToggleStatus: true,
-                        currentPath: '/radio'
-                    })
+                        currentPath: routeProps.location.pathname
+                    }))
                 }
             },
             errorFn: (err: any) => { console.log(err) }
@@ -130,14 +125,14 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
                             type: "application/x-mpegURL"
                         })
                         player.play()
-                        setInitState({
+                        setInitState(initState => ({
                             ...initState,
                             singleRadioSelect: item,
                             currentChannel: currentChannel
-                        })
+                        }))
                         setLoadingState(false)
                     } else {
-                        setInitState({ ...initState, currentChannel: currentChannel })
+                        setInitState(initState => ({ ...initState, currentChannel: currentChannel }))
                         setLoadingState(false)
                     }
 
@@ -154,16 +149,16 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
 
     const setCurrentVoice: (voiceVal: string) => void = voiceVal => {
         player.volume(Number(voiceVal) / 100)
-        setInitState({ ...initState, playerVoice: $.convert(voiceVal, 'number') })
+        setInitState(initState => ({ ...initState, playerVoice: $.convert(voiceVal, 'number') }))
     }
 
     const setCurrentSearchs: ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => void = ({ target: { value } }) => {
         const filterRadioList: channelItemType[] = $.filter(radioList, ({ channel_title }: channelItemType) => channel_title.match(value))
-        setInitState({
+        setInitState(initState => ({
             ...initState,
             filterRadioList: value === "" ? radioList : filterRadioList,
             currentSearch: value,
-        })
+        }))
     }
 
     const setCurrentPlayState: (status: boolean) => void = status => {
@@ -203,17 +198,17 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
             beforePost: () => setLoadingState(true),
             successFn: (data: { message: string, data?: { [key: string]: any }[], haveTheSame?: boolean }) => {
                 if (data.message === 'search success') {
-                    data.haveTheSame ? setInitState({
+                    data.haveTheSame ? setInitState(initState => ({
                         ...initState,
-                        alertBageText: formatLang('alreadyInCollection'),
+                        alertBageText: formatLanguage('alreadyInCollection'),
                         toggleAlertBageText: true
-                    }) : addItem()
+                    })) : addItem()
                 } else {
-                    setInitState({
+                    setInitState(initState => ({
                         ...initState,
                         alertBageText: data.message,
                         toggleAlertBageText: true
-                    })
+                    }))
                 }
                 setLoadingState(false)
             },
@@ -231,17 +226,17 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
             beforePost: () => setLoadingState(true),
             successFn: ({ message }: { message: string }) => {
                 if (message === 'add success') {
-                    setInitState({
+                    setInitState(initState => ({
                         ...initState,
-                        alertBageText: formatLang('addSuccess'),
+                        alertBageText: formatLanguage('addSuccess'),
                         toggleAlertBageText: true
-                    })
+                    }))
                 } else {
-                    setInitState({
+                    setInitState(initState => ({
                         ...initState,
                         alertBageText: message,
                         toggleAlertBageText: true
-                    })
+                    }))
                 }
                 setLoadingState(false)
             },
@@ -256,11 +251,11 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
     }
 
     const toggleRightList: () => void = () => {
-        setMainInitStateStatus({ ...mainInitState, topToggleStatus: !mainInitState.topToggleStatus })
-        setInitState({ ...initState, showfilterRadioList: !showfilterRadioList })
+        setMainInitStateStatus(mainInitState => ({ ...mainInitState, topToggleStatus: !mainInitState.topToggleStatus }))
+        setInitState(initState => ({ ...initState, showfilterRadioList: !showfilterRadioList }))
     }
 
-    const toggleTooltip: (status: boolean) => void = status => setInitState({ ...initState, showTooltip: status })
+    const toggleTooltip: (status: boolean) => void = status => setInitState(initState => ({ ...initState, showTooltip: status }))
 
     const setGetDateTimer: (status: boolean) => void = status => {
         if (status) {
@@ -273,6 +268,8 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
     const whenInputTypeing: (status: boolean) => void = status => setIsKeyDown(status)
 
     const whenKeyDown: ({ keyCode }: KeyboardEvent) => void = ({ keyCode }) => {
+        const numCode:string[] = ['32','38','40']
+        if (!$.includes(numCode,keyCode)) return
         if (!isKeyDown) {
             const keyCodeSet: { [key: string]: any } = {
                 '32': (): void => setCurrentPlayState(!playState),
@@ -286,7 +283,7 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
     useEffect(() => {
         if (toggleAlertBageText) {
             setTimeout(() => {
-                setInitState({ ...initState, toggleAlertBageText: false })
+                setInitState(initState => ({ ...initState, toggleAlertBageText: false }))
             }, 1200);
         }
     }, [toggleAlertBageText])
@@ -310,7 +307,7 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
                 setPlayState(false)
             })
 
-            setInitState({ ...initState, player: videoJs })
+            setInitState(initStates => ({ ...initStates, player: videoJs }))
         }
     }, [player])
 
@@ -319,7 +316,7 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
     }, [singleRadioSelect])
 
     useEffect(() => {
-        setMainInitStateStatus({ ...mainInitState, currentPath: '/radio' })
+        setMainInitStateStatus(mainInitState => ({ ...mainInitState, currentPath: routeProps.location.pathname }))
         getAllChannel()
         return () => setGetDateTimer(false)
     }, [])
@@ -333,7 +330,7 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
                     <input
                         type="text"
                         value={currentSearch}
-                        placeholder={formatLang('searchRadio')}
+                        placeholder={formatLanguage('searchRadio')}
                         onChange={setCurrentSearchs}
                         onFocus={whenInputTypeing.bind(this, true)}
                         onBlur={whenInputTypeing.bind(this, false)}
@@ -357,11 +354,14 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
                             <div className="img-outer">
                                 <div className="img" style={{ backgroundImage: `url('https://hichannel.hinet.net/upload/radio/channel/${channel_image}')` }}></div>
                                 <div className="radio-title">{channel_title}</div>
-                                <div className="add-collect-btn" onClick={seletctChannel.bind(this, {
-                                    currentChannel: channel_title,
-                                    currentId: channel_id,
-                                    currentImgUrl: `https://hichannel.hinet.net/upload/radio/channel/${channel_image}`
-                                })}>
+                                <div 
+                                    className="add-collect-btn" 
+                                    onClick={seletctChannel.bind(this, {
+                                        currentChannel: channel_title,
+                                        currentId: channel_id,
+                                        currentImgUrl: `https://hichannel.hinet.net/upload/radio/channel/${channel_image}`
+                                    })}
+                                >
                                     <i className="fal fa-heart"></i>
                                 </div>
                                 <div className={currentChannel === channel_title && playState === true ? "is-playing-frame toggle" : "is-playing-frame"}>
@@ -370,12 +370,12 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
                             </div>
                         </div>
                     )) : <div className="no-data">
-                        <div>-- {formatLang('noSearchResults')} --</div>
+                        <div>-- {formatLanguage('noSearchResults')} --</div>
                     </div>}
                 </div>
             </div>
             <div className={showfilterRadioList ? "radio-rank-list-outer-frame toggle" : "radio-rank-list-outer-frame"}>
-                <div className="radio-rank-list-title">{formatLang('topRadioRack')}</div>
+                <div className="radio-rank-list-title">{formatLanguage('topRadioRack')}</div>
                 <div className="radio-rank-list-item-outer-frame">
                     <div className="radio-rank-list-item-outer">
                         {radioRankList.length > 0 && $.maps(radioRankList, ({
@@ -409,11 +409,11 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
                             onMouseLeave={toggleTooltip.bind(this, false)}
                         >
                             <div className={showfilterRadioList ? "toggle-button active" : "toggle-button"}></div>
-                            <div className={showTooltip ? "tooltip active" : "tooltip"}>{formatLang(showfilterRadioList ? 'closeFunctionList':'openFunctionList')}</div>
+                            <div className={showTooltip ? `tooltip-${language} active` : `tooltip-${language}`}>{formatLanguage(showfilterRadioList ? 'closeFunctionList':'openFunctionList')}</div>
                         </div>
                     </div>
                     <div className="single-radio-body">
-                        {currentChannel === '' && <div className="at-start-tipe">請點擊黑框內右上角開起功能選單，並選擇要收聽的電台</div>}
+                        {currentChannel === '' && <div className="at-start-tipe">{formatLanguage('radioDesc')}</div>}
                         <div className="radio-controller" style={{ display: currentChannel !== '' ? 'block' : 'none' }}>
                             <AudioPlayer
                                 audioPlayerProps={{
@@ -430,8 +430,10 @@ const Radio: FunctionComponent<RadioProps> = ({ mainInitState, setMainInitStateS
                         <span>{singleRadioSelect.desc}</span>
                         {'programList' in singleRadioSelect && <div className="current-play-time-list-outer">
                             <div className="current-play-time-list-title">
-                                <span>{formatLang('radioProgramList')}</span>
-                                <span className="current-program-name">{$.maps(singleRadioSelect.programList, ({ start_time, end_time, name, on }: programListType) => (countCurrentTimeIsPlay(start_time, end_time) && on && formatLang('currentProgram',{ program : name })))}</span>
+                                <span>{formatLanguage('radioProgramList')}</span>
+                                <span className="current-program-name">
+                                    {$.maps(singleRadioSelect.programList, ({ start_time, end_time, name, on }: programListType) => (countCurrentTimeIsPlay(start_time, end_time) && on && formatLanguage('currentProgram',{ program : name })))}
+                                </span>
                             </div>
                             <div className="current-play-time-list">
                                 {$.maps(singleRadioSelect.programList, ({ start_time, end_time, name, on }: programListType, index: number) => (

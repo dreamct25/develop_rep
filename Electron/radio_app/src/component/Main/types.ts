@@ -5,10 +5,12 @@ export interface cssSetPropertys {
 }
 
 export interface initStateType {
-    lang: string,
+    language: string,
     currentPath: string,
     topToggleStatus: boolean,
     fullscreenState: boolean,
     toggleModal: boolean,
-    toggleCopyRightModal: boolean
+    toggleCopyRightModal: boolean,
+    languageToggleListStatus:boolean,
+    moveXY:{ baseX: number,baseY: number }
 }

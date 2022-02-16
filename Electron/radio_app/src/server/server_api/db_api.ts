@@ -42,6 +42,7 @@ route.post("/add_item", (req: Request, res: Response) => {
 route.post("/get_collect_single_item", (req: Request, res: Response) => {
     const db: Database = new sqlite.Database(fileUrl)
     const { radio_name, isSingleCheck }: { radio_name: string, isSingleCheck: boolean } = req.body
+    console.log(req.body)
     db.all("SELECT * FROM radio_collect_list WHERE radio_name = ?", radio_name, (err: Error, data: any | { [key: string]: any }[]) => {
         if (err) {
             res.json({ message: err.message })

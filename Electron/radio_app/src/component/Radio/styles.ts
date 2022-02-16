@@ -260,7 +260,8 @@ const { Container }: cssSetPropertys = {
                         &.active{
                             background-color: rgb(8,232,222);
                         }
-                        .tooltip {
+                        .tooltip-zh,
+                        .tooltip-en {
                             color: black;
                             font-size: 15px;
                             position: absolute;
@@ -291,6 +292,10 @@ const { Container }: cssSetPropertys = {
                                 z-index: 2;
                             }
                         }
+                        .tooltip-en{
+                            transform: translate(-45px,-36px);
+                            width: 128px;
+                        }
                         &:hover{
                             opacity: 1;
                         }
@@ -299,7 +304,8 @@ const { Container }: cssSetPropertys = {
                 .single-radio-body{
                     .at-start-tipe{
                         text-align: center;
-                        padding:18px 0 25px 0;
+                        padding-top: 18px;
+                        line-height:32px;
                     }
                     span{
                         display: block;

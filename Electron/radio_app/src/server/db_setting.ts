@@ -1,4 +1,4 @@
-const fileUrl = process.env.NODE_ENV === 'production' ? `${__dirname}/data.db` : `./src/asset/data.db`
+const fileUrl = process.env.NODE_ENV === 'production' ? `${__dirname}/xyz.db` : `./src/server/xyz.db`
 const sqlite = require('sqlite3').verbose()
 const fs = require('fs')
 

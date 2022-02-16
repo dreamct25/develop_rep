@@ -2,13 +2,15 @@ import { StyledComponent } from "styled-components";
 import { VideoJsPlayer } from 'video.js'
 import { initStateType as mainInitStateType } from '../Main/types'
 import { channelItemType, radioInfoListType, channelRankItemType } from '../../server/server_api/channel_api'
+import { RouteComponentProps } from "react-router-dom";
 
 export interface cssSetPropertys {
     Container: StyledComponent<"div", any>
 }
 
 export interface RadioProps {
-    mainInitState: mainInitStateType,
+    routeProps:RouteComponentProps<{[key: string]: string }>
+    language:string
     setMainInitStateStatus: React.Dispatch<React.SetStateAction<mainInitStateType>>,
 }
 
@@ -25,5 +27,5 @@ export interface initStateType {
     loadingState: boolean,
     singleRadioSelect: { [key: string]: any } | radioInfoListType,
     alertBageText: string,
-    toggleAlertBageText: boolean,
+    toggleAlertBageText: boolean
 }

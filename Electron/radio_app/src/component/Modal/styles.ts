@@ -27,7 +27,8 @@ const { Container }: { Container: StyledComponent<"div", any> } = {
                 .modal-title{
                     font-size: 20px;
                     padding: 12px 14px 15px 14px;
-                    box-shadow: inset 0 -0.2px 0 0 white;
+                    box-shadow: inset 0 0 1px 0 white;
+                    border-radius:8px 8px 0 0;
                 }
                 .modal-copy-right-info-body{
                     text-align: center;
@@ -36,6 +37,7 @@ const { Container }: { Container: StyledComponent<"div", any> } = {
                 .modal-body{
                     text-align: center;
                     padding: 30px;
+                    box-shadow: inset 0 0 1px 0 white;
                 }
                 .modal-copy-right-info-footer{
                     div{
@@ -47,7 +49,9 @@ const { Container }: { Container: StyledComponent<"div", any> } = {
                 }
                 .modal-footer{
                    display: flex;
-                   box-shadow: inset 0 0.2px 0 0 white;
+                   box-shadow: inset 0 0 1px 0 white;
+                   border-radius:0 0 8px 8px;
+                   overflow: hidden;
                    div{
                        padding: 12px 0;
                        width: 50%;

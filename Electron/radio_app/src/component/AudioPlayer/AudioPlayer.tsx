@@ -6,16 +6,14 @@ import Container from './styles'
 // @ts-ignore
 import { CircleSlider } from 'react-circle-slider'
 
-const AudioPlayer: FunctionComponent<AudioPlayerProps> = ({ audioPlayerProps }: AudioPlayerProps): JSX.Element => {
-
-    const {
-        audioPlayer,
-        audioVoice,
-        audioState,
-        setCurrentVoice,
-        setCurrentPlayState,
-        prevOrNext
-    } = audioPlayerProps
+const AudioPlayer: FunctionComponent<AudioPlayerProps> = ({ audioPlayerProps : {
+    audioPlayer,
+    audioVoice,
+    audioState,
+    setCurrentVoice,
+    setCurrentPlayState,
+    prevOrNext
+} }: AudioPlayerProps): JSX.Element => {
 
     const setCurrentAudioState: () => void = () => setCurrentPlayState(!audioState)
 

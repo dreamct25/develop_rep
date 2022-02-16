@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { Switch, Route, useHistory } from 'react-router-dom'
+import { Switch, Route, useHistory, RouteComponentProps } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ipcRenderer } from 'electron'
 import $ from '../../lib/Library'
@@ -12,39 +12,29 @@ import Modal from "../Modal/Modal";
 
 const Main: FunctionComponent = (): JSX.Element => {
     const { t, i18n } = useTranslation()
-    const formatLang = t
+    const formatLanguage = t
     const route = useHistory()
-    const [initState, setInitState] = useState<initStateType>({
-        lang: 'zh',
-        currentPath: '',
-        topToggleStatus: false,
-        fullscreenState: false,
-        toggleModal: false,
-        toggleCopyRightModal: false
-    })
-
-    const [moveXY, setMoveXY] = useState<{ baseX: number, baseY: number }>({
-        baseX: -1,
-        baseY: -1
-    })
-
-    const {
-        lang,
+    const [{
+        language,
         currentPath,
         topToggleStatus,
         fullscreenState,
         toggleModal,
-        toggleCopyRightModal
-    }: initStateType = initState
+        toggleCopyRightModal,
+        languageToggleListStatus,
+        moveXY
+    }, setInitState] = useState<initStateType>({
+        language: 'zh',
+        currentPath: '',
+        topToggleStatus: false,
+        fullscreenState: false,
+        toggleModal: false,
+        toggleCopyRightModal: false,
+        languageToggleListStatus: false,
+        moveXY:{ baseX: -1, baseY: -1 }
+    })
 
-    const dragStart: ({ nativeEvent: { button, x, y } }: React.MouseEvent<HTMLDivElement>) => void = ({ nativeEvent: { button, x, y } }) => {
-        // 滑鼠點擊後移動視窗開始
-        // button 0 為左鍵，2 為右鍵
-        if (button === 0) {
-            // win.setResizable(true) // 開啟可調整視窗，因拖動時會造成視窗放大
-            setMoveXY({ baseX: x, baseY: y })
-        }
-    }
+    const dragStart: ({ nativeEvent: { button, x, y } }: React.MouseEvent<HTMLDivElement>) => void = ({ nativeEvent: { button, x, y } }) => button === 0 && setInitState(initState => ({ ...initState,moveXY:{ baseX: x, baseY: y } }))
 
     useEffect(() => {
         const { baseX, baseY } = moveXY;
@@ -52,7 +42,7 @@ const Main: FunctionComponent = (): JSX.Element => {
     }, [moveXY])
 
     const dragEnd: () => void = () => {
-        setMoveXY({ baseX: -1, baseY: -1 })
+        setInitState(initState => ({ ...initState,moveXY:{ baseX: -1, baseY: -1 } }))
         $(document).on('mousemove', () => { });
     }
 
@@ -62,7 +52,7 @@ const Main: FunctionComponent = (): JSX.Element => {
     }
 
     const fullScreenToggle: () => void = () => {
-        setInitState({ ...initState, fullscreenState: !fullscreenState })
+        setInitState(initState => ({ ...initState, fullscreenState: !fullscreenState }))
         ipcRenderer.send('setFullscreen', !fullscreenState)
     }
 
@@ -70,17 +60,21 @@ const Main: FunctionComponent = (): JSX.Element => {
 
     const setToggleModalFn: (status: boolean, method: string) => void = (status, method) => {
         method === 'confirm' && !toggleCopyRightModal && setTimeout(() => ipcRenderer.send('closeApp'), 700);
-        method === 'confirm' && toggleCopyRightModal && setTimeout(() => setInitState({ ...initState, toggleModal: false, toggleCopyRightModal: false }), 700);
-        method === 'copyRight' ? setInitState({
+        method === 'confirm' && toggleCopyRightModal && setTimeout(() => setInitState(initState => ({ ...initState, toggleModal: false, toggleCopyRightModal: false })), 700);
+        method === 'copyRight' ? setInitState(initState => ({
             ...initState,
             toggleModal: status,
             toggleCopyRightModal: status
-        }) :
-            setInitState({
+        })) :
+            setInitState(initState => ({
                 ...initState,
                 toggleModal: status,
-            })
+            }))
     }
+
+    const setLanguageToggleList:() => void = () => setInitState(initState => ({ ...initState,languageToggleListStatus:!languageToggleListStatus }))
+
+    const setCurrentLanguage:(val:string) => void = val => setInitState(initState => ({ ...initState, language: val,languageToggleListStatus:!languageToggleListStatus }))
 
     const goPage: (pathname: string) => void = pathname => route.push({ pathname: navigator.onLine ? pathname : '/wrong' })
 
@@ -90,13 +84,13 @@ const Main: FunctionComponent = (): JSX.Element => {
         goPage('/radio')
     }, [])
 
-    useEffect(() => { i18n.changeLanguage(lang) }, [lang])
+    useEffect(() => { i18n.changeLanguage(language) }, [language])
     return (
         <Container>
             <div className="top-bar" onMouseDown={dragStart} onMouseUp={dragEnd}>
-                <div className="top-bar-title">{formatLang('radio')}</div>
+                <div className="top-bar-title">{formatLanguage('radio')}</div>
                 <div className="top-bar-controller">
-                    {process.platform !== 'darwin' && <div className="abount-text" onClick={setToggleModalFn.bind(this,true, 'copyRight')}>{formatLang('about')}</div>}
+                    {process.platform !== 'darwin' && <div className="abount-text" onClick={setToggleModalFn.bind(this,true, 'copyRight')}>{formatLanguage('about')}</div>}
                     <div className="min" onClick={minScreen}>
                         <i className="fas fa-horizontal-rule min-icon"></i>
                     </div>
@@ -109,29 +103,51 @@ const Main: FunctionComponent = (): JSX.Element => {
                 </div>
             </div>
             <div className="change-language-list">
-                <div onClick={() => {
-                    setInitState({
-                        ...initState,
-                        lang: lang === 'zh' ? 'en' : 'zh'
-                    })
-                }}><i className="fal fa-globe-americas">&nbsp;&nbsp;</i>{formatLang('changeLanguage')}</div>
+                <div 
+                    className="change-language-switch"
+                    onClick={setLanguageToggleList}
+                >
+                    <i className="fal fa-globe-americas"></i>
+                    &nbsp;
+                    {formatLanguage('changeLanguage')}
+                </div>
+                <div className={languageToggleListStatus ? "language-list-item-outer toggle" : "language-list-item-outer"}>
+                    <div 
+                        className={language === 'zh' ? "language-list-item active" : "language-list-item"}
+                        onClick={setCurrentLanguage.bind(this,'zh')}
+                    >{formatLanguage('languageZh')}</div>
+                    <div 
+                        className={language === 'en' ? "language-list-item active" : "language-list-item"}
+                        onClick={setCurrentLanguage.bind(this,'en')}
+                    >{formatLanguage('languageEn')}</div>
+                </div>
             </div>
             {navigator.onLine !== false && (
                 <div className={topToggleStatus ? "top-option-group toggle" : "top-option-group"}>
-                    <div className={currentPath === '/radio' ? "go-radio-list active" : "go-radio-list"} onClick={goPage.bind(this, '/radio')}>{formatLang('radioList')}</div>
-                    <div className={currentPath === '/collect' ? "go-collect-list active" : "go-collect-list"} onClick={goPage.bind(this, '/collect')}>{formatLang('collectList')}</div>
+                    <div 
+                        className={currentPath === '/radio' ? "go-radio-list active" : "go-radio-list"} 
+                        onClick={goPage.bind(this, '/radio')}
+                    >
+                        {formatLanguage('radioList')}
+                    </div>
+                    <div 
+                        className={currentPath === '/collect' ? "go-collect-list active" : "go-collect-list"} 
+                        onClick={goPage.bind(this, '/collect')}
+                    >
+                        {formatLanguage('collectList')}
+                    </div>
                 </div>
             )}
             <Switch>
-                <Route exact path="/radio" render={() => <Radio mainInitState={initState} setMainInitStateStatus={setInitState} />} />
-                <Route exact path="/collect" render={() => <RadioCollect mainInitState={initState} setMainInitStateStatus={setInitState} />} />
+                <Route exact path="/radio" render={(routeProps:RouteComponentProps<{[key: string]: string }>) => <Radio routeProps={routeProps} language={language} setMainInitStateStatus={setInitState} />} />
+                <Route exact path="/collect" render={(routeProps:RouteComponentProps<{[key: string]: string }>) => <RadioCollect routeProps={routeProps} language={language} setMainInitStateStatus={setInitState} />} />
                 <Route exact path="/wrong" component={NetworkWrong} />
             </Switch>
             <Modal modalProps={{
-                modalTitle: toggleCopyRightModal ? '' : formatLang('prompt'),
+                modalTitle: toggleCopyRightModal ? '' : formatLanguage('prompt'),
                 toggleModal: toggleModal,
                 setToggleModal: setToggleModalFn,
-                renderText: toggleCopyRightModal ? formatLang('copyRight') : formatLang('doYouWantToCloseApplication'),
+                renderText: toggleCopyRightModal ? formatLanguage('copyRight') : formatLanguage('doYouWantToCloseApplication'),
                 showCopyRightInfo: toggleCopyRightModal
             }} />
         </Container>

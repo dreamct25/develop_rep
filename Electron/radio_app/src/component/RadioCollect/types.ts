@@ -2,6 +2,7 @@ import { StyledComponent } from "styled-components";
 import { VideoJsPlayer } from 'video.js'
 import { initStateType as mainInitStateType } from '../Main/types'
 import { radioInfoListType } from '../../server/server_api/channel_api';
+import { RouteComponentProps } from "react-router-dom";
 
 export interface cssSetPropertys {
     Container: StyledComponent<"div", any>
@@ -36,6 +37,7 @@ export interface alertBageType {
 }
 
 export interface RadioCollectProps {
-    mainInitState: mainInitStateType,
+    routeProps:RouteComponentProps<{[key: string]: string }>
+    language:string
     setMainInitStateStatus: React.Dispatch<React.SetStateAction<mainInitStateType>>,
 }

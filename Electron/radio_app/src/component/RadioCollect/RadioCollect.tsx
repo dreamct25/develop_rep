@@ -1,5 +1,4 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { useTranslation, TFunction } from "react-i18next";
 import VideoJs from 'video.js'
 import 'video.js/dist/video-js.min.css'
@@ -12,8 +11,24 @@ import AlertBageText from "../AlertBageText/AlertBageText";
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import Modal from "../Modal/Modal";
 
-const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, setMainInitStateStatus }: RadioCollectProps): JSX.Element => {
-    const [initState, setInitState] = useState<initStateType>({
+const RadioCollect: FunctionComponent<RadioCollectProps> = ({ 
+    routeProps,
+    language,
+    setMainInitStateStatus 
+}: RadioCollectProps): JSX.Element => {
+    const [{
+        collectData,
+        filterCollectList,
+        singleRadioSelect,
+        showCollectList,
+        showTooltip,
+        currentChannel,
+        player,
+        playerVoice,
+        deleteIdTemp,
+        deleteItemTextTemp,
+        currentSearch
+    }, setInitState] = useState<initStateType>({
         collectData: [],
         filterCollectList: [],
         showCollectList: false,
@@ -28,7 +43,10 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
         currentSearch: ''
     })
 
-    const [alertBageGroup, setAlertBageGroup] = useState<alertBageType>({
+    const [{
+        alertBageText,
+        toggleAlertBageText
+    }, setAlertBageGroup] = useState<alertBageType>({
         alertBageText: '',
         toggleAlertBageText: false
     })
@@ -47,35 +65,14 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
 
     const getDateTimer: React.MutableRefObject<any> = useRef<any>(null)
 
-    const route = useHistory()
-
     const { t }: { t: TFunction<"translation", undefined> } = useTranslation()
 
-    const formatLang: TFunction<"translation", undefined> = t
+    const formatLanguage: TFunction<"translation", undefined> = t
 
     if (!navigator.onLine) {
-        route.push({ pathname: '/wrong' })
+        routeProps.history.push({ pathname: '/wrong' })
         return
     }
-
-    const {
-        collectData,
-        filterCollectList,
-        singleRadioSelect,
-        showCollectList,
-        showTooltip,
-        currentChannel,
-        player,
-        playerVoice,
-        deleteIdTemp,
-        deleteItemTextTemp,
-        currentSearch
-    } = initState
-
-    const {
-        alertBageText,
-        toggleAlertBageText
-    } = alertBageGroup
 
     const getCollectData: () => void = () => {
         $.fetch({
@@ -83,17 +80,17 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
             url: 'http://localhost:9870/db/get_collect_item',
             beforePost: () => setLoadingState(true),
             successFn: (data: collectItem[]) => {
-                setInitState({
+                setInitState(initState => ({
                     ...initState,
                     collectData: data,
                     filterCollectList: data,
                     showCollectList: true,
-                })
-                setMainInitStateStatus({
+                }))
+                setMainInitStateStatus(mainInitState => ({
                     ...mainInitState,
                     topToggleStatus: true,
-                    currentPath: '/collect'
-                })
+                    currentPath: routeProps.location.pathname
+                }))
                 setLoadingState(false)
             },
             errorFn: (err: any) => console.log(err)
@@ -112,7 +109,7 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
 
                     setTimeout(() => {
                         setAlertBageGroup({
-                            alertBageText: formatLang('deleteSuccess'),
+                            alertBageText: formatLanguage('deleteSuccess'),
                             toggleAlertBageText: true
                         })
                         getCollectData()
@@ -145,14 +142,14 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
                         type: "application/x-mpegURL"
                     })
                     player.play()
-                    setInitState({
+                    setInitState(initState => ({
                         ...initState,
                         singleRadioSelect: item,
                         currentChannel: channelName,
-                    })
+                    }))
                     setLoadingState(false)
                 } else {
-                    setInitState({ ...initState, currentChannel: channelName })
+                    setInitState(initState => ({ ...initState, currentChannel: channelName }))
                     setLoadingState(false)
                 }
 
@@ -163,7 +160,7 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
 
     const setCurrentVoice: (voiceVal: string) => void = voiceVal => {
         player.volume(Number(voiceVal) / 100)
-        setInitState({ ...initState, playerVoice: $.convert(voiceVal, 'number') })
+        setInitState(initState => ({ ...initState, playerVoice: $.convert(voiceVal, 'number') }))
     }
 
     const setCurrentPlayState: (status: boolean) => void = status => {
@@ -173,11 +170,11 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
 
     const controlModal: (...parameters: any[]) => void = (...parameters) => {
         const [status, deleteId, deleteItemText] = parameters
-        setInitState({
+        setInitState(initState => ({
             ...initState,
             deleteIdTemp: deleteId,
             deleteItemTextTemp: deleteItemText
-        })
+        }))
         setToggleModal(status)
     }
 
@@ -202,11 +199,11 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
     }
 
     const toggleFunctionList: () => void = () => {
-        setInitState({ ...initState, showCollectList: !showCollectList })
-        setMainInitStateStatus({ ...mainInitState, topToggleStatus: !mainInitState.topToggleStatus })
+        setInitState(initState => ({ ...initState, showCollectList: !showCollectList }))
+        setMainInitStateStatus(mainInitState => ({ ...mainInitState, topToggleStatus: !mainInitState.topToggleStatus }))
     }
 
-    const toggleTooltip: (status: boolean) => void = status => setInitState({ ...initState, showTooltip: status })
+    const toggleTooltip: (status: boolean) => void = status => setInitState(initState => ({ ...initState, showTooltip: status }))
 
     const countCurrentTimeIsPlay: (startTime: string, endTime: string) => boolean = (startTime, endTime) => {
         const [date, time]: string[] = new Date(+new Date() + (8 * 60 * 60 * 1000)).toJSON().split('T')
@@ -217,11 +214,11 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
     const setCurrentSearchs: ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => void = ({ target: { value } }) => {
         const filterRadioList: collectItem[] = $.filter(collectData, ({ radio_name }: collectItem) => radio_name.match(value))
 
-        setInitState({
+        setInitState(initState => ({
             ...initState,
             filterCollectList: value === "" ? collectData : filterRadioList,
             currentSearch: value
-        })
+        }))
     }
 
     const setGetDateTimer: (status: boolean) => void = status => {
@@ -235,6 +232,8 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
     const whenInputTypeing: (status: boolean) => void = status => setIsKeyDown(status)
 
     const whenKeyDown: ({ keyCode }: KeyboardEvent) => void = ({ keyCode }) => {
+        const numCode:string[] = ['32','38','40']
+        if (!$.includes(numCode,keyCode)) return
         if (!isKeyDown) {
             const keyCodeSet: { [key: string]: any } = {
                 '32': (): void => setCurrentPlayState(!playState),
@@ -246,7 +245,7 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
     }
 
     useEffect(() => {
-        toggleAlertBageText && setTimeout(() => setAlertBageGroup({ ...alertBageGroup, toggleAlertBageText: false }), 1000);
+        toggleAlertBageText && setTimeout(() => setAlertBageGroup(alertBageState => ({ ...alertBageState, toggleAlertBageText: false })), 1000);
     }, [toggleAlertBageText])
 
     useEffect(() => {
@@ -268,7 +267,7 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
                 setPlayState(false)
             })
 
-            setInitState({ ...initState, player: videoJs })
+            setInitState(initState => ({ ...initState, player: videoJs }))
         }
     }, [player])
 
@@ -296,12 +295,12 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
                             onMouseLeave={toggleTooltip.bind(this, false)}
                         >
                             <div className={showCollectList ? "toggle-button active" : "toggle-button"}></div>
-                            <div className={showTooltip ? "tooltip active" : "tooltip"}>{ formatLang(showCollectList ? 'openFunctionList' : 'closeFunctionList')}</div>
+                            <div className={showTooltip ? `tooltip-${language} active` : `tooltip-${language}`}>{ formatLanguage(showCollectList ? 'closeFunctionList' : 'openFunctionList')}</div>
                         </div>
                     </div>
                     <div className="colletct-single-radio-body">
                         <div className="colletct-radio-controller">
-                            {currentChannel === '' && <div className="at-start-tipe">請點擊黑框內右上角開起功能選單，並選擇要收聽的收藏電台</div>}
+                            {currentChannel === '' && <div className="at-start-tipe">{formatLanguage('radioDesc')}</div>}
                             <div className="radio-controller" style={{ display: currentChannel !== '' ? 'block' : 'none' }}>
                                 <AudioPlayer
                                     audioPlayerProps={{
@@ -319,8 +318,10 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
                         <span>{singleRadioSelect.desc}</span>
                         {'programList' in singleRadioSelect && <div className="current-play-time-list-outer">
                             <div className="current-play-time-list-title">
-                                <span>{formatLang('radioProgramList')}</span>
-                                <span className="current-program-name">{$.maps(singleRadioSelect.programList, ({ start_time, end_time, name, on }: programListType) => (countCurrentTimeIsPlay(start_time, end_time) && on && formatLang('currentProgram',{ program : name})))}</span>
+                                <span>{formatLanguage('radioProgramList')}</span>
+                                <span className="current-program-name">
+                                    {$.maps(singleRadioSelect.programList, ({ start_time, end_time, name, on }: programListType) => (countCurrentTimeIsPlay(start_time, end_time) && on && formatLanguage('currentProgram',{ program : name})))}
+                                </span>
                             </div>
                             <div className="current-play-time-list">
                                 {$.maps(singleRadioSelect.programList, ({ start_time, end_time, name, on }: programListType, index: number) => (
@@ -349,7 +350,7 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
                     <input
                         type="text"
                         value={currentSearch}
-                        placeholder={formatLang('searchCollectionRadio')}
+                        placeholder={formatLanguage('searchCollectionRadio')}
                         onChange={setCurrentSearchs}
                         onFocus={whenInputTypeing.bind(this, true)}
                         onBlur={whenInputTypeing.bind(this, false)}
@@ -370,15 +371,15 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({ mainInitState, set
                             </div>
                         </div>
                     )) : <div className="no-data">
-                        <div>-- {formatLang('noSearchResults')} --</div>
+                        <div>-- {formatLanguage('noSearchResults')} --</div>
                     </div>}
                 </div>
             </div>
             <Modal modalProps={{
-                modalTitle: formatLang('message'),
+                modalTitle: formatLanguage('message'),
                 toggleModal: toggleModal,
                 setToggleModal: setToggleModalFn,
-                renderText: formatLang('doYouWantToDelete',{ itemName: deleteItemTextTemp})
+                renderText: formatLanguage('doYouWantToDelete',{ itemName: deleteItemTextTemp})
             }} />
             <AlertBageText text={alertBageText} toggleState={toggleAlertBageText} />
             <Loading loadingState={loadingState} />
