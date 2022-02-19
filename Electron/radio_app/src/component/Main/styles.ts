@@ -9,7 +9,7 @@ const { Container }: cssSetPropertys = {
         color: white;
         position: relative;
         min-height: 98.5vh;
-        background-image: url('../../asset/img/main-bg.jpg');
+        background-image: url('../img/main-bg.jpg');
         background-position: center center;
         background-repeat: no-repeat;
         background-size: cover;

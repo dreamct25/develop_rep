@@ -18,7 +18,7 @@ const createWindow = (): void => {
     width: 1280,
     height: 720,
     frame: false,
-    transparent:true,
+    transparent: true,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -60,12 +60,12 @@ const createWindow = (): void => {
       },
       {
         label: 'Dev Toolse',
-        accelerator:'F12',
+        accelerator: 'F12',
         click() {
           mainWindow.webContents.toggleDevTools()
         }
-      },{
-        role:'reload'
+      }, {
+        role: 'reload'
       }]
     })
   }
