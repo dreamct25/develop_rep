@@ -7,7 +7,7 @@ const { Container }: { Container: StyledComponent<"div", any> } = {
         justify-content: center;
         align-items: center;
         background-color: rgb(30,30,30);
-        min-height: 100vh;
+        min-height: 98.5vh;
         .message{
             text-align: center;
         }
