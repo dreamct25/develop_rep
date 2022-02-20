@@ -2,7 +2,7 @@ const rules = require('./webpack.rules');
 const plugins = require('./webpack.plugins');
 const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const assets = ['img'];
+const assets = ['img','icon'];
 const copyPlugins = assets.map(asset => {
   return new CopyWebpackPlugin({patterns:[
     {

@@ -26,7 +26,7 @@ const Modal: FunctionComponent<ModalProps> = ({ modalProps }: ModalProps): JSX.E
                 {
                     showCopyRightInfo === true ? (
                         <div className={toggleModal ? "modal-copy-right-info-outer toggle" : "modal-copy-right-info-outer"}>
-                            <div className="modal-copy-right-info-body">{renderText}</div>
+                            <div className="modal-copy-right-info-body">&copy;&nbsp;{renderText}</div>
                             <div className="modal-copy-right-info-footer">
                                 <div onClick={setModalToggle.bind(this, false, 'confirm')}>{formatLang('confirm')}</div>
                             </div>

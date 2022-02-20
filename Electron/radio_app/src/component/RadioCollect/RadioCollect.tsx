@@ -232,7 +232,7 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({
     const whenInputTypeing: (status: boolean) => void = status => setIsKeyDown(status)
 
     const whenKeyDown: ({ keyCode }: KeyboardEvent) => void = ({ keyCode }) => {
-        const numCode:string[] = ['32','38','40']
+        const numCode:number[] = [32,38,40]
         if (!$.includes(numCode,keyCode)) return
         if (!isKeyDown) {
             const keyCodeSet: { [key: string]: any } = {

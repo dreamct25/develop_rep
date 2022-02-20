@@ -41,7 +41,15 @@ const { Container }: cssSetPropertys = {
             justify-content: space-between;
             align-items: center;
             .top-bar-title{
+                display: flex;
+                align-items: center;
                 font-size: 15px;
+                img{
+                    height:20px;
+                }
+                span{
+                    padding-left: 5px;
+                }
             }
             .top-bar-controller{
                 display: flex;

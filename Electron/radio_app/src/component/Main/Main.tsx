@@ -88,7 +88,10 @@ const Main: FunctionComponent = (): JSX.Element => {
     return (
         <Container>
             <div className="top-bar" onMouseDown={dragStart} onMouseUp={dragEnd}>
-                <div className="top-bar-title">{formatLanguage('radio')}</div>
+                <div className="top-bar-title">
+                    <img src="../icon/radio-waves.png" />
+                    <span>{formatLanguage('radio')}</span>
+                </div>
                 <div className="top-bar-controller">
                     {process.platform !== 'darwin' && <div className="abount-text" onClick={setToggleModalFn.bind(this,true, 'copyRight')}>{formatLanguage('about')}</div>}
                     <div className="min" onClick={minScreen}>
