@@ -9,7 +9,7 @@ const { Container }: cssSetPropertys = {
         color: white;
         position: relative;
         min-height: 98.5vh;
-        background-image: url('../img/main-bg.jpg');
+        background-image: url('../asset/img/main-bg.jpg');
         background-position: center center;
         background-repeat: no-repeat;
         background-size: cover;
@@ -111,7 +111,7 @@ const { Container }: cssSetPropertys = {
         .change-language-list{
             text-align:center;
             position: absolute;
-            top: 32px;
+            top: 33px;
             right: 0;
             z-index: 0;
             margin:5px 5px 0 0;
@@ -120,6 +120,9 @@ const { Container }: cssSetPropertys = {
             border-radius: 5px;
             cursor: pointer;
             user-select: none;
+            z-index: 1;
+            opacity: 0.2;
+            transition: .5s ease;
             .change-language-switch{
                 padding: 5px 6px;
                 background-color: white;
@@ -146,6 +149,9 @@ const { Container }: cssSetPropertys = {
                 &.toggle{
                     margin-top: 0;
                 }
+            }
+            &:hover{
+                opacity: 1;
             }
         }
         .top-option-group{

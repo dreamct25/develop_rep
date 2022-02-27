@@ -21,6 +21,7 @@ export interface initStateType {
     filterCollectList: collectItem[],
     showCollectList: boolean,
     showTooltip: boolean,
+    showLeftBarTooltip: boolean,
     singleRadioSelect: { [key: string]: any } | radioInfoListType,
     player?: VideoJsPlayer,
     playerVoice: number,
@@ -28,7 +29,8 @@ export interface initStateType {
     currentChannel: string,
     deleteIdTemp: number,
     deleteItemTextTemp: string,
-    currentSearch: string
+    currentSearch: string,
+    currentMoveToChannel: string
 }
 
 export interface alertBageType {

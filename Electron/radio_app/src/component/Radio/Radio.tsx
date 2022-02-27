@@ -22,9 +22,12 @@ const Radio: FunctionComponent<RadioProps> = ({
         filterRadioList,
         showfilterRadioList,
         showTooltip,
+        showSingleTooltip,
+        showLeftBarTooltip,
         playerVoice,
         currentChannel,
         currentSearch,
+        currentMoveToChannel,
         singleRadioSelect,
         alertBageText,
         toggleAlertBageText,
@@ -35,9 +38,12 @@ const Radio: FunctionComponent<RadioProps> = ({
         radioRankList: [],
         showfilterRadioList: false,
         showTooltip: false,
+        showSingleTooltip: false,
+        showLeftBarTooltip: false,
         playerVoice: 30,
         currentChannel: '',
         currentSearch: '',
+        currentMoveToChannel:'',
         loadingState: false,
         singleRadioSelect: {},
         alertBageText: '',
@@ -140,7 +146,7 @@ const Radio: FunctionComponent<RadioProps> = ({
                 errorFn: (err: any) => { console.log(err) }
             })
         } else {
-            ((target as Element).className === 'fal fa-heart' || (target as Element).className === 'add-collect-btn') && addCollectToDb({
+            (target as Element).nodeName === 'path' && addCollectToDb({
                 channelTitle: currentChannel,
                 channelImgUrl: currentImgUrl
             })
@@ -223,7 +229,6 @@ const Radio: FunctionComponent<RadioProps> = ({
                 radio_name: channelTitle,
                 radio_img_url: channelImgUrl
             },
-            beforePost: () => setLoadingState(true),
             successFn: ({ message }: { message: string }) => {
                 if (message === 'add success') {
                     setInitState(initState => ({
@@ -231,6 +236,7 @@ const Radio: FunctionComponent<RadioProps> = ({
                         alertBageText: formatLanguage('addSuccess'),
                         toggleAlertBageText: true
                     }))
+                    getAllChannel()
                 } else {
                     setInitState(initState => ({
                         ...initState,
@@ -238,7 +244,6 @@ const Radio: FunctionComponent<RadioProps> = ({
                         toggleAlertBageText: true
                     }))
                 }
-                setLoadingState(false)
             },
             errorFn: (err: any) => { console.log(err) }
         })
@@ -255,7 +260,12 @@ const Radio: FunctionComponent<RadioProps> = ({
         setInitState(initState => ({ ...initState, showfilterRadioList: !showfilterRadioList }))
     }
 
-    const toggleTooltip: (status: boolean) => void = status => setInitState(initState => ({ ...initState, showTooltip: status }))
+    const toggleTooltip: (valType:string,status: boolean,channelTitle?:string) => void = (valType,status,channelTitle) => setInitState(initState => {
+        const initStateTemp:initStateType = { ...initState };
+        (initStateTemp as {[key:string]:any})[valType] = status
+        if(channelTitle !== undefined)initStateTemp.currentMoveToChannel = channelTitle
+        return initStateTemp
+    })
 
     const setGetDateTimer: (status: boolean) => void = status => {
         if (status) {
@@ -340,7 +350,8 @@ const Radio: FunctionComponent<RadioProps> = ({
                     {filterRadioList.length > 0 ? $.maps(filterRadioList, ({
                         channel_title,
                         channel_id,
-                        channel_image
+                        channel_image,
+                        inCollect
                     }: channelItemType) => (
                         <div
                             className="radio-list-item"
@@ -355,14 +366,19 @@ const Radio: FunctionComponent<RadioProps> = ({
                                 <div className="img" style={{ backgroundImage: `url('https://hichannel.hinet.net/upload/radio/channel/${channel_image}')` }}></div>
                                 <div className="radio-title">{channel_title}</div>
                                 <div 
-                                    className="add-collect-btn" 
+                                    className="add-collect-btn"
                                     onClick={seletctChannel.bind(this, {
                                         currentChannel: channel_title,
                                         currentId: channel_id,
                                         currentImgUrl: `https://hichannel.hinet.net/upload/radio/channel/${channel_image}`
                                     })}
+                                    onMouseEnter={toggleTooltip.bind(this, 'showLeftBarTooltip', true, channel_title)}
+                                    onMouseLeave={toggleTooltip.bind(this, 'showLeftBarTooltip', false, channel_title)}
                                 >
-                                    <i className="fal fa-heart"></i>
+                                    <svg className={inCollect ? "heart-icon in-collect" : "heart-icon"} viewBox="0 0 90 90">
+                                        <path d="M60,30 a30,30 0 0,1 0,60 L0,90 0,30 a30,30 0 0,1 60,0"></path>
+                                    </svg>
+                                    <div className={currentMoveToChannel === channel_title && showLeftBarTooltip ? `tooltip-${language} ${currentChannel === channel_title && playState === true ? 'when-play':'not-play'}` : `tooltip-${language}`}>{formatLanguage(radioList.filter((item:channelItemType) => item.channel_title === channel_title)[0].inCollect ? 'alreadyInCollection':'addToCollect')}</div>
                                 </div>
                                 <div className={currentChannel === channel_title && playState === true ? "is-playing-frame toggle" : "is-playing-frame"}>
                                     <i className="fas fa-volume"></i>
@@ -401,12 +417,32 @@ const Radio: FunctionComponent<RadioProps> = ({
             <div className={showfilterRadioList ? "radio-center-outer toggle" : "radio-center-outer"}>
                 <div className="radio-content">
                     <div className="single-radio-header">
-                        <span>{singleRadioSelect.title}</span>
+                        <div className="single-radio-header-left-group">
+                            <span>{singleRadioSelect.title}</span>
+                            {Object.keys(singleRadioSelect).length > 0 && (
+                                <div 
+                                    className="add-collect-btn"
+                                    onClick={seletctChannel.bind(this, {
+                                        currentChannel: singleRadioSelect.title,
+                                        currentId: singleRadioSelect.id,
+                                        currentImgUrl: singleRadioSelect.imageUrl
+                                    })}
+                                    onMouseEnter={toggleTooltip.bind(this, 'showSingleTooltip', true)}
+                                    onMouseLeave={toggleTooltip.bind(this, 'showSingleTooltip', false)}
+                                >
+                                    <svg className={radioList.filter((item:channelItemType) => item.channel_title === currentChannel)[0].inCollect ? "heart-icon in-collect" : "heart-icon"} viewBox="0 0 90 90">
+                                        <path d="M60,30 a30,30 0 0,1 0,60 L0,90 0,30 a30,30 0 0,1 60,0"></path>
+                                    </svg>
+                                    <div className={showSingleTooltip ? `tooltip-${language} active` : `tooltip-${language}`}>{formatLanguage(radioList.filter((item:channelItemType) => item.channel_title === currentChannel)[0].inCollect ? 'alreadyInCollection':'addToCollect')}</div>
+                                </div>
+                            )}
+                            
+                        </div>
                         <div
                             className={showfilterRadioList ? "toggle-right-list active" : "toggle-right-list"}
                             onClick={toggleRightList.bind(this)}
-                            onMouseEnter={toggleTooltip.bind(this, true)}
-                            onMouseLeave={toggleTooltip.bind(this, false)}
+                            onMouseEnter={toggleTooltip.bind(this,'showTooltip', true)}
+                            onMouseLeave={toggleTooltip.bind(this,'showTooltip', false)}
                         >
                             <div className={showfilterRadioList ? "toggle-button active" : "toggle-button"}></div>
                             <div className={showTooltip ? `tooltip-${language} active` : `tooltip-${language}`}>{formatLanguage(showfilterRadioList ? 'closeFunctionList':'openFunctionList')}</div>

@@ -4,17 +4,22 @@ import { cssSetPropertys } from './types'
 const { Container }: cssSetPropertys = {
     Container: styled.div`
         .collect-radio-center-outer{
-            margin: 10px 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             position: relative;
-            border-radius:10px;
             background: radial-gradient(closest-corner,rgba(0,0,0,.8),rgba(0,0,0,.6));
             box-shadow: 0 0 22px 13px rgba(0,0,0,.7);
+            border-radius: 20px;
+            min-height: 98.5vh;
+            backdrop-filter: blur(5px);
+            padding: 0 100px;
+            transform: translateY(0px);
             transition: .7s ease;
             .collect-radio-content{
                 position: relative;
                 z-index: 2;
                 padding: 15px;
-                margin-top: 33px;
                 .colletct-single-radio-header{
                     font-size: 25px;
                     display: flex;
@@ -140,6 +145,10 @@ const { Container }: cssSetPropertys = {
             }
             &.toggle{
                 margin: 10px 260px;
+                min-height: 0vh;
+                backdrop-filter: blur(0px);
+                padding: 0 0;
+                transform: translateY(33px);
             }
         }
         .collect-list-outer-frame{
@@ -170,7 +179,7 @@ const { Container }: cssSetPropertys = {
             .collect-list-outer{
                 overflow-x: hidden;
                 overflow-y: scroll;
-                height: 95.5vh;
+                height: 87.5vh;
                 .collect-list-item{
                     padding: 15px 11px 0 15px;
                     .img-outer{
@@ -206,17 +215,68 @@ const { Container }: cssSetPropertys = {
                             position: absolute;
                             top: 0;
                             right: 0;
-                            margin:5px;
-                            padding:3px 5.13px 5px 5.13px;
+                            margin:6px;
                             font-size: 18px;
-                            background-color: rgba(0,0,0,.5);
-                            backdrop-filter:blur(10px);
                             border-radius: 50%;
                             transform: translateY(-35px);
                             cursor: pointer;
                             user-select: none;
                             z-index: 5;
+                            color: rgb(45,45,45);
                             transition: .7s ease;
+                            i{
+                                font-weight: bold;
+                            }
+                            &:hover{
+                                color: rgb(255,0,0);
+                            }
+                            .tooltip-zh,
+                            .tooltip-en {
+                                font-size: 15px;
+                                position: absolute;
+                                border-radius: 6.4px;
+                                padding: 6px;
+                                text-align: center;
+                                transform: translate(-96px,-22px);
+                                width: 87px;
+                                opacity: 0;
+                                z-index: -1;
+                                transition: .7s ease;
+
+                                &:after {
+                                    content: '';
+                                    position: absolute;
+                                    top: 0;
+                                    right: 0;
+                                    width: 0;
+                                    height: 0;
+                                    border: 6px solid transparent;
+                                    transform: translate(12px, 8px);
+                                    transition: .7s ease;
+                                }
+                                &.when-play{
+                                    color: black;
+                                    background-color:rgb(255,255,255);
+                                    opacity: 1;
+                                    z-index: 2;
+                                    &:after{
+                                        border-left-color: rgb(255,255,255);
+                                    }
+                                }
+                                &.not-play{
+                                    opacity: 1;
+                                    z-index: 2;
+                                    color: white;
+                                    background-color:rgb(45,45,45);
+                                    &:after{
+                                        border-left-color: rgb(45,45,45);
+                                    }
+                                }
+                            }
+                            .tooltip-en{
+                                transform: translate(-173px,-22px);
+                                width: 164px;
+                            }
                         }
                         .is-playing-frame{
                             position: absolute;
@@ -276,7 +336,7 @@ const { Container }: cssSetPropertys = {
                     justify-content: center;
                     flex-direction: column;
                     align-items: center;
-                    min-height: 100vh;
+                    min-height: 87.5vh;
                 }
                 &::-webkit-scrollbar {
                     width: 4px;

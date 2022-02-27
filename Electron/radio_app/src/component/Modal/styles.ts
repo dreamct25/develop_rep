@@ -32,7 +32,8 @@ const { Container }: { Container: StyledComponent<"div", any> } = {
                 }
                 .modal-copy-right-info-body{
                     text-align: center;
-                    padding: 20px 0;
+                    padding: 20px 0 11px 0;
+                    line-height: 22px;
                 }
                 .modal-body{
                     text-align: center;

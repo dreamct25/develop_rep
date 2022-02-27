@@ -1,19 +1,20 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { Switch, Route, useHistory, RouteComponentProps } from 'react-router-dom'
+import { Switch, Route, useHistory as useRouter, RouteComponentProps } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { ipcRenderer } from 'electron'
+import { ipcRenderer } from "electron";
 import $ from '../../lib/Library'
 import Radio from "../Radio/Radio";
 import RadioCollect from "../RadioCollect/RadioCollect";
-import { Container } from './styles'
-import { initStateType } from './types'
 import NetworkWrong from "../NetworkWrong/NetworkWrong";
 import Modal from "../Modal/Modal";
+import { Container } from './styles'
+import { initStateType } from './types'
+import { author } from '../../asset/version/version.json'
 
 const Main: FunctionComponent = (): JSX.Element => {
     const { t, i18n } = useTranslation()
     const formatLanguage = t
-    const route = useHistory()
+    const route = useRouter()
     const [{
         language,
         currentPath,
@@ -89,7 +90,7 @@ const Main: FunctionComponent = (): JSX.Element => {
         <Container>
             <div className="top-bar" onMouseDown={dragStart} onMouseUp={dragEnd}>
                 <div className="top-bar-title">
-                    <img src="../icon/radio-waves.png" />
+                    <img src="../asset/icon/radio-waves.png" />
                     <span>{formatLanguage('radio')}</span>
                 </div>
                 <div className="top-bar-controller">
@@ -150,7 +151,7 @@ const Main: FunctionComponent = (): JSX.Element => {
                 modalTitle: toggleCopyRightModal ? '' : formatLanguage('prompt'),
                 toggleModal: toggleModal,
                 setToggleModal: setToggleModalFn,
-                renderText: toggleCopyRightModal ? formatLanguage('copyRight') : formatLanguage('doYouWantToCloseApplication'),
+                renderText: toggleCopyRightModal ? formatLanguage('copyRight',{ person:author.name }) : formatLanguage('doYouWantToCloseApplication'),
                 showCopyRightInfo: toggleCopyRightModal
             }} />
         </Container>

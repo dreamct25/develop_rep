@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { useTranslation, TFunction } from "react-i18next";
 import { Container } from './styles'
+import { version } from '../../asset/version/version.json'
 
 interface ModalProps {
     modalProps: {
@@ -26,7 +27,7 @@ const Modal: FunctionComponent<ModalProps> = ({ modalProps }: ModalProps): JSX.E
                 {
                     showCopyRightInfo === true ? (
                         <div className={toggleModal ? "modal-copy-right-info-outer toggle" : "modal-copy-right-info-outer"}>
-                            <div className="modal-copy-right-info-body">&copy;&nbsp;{renderText}</div>
+                            <div className="modal-copy-right-info-body">&copy;&nbsp;{renderText}<br/>{formatLang('version')}&nbsp;{version}</div>
                             <div className="modal-copy-right-info-footer">
                                 <div onClick={setModalToggle.bind(this, false, 'confirm')}>{formatLang('confirm')}</div>
                             </div>

@@ -22,17 +22,20 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({
         singleRadioSelect,
         showCollectList,
         showTooltip,
+        showLeftBarTooltip,
         currentChannel,
         player,
         playerVoice,
         deleteIdTemp,
         deleteItemTextTemp,
-        currentSearch
+        currentSearch,
+        currentMoveToChannel
     }, setInitState] = useState<initStateType>({
         collectData: [],
         filterCollectList: [],
         showCollectList: false,
         showTooltip: false,
+        showLeftBarTooltip: false,
         singleRadioSelect: {},
         player: null,
         playerVoice: 30,
@@ -40,7 +43,8 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({
         currentChannel: '',
         deleteIdTemp: 0,
         deleteItemTextTemp: '',
-        currentSearch: ''
+        currentSearch: '',
+        currentMoveToChannel:''
     })
 
     const [{
@@ -203,7 +207,12 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({
         setMainInitStateStatus(mainInitState => ({ ...mainInitState, topToggleStatus: !mainInitState.topToggleStatus }))
     }
 
-    const toggleTooltip: (status: boolean) => void = status => setInitState(initState => ({ ...initState, showTooltip: status }))
+    const toggleTooltip: (valType:string,status: boolean,radioName?:string) => void = (valType,status,radioName) => setInitState(initState => {
+        const initStateTemp:initStateType = { ...initState };
+        (initStateTemp as {[key:string]:any})[valType] = status
+        if(radioName !== undefined) initStateTemp.currentMoveToChannel = radioName
+        return initStateTemp
+    })
 
     const countCurrentTimeIsPlay: (startTime: string, endTime: string) => boolean = (startTime, endTime) => {
         const [date, time]: string[] = new Date(+new Date() + (8 * 60 * 60 * 1000)).toJSON().split('T')
@@ -291,8 +300,8 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({
                         <div
                             className={showCollectList ? "toggle-right-list active" : "toggle-right-list"}
                             onClick={toggleFunctionList.bind(this)}
-                            onMouseEnter={toggleTooltip.bind(this, true)}
-                            onMouseLeave={toggleTooltip.bind(this, false)}
+                            onMouseEnter={toggleTooltip.bind(this, 'showTooltip', true)}
+                            onMouseLeave={toggleTooltip.bind(this, 'showTooltip', false)}
                         >
                             <div className={showCollectList ? "toggle-button active" : "toggle-button"}></div>
                             <div className={showTooltip ? `tooltip-${language} active` : `tooltip-${language}`}>{ formatLanguage(showCollectList ? 'closeFunctionList' : 'openFunctionList')}</div>
@@ -362,17 +371,29 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({
                             <div className="img-outer">
                                 <div className="img" style={{ backgroundImage: `url(${radio_img_url})` }}></div>
                                 <div className="radio-title">{radio_name}</div>
-                                <div className="delete-collect-btn" onClick={controlModal.bind(this, true, uuid, radio_name)}>
+                                <div 
+                                    className="delete-collect-btn" 
+                                    onClick={controlModal.bind(this, true, uuid, radio_name)}
+                                    onMouseEnter={toggleTooltip.bind(this, 'showLeftBarTooltip', true, radio_name)}
+                                    onMouseLeave={toggleTooltip.bind(this, 'showLeftBarTooltip', false, radio_name)}
+                                >
                                     <i className="fal fa-trash-alt"></i>
+                                    <div className={currentMoveToChannel === radio_name && showLeftBarTooltip ? `tooltip-${language} ${currentChannel === radio_name && playState === true ? 'when-play':'not-play'}` : `tooltip-${language}`}>{formatLanguage('deleteCollect')}</div>
                                 </div>
                                 <div className={currentChannel === radio_name && playState === true ? "is-playing-frame toggle" : "is-playing-frame"}>
                                     <i className="fas fa-volume"></i>
                                 </div>
                             </div>
                         </div>
-                    )) : <div className="no-data">
-                        <div>-- {formatLanguage('noSearchResults')} --</div>
-                    </div>}
+                    )) : collectData.length > 0 ? (
+                            <div className="no-data">
+                                <div>-- {formatLanguage('noSearchResults')} --</div>
+                            </div>
+                        ) : (
+                            <div className="no-data">
+                                <div>-- {formatLanguage('noCollectData')} --</div>
+                            </div>
+                        )}
                 </div>
             </div>
             <Modal modalProps={{

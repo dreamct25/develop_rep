@@ -21,9 +21,12 @@ export interface initStateType {
     radioRankList: channelRankItemType[],
     showfilterRadioList: boolean,
     showTooltip: boolean,
+    showSingleTooltip:boolean,
+    showLeftBarTooltip:boolean,
     playerVoice: number,
     currentChannel: string,
     currentSearch: string,
+    currentMoveToChannel:string
     loadingState: boolean,
     singleRadioSelect: { [key: string]: any } | radioInfoListType,
     alertBageText: string,

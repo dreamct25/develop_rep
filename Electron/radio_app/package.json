@@ -1,7 +1,7 @@
 {
   "name": "radio_app",
   "productName": "Radio",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {
@@ -20,19 +20,20 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "icon":"./src/icon/radio-waves-icon"
+        "icon": "./src/asset/icon/radio-waves-icon"
       },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "radio_app"
+            "name": "radio"
           }
         },
         {
           "name": "@electron-forge/maker-zip",
           "platforms": [
-            "darwin"
+            "darwin",
+            "win32"
           ]
         },
         {
@@ -58,6 +59,11 @@
                   "html": "./src/index.html",
                   "js": "./src/renderer.tsx",
                   "name": "main_window"
+                },
+                {
+                  "html": "./src/index_loading.html",
+                  "js": "./src/renderer_loading.tsx",
+                  "name": "loading_window"
                 }
               ]
             }
@@ -104,6 +110,7 @@
     "i18next": "^21.6.7",
     "internet-available": "^1.0.0",
     "morgan": "^1.10.0",
+    "node-gyp": "^8.4.1",
     "react": "^17.0.2",
     "react-circle-slider": "^1.6.2",
     "react-dom": "^17.0.2",

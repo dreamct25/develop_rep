@@ -11,82 +11,107 @@ if (require('electron-squirrel-startup')) {
 }
 
 const createWindow = (): void => {
+
   process.setMaxListeners(20)
+
   require('./server/server_config')
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 1280,
-    height: 720,
+
+  // Create the loading browser window.
+  const loadingWindow = new BrowserWindow({
+    width: 300,
+    height: 300,
     frame: false,
-    transparent: true,
+    transparent:true,
+    show:false,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      webSecurity: false
     }
   });
 
-  // and load the index.html of the app.
-  mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
-
-  const mainMenuSet: MenuItem[] | MenuItemConstructorOptions[] = [{
-    label: 'File', // 程式上方選單文字
-    accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q', // 快捷鍵，darwin 是 Mac 平台，win32 是 Windows 平台
-    submenu: [{ // 當前選單文字底下的子選單
-      label: 'Quit', // 子選單文字
-      click() { // 點擊事件
-        app.quit() // 關閉程式
+  loadingWindow.once('show',() => {
+    // Create the main browser window.
+    const mainWindow = new BrowserWindow({
+      width: 1280,
+      height: 720,
+      frame: false,
+      transparent: true,
+      show:false,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        webSecurity: false
       }
-    }]
-  }]
+    });
 
-  if (process.env.NODE_ENV === 'production') {
-    mainMenuSet.push({
-      label: 'Help',
-      submenu: [{
-        label: 'About',
-        click() { mainWindow.webContents.send('getCopyrightInfo') }
-      }]
+    mainWindow.once('ready-to-show',() => {
+      setTimeout(() => {
+        loadingWindow.webContents.send('closeLoading',false)
+        setTimeout(() => {
+          loadingWindow.hide()
+          loadingWindow.close()
+          setTimeout(() => mainWindow.show(),300)
+        },501)
+      },500)
     })
-  } else {
-    mainMenuSet.push({
-      label: 'Help',
-      submenu: [{
-        label: 'About',
-        click() { mainWindow.webContents.send('getCopyrightInfo') }
-      },
-      {
-        label: 'Dev Toolse',
-        accelerator: 'F12',
-        click() {
-          mainWindow.webContents.toggleDevTools()
+  
+    // and load the index.html of the app.
+    mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+  
+    const mainMenuSet: MenuItem[] | MenuItemConstructorOptions[] = [{
+      label: 'File', // 程式上方選單文字
+      accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q', // 快捷鍵，darwin 是 Mac 平台，win32 是 Windows 平台
+      submenu: [{ // 當前選單文字底下的子選單
+        label: 'Quit', // 子選單文字
+        click() { // 點擊事件
+          app.quit() // 關閉程式
         }
-      }, {
-        role: 'reload'
       }]
-    })
-  }
-
-  if (process.platform === 'darwin') {
-    mainMenuSet.unshift({
-      label: ''
-    })
-  }
-
-  const mainMenu: Menu = Menu.buildFromTemplate(mainMenuSet)
-
-  Menu.setApplicationMenu(mainMenu)
-
-  ipcMain.on('setPosition', (event: IpcMainEvent, { dragX, dragY }: { dragX: number, dragY: number }) => {
-    mainWindow.setPosition(dragX, dragY)
+    }]
+  
+    if (process.env.NODE_ENV === 'production') {
+      mainMenuSet.push({
+        label: 'Help',
+        submenu: [{
+          label: 'About',
+          click() { mainWindow.webContents.send('getCopyrightInfo') }
+        }]
+      })
+    } else {
+      mainMenuSet.push({
+        label: 'Help',
+        submenu: [{
+          label: 'About',
+          click() { mainWindow.webContents.send('getCopyrightInfo') }
+        },
+        {
+          label: 'Dev Toolse',
+          accelerator: 'F12',
+          click() { mainWindow.webContents.toggleDevTools() }
+        }, {
+          role: 'reload'
+        }]
+      })
+    }
+  
+    process.platform === 'darwin' && mainMenuSet.unshift({ label: '' })
+  
+    const mainMenu: Menu = Menu.buildFromTemplate(mainMenuSet)
+  
+    Menu.setApplicationMenu(mainMenu)
+  
+    ipcMain.on('setPosition', (event: IpcMainEvent, { dragX, dragY }: { dragX: number, dragY: number }) => mainWindow.setPosition(dragX, dragY))
+  
+    ipcMain.on('setFullscreen', (event: IpcMainEvent, value: boolean) => mainWindow.setFullScreen(value))
+    
+    ipcMain.on('setMinScreen', () => mainWindow.minimize())
+    
+    ipcMain.on('closeApp', () => app.quit())
   })
 
-  ipcMain.on('setFullscreen', (event: IpcMainEvent, value: boolean) => mainWindow.setFullScreen(value))
-  ipcMain.on('setMinScreen', () => mainWindow.minimize())
-  ipcMain.on('closeApp', () => app.quit())
+  loadingWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY.replace('main_window','loading_window'))
+
+  loadingWindow.show()
 };
 
 // This method will be called when Electron has finished
