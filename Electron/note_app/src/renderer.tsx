@@ -25,7 +25,14 @@
  *  });
  * ```
  */
+import React, { FunctionComponent } from 'react';
+import ReactDom from 'react-dom'
+import App from './container/App';
 
-import './index.css';
+const AppEntry:FunctionComponent = ():JSX.Element => (
+    <App />
+)
+
+ReactDom.render(<AppEntry />,document.querySelector("#root"))
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
