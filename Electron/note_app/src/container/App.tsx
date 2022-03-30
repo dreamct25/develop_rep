@@ -1,17 +1,25 @@
-import React,{ memo,FunctionComponent,createContext, Context } from 'react'
+import React, { memo, FunctionComponent, createContext, Context } from 'react'
 import Main from './Main'
 import $ from '../lib/Library'
 
-export const newContext:Context<{
-    $:typeof $
+export const newContext: Context<{
+    $: typeof $
 }> = createContext({
-    $:null
+    $: null
 })
 
-const App:FunctionComponent = ():JSX.Element => (
-    <newContext.Provider value={{ $ }}>
-        <Main />
-    </newContext.Provider>
-)
+const App: FunctionComponent = (): JSX.Element => {
+    $.fetch.createBase({
+        baseUrl: 'http://localhost:9003/db_api',
+        baseHeaders: {
+            'Content-Type': 'application/json'
+        }
+    })
+    return (
+        <newContext.Provider value={{ $ }}>
+            <Main />
+        </newContext.Provider>
+    )
+}
 
 export default memo(App)
