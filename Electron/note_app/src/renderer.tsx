@@ -25,12 +25,17 @@
  *  });
  * ```
  */
-import React, { FunctionComponent } from 'react';
+import React, { Fragment, FunctionComponent } from 'react';
 import ReactDom from 'react-dom'
-import App from './container/App';
+import App from './container/App/App';
+import { GlobalStyle } from './styles';
 
 const AppEntry:FunctionComponent = ():JSX.Element => (
-    <App />
+    <Fragment>
+        <GlobalStyle />
+        <App />
+    </Fragment>
+    
 )
 
 ReactDom.render(<AppEntry />,document.querySelector("#root"))

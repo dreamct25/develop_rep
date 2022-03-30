@@ -1,19 +1,25 @@
 import { ipcRenderer } from 'electron'
 import React, { memo, FunctionComponent, useState, ChangeEvent, useContext, useEffect, MouseEvent } from 'react'
-import { newContext } from './App'
-
+import { newContext } from '../App/App'
+import Container from './styles'
 
 const Main: FunctionComponent = (): JSX.Element => {
     const { $ } = useContext(newContext)
     const [{
         textVal,
-        texValCurrentId
+        texValCurrentId,
+        textAreaWidth,
+        textAreaHeight
     }, setIniteState] = useState<{
         textVal: string,
-        texValCurrentId: string
+        texValCurrentId: string,
+        textAreaWidth:number,
+        textAreaHeight:number
     }>({
         textVal: '',
-        texValCurrentId: ''
+        texValCurrentId: '',
+        textAreaWidth:window.innerWidth,
+        textAreaHeight:window.innerHeight
     })
 
     const setVal: ({ target: { value } }: ChangeEvent<HTMLTextAreaElement>) => void = ({ target: { value } }) => {
@@ -94,12 +100,18 @@ const Main: FunctionComponent = (): JSX.Element => {
 
     useEffect(() => {
         getNoteList()
+        // window.addEventListener('resize',() => {
+        //     setIniteState(prevState => ({
+        //         ...prevState,
+        //         textAreaWidth: Math.floor(window.innerWidth / 25)
+        //     }))
+        // })
     }, [])
     return (
-        <div>
-            <textarea value={textVal} onMouseDown={showRightList} onChange={setVal} name="" id="" cols={30} rows={10}></textarea>
-            <div onClick={setToDb}>setToDB</div>
-        </div>
+        <Container>
+            <textarea className='text-area' value={textVal} onMouseDown={showRightList} onChange={setVal}></textarea>
+            {/* <div onClick={setToDb}>setToDB</div> */}
+        </Container>
     )
 }
 

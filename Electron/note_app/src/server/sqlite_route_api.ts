@@ -1,5 +1,4 @@
 import { Request, Response, Router } from "express"
-import { Database } from 'sqlite3'
 import useSqlite3 from './db_setting'
 const route = Router()
 

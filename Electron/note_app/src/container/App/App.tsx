@@ -1,6 +1,6 @@
 import React, { memo, FunctionComponent, createContext, Context } from 'react'
-import Main from './Main'
-import $ from '../lib/Library'
+import Main from '../Main/Main'
+import $ from '../../lib/Library'
 
 export const newContext: Context<{
     $: typeof $

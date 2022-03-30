@@ -34,6 +34,14 @@ const createWindow = (): void => {
       {
         label: 'clear all',
         click: () => mainWindow.webContents.send('deleteItem')
+      },
+      {
+        label: 'font',
+        submenu:Menu.buildFromTemplate([{
+          label:'1'
+        },{
+          label:'2'
+        }])
       }
     ]);
     rightM.popup({});
