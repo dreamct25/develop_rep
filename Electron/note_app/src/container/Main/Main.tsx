@@ -1,9 +1,15 @@
 import { ipcRenderer } from 'electron'
+import { createProxyMiddleware } from 'http-proxy-middleware'
 import React, { memo, FunctionComponent, useState, ChangeEvent, useContext, useEffect, MouseEvent } from 'react'
 import { newContext } from '../App/App'
 import Container from './styles'
 
 const Main: FunctionComponent = (): JSX.Element => {
+    const proxy = createProxyMiddleware({
+        target: '',
+        changeOrigin: true
+    })
+    proxy
     const { $ } = useContext(newContext)
     const [{
         textVal,
@@ -13,13 +19,13 @@ const Main: FunctionComponent = (): JSX.Element => {
     }, setIniteState] = useState<{
         textVal: string,
         texValCurrentId: string,
-        textAreaWidth:number,
-        textAreaHeight:number
+        textAreaWidth: number,
+        textAreaHeight: number
     }>({
         textVal: '',
         texValCurrentId: '',
-        textAreaWidth:window.innerWidth,
-        textAreaHeight:window.innerHeight
+        textAreaWidth: window.innerWidth,
+        textAreaHeight: window.innerHeight
     })
 
     const setVal: ({ target: { value } }: ChangeEvent<HTMLTextAreaElement>) => void = ({ target: { value } }) => {
@@ -27,11 +33,6 @@ const Main: FunctionComponent = (): JSX.Element => {
             ...prevState,
             textVal: value
         }))
-    }
-
-    const resolveTextVal = () => {
-        const getWhiteSpace: string[] = textVal.split('\n')
-        console.log(getWhiteSpace)
     }
 
     const getNoteList = () => {
@@ -95,8 +96,6 @@ const Main: FunctionComponent = (): JSX.Element => {
     ipcRenderer.on('deleteItem', () => {
         deleteItemToDb()
     })
-
-    resolveTextVal()
 
     useEffect(() => {
         getNoteList()

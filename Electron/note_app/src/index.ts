@@ -21,13 +21,27 @@ const createWindow = (): void => {
     }
   });
 
+  const settingWindow = new BrowserWindow({
+    height: 500,
+    width: 300,
+    transparent: true,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
+    }
+  })
+
   require('./server/server_config')
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+  settingWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY.replace('main_window', 'setting_window'))
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+  settingWindow.webContents.openDevTools()
+
+  settingWindow.hide()
 
   ipcMain.on('showRightMenu', () => {
     const rightM = Menu.buildFromTemplate([
@@ -37,15 +51,23 @@ const createWindow = (): void => {
       },
       {
         label: 'font',
-        submenu:Menu.buildFromTemplate([{
-          label:'1'
-        },{
-          label:'2'
+        submenu: Menu.buildFromTemplate([{
+          label: '1'
+        }, {
+          label: '2'
         }])
+      },
+      {
+        label: 'setting',
+        click: () => {
+          settingWindow.show()
+        }
       }
     ]);
     rightM.popup({});
   })
+
+  ipcMain.on('closeWindow', () => settingWindow.hide())
 };
 
 // This method will be called when Electron has finished
