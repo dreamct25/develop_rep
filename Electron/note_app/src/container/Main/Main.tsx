@@ -1,31 +1,32 @@
 import { ipcRenderer } from 'electron'
-import { createProxyMiddleware } from 'http-proxy-middleware'
 import React, { memo, FunctionComponent, useState, ChangeEvent, useContext, useEffect, MouseEvent } from 'react'
 import { newContext } from '../App/App'
 import Container from './styles'
-
+interface dataType {
+    create_date: string
+    note_desc: string
+    uuid: number
+}
 const Main: FunctionComponent = (): JSX.Element => {
-    const proxy = createProxyMiddleware({
-        target: '',
-        changeOrigin: true
-    })
-    proxy
     const { $ } = useContext(newContext)
     const [{
         textVal,
-        texValCurrentId,
-        textAreaWidth,
-        textAreaHeight
+        textValCurrentId,
+        textColor,
+        textSize,
+        haveNoteDesc
     }, setIniteState] = useState<{
         textVal: string,
-        texValCurrentId: string,
-        textAreaWidth: number,
-        textAreaHeight: number
+        textValCurrentId: number,
+        textColor:string,
+        textSize:string,
+        haveNoteDesc:boolean
     }>({
         textVal: '',
-        texValCurrentId: '',
-        textAreaWidth: window.innerWidth,
-        textAreaHeight: window.innerHeight
+        textValCurrentId: 999,
+        textColor:'rgba(0,0,0,1)',
+        textSize:'16px',
+        haveNoteDesc:false
     })
 
     const setVal: ({ target: { value } }: ChangeEvent<HTMLTextAreaElement>) => void = ({ target: { value } }) => {
@@ -41,21 +42,32 @@ const Main: FunctionComponent = (): JSX.Element => {
             url: '/get_note_list',
             beforePost: () => console.log('request !'),
             successFn: ({ data }: { data: any }) => {
-                console.log(data.data)
-                setIniteState(prevState => ({
-                    ...prevState,
-                    textVal: ''
-                }))
+                if(data.data.length > 0){
+                    const [{ uuid,note_desc }]:dataType[] = data.data
+                    setIniteState(prevState => ({
+                        ...prevState,
+                        textVal: note_desc,
+                        textValCurrentId:uuid,
+                        haveNoteDesc:true
+                    }))
+                } else {
+                    setIniteState(prevState => ({
+                        ...prevState,
+                        textVal: '',
+                        textValCurrentId:999,
+                        haveNoteDesc:false
+                    }))
+                }
             },
             errorFn: ({ statusText }: { statusText: string }) => console.log(statusText)
         })
     }
 
-    const setToDb: () => void = () => {
+    const addToNoteList: () => void = () => {
         $.fetch({
             method: 'post',
             url: '/set_note_list_item',
-            data: { textVal },
+            data: { textVal,textValCurrentId },
             beforePost: () => console.log('request !'),
             successFn: ({ data }: { data: any }) => {
                 console.log(data)
@@ -71,13 +83,26 @@ const Main: FunctionComponent = (): JSX.Element => {
         })
     }
 
-    const deleteItemToDb = () => {
+    const updateToNoteList: () => void = () => {
+        $.fetch({
+            method: 'post',
+            url: '/update_note_list_item',
+            data: { textVal,textValCurrentId },
+            beforePost: () => console.log('request !'),
+            successFn: ({ data:{ status } }: { data:{ status: string} }) => {
+                if(status === 'ok') getNoteList()
+            },
+            errorFn: ({ statusText }: { statusText: string }) => console.log(statusText)
+        })
+    }
+
+    const deleteItemToNoteList = () => {
         $.fetch({
             method: 'post',
             url: '/delete_note_list_item',
-            data: { uuid: 2 },
+            data: { uuid: textValCurrentId },
             before: () => console.log('request !'),
-            successFn: ({ status }: { status: string }) => {
+            successFn: ({ data:{ status } }: { data:{ status: string} }) => {
                 if (status === 'ok') {
                     getNoteList()
                 }
@@ -93,23 +118,44 @@ const Main: FunctionComponent = (): JSX.Element => {
         }
     }
 
-    ipcRenderer.on('deleteItem', () => {
-        deleteItemToDb()
-    })
+    useEffect(() => {
+        ipcRenderer.once('deleteItem', () => deleteItemToNoteList())
+    },[textValCurrentId])
 
     useEffect(() => {
         getNoteList()
-        // window.addEventListener('resize',() => {
-        //     setIniteState(prevState => ({
-        //         ...prevState,
-        //         textAreaWidth: Math.floor(window.innerWidth / 25)
-        //     }))
-        // })
+    
+        ipcRenderer.on('getSettingNoteContent',(event,value:{
+            fontSize:string,
+            fontColor:{
+                R:string,
+                G:string,
+                B:string
+            }
+        }) => {
+            const { fontSize,fontColor:{ R,G,B } } = value
+            setIniteState(prevState => ({
+                ...prevState,
+                textSize:`${fontSize}px`,
+                textColor:`rgba(${R},${G},${B},1)`
+            }))
+        })
     }, [])
     return (
         <Container>
-            <textarea className='text-area' value={textVal} onMouseDown={showRightList} onChange={setVal}></textarea>
-            {/* <div onClick={setToDb}>setToDB</div> */}
+            <textarea 
+                className='text-area'
+                style={{
+                  fontSize:textSize,
+                  color:textColor
+                }}
+                value={textVal}
+                onMouseDown={showRightList}
+                onChange={setVal}
+                onBlur={() => {
+                    haveNoteDesc ? updateToNoteList() : addToNoteList()
+                }}
+            />
         </Container>
     )
 }

@@ -4,6 +4,7 @@ import { Container } from '.'
 import $ from '../../lib/Library'
 
 interface initState {
+    fontSize:string
     fontColor: {
         R: string,
         G: string,
@@ -12,8 +13,10 @@ interface initState {
 }
 const Setting: FunctionComponent = (): JSX.Element => {
     const [{
+        fontSize,
         fontColor
     }, setInitState] = useState<initState>({
+        fontSize:'16',
         fontColor: {
             R: '0',
             G: '0',
@@ -25,7 +28,10 @@ const Setting: FunctionComponent = (): JSX.Element => {
     }
 
     const settingNoteContent: () => void = () => {
-
+        ipcRenderer.send('settingNoteContent',{
+            fontSize,
+            fontColor
+        })
     }
 
     const setVal: (valType: string, { target: { value } }: ChangeEvent<HTMLInputElement>) => void = (valType, { target: { value } }) => {
@@ -55,7 +61,7 @@ const Setting: FunctionComponent = (): JSX.Element => {
             <div className="top-close" onClick={closeWindow}>close</div>
             <div>
                 <div>文字大小</div>
-                <input type="text"></input>
+                <input type="text" value={fontSize} maxLength={3} onChange={setVal.bind(this,'fontSize')}></input>
             </div>
             <div className="font-color-group">
                 <div>文字顏色</div>
@@ -65,7 +71,7 @@ const Setting: FunctionComponent = (): JSX.Element => {
                     <div>B <input type="text" value={fontColor.B} maxLength={3} onChange={setVal.bind(this, 'fontColor_B')} /></div>
                 </div>
             </div>
-            <div className="confirm-setting">確定</div>
+            <div className="confirm-setting" onClick={settingNoteContent}>確定</div>
         </Container>
     )
 }

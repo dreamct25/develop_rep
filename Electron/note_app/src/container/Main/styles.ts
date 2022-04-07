@@ -9,6 +9,8 @@ const { Container }:cssSetPropertys = {
             height: 99.66vh;
             outline: none;
             border: none;
+            overflow: hidden;
+            transition: .5s ease;
         }
     `
 }

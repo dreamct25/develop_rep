@@ -15,6 +15,7 @@ const createWindow = (): void => {
   const mainWindow = new BrowserWindow({
     height: 600,
     width: 800,
+    resizable:true,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -50,14 +51,6 @@ const createWindow = (): void => {
         click: () => mainWindow.webContents.send('deleteItem')
       },
       {
-        label: 'font',
-        submenu: Menu.buildFromTemplate([{
-          label: '1'
-        }, {
-          label: '2'
-        }])
-      },
-      {
         label: 'setting',
         click: () => {
           settingWindow.show()
@@ -68,6 +61,9 @@ const createWindow = (): void => {
   })
 
   ipcMain.on('closeWindow', () => settingWindow.hide())
+  ipcMain.on('settingNoteContent',(event,value) => {
+    mainWindow.webContents.send('getSettingNoteContent',value)
+  })
 };
 
 // This method will be called when Electron has finished

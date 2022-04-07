@@ -32,7 +32,6 @@ route.get("/get_note_list", (req: Request, res: Response<resDataType>) => {
 })
 
 route.post('/set_note_list_item', (req: Request, res: Response<{ message: string, status: string }>) => {
-   console.log(req.body)
    const { textVal }: { textVal: string } = req.body
    useSqlite3(db => {
       db.run("INSERT INTO note_list(note_desc,create_date) VALUES(?,datetime('now','localtime'))", [textVal], (err: Error) => {
@@ -44,9 +43,20 @@ route.post('/set_note_list_item', (req: Request, res: Response<{ message: string
    })
 })
 
+route.post('/update_note_list_item', (req: Request, res: Response<{ message: string, status: string }>) => {
+   const { textVal,textValCurrentId }: { textVal: string,textValCurrentId:string } = req.body
+   useSqlite3(db => {
+      db.run("UPDATE note_list SET note_desc = ? WHERE uuid = ?", [textVal,textValCurrentId], (err: Error) => {
+         res.json({
+            message: err ? err.message : 'update success',
+            status: err ? 'error' : 'ok'
+         })
+      })
+   })
+})
+
 route.post('/delete_note_list_item', (req: Request, res: Response<{ message: string, status: string }>) => {
    const { uuid }: { uuid: number } = req.body
-   console.log(req.body)
    useSqlite3(db => {
       db.run("DELETE FROM note_list WHERE uuid = ?", uuid, (err: Error) => {
          res.json({
