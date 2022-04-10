@@ -8,6 +8,8 @@ interface resDataType {
    data?: { [key: string]: any }[]
 }
 
+// note_list table CRUD strat
+
 route.get("/get_note_list", (req: Request, res: Response<resDataType>) => {
    useSqlite3(db => {
       db.all("SELECT * FROM note_list", (err: Error, resItem: any) => {
@@ -44,9 +46,9 @@ route.post('/set_note_list_item', (req: Request, res: Response<{ message: string
 })
 
 route.post('/update_note_list_item', (req: Request, res: Response<{ message: string, status: string }>) => {
-   const { textVal,textValCurrentId }: { textVal: string,textValCurrentId:string } = req.body
+   const { textVal, textValCurrentId }: { textVal: string, textValCurrentId: string } = req.body
    useSqlite3(db => {
-      db.run("UPDATE note_list SET note_desc = ? WHERE uuid = ?", [textVal,textValCurrentId], (err: Error) => {
+      db.run("UPDATE note_list SET note_desc = ?,update_date = datetime('now','localtime') WHERE uuid = ?", [textVal, textValCurrentId], (err: Error) => {
          res.json({
             message: err ? err.message : 'update success',
             status: err ? 'error' : 'ok'
@@ -66,6 +68,109 @@ route.post('/delete_note_list_item', (req: Request, res: Response<{ message: str
       })
    })
 })
+
+// note_list table CRUD end
+
+// user_setting table CRUD start
+
+route.get("/get_user_setting", (req: Request, res: Response<resDataType>) => {
+   useSqlite3(db => {
+      db.all("SELECT * FROM user_setting", (err: Error, resItem: any) => {
+         let resData: resDataType
+         if (err) {
+            resData = {
+               message: err.message,
+               status: 'error',
+               data: null
+            }
+         } else {
+            resData = {
+               message: 'excute success',
+               status: 'ok',
+               data: resItem
+            }
+         }
+
+         res.json(resData)
+      })
+   })
+})
+
+route.post('/set_user_setting_item', (req: Request, res: Response<{ message: string, status: string }>) => {
+   const {
+      fontSize,
+      fontColor,
+      fontStyle,
+      fontFamily,
+      fontLineHeight,
+      typingSpaceBackgroundColor
+   }: { [key: string]: any } = req.body
+
+   console.log(req.body)
+   useSqlite3(db => {
+      db.run(`
+         INSERT INTO user_setting(
+            font_size,
+            font_color,
+            font_style,
+            font_family,
+            font_line_height,
+            background_color,
+            create_date
+         ) VALUES(?,?,?,?,?,?,datetime('now','localtime'))`, [
+         fontSize,
+         fontColor,
+         fontStyle,
+         fontFamily,
+         fontLineHeight,
+         typingSpaceBackgroundColor
+      ], (err: Error) => {
+         res.json({
+            message: err ? err.message : 'add success',
+            status: err ? 'error' : 'ok'
+         })
+      })
+   })
+})
+
+route.post('/update_user_setting_item', (req: Request, res: Response<{ message: string, status: string }>) => {
+   const {
+      uuid,
+      fontSize,
+      fontColor,
+      fontStyle,
+      fontFamily,
+      fontLineHeight,
+      typingSpaceBackgroundColor
+   }: { [key: string]: any } = req.body
+   useSqlite3(db => {
+      db.run(`
+         UPDATE user_setting 
+         SET font_size = ?,
+         font_color = ?,
+         font_style = ?,
+         font_family = ?,
+         font_line_height = ?,
+         background_color = ?,
+         update_date = datetime('now','localtime') 
+         WHERE uuid = ?`, [
+         fontSize,
+         fontColor,
+         fontStyle,
+         fontFamily,
+         fontLineHeight,
+         typingSpaceBackgroundColor,
+         uuid
+      ], (err: Error) => {
+         res.json({
+            message: err ? err.message : 'update success',
+            status: err ? 'error' : 'ok'
+         })
+      })
+   })
+})
+
+// user_setting table CRUD end
 
 
 export default route

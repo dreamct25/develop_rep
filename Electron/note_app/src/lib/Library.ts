@@ -11,7 +11,7 @@ const $: any = ((el) => {
         self.addClass = (classText: string): any => { self.classList.add(classText); return self } // 更新方法 2022/03/12 變形為可鏈式寫法
         self.removeClass = (classText: string): any => { self.classList.remove(classText); return self } // 更新方法 2022/03/12 變形為可鏈式寫法
         self.toggleClass = (classText: string): void => self.classList.toggle(classText); // 更新方法 2021/09/20
-        self.on = (eventType: string, fn: (self: any, t: Event) => void): void => { self[["on", eventType].join("")] = (t: Event) => fn.call(fn, self, t); }; // 更新方法 2021/09/20
+        self.on = (eventType: string, fn: (self: any, t: Event) => void): void => { self[["on", eventType].join("")] = (t: Event) => fn.call(fn, t); }; // 更新方法 2021/09/20
         self.listener = (eventType: string, fn: () => void): void => self.addEventListener(eventType, fn);
         self.removeListener = (eventType: string, fn: () => void): void => self.removeEventListener(eventType, fn); // 更新方法 2022/01/04
         self.val = (valTemp?: string): string | void => valTemp ? self.value : self.value = valTemp;
@@ -300,10 +300,10 @@ const $: any = ((el) => {
     }
 
     class FetchClass { // 更新 FetchClass 類封裝方法內容 2022/03/24
-        public static baseUrl:string = ''
-        public static baseHeaders:{[key:string]:any} = {}
+        public static baseUrl: string = ''
+        public static baseHeaders: { [key: string]: any } = {}
 
-        public static async fetch(settingParams:{
+        public static async fetch(settingParams: {
             method: string,
             url: string,
             headers?: { [key: string]: any },
@@ -313,7 +313,7 @@ const $: any = ((el) => {
             successFn: (data: any) => void,
             excuteDone?: () => void,
             errorFn: (err: any) => void
-        }):Promise<void> { 
+        }): Promise<void> {
             // 更新類 ajax 方法 2021/09/11
             // 更新類 ajax 方法內容 2021/10/21
             //#region 參數設定
@@ -328,47 +328,47 @@ const $: any = ((el) => {
              * @param {Function} errorFn <= 回呼函式
              */
             //#endregion
-    
-            const settings:{ [key: string]: any } = {};
-            const { method, headers, contentType, data,beforePost,successFn,excuteDone,errorFn } = settingParams;
-    
+
+            const settings: { [key: string]: any } = {};
+            const { method, headers, contentType, data, beforePost, successFn, excuteDone, errorFn } = settingParams;
+
             settings.method = method;
             settingParams.url = this.baseUrl ? `${this.baseUrl}${settingParams.url}` : settingParams.url;
-    
+
             if (this.baseHeaders || headers) {
                 settings.headers = this.baseHeaders || headers;
             }
-    
+
             if (data) {
                 settings.headers = this.baseHeaders || { "Content-Type": contentType };
                 settings.body = $.convert(data, 'stringify');
             }
-    
+
             if ((this.baseHeaders || headers) && data) {
                 settings.headers = this.baseHeaders || { ...headers };
                 settings.body = $.convert(data, 'stringify');
             };
-    
-            if (beforePost){
+
+            if (beforePost) {
                 beforePost!.call(beforePost);
             };
-    
-            if(!successFn){
-                $.console('error','Function Name successFn is required in obejct parameters.');
+
+            if (!successFn) {
+                $.console('error', 'Function Name successFn is required in obejct parameters.');
                 return
             };
-    
-            if(!errorFn){
-                $.console('error','Function Name errorFn is required in obejct parameters.');
+
+            if (!errorFn) {
+                $.console('error', 'Function Name errorFn is required in obejct parameters.');
                 return
             };
-    
+
             // 更新 Request 成功與錯誤回傳內容 2022/03/14
             try {
                 const res = await fetch(settingParams.url, settings).then(res => res);
-    
+
                 if (res.status >= 200 && res.status < 300) {
-                    res.json().then(resItem => successFn.call(successFn,{
+                    res.json().then(resItem => successFn.call(successFn, {
                         bodyUsed: res.bodyUsed,
                         headers: res.headers,
                         ok: res.ok,
@@ -376,8 +376,8 @@ const $: any = ((el) => {
                         status: res.status,
                         statusText: res.status,
                         type: res.type,
-                        url:res.url,
-                        data:resItem
+                        url: res.url,
+                        data: resItem
                     })).then(() => excuteDone && excuteDone.call(excuteDone));
                 }
                 else {
@@ -389,16 +389,16 @@ const $: any = ((el) => {
                         status: res.status,
                         statusText: res.status,
                         type: res.type,
-                        url:res.url,
+                        url: res.url,
                     }));
                 };
             }
-            catch (err:any) {
-                errorFn.call(errorFn,JSON.parse(err.message));
+            catch (err: any) {
+                errorFn.call(errorFn, JSON.parse(err.message));
             };
         };
 
-        public static createBase({ baseUrl,baseHeaders }:{ baseUrl:string,baseHeaders:{[key:string]:any} }){ // 更新 fetch 物件組態設定方法 2022/03/24
+        public static createBase({ baseUrl, baseHeaders }: { baseUrl: string, baseHeaders: { [key: string]: any } }) { // 更新 fetch 物件組態設定方法 2022/03/24
             //#region
             /** 參數設定
              * @param {string} baseUrl 固定網址，設定後網址後半部變動部分只須設定 url
@@ -408,10 +408,10 @@ const $: any = ((el) => {
             this.baseUrl = baseUrl
             this.baseHeaders = baseHeaders
         }
-        
+
     }
 
-    $.fetch = (settingParams:{ // 更新 FetchClass 類方法導出 2022/03/24
+    $.fetch = (settingParams: { // 更新 FetchClass 類方法導出 2022/03/24
         method: string,
         url: string,
         headers?: { [key: string]: any },
@@ -421,21 +421,21 @@ const $: any = ((el) => {
         successFn: (data: any) => void,
         excuteDone?: () => void,
         errorFn: (err: any) => void
-    }):Promise<void> => FetchClass.fetch(settingParams);
+    }): Promise<void> => FetchClass.fetch(settingParams);
 
-    ($.fetch as {[key:string]:any}).createBase = (paramters:{ // 更新 FetchClass 類方法導出，為 fetch 基礎組態設定 2022/03/24
-        baseUrl:string,
-        baseHeaders:{[key:string]:any}
-    }):void => FetchClass.createBase(paramters)
+    ($.fetch as { [key: string]: any }).createBase = (paramters: { // 更新 FetchClass 類方法導出，為 fetch 基礎組態設定 2022/03/24
+        baseUrl: string,
+        baseHeaders: { [key: string]: any }
+    }): void => FetchClass.createBase(paramters)
 
     return $;
 })((el: any): any => typeof el === "object" ? el : document.querySelectorAll(el).length > 1 ? document.querySelectorAll(el) : document.querySelector(el)); // 更新元素指向 2021/8/31
 
 // Use in node js
 declare global {
-    interface Date { 
+    interface Date {
         calculateDay: (format: { day: number, method: string }) => (Date | undefined)
-        toOptionTimeZoneForISO:(zoneTime:number) => string
+        toOptionTimeZoneForISO: (zoneTime: number) => string
     }
 }
 
@@ -484,13 +484,13 @@ Date.prototype.toOptionTimeZoneForISO = function (zoneTime: number): string {
 
 // Use in node js
 declare global {
-    interface Array<T> { 
-        append: (item:any) => void
-        appendFirst:(...item:any[]) => any[]
-        remove:(pos:number) => any[]
-        range:(startPos:number,endPos:number) => any[]
-        removeFirst:() => any[]
-        removeLast:() => any[]
+    interface Array<T> {
+        append: (item: any) => void
+        appendFirst: (...item: any[]) => any[]
+        remove: (pos: number) => any[]
+        range: (startPos: number, endPos: number) => any[]
+        removeFirst: () => any[]
+        removeLast: () => any[]
     }
 }
 

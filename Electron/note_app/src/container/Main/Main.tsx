@@ -14,19 +14,31 @@ const Main: FunctionComponent = (): JSX.Element => {
         textValCurrentId,
         textColor,
         textSize,
+        textFontFamily,
+        textFontStyle,
+        textFontLineHeight,
+        textBackgroundColor,
         haveNoteDesc
     }, setIniteState] = useState<{
         textVal: string,
         textValCurrentId: number,
-        textColor:string,
-        textSize:string,
-        haveNoteDesc:boolean
+        textColor: string,
+        textSize: string,
+        textFontFamily: string,
+        textFontStyle: string,
+        textFontLineHeight: string,
+        textBackgroundColor: string
+        haveNoteDesc: boolean
     }>({
         textVal: '',
         textValCurrentId: 999,
-        textColor:'rgba(0,0,0,1)',
-        textSize:'16px',
-        haveNoteDesc:false
+        textColor: 'rgba(0,0,0,1)',
+        textSize: '16px',
+        textFontFamily: '',
+        textFontStyle: 'normal',
+        textFontLineHeight: 'unset',
+        textBackgroundColor: 'rgba(0,0,0,1)',
+        haveNoteDesc: false
     })
 
     const setVal: ({ target: { value } }: ChangeEvent<HTMLTextAreaElement>) => void = ({ target: { value } }) => {
@@ -42,20 +54,20 @@ const Main: FunctionComponent = (): JSX.Element => {
             url: '/get_note_list',
             beforePost: () => console.log('request !'),
             successFn: ({ data }: { data: any }) => {
-                if(data.data.length > 0){
-                    const [{ uuid,note_desc }]:dataType[] = data.data
+                if (data.data.length > 0) {
+                    const [{ uuid, note_desc }]: dataType[] = data.data
                     setIniteState(prevState => ({
                         ...prevState,
                         textVal: note_desc,
-                        textValCurrentId:uuid,
-                        haveNoteDesc:true
+                        textValCurrentId: uuid,
+                        haveNoteDesc: true
                     }))
                 } else {
                     setIniteState(prevState => ({
                         ...prevState,
                         textVal: '',
-                        textValCurrentId:999,
-                        haveNoteDesc:false
+                        textValCurrentId: 999,
+                        haveNoteDesc: false
                     }))
                 }
             },
@@ -67,7 +79,7 @@ const Main: FunctionComponent = (): JSX.Element => {
         $.fetch({
             method: 'post',
             url: '/set_note_list_item',
-            data: { textVal,textValCurrentId },
+            data: { textVal, textValCurrentId },
             beforePost: () => console.log('request !'),
             successFn: ({ data }: { data: any }) => {
                 console.log(data)
@@ -87,10 +99,10 @@ const Main: FunctionComponent = (): JSX.Element => {
         $.fetch({
             method: 'post',
             url: '/update_note_list_item',
-            data: { textVal,textValCurrentId },
+            data: { textVal, textValCurrentId },
             beforePost: () => console.log('request !'),
-            successFn: ({ data:{ status } }: { data:{ status: string} }) => {
-                if(status === 'ok') getNoteList()
+            successFn: ({ data: { status } }: { data: { status: string } }) => {
+                if (status === 'ok') getNoteList()
             },
             errorFn: ({ statusText }: { statusText: string }) => console.log(statusText)
         })
@@ -102,7 +114,7 @@ const Main: FunctionComponent = (): JSX.Element => {
             url: '/delete_note_list_item',
             data: { uuid: textValCurrentId },
             before: () => console.log('request !'),
-            successFn: ({ data:{ status } }: { data:{ status: string} }) => {
+            successFn: ({ data: { status } }: { data: { status: string } }) => {
                 if (status === 'ok') {
                     getNoteList()
                 }
@@ -120,34 +132,61 @@ const Main: FunctionComponent = (): JSX.Element => {
 
     useEffect(() => {
         ipcRenderer.once('deleteItem', () => deleteItemToNoteList())
-    },[textValCurrentId])
+    }, [textValCurrentId])
 
     useEffect(() => {
         getNoteList()
-    
-        ipcRenderer.on('getSettingNoteContent',(event,value:{
-            fontSize:string,
-            fontColor:{
-                R:string,
-                G:string,
-                B:string
-            }
+
+        ipcRenderer.on('getSettingNoteContent', (event, value: {
+            fontSize: string,
+            fontStyle: string
+            fontColor: {
+                r: number,
+                g: number,
+                b: number,
+                a: number
+            },
+            typingSpaceBackgroundColor: {
+                r: number,
+                g: number,
+                b: number,
+                a: number
+            },
+            fontFamily: string,
+            fontLineHeight: string
         }) => {
-            const { fontSize,fontColor:{ R,G,B } } = value
+            const {
+                fontSize,
+                fontStyle,
+                fontFamily,
+                fontLineHeight,
+                fontColor,
+                typingSpaceBackgroundColor
+            } = value
+
             setIniteState(prevState => ({
                 ...prevState,
-                textSize:`${fontSize}px`,
-                textColor:`rgba(${R},${G},${B},1)`
+                textSize: `${fontSize}px`,
+                textColor: `rgba(${fontColor.r},${fontColor.g},${fontColor.b},${fontColor.a})`,
+                textFontFamily: fontFamily,
+                textFontStyle: fontStyle,
+                textFontLineHeight: fontLineHeight === '0' ? 'unset' : `${fontLineHeight}px`,
+                textBackgroundColor: `rgba(${typingSpaceBackgroundColor.r},${typingSpaceBackgroundColor.g},${typingSpaceBackgroundColor.b},${typingSpaceBackgroundColor.a})`
             }))
         })
     }, [])
     return (
         <Container>
-            <textarea 
+            <textarea
                 className='text-area'
                 style={{
-                  fontSize:textSize,
-                  color:textColor
+                    fontSize: textSize,
+                    color: textColor,
+                    fontFamily: textFontFamily,
+                    fontStyle: textFontStyle === 'bold' ? 'normal' : textFontStyle,
+                    fontWeight: textFontStyle === 'bold' ? textFontStyle : 'unset',
+                    lineHeight: textFontLineHeight,
+                    backgroundColor: textBackgroundColor
                 }}
                 value={textVal}
                 onMouseDown={showRightList}

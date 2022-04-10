@@ -11,7 +11,21 @@ if (!fs.existsSync(fileUrl)) {
             CREATE TABLE IF NOT EXISTS note_list (
                 uuid INTEGER PRIMARY KEY NOT NULL,
                 note_desc TEXT NOT NULL,
-                create_date TEXT NOT NULL
+                create_date TEXT NOT NULL,
+                update_date TEXT
+            )
+        `)
+        sqliteDB.run(`
+            CREATE TABLE IF NOT EXISTS user_setting (
+                uuid INTEGER PRIMARY KEY NOT NULL,
+                font_size TEXT NOT NULL,
+                font_color TEXT NOT NULL,
+                font_style TEXT NOT NULL,
+                font_family TEXT NOT NULL,
+                font_line_height TEXT NOT NULL,
+                background_color TEXT NOT NULL,
+                create_date TEXT NOT NULL,
+                update_date TEXT
             )
         `)
     })
