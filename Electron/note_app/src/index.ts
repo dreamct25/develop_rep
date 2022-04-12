@@ -16,8 +16,9 @@ const createWindow = (): void => {
   const mainWindow = new BrowserWindow({
     height: 600,
     width: 800,
-    resizable: true,
-    // transparent: true,
+    resizable:true,
+    frame:false,
+    transparent: true,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -27,7 +28,7 @@ const createWindow = (): void => {
   const settingWindow = new BrowserWindow({
     height: 580,
     width: 300,
-    resizable: false,
+    // resizable: false,
     frame: false,
     transparent: true,
     webPreferences: {
@@ -41,7 +42,7 @@ const createWindow = (): void => {
   settingWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY.replace('main_window', 'setting_window'))
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
   settingWindow.webContents.openDevTools()
 
   settingWindow.hide()

@@ -4,13 +4,13 @@ import { cssSetPropertys } from "./types";
 const { Container }:cssSetPropertys = {
     Container:styled.div`
         .text-area{
-            resize: unset;
+            padding: 10px;
+            /* resize: unset; */
             width: 100%;
             height: 99.66vh;
             outline: none;
             border: none;
             overflow: hidden;
-            transition: .5s ease;
         }
     `
 }

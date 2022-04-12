@@ -191,9 +191,9 @@ const Main: FunctionComponent = (): JSX.Element => {
                 value={textVal}
                 onMouseDown={showRightList}
                 onChange={setVal}
-                onBlur={() => {
-                    haveNoteDesc ? updateToNoteList() : addToNoteList()
-                }}
+                // onBlur={() => {
+                //     haveNoteDesc ? updateToNoteList() : addToNoteList()
+                // }}
             />
         </Container>
     )
