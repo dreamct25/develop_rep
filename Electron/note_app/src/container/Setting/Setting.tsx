@@ -1,6 +1,5 @@
 import { ipcRenderer } from "electron";
 import React, { ChangeEvent, FunctionComponent, useState, MouseEvent, useEffect } from "react";
-import { getAvailableFontFamilies } from 'electron-font-manager'
 import { RgbaColorPicker } from 'react-colorful'
 import { Container } from '.'
 import $ from '../../lib/Library'
@@ -15,7 +14,8 @@ interface initState {
     toggleFontColorBox: boolean,
     toggleTypingSpaceBackgroundColor: boolean,
     haveUserSetting: boolean,
-    userSettingId: number
+    userSettingId: number,
+    systemFonts: string[]
     moveXY: {
         baseX: number,
         baseY: number
@@ -32,12 +32,12 @@ interface dataType {
     background_color: string
 }
 
+$.fetch.createBase({
+    baseUrl: 'http://localhost:9003',
+    baseHeaders: { 'Content-Type': 'application/json' }
+})
+
 const Setting: FunctionComponent = (): JSX.Element => {
-    $.fetch.createBase({
-        baseUrl: 'http://localhost:9003/db_api',
-        baseHeaders: { 'Content-Type': 'application/json' }
-    })
-    const systemFonts: string[] = getAvailableFontFamilies()
     const fontStyleList: string[] = ['Normal', 'Italic', 'Bold']
     const [{
         fontSize,
@@ -50,6 +50,7 @@ const Setting: FunctionComponent = (): JSX.Element => {
         toggleTypingSpaceBackgroundColor,
         haveUserSetting,
         userSettingId,
+        systemFonts,
         moveXY
     }, setInitState] = useState<initState>({
         fontSize: '16',
@@ -62,6 +63,7 @@ const Setting: FunctionComponent = (): JSX.Element => {
         toggleTypingSpaceBackgroundColor: false,
         haveUserSetting: false,
         userSettingId: 999,
+        systemFonts: [],
         moveXY: {
             baseX: -1,
             baseY: -1
@@ -130,7 +132,7 @@ const Setting: FunctionComponent = (): JSX.Element => {
 
     const moveingWindow: ({ screenX, screenY }: MouseEvent) => void = ({ screenX, screenY }) => {
         const { baseX, baseY } = moveXY
-        ipcRenderer.send('setPosition', { dragX: screenX - baseX, dragY: screenY - baseY })
+        ipcRenderer.send('setPosition', { windowName: 'settingWindow', dragX: screenX - baseX, dragY: screenY - baseY })
     }
 
     const endDragWindow: () => void = () => {
@@ -141,7 +143,7 @@ const Setting: FunctionComponent = (): JSX.Element => {
     const getUserSetting: () => void = () => {
         $.fetch({
             method: 'get',
-            url: '/get_user_setting',
+            url: '/db_api/get_user_setting',
             beforePost: () => console.log('request !'),
             successFn: ({ data }: { data: any }) => {
                 if (data.data.length > 0) {
@@ -154,6 +156,7 @@ const Setting: FunctionComponent = (): JSX.Element => {
                         font_color,
                         background_color
                     }]: dataType[] = data.data
+                    console.log(data)
                     setInitState(prevState => ({
                         ...prevState,
                         fontSize: font_size,
@@ -171,6 +174,7 @@ const Setting: FunctionComponent = (): JSX.Element => {
                         ...prevState,
                         haveUserSetting: false
                     }))
+                    setUserSettingToDb()
                 }
             },
             excuteDone: () => console.log('request done !'),
@@ -190,7 +194,7 @@ const Setting: FunctionComponent = (): JSX.Element => {
 
         $.fetch({
             method: 'post',
-            url: haveUserSetting ? '/update_user_setting_item' : '/set_user_setting_item',
+            url: haveUserSetting ? '/db_api/update_user_setting_item' : '/db_api/set_user_setting_item',
             data: haveUserSetting ? { uuid: userSettingId, ...packPostData } : packPostData,
             beforePost: () => console.log('request !'),
             successFn: ({ data }: { data: any }) => {
@@ -202,8 +206,23 @@ const Setting: FunctionComponent = (): JSX.Element => {
         })
     }
 
+    const getSystemFont: () => void = () => {
+        $.fetch({
+            method: 'get',
+            url: '/get_font_setting',
+            beforePost: () => console.log('request !'),
+            successFn: ({ data }: { data: any }) => {
+                setInitState(prevState => ({
+                    ...prevState,
+                    systemFonts: data.font
+                }))
+            },
+            excuteDone: () => console.log('request done !'),
+            errorFn: ({ statusText }: { statusText: string }) => console.log(statusText)
+        })
+    }
+
     useEffect(() => {
-        console.log(1)
         settingNoteContent(false)
     }, [userSettingId])
 
@@ -213,6 +232,7 @@ const Setting: FunctionComponent = (): JSX.Element => {
     }, [moveXY])
 
     useEffect(() => {
+        getSystemFont()
         getUserSetting()
     }, [])
 

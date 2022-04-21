@@ -24,6 +24,10 @@ if (!fs.existsSync(fileUrl)) {
                 font_family TEXT NOT NULL,
                 font_line_height TEXT NOT NULL,
                 background_color TEXT NOT NULL,
+                window_pos_x INTEGER NULL,
+                window_pos_y INTEGER NULL,
+                window_size_w INTEGER NULL,
+                window_size_h INTEGER NULL,
                 create_date TEXT NOT NULL,
                 update_date TEXT
             )

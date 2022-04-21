@@ -1,1 +1,1 @@
-declare module 'electron-font-manager';
+declare module 'dnm-font-manager';

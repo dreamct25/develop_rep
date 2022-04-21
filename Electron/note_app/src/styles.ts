@@ -140,6 +140,8 @@ const GlobalStyle = createGlobalStyle`
     }
     html{
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+        overflow-y: hidden;
+        overflow-x: hidden;
         .flex{
             display: flex;
         }

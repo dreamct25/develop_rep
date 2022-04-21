@@ -106,7 +106,6 @@ route.post('/set_user_setting_item', (req: Request, res: Response<{ message: str
       typingSpaceBackgroundColor
    }: { [key: string]: any } = req.body
 
-   console.log(req.body)
    useSqlite3(db => {
       db.run(`
          INSERT INTO user_setting(
@@ -160,6 +159,58 @@ route.post('/update_user_setting_item', (req: Request, res: Response<{ message: 
          fontFamily,
          fontLineHeight,
          typingSpaceBackgroundColor,
+         uuid
+      ], (err: Error) => {
+         res.json({
+            message: err ? err.message : 'update success',
+            status: err ? 'error' : 'ok'
+         })
+      })
+   })
+})
+
+route.post('/update_user_setting_current_window_pos', (req: Request, res: Response<{ message: string, status: string }>) => {
+   const {
+      uuid,
+      posX,
+      posY
+   }: { [key: string]: any } = req.body
+   console.log(uuid, posX, posY)
+   useSqlite3(db => {
+      db.run(`
+         UPDATE user_setting 
+         SET window_pos_x = ?,
+         window_pos_y = ?,
+         update_date = datetime('now','localtime') 
+         WHERE uuid = ?`, [
+         posX,
+         posY,
+         uuid
+      ], (err: Error) => {
+         res.json({
+            message: err ? err.message : 'update success',
+            status: err ? 'error' : 'ok'
+         })
+      })
+   })
+})
+
+route.post('/update_user_setting_current_window_size', (req: Request, res: Response<{ message: string, status: string }>) => {
+   const {
+      uuid,
+      sizeW,
+      sizeH
+   }: { [key: string]: any } = req.body
+   console.log(uuid, sizeW, sizeH)
+   useSqlite3(db => {
+      db.run(`
+         UPDATE user_setting 
+         SET window_size_w = ?,
+         window_size_h = ?,
+         update_date = datetime('now','localtime') 
+         WHERE uuid = ?`, [
+         sizeW,
+         sizeH,
          uuid
       ], (err: Error) => {
          res.json({
