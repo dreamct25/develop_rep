@@ -10,6 +10,10 @@
     "noCollectData":"No Collection Radio",
     "openFunctionList":"open function list",
     "closeFunctionList":"close function list",
+    "qrLink":"QRCode link",
+    "qrDesc":"Please connect device to wifi which is the same with computer",
+    "deviceConnected":"Device connected",
+    "deviceNotConnect":"Device disconnect",
     "radioProgramList":"Radio Program List",
     "currentProgram":"Current Program：{{program}}",
     "addSuccess":"Add Success",
@@ -23,7 +27,7 @@
     "cancel":"Cancel",
     "doYouWantToDelete":"Do you want to delete  {{itemName}} radio ?",
     "doYouWantToCloseApplication":"Do you want to close application ?",
-    "copyRight":"CopyRight By {{ person }} 2022-02",
+    "copyRight":"CopyRight By {{ person }} 2022-02 ~ 2022-05",
     "checkIsOnline":"Please check your network status is connected or not then try to click Reload button to check !",
     "redirectMessage":"Network is connected,now will redirect screen view after {{ seconds }} seconds",
     "retryButton":"Retry",
@@ -31,5 +35,12 @@
     "radioDesc":"Please click right upper corner switch inside of black box will open the function list ,then choose radio who want to listen",
     "languageEn":"EN",
     "languageZh":"ZH",
-    "version":"Version"
+    "version":"Version",
+    "remote":{
+        "currentPlay":"Current Playing",
+        "voice":"Voice",
+        "radioList":"Radio list",
+        "noChannel":"No choice Channel",
+        "getRadioList":"Get radio list"
+    }
 }

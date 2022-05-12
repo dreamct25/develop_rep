@@ -30,5 +30,6 @@ export interface initStateType {
     loadingState: boolean,
     singleRadioSelect: { [key: string]: any } | radioInfoListType,
     alertBageText: string,
-    toggleAlertBageText: boolean
+    toggleAlertBageText: boolean,
+    currentIp:string
 }

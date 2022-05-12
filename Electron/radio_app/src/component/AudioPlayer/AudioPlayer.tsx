@@ -1,9 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { AudioPlayerProps } from './types'
 import Container from './styles'
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import { CircleSlider } from 'react-circle-slider'
 
 const AudioPlayer: FunctionComponent<AudioPlayerProps> = ({ audioPlayerProps : {

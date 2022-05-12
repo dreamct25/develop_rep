@@ -1,13 +1,9 @@
 import { Router, Request, Response } from "express"
 import { Database } from 'sqlite3'
+import internetAvailable from 'internet-available'
 import { collectItem } from '../../component/RadioCollect/types'
 import $ from '../../lib/Library'
-const { sqlite, fileUrl } = require('../db_setting')
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-
-import internetAvailable from 'internet-available'
+import useSqlite from "../db_setting"
 
 const { HiNetHichannel } = require('hinet-hichannel-taiwan-radio')
 const route: Router = Router()
@@ -60,23 +56,31 @@ export interface channelRankItemType {
     radio_type: string
 }
 
-route.get('/get_channel', (req: Request, res: Response) => {
+route.get('/get_channel', (req: Request, res: Response<{
+    message:string
+} | {
+    data:{
+        channels:channelItemType[],
+        rankItem:channelRankItemType[]
+    }
+}>) => {
     internetAvailable().then(() => {
         const hichannel = new HiNetHichannel
         let channelsTemp:channelItemType[] = []
         hichannel.getChannels().then((channels: channelItemType[]) => {
-            const db: Database = new sqlite.Database(fileUrl)
-            db.all("SELECT * FROM radio_collect_list", (err: Error, data: collectItem[]) => {
-                if (err) {
-                    res.json({ message: err.message })
-                } else {
-                    const dbDataTemp:string[] = $.maps(data,((item:collectItem) => item.radio_name))
-                    channelsTemp = $.maps(channels,(item:channelItemType) => ({
-                        ...item,
-                        inCollect:$.includes(dbDataTemp,item.channel_title)
-                    }))
-                }
-                db.close()
+            useSqlite(db => {
+                db.all("SELECT * FROM radio_collect_list", (err: Error, data: collectItem[]) => {
+                    if (err) {
+                        res.json({ message: err.message })
+                    } else {
+                        const dbDataTemp:string[] = $.maps(data,((item:collectItem) => item.radio_name))
+                        channelsTemp = $.maps(channels,(item:channelItemType) => ({
+                            ...item,
+                            inCollect:$.includes(dbDataTemp,item.channel_title)
+                        }))
+                    }
+                    db.close()
+                })
             })
         }).then(() => {
             hichannel.getRankingChannels().then((rankItem: channelRankItemType[]) => {
@@ -110,4 +114,4 @@ route.post('/get_single_channel', (req: Request, res: Response) => {
     })
 })
 
-module.exports = route
+export default route

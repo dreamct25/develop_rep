@@ -81,7 +81,7 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({
     const getCollectData: () => void = () => {
         $.fetch({
             method: 'get',
-            url: 'http://localhost:9870/db/get_collect_item',
+            url: `http://localhost:${process.env.ELECTRON_SERVER_PORT}/db/get_collect_item`,
             beforePost: () => setLoadingState(true),
             successFn: (data: collectItem[]) => {
                 setInitState(initState => ({
@@ -104,7 +104,7 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({
     const delectColletcItem: (uuid: number) => void = uuid => {
         $.fetch({
             method: 'post',
-            url: 'http://localhost:9870/db/delete_item',
+            url: `http://localhost:${process.env.ELECTRON_SERVER_PORT}/db/delete_item`,
             contentType: 'application/json',
             data: { uuid: uuid },
             beforePost: () => setLoadingState(true),
@@ -134,7 +134,7 @@ const RadioCollect: FunctionComponent<RadioCollectProps> = ({
     const selectCurrentChannel: (channelName: string, { target }: React.MouseEvent<HTMLElement>) => void = (channelName, { target }) => {
         ((target as Element).className === 'img') && $.fetch({
             method: 'post',
-            url: 'http://localhost:9870/channel/get_single_channel',
+            url: `http://localhost:${process.env.ELECTRON_SERVER_PORT}/channel/get_single_channel`,
             contentType: 'application/json',
             data: { selectChannelName: channelName },
             beforePost: () => setLoadingState(true),

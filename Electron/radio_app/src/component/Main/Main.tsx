@@ -2,6 +2,7 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { Switch, Route, useHistory as useRouter, RouteComponentProps } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ipcRenderer } from "electron";
+import { io } from 'socket.io-client'
 import $ from '../../lib/Library'
 import Radio from "../Radio/Radio";
 import RadioCollect from "../RadioCollect/RadioCollect";
@@ -9,7 +10,7 @@ import NetworkWrong from "../NetworkWrong/NetworkWrong";
 import Modal from "../Modal/Modal";
 import { Container } from './styles'
 import { initStateType } from './types'
-import { author } from '../../asset/version/version.json'
+import version from '../../asset/version.json'
 
 const Main: FunctionComponent = (): JSX.Element => {
     const { t, i18n } = useTranslation()
@@ -75,17 +76,53 @@ const Main: FunctionComponent = (): JSX.Element => {
 
     const setLanguageToggleList:() => void = () => setInitState(initState => ({ ...initState,languageToggleListStatus:!languageToggleListStatus }))
 
-    const setCurrentLanguage:(val:string) => void = val => setInitState(initState => ({ ...initState, language: val,languageToggleListStatus:!languageToggleListStatus }))
+    const setCurrentLanguage:(val:string) => void = val => {
+        setInitState(initState => ({ ...initState, language: val,languageToggleListStatus:!languageToggleListStatus }))
+        setUserSetting('update',val)
+    } 
 
     const goPage: (pathname: string) => void = pathname => route.push({ pathname: navigator.onLine ? pathname : '/wrong' })
 
-    ipcRenderer.on('getCopyrightInfo', () => setToggleModalFn(true, 'copyRight'))
+    const setUserSetting:(method:string,useLanguage?:string) => void = (method,useLanguage) => {
+        const url = method === 'add' ? 'http://localhost:9870/db/add_user_setting' : 'http://localhost:9870/db/update_user_setting'
+        const data = method === 'add' ? { language,remote_language:language } : { uuid:1,language:useLanguage,remote_language:useLanguage }
+
+        $.fetch({
+            method:'post',
+            url,
+            headers:{ 'Content-Type':'application/json' },
+            data,
+            successFn:(data:any) => console.log(data),
+            errorFn:(err:any) => console.log(err)
+        })
+    }
 
     useEffect(() => {
         goPage('/radio')
+        ipcRenderer.on('getCopyrightInfo', () => setToggleModalFn(true, 'copyRight'))
+
+        const socketClient = io('ws://localhost:9870')
+
+        socketClient.on('whenChangeLaguageFromRemote',({ language }:{ language:string }) => setInitState(prevState => ({ ...prevState,language })))
+    
+        $.fetch({
+            method:'get',
+            url:'http://localhost:9870/db/get_user_setting',
+            successFn:(data:{[key:string]:any}[]) => {
+                if(data.length > 0){
+                    const [{ language }] = data
+                    setInitState(prevState => ({ ...prevState,language }))
+                } else {
+                    setUserSetting('add')
+                }
+            },
+            errorFn:(err:any) => console.log(err)
+        })
     }, [])
 
-    useEffect(() => { i18n.changeLanguage(language) }, [language])
+    useEffect(() => {
+        i18n.changeLanguage(language)
+    }, [language])
     return (
         <Container>
             <div className="top-bar" onMouseDown={dragStart} onMouseUp={dragEnd}>
@@ -151,7 +188,7 @@ const Main: FunctionComponent = (): JSX.Element => {
                 modalTitle: toggleCopyRightModal ? '' : formatLanguage('prompt'),
                 toggleModal: toggleModal,
                 setToggleModal: setToggleModalFn,
-                renderText: toggleCopyRightModal ? formatLanguage('copyRight',{ person:author.name }) : formatLanguage('doYouWantToCloseApplication'),
+                renderText: toggleCopyRightModal ? formatLanguage('copyRight',{ person:version.author.name }) : formatLanguage('doYouWantToCloseApplication'),
                 showCopyRightInfo: toggleCopyRightModal
             }} />
         </Container>

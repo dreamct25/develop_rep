@@ -88,7 +88,7 @@ const { Container }: cssSetPropertys = {
                                 }
                             }
                             .tooltip-zh,
-                            .tooltip-en {
+                            .tooltip-en{
                                 font-size: 15px;
                                 position: absolute;
                                 border-radius: 6.4px;
@@ -357,6 +357,58 @@ const { Container }: cssSetPropertys = {
                             }
                             &:hover{
                                 opacity: 1;
+                            }
+                        }
+                        .connect-status-bar{
+                            display: flex;
+                            align-items: center;
+                            position: absolute;
+                            top: 0;
+                            right: 0;
+                            z-index: 3;
+                            font-size: 15px;
+                            transform: translate(-63px, 16px);
+                            .show-qr-code{
+                                position: relative;
+                                padding: 3px;
+                                box-shadow: inset 0 0 2px 1px rgba(255,255,255,.7);
+                                border-radius: 3px;
+                                margin-left: 5px;
+                                cursor: pointer;
+                                user-select: none;
+                                .tooltip-qr{
+                                    color: black;
+                                    font-size: 15px;
+                                    position: absolute;
+                                    background-color: rgb(255,255,255);
+                                    border-radius: 6.4px;
+                                    padding: 6px;
+                                    text-align: center;
+                                    transform: translate(-45px,-53px);
+                                    width: 101px;
+                                    opacity: 0;
+                                    z-index: -1;
+                                    transition: .7s ease;
+                                    box-shadow: 0 0 5px 0 rgba(0,0,0,.7);
+
+                                    &:after {
+                                        content: '';
+                                        position: absolute;
+                                        top: 0;
+                                        left: 50%;
+                                        width: 0;
+                                        height: 0;
+                                        border: 6px solid transparent;
+                                        border-top-color: rgb(255,255,255);
+                                        border-bottom: 0;
+                                        transform: translate(-5px, 27px);
+                                    }
+                                }
+                                &:hover{
+                                    .tooltip-qr{
+                                        opacity: 1;
+                                    }
+                                }
                             }
                         }
                     }

@@ -1,16 +1,45 @@
-const express = require("express")
-const bodyParser = require("body-parser")
-const cors = require("cors")
-const morgan = require("morgan")
-const server = express()
-const dbApi = require("./server_api/db_api")
-const channelApi = require("./server_api/channel_api")
+import express,{ Request,Response } from 'express'
+import { createServer } from 'http'
+import bodyParser from 'body-parser'
+import cors from 'cors'
+import morgan from 'morgan'
+import { Server } from 'socket.io'
+import dbApi from './server_api/db_api'
+import channelApi from './server_api/channel_api'
+import socketRoute from './soket_setting'
+import os from 'os'
 
-server.use(morgan("combined"))
-server.use(bodyParser.json())
-server.use(cors())
+const app = express()
+const server = createServer(app)
+const socketIO = new Server(server)
 
-server.use("/db", dbApi)
-server.use("/channel", channelApi)
+app.use(morgan("combined"))
+app.use(bodyParser.json())
+app.use(cors())
+app.set('socket',socketIO)
 
-server.listen(process.env.PORT || 9870)
+app.use('/get_remote_ip',(req,res) => {
+    const ipconfig = os.networkInterfaces()
+    let addressIp = ''
+    for (const devName in ipconfig) {
+        let netList = ipconfig[devName];
+        for (var i = 0; i < netList.length; i++) {
+            let { address, family, internal } = netList[i]
+            if (family === 'IPv4' && address !== '127.0.0.1' && !internal) {
+                addressIp = address;
+                break;
+            }
+        }
+    }
+    res.json({
+        currentIp:addressIp
+    })
+})
+
+app.use('/radio_remote',express.static(`${__dirname.replace('main','renderer')}/radio_remote`))
+
+app.use('/socket',socketRoute)
+app.use("/db", dbApi)
+app.use("/channel", channelApi)
+
+server.listen(9870)

@@ -10,6 +10,10 @@
     "noCollectData":"無收藏電台",
     "openFunctionList":"開啟功能列",
     "closeFunctionList":"關閉功能列",
+    "qrLink":"QRCode 連結",
+    "qrDesc":"請將裝置連接到與電腦相同的 WIFI 中",
+    "deviceConnected":"設備已連接",
+    "deviceNotConnect":"設備未連接",
     "radioProgramList":"廣播節目表",
     "currentProgram":"當前節目：{{ program }}",
     "addSuccess":"新增成功",
@@ -23,7 +27,7 @@
     "cancel":"取消",
     "doYouWantToDelete":"確定要刪除 {{itemName}} 電台嗎 ?",
     "doYouWantToCloseApplication":"確定要關閉應用程式嗎 ?",
-    "copyRight":"{{ person }} 版權所有 2022-02",
+    "copyRight":"{{ person }} 版權所有 2022-02 ~ 2022-05",
     "checkIsOnline":"請檢查您的網絡狀態是否已連接，然後嘗試點擊重新加載按鈕進行檢查",
     "redirectMessage":"網路已連接,現在將在 {{ seconds }} 後重新導向畫面",
     "retryButton":"重試",
@@ -31,5 +35,12 @@
     "radioDesc":"請點擊黑框內右上角的開關會打開功能列表，然後選擇要收聽的電台",
     "languageEn":"英文",
     "languageZh":"中文",
-    "version":"版本"
+    "version":"版本",
+    "remote":{
+        "currentPlay":"正在播放",
+        "voice":"音量",
+        "radioList":"廣播列表",
+        "noChannel":"無選擇電台",
+        "getRadioList":"取得廣播列表中"
+    }
 }

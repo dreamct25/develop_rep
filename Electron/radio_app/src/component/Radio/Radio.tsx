@@ -1,6 +1,7 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState,MutableRefObject } from "react";
 import { TFunction, useTranslation } from 'react-i18next'
 import VideoJs, { VideoJsPlayer } from 'video.js'
+import { io } from 'socket.io-client'
 import 'video.js/dist/video-js.min.css'
 import $ from '../../lib/Library'
 import { Container } from './styles'
@@ -9,6 +10,7 @@ import { postBackItemType, channelItemType, channelRankItemType, programListType
 import Loading from "../Loading/Loading";
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import AlertBageText from "../AlertBageText/AlertBageText";
+import QRCodeModal from "../QRCodeModal/QRCodeModal";
 
 const Radio: FunctionComponent<RadioProps> = ({ 
     routeProps,
@@ -31,6 +33,7 @@ const Radio: FunctionComponent<RadioProps> = ({
         singleRadioSelect,
         alertBageText,
         toggleAlertBageText,
+        currentIp,
     }, setInitState] = useState<initStateType>({
         player: null,
         radioList: [],
@@ -48,6 +51,7 @@ const Radio: FunctionComponent<RadioProps> = ({
         singleRadioSelect: {},
         alertBageText: '',
         toggleAlertBageText: false,
+        currentIp:'',
     })
 
     const [loadingState, setLoadingState] = useState<boolean>(false)
@@ -56,11 +60,19 @@ const Radio: FunctionComponent<RadioProps> = ({
 
     const [isKeyDown, setIsKeyDown] = useState<boolean>(false)
 
+    const [toggleQRCodeModal, setToggleQRCodeModal] = useState<boolean>(false)
+
     const [[currentDate, currentTime], setCurrentTime] = useState<string[]>($.formatDateTime({ formatDate: new Date(), formatType: 'yyyy-MM-ddTHH：mm：ss' }).split('T'))
 
-    const videoRef: React.MutableRefObject<HTMLVideoElement> = useRef<HTMLVideoElement>(null)
+    const videoRef: MutableRefObject<HTMLVideoElement> = useRef<HTMLVideoElement>(null)
 
-    const getDateTimer: React.MutableRefObject<any> = useRef<any>(null)
+    const connectDevice: MutableRefObject<boolean> = useRef<boolean>(false)
+
+    const getDateTimer: MutableRefObject<any> = useRef<any>(null)
+
+    const getReqTimer: MutableRefObject<any> = useRef<any>(null)
+
+    const getConnectDeviceTimer: MutableRefObject<any> = useRef<any>(null)
 
     const { t }: { t: TFunction<"translation", undefined> } = useTranslation()
 
@@ -318,6 +330,63 @@ const Radio: FunctionComponent<RadioProps> = ({
             })
 
             setInitState(initStates => ({ ...initStates, player: videoJs }))
+
+            const socketClient = io('ws://localhost:9870')
+
+            socketClient.on('setVoiceFromRemote',(e) => {
+                const { voiceVal } = e
+                videoJs.volume($.convert(voiceVal,'number') / 100)
+                setInitState(prevState => ({
+                    ...prevState,
+                    playerVoice:voiceVal
+                }))
+            })
+
+            socketClient.on('setPlayStateFromRemote',(e) => {
+                const { playState } = e
+                videoJs[!playState ? 'play' : 'pause']()
+                setPlayState(!playState)
+            })
+
+            socketClient.on('setChannelFromRemote',(e) => {
+                const { channel } = e
+                $.fetch({
+                    method: 'post',
+                    url: 'http://localhost:9870/channel/get_single_channel',
+                    headers: { "Content-Type": "application/json" },
+                    data: { selectChannelName: channel },
+                    beforePost: () => setLoadingState(true),
+                    successFn: ({ data }: { data: postBackItemType | string }) => {
+                        if (typeof data === 'object') {
+                            const { radioUrl, radioInfoList: [item] } = data
+                            videoJs.src({
+                                src: radioUrl,
+                                type: "application/x-mpegURL"
+                            })
+                            videoJs.play()
+                            setInitState(initState => ({
+                                ...initState,
+                                singleRadioSelect: item,
+                                currentChannel: channel
+                            }))
+                            setLoadingState(false)
+                        } else {
+                            setInitState(initState => ({ ...initState, currentChannel: channel }))
+                            setLoadingState(false)
+                        }
+    
+                    },
+                    errorFn: (err: any) => { console.log(err) }
+                })
+            })
+
+            socketClient.on('remoteIsStart',(e:{ isStart:boolean }) => {
+                const { isStart } = e
+                connectDevice.current = isStart
+
+                clearTimeout(getConnectDeviceTimer.current)
+                getConnectDeviceTimer.current = setTimeout(() => connectDevice.current = false,1002)         
+            })
         }
     }, [player])
 
@@ -325,11 +394,64 @@ const Radio: FunctionComponent<RadioProps> = ({
         setGetDateTimer(Object.keys(singleRadioSelect).length > 0)
     }, [singleRadioSelect])
 
+    const getCurrentIp:() => void = () => {
+        $.fetch({
+            method:'post',
+            url:'http://localhost:9870/get_remote_ip',
+            successFn:(data:any) => {
+                setInitState(prevState => ({
+                    ...prevState,
+                    currentIp:data.currentIp
+                }))
+            },
+            errorFn:() => {
+                console.log('err!')
+            }
+        })
+    }
+
     useEffect(() => {
+        if(currentIp){
+            clearTimeout(getReqTimer.current)
+            getReqTimer.current = setTimeout(() => 
+                $.fetch({
+                    method:'post',
+                    url:`http://${currentIp}:9870/socket/post_current_setting`,
+                    headers: { "Content-Type": "application/json" },
+                    data:{
+                        playerVoice,
+                        currentChannel,
+                        playState,
+                        language
+                    },
+                    successFn:(data:any) => {
+                        console.log(data)
+                    },
+                    errorFn:() => {
+                        console.log('err!')
+                    }
+                })
+            ,500)
+        }
+    },[currentChannel,playerVoice,playState,connectDevice.current,language])
+
+    useEffect(() => {
+        getCurrentIp()
         setMainInitStateStatus(mainInitState => ({ ...mainInitState, currentPath: routeProps.location.pathname }))
         getAllChannel()
         return () => setGetDateTimer(false)
     }, [])
+
+    if(connectDevice.current){
+        $.fetch({
+            method:'get',
+            url:`http://${currentIp}:9870/socket/check_remote_is_start`,
+            successFn:(data:any) => {},
+            errorFn:() => {
+                console.log('err!')
+            }
+        })
+    }
 
     $(window).on('keydown', whenKeyDown)
 
@@ -436,7 +558,15 @@ const Radio: FunctionComponent<RadioProps> = ({
                                     <div className={showSingleTooltip ? `tooltip-${language} active` : `tooltip-${language}`}>{formatLanguage(radioList.filter((item:channelItemType) => item.channel_title === currentChannel)[0].inCollect ? 'alreadyInCollection':'addToCollect')}</div>
                                 </div>
                             )}
-                            
+                            {currentChannel && (
+                                <div className="connect-status-bar">
+                                    {formatLanguage(connectDevice.current ? 'deviceConnected' : 'deviceNotConnect')}
+                                    <div className="show-qr-code" onClick={() => setToggleQRCodeModal(true)}>
+                                        <i className="fas fa-qrcode" />
+                                        <div className="tooltip-qr">{formatLanguage('qrLink')}</div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                         <div
                             className={showfilterRadioList ? "toggle-right-list active" : "toggle-right-list"}
@@ -493,6 +623,7 @@ const Radio: FunctionComponent<RadioProps> = ({
                     </div>
                 </div>
             </div>
+            {currentIp && (<QRCodeModal toggleModal={toggleQRCodeModal} renderText={formatLanguage('qrDesc')} setToggleQRCodeModal={setToggleQRCodeModal} value={`http://${currentIp}:9870/radio_remote`} />)}
             <AlertBageText text={alertBageText} toggleState={toggleAlertBageText} />
             <Loading loadingState={loadingState} />
         </Container>
