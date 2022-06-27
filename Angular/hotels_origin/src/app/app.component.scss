@@ -1,0 +1,105 @@
+.main{
+    position: relative;
+    user-select: none;
+    .header{
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background:linear-gradient(rgba(0,0,0,.7),rgba(10,10,10,.7),rgba(50,50,50,.7),rgba(50,50,50,.5),rgba(70,70,70,.3),transparent);
+        z-index: 30;
+        .title{
+            overflow: hidden;
+            margin-top: -8px;
+            h1{
+                opacity: 1;
+                transform: translateX(0px);
+                padding: 0 20px;
+                margin-bottom: 0;
+                color: white;
+                transition: .7s ease;
+            }
+            .title-toggle{
+                opacity: 0;
+                transform: translateX(-200px);
+            }
+        }
+        .search-switch{
+            margin:14px 0 8px 0;
+            position: relative;
+            min-height: 5vh;
+            .search-groups-outer{
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                opacity: 0;
+                transform: translateY(-200px);
+                transition: .7s ease;
+            }
+            .current-single-name{
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                opacity: 0;
+                color: white;
+                font-size: 25px;
+                text-align: center;
+                opacity: 0;
+                transform: translateY(-200px);
+                transition: .7s ease;
+            }
+            .single-name-toggle{
+                opacity: 1;
+                transform: translateY(-5px);
+            }
+            .search-toggle{
+                opacity: 1;
+                transform: translateY(0px);
+            }
+        }
+        
+    }
+    .collect-btn{
+        position: fixed;
+        top: 0;
+        right: 0;
+        padding: 2px 12px 7px 12px;
+        z-index: 35;
+        border-radius: 0 0 0 10px;
+        color: white;
+        cursor: pointer;
+    }
+}
+
+@media screen and (max-width:414px) {
+    .main{
+        .header{
+            .title{
+                margin-top: 6px;
+                text-align: center;
+                h1{
+                    font-size: 40px;
+                    transform: translateY(0px);
+                }
+                .title-toggle{
+                    opacity: 0;
+                    transform: translateY(50px);
+                }
+            }
+            .search-switch{
+                margin: 9px 0 8px 0;
+                .single-name-toggle{
+                    opacity: 1;
+                    transform: translateY(-50px);
+                }
+            }
+        }
+        .collect-btn{
+            padding: 10px 12px 7px 12px;
+        }
+    }
+}

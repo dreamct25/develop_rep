@@ -1,0 +1,24 @@
+<div class="main">
+  <div class="header">
+    <div class="row g-0 align-items-center">
+      <div class="col-md-2">
+        <div class="title">
+          <h1 [class.title-toggle]="currentSingleName !== null">Hotels</h1>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="search-switch">
+          <div class="search-groups-outer" [class.search-toggle]="currentSingleName === null">
+            <app-search-group></app-search-group>
+          </div>
+          <div class="current-single-name" [class.single-name-toggle]="currentSingleName !== null">
+            {{ currentSingleName }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <router-outlet></router-outlet>
+  <div class="collect-btn" (click)="toggleCollect = true">收藏旅館</div>
+  <app-collect [propsToggle]="toggleCollect" (postToggle)="toggleCollect = $event"></app-collect>
+</div>

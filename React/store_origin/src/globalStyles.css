@@ -1,0 +1,12 @@
+html{
+    background-image:url("https://unsplash.com/photos/Q9CkYF2IOzo/download?force=true&w=1920");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    min-height: 100vh;
+}
+
+body{
+    background-color: transparent;
+    text-align: unset;
+}

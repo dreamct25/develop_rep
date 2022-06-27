@@ -1,0 +1,930 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My resume</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <style src="text/css">
+        @charset "UTF-8";
+        /* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+        
+        html,
+        body,
+        div,
+        span,
+        applet,
+        object,
+        iframe,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        blockquote,
+        pre,
+        a,
+        abbr,
+        acronym,
+        address,
+        big,
+        cite,
+        code,
+        del,
+        dfn,
+        em,
+        img,
+        ins,
+        kbd,
+        q,
+        s,
+        samp,
+        small,
+        strike,
+        strong,
+        sub,
+        sup,
+        tt,
+        var,
+        b,
+        u,
+        i,
+        center,
+        dl,
+        dt,
+        dd,
+        ol,
+        ul,
+        li,
+        fieldset,
+        form,
+        label,
+        legend,
+        table,
+        caption,
+        tbody,
+        tfoot,
+        thead,
+        tr,
+        th,
+        td,
+        article,
+        aside,
+        canvas,
+        details,
+        embed,
+        figure,
+        figcaption,
+        footer,
+        header,
+        hgroup,
+        menu,
+        nav,
+        output,
+        ruby,
+        section,
+        summary,
+        time,
+        mark,
+        audio,
+        video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+        /* HTML5 display-role reset for older browsers */
+        
+        article,
+        aside,
+        details,
+        figcaption,
+        figure,
+        footer,
+        header,
+        hgroup,
+        menu,
+        nav,
+        section {
+            display: block;
+        }
+        
+        body {
+            line-height: 1;
+        }
+        
+        ol,
+        ul {
+            list-style: none;
+        }
+        
+        blockquote,
+        q {
+            quotes: none;
+        }
+        
+        blockquote:before,
+        blockquote:after,
+        q:before,
+        q:after {
+            content: "";
+            content: none;
+        }
+        
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .wrap {
+            max-width: 960px;
+            margin: 0 auto;
+            background-image: url(https://drive.google.com/uc?export=view&id=1FxrDh2_TMCDjMq33_WNVoqoEdC5joE2O);
+            background-repeat: no-repeat;
+            background-position: bottom center;
+            background-size: cover;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: black;
+            opacity: 0.8;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 99;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .header h1 {
+                margin-top: 2%;
+                margin-bottom: 10%;
+                text-align: center;
+            }
+        }
+        
+        .header h1 a {
+            display: block;
+            text-decoration: none;
+            color: white;
+            font-family: 微軟正黑體;
+            font-size: 30px;
+            padding: 20px 20px 24px 20px;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .header h1 a {
+                padding: 50px 20px 24px 20px;
+            }
+        }
+        
+        @media screen and (max-width: 414px) and (min-width: 320px) {
+            .header h1 a {
+                padding: 33px 20px 24px 20px;
+            }
+        }
+        
+        .header .navbar ul {
+            float: right;
+            margin-top: -48px;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .header .navbar ul {
+                float: none;
+            }
+        }
+        
+        .header .navbar ul li {
+            float: left;
+            padding: 0 10px 0px 10px;
+            position: relative;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .header .navbar ul li {
+                width: 33.3333%;
+                padding: 0;
+            }
+        }
+        
+        .header .navbar ul li a {
+            display: block;
+            padding: 0 10px 25px 10px;
+            text-decoration: none;
+            text-align: center;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 20px;
+            z-index: 20;
+            transition: all 1.5s;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .header .navbar ul li a {
+                padding-bottom: 12%;
+            }
+        }
+        
+        .header .navbar ul li a:hover {
+            transition: all 1.5s;
+            transform: scale(1.2, 1.2);
+            color: red;
+        }
+        
+        .header .navbar ul li:after {
+            content: "";
+            width: 0;
+            height: 3px;
+            background: red;
+            position: absolute;
+            top: 103%;
+            left: 50%;
+            transition: all 1.5s;
+        }
+        
+        .header .navbar ul li:hover:after {
+            left: 0%;
+            width: 100%;
+        }
+        
+        .list.active {
+            border-bottom: 3px solid red;
+            color: red !important;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .list.active {
+                border-bottom: none;
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .headerU {
+                transition: all 1s;
+                transform: scale(0.8);
+                top: -50px;
+                left: -100px;
+                right: -100px;
+            }
+        }
+        
+        @media screen and (max-width: 414px) and (min-width: 320px) {
+            .headerU {
+                transition: all 1s;
+                transform: scale(0.8);
+                top: -17px;
+                left: -50px;
+                right: -50px;
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .headerD {
+                transition: all 1s;
+                left: -50px;
+                right: -50px;
+            }
+        }
+        
+        @media screen and (max-width: 414px) and (min-width: 320px) {
+            .headerD {
+                transition: all 1s;
+                top: -17px;
+                left: -20px;
+                right: -20px;
+            }
+        }
+        
+        .banner {
+            margin: 257px 56px -400px 128px;
+            line-height: 6.5em;
+            text-align: center;
+            transform: rotate(45deg);
+        }
+        
+        .banner .banner-rol-fix .title-1 {
+            color: white;
+            padding-right: 82px;
+            font-size: 50px;
+            font-family: Arial, Helvetica, sans-serif;
+            opacity: 0;
+            transform: translateY(-150px);
+            transition: all 5s;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .banner .banner-rol-fix .title-1 {
+                margin: 88% -68% 0 -77%;
+            }
+        }
+        
+        @media screen and (max-width: 414px) and (min-width: 320px) {
+            .banner .banner-rol-fix .title-1 {
+                margin: 0% 4% 0 -89%;
+            }
+        }
+        
+        .banner .banner-rol-fix .title-2 {
+            color: white;
+            padding-left: 72px;
+            font-size: 50px;
+            font-family: Arial, Helvetica, sans-serif;
+            opacity: 0;
+            transform: translateY(150px);
+            transition: all 3s;
+            transition-delay: 3.5s;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .banner .banner-rol-fix .title-2 {
+                margin: -2% -31% 0 -45%;
+            }
+        }
+        
+        @media screen and (max-width: 414px) and (min-width: 320px) {
+            .banner .banner-rol-fix .title-2 {
+                margin: 16% -54% 0 -31%;
+            }
+        }
+        
+        .moveIn {
+            transform: translateY(0px) rotate(-45deg) !important;
+            opacity: 1 !important;
+        }
+        
+        .moveOut {
+            opacity: 0 !important;
+        }
+        
+        .moveIn-1 {
+            transform: translateY(0px) rotate(-45deg) !important;
+            opacity: 1 !important;
+        }
+        
+        .content {
+            background: rgba(0, 0, 0, 0.9);
+            transform: rotate(-7deg);
+            opacity: 0.8;
+            padding: 155px 2px 237px 65px;
+            margin: 600px -50px -320px -32px;
+            box-shadow: inset -5px -3px 18px grey;
+            z-index: 8;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .content {
+                padding-bottom: 45%;
+                margin-left: -10%;
+                margin-top: 87%;
+            }
+        }
+        
+        @media screen and (max-width: 414px) and (min-width: 320px) {
+            .content {
+                padding-bottom: 15%;
+                margin-right: -20%;
+                margin-left: -20%;
+                margin-top: 98%;
+            }
+        }
+        
+        .content .skill-rol-fix {
+            transform: rotate(7deg);
+        }
+        
+        .content .skill-rol-fix .skill {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 3s;
+        }
+        
+        .content .skill-rol-fix .skill h2 {
+            color: white;
+            float: right;
+            margin-top: -135px;
+            text-indent: -190px;
+            font-size: 50px;
+            font-weight: bold;
+            font-family: 微軟正黑體;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .content .skill-rol-fix .skill h2 {
+                margin-top: -10%;
+            }
+        }
+        
+        @media screen and (max-width: 414px) and (min-width: 320px) {
+            .content .skill-rol-fix .skill h2 {
+                margin-top: -15%;
+            }
+        }
+        
+        .content .skill-rol-fix .skill ul {
+            float: right;
+            margin-top: -65px;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .content .skill-rol-fix .skill ul {
+                float: none;
+            }
+        }
+        
+        @media screen and (max-width: 414px) and (min-width: 320px) {
+            .content .skill-rol-fix .skill ul {
+                float: none;
+            }
+        }
+        
+        .content .skill-rol-fix .skill ul li {
+            float: left;
+            width: 27.3333%;
+            margin: 0px 3px 21px 30px;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .content .skill-rol-fix .skill ul li {
+                width: 33.3333%;
+                margin-left: 11%;
+            }
+        }
+        
+        @media screen and (max-width: 414px) and (min-width: 320px) {
+            .content .skill-rol-fix .skill ul li {
+                width: 62%;
+                float: none;
+            }
+        }
+        
+        .content .skill-rol-fix .skill ul li h1 {
+            color: white;
+            font-size: 25px;
+            font-weight: bold;
+            font-family: 微軟正黑體;
+        }
+        
+        .content .skill-rol-fix .skill ul li p {
+            color: white;
+            margin-top: 15px;
+            font-family: 微軟正黑體;
+            font-size: 14px;
+            text-align: justify;
+            line-height: 1.5em;
+        }
+        
+        .skfadeIn {
+            opacity: 1 !important;
+            transform: translateY(0px) !important;
+        }
+        
+        .content-1 {
+            transform: rotate(7deg);
+            background: rgba(0, 0, 0, 0.6);
+            padding: 59px 25px 140px 25px;
+            margin: 367px -25px 49px -30px;
+            box-shadow: inset -5px -3px 18px grey;
+            z-index: 6;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .content-1 {
+                padding-bottom: 18%;
+                margin-left: -5%;
+            }
+        }
+        
+        @media screen and (max-width: 414px) and (min-width: 320px) {
+            .content-1 {
+                padding-bottom: 20%;
+                margin-right: -10%;
+                margin-left: -10%;
+                margin-top: 86%;
+            }
+        }
+        
+        .content-1 .content1-rol-fix {
+            transform: rotate(-7deg);
+        }
+        
+        .content-1 .content1-rol-fix .intst {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 3s;
+        }
+        
+        .content-1 .content1-rol-fix .intst h3 {
+            color: white;
+            font-weight: bold;
+            font-size: 50px;
+            font-family: Arial, Helvetica, sans-serif;
+            margin-bottom: 23px;
+            margin-left: 65px;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .content-1 .content1-rol-fix .intst h3 {
+                text-indent: -2%;
+            }
+        }
+        
+        @media screen and (max-width: 414px) and (min-width: 320px) {
+            .content-1 .content1-rol-fix .intst h3 {
+                text-indent: -12%;
+                margin-top: 5%;
+            }
+        }
+        
+        .content-1 .content1-rol-fix .intst p {
+            color: white;
+            font-size: 21px;
+            font-family: 微軟正黑體;
+            text-align: justify;
+            padding-left: 7%;
+            padding-right: 7%;
+            line-height: 1.5em;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .content-1 .content1-rol-fix .intst p {
+                margin-bottom: -4%;
+            }
+        }
+        
+        .intstfadeIn {
+            opacity: 1 !important;
+            transform: translateY(0px) !important;
+        }
+        
+        .profile {
+            background: rgba(0, 0, 0, 0.3);
+            transform: rotate(-7deg);
+            padding: 151px 2px 59px 30px;
+            margin: -2px -25px 174px -25px;
+            box-shadow: inset -5px -3px 18px grey;
+            z-index: 4;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .profile {
+                padding-bottom: 8%;
+                margin-left: -12%;
+                margin-right: -12%;
+            }
+        }
+        
+        @media screen and (max-width: 414px) and (min-width: 320px) {
+            .profile {
+                padding-bottom: 20%;
+                margin-right: -84%;
+                margin-left: -27%;
+                margin-top: -15%;
+            }
+        }
+        
+        .profile .profile-rol-fix {
+            transform: rotate(7deg);
+        }
+        
+        .profile .profile-rol-fix .profilemn {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 3s;
+        }
+        
+        .profile .profile-rol-fix .profilemn h4 {
+            color: white;
+            float: left;
+            margin-top: -50px;
+            text-indent: 100px;
+            font-size: 50px;
+            font-weight: bold;
+            font-family: 微軟正黑體;
+        }
+        
+        @media screen and (max-width: 414px) and (min-width: 320px) {
+            .profile .profile-rol-fix .profilemn h4 {
+                margin-left: 14%;
+                margin-top: -10%;
+            }
+        }
+        
+        .profile .profile-rol-fix .profilemn P {
+            color: white;
+            font-family: 微軟正黑體;
+            width: 40%;
+            padding-top: 9px;
+            padding-left: 100px;
+            line-height: 1.5em;
+            text-align: justify;
+        }
+        
+        @media screen and (max-width: 414px) and (min-width: 320px) {
+            .profile .profile-rol-fix .profilemn P {
+                text-align: justify;
+                margin: 0 2%;
+            }
+        }
+        
+        .profile .profile-rol-fix .profilemn img {
+            float: right;
+            margin-top: -280px;
+            margin-right: 175px;
+            border-radius: 109px;
+        }
+        
+        @media screen and (max-width: 414px) and (min-width: 320px) {
+            .profile .profile-rol-fix .profilemn img {
+                float: none;
+                margin-left: 23%;
+                margin-top: 3%;
+            }
+        }
+        
+        .profile .profile-rol-fix .profilemn ul {
+            float: right;
+            margin-right: 150px;
+            margin-top: -75px;
+        }
+        
+        @media screen and (max-width: 414px) and (min-width: 320px) {
+            .profile .profile-rol-fix .profilemn ul {
+                float: none;
+                margin-left: 24%;
+                margin-top: 4%;
+            }
+        }
+        
+        .profile .profile-rol-fix .profilemn ul li {
+            color: white;
+            font-size: 18px;
+            font-family: Arial, Helvetica, sans-serif;
+            margin-bottom: 8px;
+        }
+        
+        .profilemnfadeIn {
+            opacity: 1 !important;
+            transform: translateY(0px) !important;
+        }
+        
+        .cktop a {
+            height: 28px;
+            font-size: 30px;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            padding: 2px 8px 2px 8px;
+            position: fixed;
+            bottom: 8px;
+            right: 8px;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .cktop a:hover {
+            color: white;
+            background: black;
+            transition: all 1.5s;
+        }
+        
+        .ckIn a {
+            opacity: 1;
+            transition: all 1.5s;
+            transform: translateY(0px);
+        }
+        
+        .ckOut a {
+            opacity: 0;
+            transition: all 1.5s;
+            transform: translateY(50px);
+        }
+        
+        .footer h5 {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            padding-bottom: 52px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="main">
+            <div class="header">
+                <h1><a href="#">Chen Design</a></h1>
+                <div class="navbar">
+                    <ul>
+                        <li><a href="#skill" class="list">Skill</a></li>
+                        <li><a href="#hobby" class="list">Hobby</a></li>
+                        <li><a href="#profile" class="list" s>Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="banner" id="banner">
+                <div class="banner-rol-fix">
+                    <p class="title-1">Never Give Up It's My Motto</p>
+                    <p class="title-2">Welcome To My Resume</p>
+                </div>
+            </div>
+            <div class="content" id="skill">
+                <div class="skill-rol-fix">
+                    <div class="skill">
+                        <h2>Skill</h2>
+                        <ul>
+                            <li>
+                                <h1>HTML</h1>
+                                <p>基本運用相關標籤打出標題、內文並配合Ement加速Code撰寫速度，與添加使用Class、Id、及圖片高寬設定等。</p>
+                            </li>
+                            <li>
+
+                                <h1>CSS</h1>
+                                <p>基本從設定文字顏色樣式頁面排版，使用普通動畫文字漸變效果與套第三方API樣式，如Fontawesome、Pure等。</p>
+                            </li>
+                            <li>
+                                <h1>Javascrip</h1>
+                                <p>基本存取值Var、使用Id更改網頁內容，套用基礎動畫與計算，用判斷式與迴圈讀出Json內值，目前仍在學習中。</p>
+                            </li>
+                            <li>
+                                <h1>RWD</h1>
+                                <p>基本響應式撰寫，網頁排版自適應平板手機設備屏寬大小，並加入透過CSS加入更改隱藏或顯示內文樣式與變更。</p>
+                            </li>
+                            <li>
+                                <h1>Sass、Scss</h1>
+                                <p>基本的Sass、Scss撰寫，但目前是以Scss撰寫居多，或是建立相關知識庫併入CSS做使用，增加CSS管理的速度。</p>
+                            </li>
+                            <li>
+                                <h1>JQuery</h1>
+                                <p>基本觸發動畫、取消標籤原始屬性，套用基本第三方動畫API與API細部內容修改、如Swiper、Lightbox等。</p>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <p class="clear-fix"></p>
+            <div class="content-1" id="hobby">
+                <div class="content1-rol-fix">
+                    <div class="intst">
+                        <h3>Hobby</h3>
+                        <p>平常喜歡接觸新事物，興趣是心理學、電腦手機相關內容修改、程式內部Code研究、攝影、出門四處溜搭、旅行、偶爾也喜歡寫寫東西。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="profile" id="profile">
+                <div class="profile-rol-fix">
+                    <div class="profilemn">
+                        <h4>蔡秉宸</h4>
+                        <p>過去一直不知道自己要作什麼工作，大部分都是做服務業的工作，但後來接觸網頁前端設計Code後好像見到了不一樣的世界。目前雖然學的東西還不是很多也還不夠專精，期許自己能朝前端領域繼續鑽研並在職場中學到更新的技術，做出更好的作品。</p>
+                        <img src="https://drive.google.com/uc?export=view&id=1B3t1sGrCXUosm5ZLxD63pXi1E2UlXn1x" width="200" height="20" alt="">
+                        <ul>
+                            <li><i class="fal fa-map-marker-alt"></i>&nbspKaohsiung.TW</li>
+                            <li><i class="fal fa-mobile"></i>&nbsp0986656603</li>
+                            <li><i class="fal fa-mail-bulk"></i> h199410@gmail.com</li>
+                            <li><i class="fab fa-github"></i><a href="https://github.com/dreamct25/dreamct25.github.io" style="text-decoration: none;color: white;"> dreamct25</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="cktop">
+                <a href="#"><i class="fal fa-angle-up"></i></a>
+            </div>
+            <div class="footer">
+                <h5>Copyright © Chen All Rights Reserved.</h5>
+            </div>
+            <div class="clear-fix"></div>
+        </div>
+    </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            // header active animate
+            $(function() {
+                var tarPos = $(window).scrollTop();
+                $(window).scroll(function() {
+                    var tarScro = $(window).scrollTop();
+                    if (tarScro > tarPos) {
+                        $('.header').stop(true, false).removeClass('headerD').addClass('headerU');
+                    } else {
+                        $('.header').stop(true, false).removeClass('headerU').addClass('headerD');
+                    }
+                    tarPos = tarScro;
+                });
+            });
+            // banner animate
+            $(window).each(function() {
+                var winScro = $(window).scrollTop()
+                var winHeight = $(window).height()
+                $('.title-1').each(function() {
+                    var mPos = $(this).offset().top
+                    if ((winScro + winHeight) >= mPos) {
+                        $(this).addClass('moveIn')
+                    }
+                })
+            })
+            $(window).each(function() {
+                var winScro = $(window).scrollTop()
+                var winHeight = $(window).height()
+                $('.title-2').each(function() {
+                    var mPos = $(this).offset().top
+                    if ((winScro + winHeight) >= mPos) {
+                        $(this).addClass('moveIn-1')
+                    }
+                })
+            });
+            // navbar animate
+            $('.list').click(function(x) {
+                x.preventDefault();
+                var tar = $(this).attr('href');
+                var tarPos = $(tar).offset().top;
+                $('html,body').animate({
+                    scrollTop: tarPos
+                }, 1000)
+            });
+            // navbar active animate
+            $(window).scroll(function() {
+                var winScro = $(window).scrollTop()
+                $('.list').each(function() {
+                    var tar = $(this).attr('href')
+                    var tarPos = $(tar).offset().top
+                    var tarHeight = $(tar).outerHeight()
+                    if (tarPos - 1 <= winScro && (tarPos + tarHeight) > tarHeight) {
+                        $('.list').removeClass('active')
+                        $(this).addClass('active')
+                    } else {
+                        $(this).removeClass('active')
+                    }
+                })
+            })
+
+            // skill fadeIn animate
+            $(window).scroll(function() {
+                    var winScro = $(window).scrollTop()
+                    var winHeight = $(window).height()
+                    $('.skill').each(function() {
+                        var tarPos = $(this).offset().top
+                        if ((winScro + winHeight) >= tarPos) {
+                            $(this).addClass('skfadeIn')
+                        }
+                    })
+                })
+                // inrst fadeIn animate
+            $(window).scroll(function() {
+                    var winScro = $(window).scrollTop()
+                    var winHeight = $(window).height()
+                    $('.intst').each(function() {
+                        var tarPos = $(this).offset().top
+                        if ((winScro + winHeight) >= tarPos) {
+                            $(this).addClass('intstfadeIn')
+                        }
+                    })
+                })
+                // profilemn fadeIn animate
+            $(window).scroll(function() {
+                    var winScro = $(window).scrollTop()
+                    var winHeight = $(window).height()
+                    $('.profilemn').each(function() {
+                        var tarPos = $(this).offset().top
+                        if ((winScro + winHeight) >= tarPos) {
+                            $(this).addClass('profilemnfadeIn')
+                        }
+                    })
+                })
+                // cktop fadeIn Out animate
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 150) {
+                    $('.cktop').addClass('ckIn');
+                    $('.cktop').removeClass('ckOut');
+                } else {
+                    $('.cktop').addClass('ckOut');
+                    $('.cktop').removeClass('ckIn');
+                }
+            });
+            // cktop scrollTop animate
+            $('.cktop').click(function(z) {
+                z.preventDefault()
+                $('html,body').animate({
+                    scrollTop: 0
+                }, 4000)
+            })
+        })
+    </script>
+</body>
+
+</html>

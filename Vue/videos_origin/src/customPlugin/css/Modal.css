@@ -1,0 +1,156 @@
+/* 彈出視窗外框架 */
+
+.modal-alert,
+.modal-message {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    background: rgba(0, 0, 0, .7);
+    transition: 1s ease;
+}
+
+
+/* 彈出視窗外框架載入淡入淡出動畫 */
+
+.modal-toggle {
+    opacity: 1;
+}
+
+
+/* 彈出視窗本體架構設定 */
+
+.modal-alert .modal-alert-body,
+.modal-message .modal-message-body {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: 1px solid black;
+    box-shadow: 0 0 5px rgba(0, 0, 0, .7);
+    background: white;
+    border-radius: 10px;
+    width: 350px;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.1);
+    transition: .5s ease;
+}
+
+
+/* 彈出視窗本體架構淡入淡出動畫 */
+
+.modal-body-toggle {
+    opacity: 1 !important;
+    transform: translate(-50%, -50%) scale(1) !important;
+}
+
+
+/* 彈出視窗本體內部架構 */
+
+.modal-alert .modal-alert-body .modal-alert-header,
+.modal-message .modal-message-body .modal-message-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 7px 15px 4px 15px;
+    border-bottom: 1px solid black;
+}
+
+.modal-alert .modal-alert-body .modal-alert-header span,
+.modal-message .modal-message-body .modal-message-header span {
+    display: block;
+    font-size: 22px;
+}
+
+.modal-alert .modal-alert-body .modal-alert-header .close {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.modal-alert .modal-alert-body .modal-alert-header .close .line {
+    background-color: black;
+    width: 18px;
+    height: 3px;
+}
+
+.modal-alert .modal-alert-body .modal-alert-header .close .line:nth-of-type(1) {
+    transform: translate(0, 1px) rotate(45deg);
+}
+
+.modal-alert .modal-alert-body .modal-alert-header .close .line:nth-of-type(2) {
+    transform: translate(0, -2px) rotate(-45deg);
+}
+
+.modal-alert .modal-alert-body .modal-alert-content,
+.modal-message .modal-message-body .modal-message-content {
+    display: block;
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.modal-message .modal-message-body .modal-message-content {
+    padding: 30px 10px;
+}
+
+.modal-alert .modal-alert-body .modal-alert-footer {
+    display: flex;
+    border-top: 1px solid black;
+    overflow: hidden;
+    border-radius: 0 0 9px 9px;
+}
+
+.modal-alert .modal-alert-body .modal-alert-footer .cancel,
+.modal-alert .modal-alert-body .modal-alert-footer .confirm {
+    color: black;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: 1s ease;
+    box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, .7);
+    width: 100%;
+    position: relative;
+    transition: .7s ease;
+}
+
+.modal-alert .modal-alert-body .modal-alert-footer .cancel::before,
+.modal-alert .modal-alert-body .modal-alert-footer .confirm::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    right: 0;
+    width: 0;
+    height: 100%;
+    z-index: -1;
+    background-color: rgba(255, 255, 255, 0);
+    transition: .7s ease;
+}
+
+.modal-alert .modal-alert-body .modal-alert-footer .cancel:hover {
+    color: white;
+    box-shadow: inset 0 0 2px 1px rgba(255, 255, 255, .7);
+}
+
+.modal-alert .modal-alert-body .modal-alert-footer .cancel:hover::before {
+    background-color: rgba(255, 0, 0, 1);
+    left: 0;
+    width: 100%;
+}
+
+.modal-alert .modal-alert-body .modal-alert-footer .confirm:hover {
+    color: white;
+    box-shadow: inset 0 0 2px 1px rgba(255, 255, 255, .7);
+}
+
+.modal-alert .modal-alert-body .modal-alert-footer .confirm:hover::before {
+    background-color: rgba(0, 162, 255, 1);
+    left: 0;
+    width: 100%;
+}

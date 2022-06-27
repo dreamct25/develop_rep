@@ -1,0 +1,12 @@
+<div class="interactive-modal-outer-frame" [class.interactive-modal-outer-frame-active]="propsModalToggle">
+  <div class="interactive-modal-outer" [class.interactive-modal-outer-active]="propsModalToggle">
+    <div class="interactive-modal">
+      <div class="interactive-modal-header">{{ propsModalContent.msTitle }}</div>
+      <div class="interactive-modal-body">{{ propsModalContent.msContent }}</div>
+      <div class="interactive-modal-footer">
+        <div class="confirm-c" (click)="closeModal(true)">確定</div>
+        <div class="cancel-c" (click)="closeModal(false)">取消</div>
+      </div>
+    </div>
+  </div>
+</div>

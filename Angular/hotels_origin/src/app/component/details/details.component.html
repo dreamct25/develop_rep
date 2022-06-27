@@ -1,0 +1,110 @@
+<div class="container">
+  <div class="back-btn" [class.back-btn-toggle]="backBtnToggle" (click)="goBack()">返回</div>
+  <div class="single-item-outer" *ngFor="let item of getSingleData">
+    <div class="single-img-outer">
+      <div class="single-img" *ngIf="item.Picture1 !=''" [class.active]="currentIndex === 1 && haveOpen === true" [style.background-image]="'url('+ item.Picture1 +')'" (touchstart)="toggleImg(1,true)" (touchend)="toggleImg(1,false)" (mouseenter)="toggleImg(1,true)" (mouseleave)="toggleImg(1,false)">
+        <div class="single-img-inside-fram" [class.active]="currentIndex === 1 && haveOpen === true">
+          <span [class.active]="haveOpen === true">旅館圖</span>
+        </div>
+        <div class="single-img-desc" [class.single-img-desc-active]="currentIndex === 1 && haveOpen === true">
+          <span>{{ item.Picdescribe1 }}</span>
+        </div>
+      </div>
+      <div class="single-img" *ngIf="item.Picture2 !=''" [class.active]="currentIndex === 2 && haveOpen === true" [style.background-image]="'url('+ item.Picture2 +')'" (touchstart)="toggleImg(2,true)" (touchend)="toggleImg(2,false)" (mouseenter)="toggleImg(2,true)" (mouseleave)="toggleImg(2,false)">
+        <div class="single-img-inside-fram" [class.active]="currentIndex === 2 && haveOpen === true">
+          <span [class.active]="haveOpen === true">旅館圖</span>
+        </div>
+        <div class="single-img-desc" [class.single-img-desc-active]="currentIndex === 2 && haveOpen === true">
+          <span>{{ item.Picdescribe2 }}</span>
+        </div>
+      </div>
+      <div class="single-img" *ngIf="item.Picture3 !=''" [class.active]="currentIndex === 3 && haveOpen === true" [style.background-image]="'url('+ item.Picture3 +')'" (touchstart)="toggleImg(3,true)" (touchend)="toggleImg(3,false)" (mouseenter)="toggleImg(3,true)" (mouseleave)="toggleImg(3,false)">
+        <div class="single-img-inside-fram" [class.active]="currentIndex === 3 && haveOpen === true">
+          <span [class.active]="haveOpen === true">旅館圖</span>
+        </div>
+        <div class="single-img-desc" [class.single-img-desc-active]="currentIndex === 3 && haveOpen === true">
+          <span>{{ item.Picdescribe3 }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="single-content">
+      <div class="title">
+        <span>旅館簡介</span>
+        <div class="title-side-group">
+          <div class="mark-btn" (click)="goMap({ name:item.Name,px:item.Px,py:item.Py })">
+            <i class="fas fa-1x fa-map-marked-alt" ></i>
+          </div>
+          <div class="star-btn" [class.star-btn-active]="item.inCollect" (click)="addToCollect(getSingleData)">
+            <i class="fas fa-1x fa-star"></i>
+          </div>
+        </div>
+      </div>
+      <div class="description">{{ item.Description }}</div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="info-1">
+            <span>房價</span>
+            <div class="price">
+              <div *ngIf="item.Spec.length !== 0; else noPrice">
+                <div class="row g-0">
+                  <div class="col-md-6">
+                    <div class="price-left">
+                      <div class="common-price">
+                        <span>平日</span>
+                        <span *ngIf="item.CeilingPrice !== null else cnull">{{ item.CeilingPrice }}</span>
+                        <ng-template #cnull>
+                          <span>無資訊</span>
+                        </ng-template>
+                      </div>
+                      <div class="special-price">
+                        <span>低價</span>
+                        <span *ngIf="item.LowestPrice !== null else lnull">{{ item.LowestPrice }}</span>
+                        <ng-template #lnull>
+                          <span>無資訊</span>
+                        </ng-template>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="price-right">
+                      <span *ngFor="let price of item.Spec">{{ price }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <ng-template #noPrice>
+                <span>無資訊</span>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="info-2">
+            <span>車位</span>
+            <span>{{ item.Parkinginfo }}</span>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="info-3">
+            <span>地址</span>
+            <span>{{ item.Zipcode }} {{ item.Add }}</span>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="info-4">
+            <span>電話</span>
+            <span>{{ item.Tel }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="have-add-float-text-outer" [class.have-add-float-text-outer-active]="toggleFloatText">
+      <span>{{ item.inCollect ? "已加入收藏中":"已從收藏移除" }}</span>
+    </div>
+  </div>
+</div>
+<app-loading [propsHaveLoading]="haveLoading"></app-loading>
+<app-localtion-modal [propsLsModalContent]="lsObj" [propsLsModalToggle]="lsModalToggle" (postClose)="lsModalToggle = $event" ></app-localtion-modal>
+<app-alert-modal [propsModalToggle]="modalToggle" [propsModalContent]="msObj"></app-alert-modal>

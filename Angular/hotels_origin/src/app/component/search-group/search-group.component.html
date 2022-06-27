@@ -1,0 +1,42 @@
+<div class="row g-0 justify-content-center">
+  <div class="col-md-8">
+    <div class="search-group-outer" [formGroup]="valGroup" *ngIf="!rwdState; else rwdBoard">
+      <div class="search-bar" formGroupName="searchBar">
+        <input type="text" formControlName="searchVal" />
+        <div class="select-group-I">
+          <div class="select-type" (click)="openListI()">{{ selectTextI }}</div>
+          <div class="select-list" [class.select-list-toggle]="openListToggleI">
+            <div class="lists" [class.selected]="currentIndexI === int" *ngFor="let item of selectListItem;let int = index" (click)="selectListValI({columnText:item.selectName,columnName:item.selectColumn,currentIndex:int})">
+              <span>{{ item.selectName }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="select-group-II">
+          <div class="select-hotel-type" (click)="openListII()">{{ selectTextII }}</div>
+          <div class="select-list" [class.select-list-toggle]="openListToggleII">
+            <div class="lists" [class.selected]="currentIndexII === int" *ngFor="let item of hotelTypeItem;let int = index" (click)="selectListValII({columnText:item.selectName,columnName:item.selectVals,currentIndex:int})">
+              <span>{{ item.selectName }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="search-btn" (click)="searching()">搜尋</div>
+        <div class="check-boxs" (click)="checkBoxToggles()">
+          <div class="check-box" [class.check-box-toggle]="checkBoxToggle">
+            <i class="fas fa-check check-confirm" [class.check-toggle]="checkBoxToggle"></i>
+          </div>
+          <div class="check-label">含圖片</div>
+        </div>
+      </div>
+    </div>
+    <ng-template #rwdBoard>
+      <div class="search-group-outer" [formGroup]="valGroup">
+        <div class="search-bar" formGroupName="searchBar">
+          <input type="text" formControlName="searchVal" />
+          <div class="search-btn" (click)="searching()">搜尋</div>
+          <div class="filter-btn" (click)="openFilterBox(true)">篩選</div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>
+<app-filter-box [propsModalToggle]="modalToggle" [propsModalContent]="msObj" (postSelectListValI)="selectListValI($event)" (postSelectListValII)="selectListValII($event)" (postClose)="openFilterBox($event)" (postCheckBoxToggle)="checkBoxToggles($event)"></app-filter-box>

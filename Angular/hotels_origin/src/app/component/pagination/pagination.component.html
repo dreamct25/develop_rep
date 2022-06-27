@@ -1,0 +1,20 @@
+<nav class="pagination-outer" aria-label="Page navigation">
+  <ul class="pagination justify-content-center align-items-center">
+      <li class="page-item" [class.disabled]="!paginationObjProps.hasPrev">
+          <a class="page-link" [class.page-link-active]="paginationObjProps.hasPrev" href="/#" (click)="current($event,paginationObjProps.currentPage - 1)">
+              <span aria-hidden="true"><i class="far fa-chevron-double-left"></i></span>
+          </a>
+      </li>
+      <li
+        class="page-item"
+        *ngFor="let pages of paginationObjProps.pageTotalToArray"
+      >
+        <a class="page-link" [class.active]="paginationObjProps.currentPage == pages" href="#" (click)="current($event,pages)">{{ pages }}</a>
+      </li>
+      <li class="page-item" [class.disabled]="!paginationObjProps.hasNext">
+        <a class="page-link" [class.page-link-active]="paginationObjProps.hasNext" href="/#" (click)="current($event,paginationObjProps.currentPage + 1)">
+            <span aria-hidden="true"><i class="far fa-chevron-double-right"></i></span>
+        </a>
+      </li>
+  </ul>
+</nav>

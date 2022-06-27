@@ -1,0 +1,11 @@
+<div class="modal-c-outer-frame" [class.modal-c-outer-frame-active]="propsModalToggle">
+  <div class="modal-c-outer" [class.modal-c-outer-active]="propsModalToggle">
+    <div class="modal-c">
+      <div class="modal-c-header">{{ propsModalContent.msTitle }}</div>
+      <div class="modal-c-body">{{ propsModalContent.msContent }}</div>
+      <div class="modal-c-footer">
+        <div class="confirm-c" (click)="closeModal()">確定</div>
+      </div>
+    </div>
+  </div>
+</div>

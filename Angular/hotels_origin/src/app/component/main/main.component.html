@@ -1,0 +1,13 @@
+<div class="container-fluid">
+  <div *ngIf="dataOnlyTemp.length !== 0 else noData">
+    <app-render-item [propsData]="getPaginationParams!.renderItem" (idPost)="goSingleInfo($event)"></app-render-item>
+    <app-pagination [paginationObjProps]="getPaginationParams!.pageObj" (goCurrent)="renderPagination(dataOnlyTemp,$event)"></app-pagination>
+  </div>
+  <ng-template #noData>
+    <div *ngIf="!haveLoading" class="no-data">
+      查無資料，請重新搜尋
+    </div>
+  </ng-template>
+  <app-loading [propsHaveLoading]="haveLoading"></app-loading>
+  <app-alert-modal [propsModalToggle]="modalToggle" [propsModalContent]="msObj" (postClose)="modalToggle = $event"></app-alert-modal>
+</div>

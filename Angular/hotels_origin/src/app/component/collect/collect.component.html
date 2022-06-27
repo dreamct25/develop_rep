@@ -1,0 +1,103 @@
+<div class="collect-outer" [class.collect-outer-active]="propsToggle">
+  <div class="close-btn" (click)="closeCollect()">
+    <div class="line"></div>
+    <div class="line"></div>
+  </div>
+  <div class="collect-container">
+    <div class="collect-item-title">旅館收藏列表</div>
+    <div class="collect-item-list" *ngIf="dataLocalStorgeTemp.length !== 0; else noData">
+      <div class="collect-item" *ngFor="let item of dataLocalStorgeTemp;let int = index">
+        <div class="title">
+          <div class="title-left-group">
+            <span>{{ item.Name }}</span>
+          </div>
+          <div class="title-right-group">
+            <div class="details-btn" (click)="openDetails(item.Id)">詳細內容</div>
+            <div class="mark-btn" (click)="goMap({ name:item.Name,px:item.Px,py:item.Py })">
+              <i class="fas fa-1x fa-map-marked-alt"></i>
+            </div>
+            <div class="delete-btn" (click)="haveDeleteCollect(item.Name,item.Id)">
+              <i class="far fa-1x fa-trash-alt"></i>
+            </div>
+          </div>
+        </div>
+        <div class="collect-content-outer">
+          <div class="collect-content" [class.collect-content-active]="currentDetailsIdTemp.indexOf(item.Id) !== -1">
+            <div class="collect-img-outer">
+              <div class="collect-img" *ngIf="item.Picture1 !=''" [class.active]="currentId === item.Id && currentIndex === 1 && haveOpen === true" [style.background-image]="'url('+ item.Picture1 +')'" (touchstart)="toggleImg(item.Id,1,true)" (touchend)="toggleImg(item.Id,1,false)" (mouseenter)="toggleImg(item.Id,1,true)" (mouseleave)="toggleImg(item.Id,1,false)">
+                <div class="collect-img-inside-fram" [class.active]="currentId === item.Id && currentIndex === 1 && haveOpen === true">
+                  <span [class.active]="currentId === item.Id && haveOpen === true">旅館圖</span>
+                </div>
+                <div class="collect-img-desc" [class.collect-img-desc-active]="currentId === item.Id && currentIndex === 1 && haveOpen === true">
+                  <span>{{ item.Picdescribe1 }}</span>
+                </div>
+              </div>
+              <div class="collect-img" *ngIf="item.Picture2 !=''" [class.active]="currentId === item.Id && currentIndex === 2 && haveOpen === true" [style.background-image]="'url('+ item.Picture2 +')'" (touchstart)="toggleImg(item.Id,2,true)" (touchend)="toggleImg(item.Id,2,false)" (mouseenter)="toggleImg(item.Id,2,true)" (mouseleave)="toggleImg(item.Id,2,false)">
+                <div class="collect-img-inside-fram" [class.active]="currentId === item.Id && currentIndex === 2 && haveOpen === true">
+                  <span [class.active]="currentId === item.Id && haveOpen === true">旅館圖</span>
+                </div>
+                <div class="collect-img-desc" [class.collect-img-desc-active]="currentId === item.Id && currentIndex === 2 && haveOpen === true">
+                  <span>{{ item.Picdescribe2 }}</span>
+                </div>
+              </div>
+              <div class="collect-img" *ngIf="item.Picture3 !=''" [class.active]="currentId === item.Id && currentIndex === 3 && haveOpen === true" [style.background-image]="'url('+ item.Picture3 +')'" (touchstart)="toggleImg(item.Id,3,true)" (touchend)="toggleImg(item.Id,3,false)" (mouseenter)="toggleImg(item.Id,3,true)" (mouseleave)="toggleImg(item.Id,3,false)">
+                <div class="collect-img-inside-fram" [class.active]="currentId === item.Id && currentIndex === 3 && haveOpen === true">
+                  <span [class.active]="currentId === item.Id && haveOpen === true">旅館圖</span>
+                </div>
+                <div class="collect-img-desc" [class.collect-img-desc-active]="currentId === item.Id && currentIndex === 3 && haveOpen === true">
+                  <span>{{ item.Picdescribe3 }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="description">{{ item.Description }}</div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="info-1">
+                  <span>房價</span>
+                  <div class="price">
+                    <div *ngIf="item.Spec.length !== 0; else noPrice">
+                      <span *ngFor="let price of item.Spec">{{ price }}</span>
+                    </div>
+                    <ng-template #noPrice>
+                      <span>無資訊</span>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="collect-footer">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="info-2">
+                <span>車位</span>
+                <span>{{ item.Parkinginfo }}</span>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="info-3">
+                <span>地址</span>
+                <span>{{ item.Zipcode }} {{ item.Add }}</span>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="info-4">
+                <span>電話</span>
+                <span>{{ item.Tel }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <app-pagination [paginationObjProps]="getPaginationParams!.pageObj" (goCurrent)="renderPagination(dataLocalStorge,$event)"></app-pagination>
+    </div>
+    <ng-template #noData>
+      <div class="collect-item-list-no-data">
+        <div class="no-data">-- 目前無收藏旅館 --</div>
+      </div>
+    </ng-template>
+  </div>
+</div>
+<app-interactive-modal [propsModalContent]="iaObj" [propsModalToggle]="iaModalToggle" (postClose)="deleteCollect($event)"></app-interactive-modal>
+<app-localtion-modal [propsLsModalContent]="lsObj" [propsLsModalToggle]="lsModalToggle" (postClose)="lsModalToggle = $event" ></app-localtion-modal>

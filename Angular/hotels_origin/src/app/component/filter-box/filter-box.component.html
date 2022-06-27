@@ -1,0 +1,40 @@
+<div class="filter-box-outer-frame" [class.filter-box-outer-frame-height-active]="modalContentOuterHeightToggle" [class.filter-box-outer-frame-active]="modalContentOuterToggle">
+  <div class="filter-box-outer" [class.filter-box-outer-active]="modalContentToggle">
+    <div class="filter-box">
+      <div class="filter-box-header">{{ propsModalContent.msTitle }}</div>
+      <div class="filter-box-body">
+        <div class="select-group-I">
+            <div class="select-I-title">搜尋種類</div>
+            <div class="select-type" (click)="openListI()">{{ selectTextI }}</div>
+            <div class="select-list-outer">
+              <div class="select-list" [class.select-list-toggle]="openListToggleI">
+                <div class="lists" [class.selected]="currentIndexI === int" *ngFor="let item of propsModalContent.msItem.selectListItem;let int = index" (click)="selectListValI({columnText:item.selectName,columnName:item.selectColumn,currentIndex:int})">
+                  <span>{{ item.selectName }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="select-group-II">
+            <div class="select-II-title">旅館種類</div>
+            <div class="select-hotel-type" (click)="openListII()">{{ selectTextII }}</div>
+            <div class="select-list-outer">
+              <div class="select-list" [class.select-list-toggle]="openListToggleII">
+                <div class="lists" [class.selected]="currentIndexII === int" *ngFor="let item of propsModalContent.msItem.hotelTypeItem;let int = index" (click)="selectListValII({columnText:item.selectName,columnName:item.selectVals,currentIndex:int})">
+                  <span>{{ item.selectName }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        <div class="check-boxs" (click)="checkBoxToggles()">
+          <div class="check-box" [class.check-box-toggle]="checkBoxToggle">
+            <i class="fas fa-check check-confirm" [class.check-toggle]="checkBoxToggle"></i>
+          </div>
+          <div class="check-label">含圖片</div>
+        </div>
+      </div>
+      <div class="filter-box-footer">
+        <div class="confirm-c" (click)="closeModal()">確定</div>
+      </div>
+    </div>
+  </div>
+</div>

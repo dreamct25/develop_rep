@@ -1,0 +1,17 @@
+<div class="location-modal-outer-frame" [class.location-modal-outer-frame-active]="propsLsModalToggle">
+  <div class="location-modal-outer" [class.location-modal-outer-active]="propsLsModalToggle">
+    <div class="location-modal">
+      <div class="location-modal-header">
+        {{ propsLsModalContent.msTitle }}
+      <div class="close-btn" (click)="closeModal()">
+        <div class="line"></div>
+        <div class="line"></div>
+      </div>
+      </div>
+      <div class="location-modal-body">
+        <div class="full-path-btn" (click)="goMapDetailsPage(propsLsModalContent.msItem.detailsParams)">查看詳細資訊</div>
+        <iframe *ngIf="propsLsModalContent.msItem.url !==''" [src]="propsLsModalContent.msItem.url | safeUrl" frameborder="0"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
