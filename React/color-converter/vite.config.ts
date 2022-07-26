@@ -7,6 +7,6 @@ export default defineConfig({
     port:9806,
     host: '0.0.0.0'
   },
-  base:'./',
+  base:'/color_converter/',
   plugins: [react()]
 })

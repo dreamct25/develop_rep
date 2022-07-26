@@ -7,7 +7,7 @@ import './i18Init'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename='/color_converter'>
       <GlobalStyle />
       <App />
     </BrowserRouter>
