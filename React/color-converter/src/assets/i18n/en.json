@@ -1,0 +1,30 @@
+{
+    "zh":"Chinese",
+    "en":"English",
+    "nav":{
+        "converter":"Color Converter",
+        "picker":"Color Picker",
+        "card":"Color Card",
+        "imagePicker":"Image Color Picker"
+    },
+    "pages":{
+        "converter":{
+            "rgbToHex" : "Rgb To Hex",
+            "toHex" : "To Hex",
+            "previewColor": "Preview Color",
+            "toggleConverter": "Toggle Converter",
+            "hexToRGB": "Hex To RGB",
+            "toRGB" : "To RGB",
+            "copy" : "Copy",
+            "copied" : "Copied",
+            "operateDescTitle":"Operate Description",
+            "operateDescContent":"You can click right top of corner's button to toggle converter,converter have RGB to HEX and Hex to RGB respectively then you can click convert column's where is the bottom of button copy converted css code."
+        },
+        "imagePicker":{
+            "dragImgContent":"Drag image into the frame",
+            "cathColorTitle":"Get Color Info",
+            "cathMsg":"No color information",
+            "previewColor": "Preview Color"
+        }
+    }
+}

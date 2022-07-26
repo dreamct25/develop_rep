@@ -1,0 +1,30 @@
+{
+    "zh":"繁體中文",
+    "en":"英文",
+    "nav":{
+        "converter":"色碼轉換",
+        "picker":"色盤檢視",
+        "card":"色卡",
+        "imagePicker":"圖片色盤檢視"
+    },
+    "pages":{
+        "converter":{
+            "rgbToHex" : "Rgb 轉 Hex",
+            "toHex" : "轉換為 Hex",
+            "previewColor": "預覽顏色",
+            "toggleConverter": "切換轉換器",
+            "hexToRGB": "Hex 轉 RGB",
+            "toRGB" : "轉換為 RGB",
+            "copy" : "複製",
+            "copied" : "已複製",
+            "operateDescTitle":"操作說明",
+            "operateDescContent":"可透過右上角按鈕切換轉換器，轉換器分別為 RGB 轉 HEX 與 HEX 轉 RGB，並可點擊轉換欄下方的按鈕複製轉換完的 css 色號代碼。"
+        },
+        "imagePicker":{
+            "dragImgContent":"拖曳圖片至框中",
+            "cathColorTitle":"取得顏色資訊",
+            "cathMsg":"尚未取得顏色資訊",
+            "previewColor": "預覽顏色"
+        }
+    }
+}

@@ -1,0 +1,165 @@
+[{
+    "color_title":"紅",
+    "color_group":[
+        { "color_name":"maroon","color_hex":"#800000" },
+        { "color_name":"darkred","color_hex":"#8B0000" },
+        { "color_name":"brown","color_hex":"#A52A2A" },
+        { "color_name":"firebrick","color_hex":"#B22222" },
+        { "color_name":"crimson","color_hex":"#DC143C" },
+        { "color_name":"red","color_hex":"#FF0000" }
+    ]
+},{ 
+    "color_title":"桃紅~紛紅",
+    "color_group":[
+        { "color_name":"mediumvioletred","color_hex":"#C71585" },
+        { "color_name":"palevioletred","color_hex":"#D87093" },
+        { "color_name":"deeppink","color_hex":"#FF1493" },
+        { "color_name":"fuchsia(magenta)","color_hex":"#FF00FF" },
+        { "color_name":"hotpink","color_hex":"#FF69B4" },
+        { "color_name":"pink","color_hex":"#FFC0CB" },
+        { "color_name":"lightpink","color_hex":"#FFB6C1" },
+        { "color_name":"mistyrose","color_hex":"#FFE4E1" },
+        { "color_name":"lavenderblush","color_hex":"#FFF0F5" }
+    ]
+},{ 
+    "color_title":"紫",
+    "color_group":[
+        { "color_name":"indigo","color_hex":"#4B0082" },
+        { "color_name":"purple","color_hex":"#800080" },
+        { "color_name":"darkmagenta","color_hex":"#8B008B" },
+        { "color_name":"darkorchid","color_hex":"#9932CC" },
+        { "color_name":"blueviolet","color_hex":"#8A2BE2" },
+        { "color_name":"darkviolet","color_hex":"#9400D3" },
+        { "color_name":"slateblue","color_hex":"#6A5ACD" },
+        { "color_name":"mediumpurple","color_hex":"#9370DB" },
+        { "color_name":"mediumslateblue","color_hex":"#7B68EE" },
+        { "color_name":"mediumorchid","color_hex":"#BA55D3" },
+        { "color_name":"violet","color_hex":"#EE82EE" },
+        { "color_name":"plum","color_hex":"#DDA0DD" },
+        { "color_name":"thistle","color_hex":"#D8BFD8" },
+        { "color_name":"lavender","color_hex":"#E6E6FA" }
+    ]
+},{ 
+    "color_title":"褐~橘~米白",
+    "color_group":[
+        { "color_name":"saddlebrown","color_hex":"#8B4513" },
+        { "color_name":"sienna","color_hex":"#A0522D" },
+        { "color_name":"chocolate","color_hex":"#D2691E" },
+        { "color_name":"indianred","color_hex":"#CD5C5C" },
+        { "color_name":"rosybrown","color_hex":"#BC8F8F" },
+        { "color_name":"lightcorol","color_hex":"#F08080" },
+        { "color_name":"salmon","color_hex":"#FA8072" },
+        { "color_name":"lightsalmon","color_hex":"#FFA07A" },
+        { "color_name":"orangered","color_hex":"#FF4500" },
+        { "color_name":"tomato","color_hex":"#FF6347" },
+        { "color_name":"coral","color_hex":"#FF7F50" },
+        { "color_name":"darkorange","color_hex":"#FF8C00" },
+        { "color_name":"sandybrown","color_hex":"#F4A460" },
+        { "color_name":"peru","color_hex":"#CD853F" },
+        { "color_name":"tan","color_hex":"#D2B48C" },
+        { "color_name":"burlywood","color_hex":"#DEB887" },
+        { "color_name":"wheat","color_hex":"#F5DEB3" },
+        { "color_name":"moccasin","color_hex":"#FFE4B5" },
+        { "color_name":"navajowhite","color_hex":"#FFDEAD" },
+        { "color_name":"peachpuff","color_hex":"#FFDAB9" },
+        { "color_name":"bisque","color_hex":"#FFE4C4" },
+        { "color_name":"antuquewhite","color_hex":"#FAEBD7" },
+        { "color_name":"papayawhip","color_hex":"#FFEFD5" },
+        { "color_name":"cornsilk","color_hex":"#FFF8DC" },
+        { "color_name":"oldlace","color_hex":"#FDF5E6" },
+        { "color_name":"linen","color_hex":"#FAF0E6" },
+        { "color_name":"seashell","color_hex":"#FFF5EE" },
+        { "color_name":"snow","color_hex":"#FFFAFA" },
+        { "color_name":"floralwhite","color_hex":"#FFFAF0" },
+        { "color_name":"ivory","color_hex":"#FFFFF0" },
+        { "color_name":"mintcream","color_hex":"#F5FFFA" }
+    ]
+    },{ 
+        "color_title":"金~黃",
+        "color_group":[
+            { "color_name":"darkgoldenrod","color_hex":"#B8860B" },
+            { "color_name":"goldenrod","color_hex":"#DAA520" },
+            { "color_name":"gold","color_hex":"#FFD700" },
+            { "color_name":"yellow","color_hex":"#FFFF00" },
+            { "color_name":"darkkhaki","color_hex":"#BDB76B" },
+            { "color_name":"khaki","color_hex":"#F0E68C" },
+            { "color_name":"palegoldenrod","color_hex":"#EEE8AA" },
+            { "color_name":"beige","color_hex":"#F5F5DC" },
+            { "color_name":"lemonchiffon","color_hex":"#FFFACD" },
+            { "color_name":"lightgoldenrodyellow","color_hex":"#FAFAD2" },
+            { "color_name":"lightyellow","color_hex":"#FFFFE0" }
+        ]
+    },{ 
+        "color_title":"綠",
+        "color_group":[
+            { "color_name":"darkslategray","color_hex":"#2F4F4F" },
+            { "color_name":"darkolivegreen","color_hex":"#556B2F" },
+            { "color_name":"olive","color_hex":"#808000" },
+            { "color_name":"darkgreen","color_hex":"#006400" },
+            { "color_name":"forestgreen","color_hex":"#228B22" },
+            { "color_name":"seagreen","color_hex":"#2E8B57" },
+            { "color_name":"green(teal)","color_hex":"#008080" },
+            { "color_name":"lightseagreen","color_hex":"#20B2AA" },
+            { "color_name":"madiumaquamarine","color_hex":"#66CDAA" },
+            { "color_name":"mediumseagreen","color_hex":"#3CB371" },
+            { "color_name":"darkseagreen","color_hex":"#8FBC8F" },
+            { "color_name":"yellowgreen","color_hex":"#9ACD32" },
+            { "color_name":"limegreen","color_hex":"#32CD32" },
+            { "color_name":"lime","color_hex":"#00FF00" },
+            { "color_name":"chartreuse","color_hex":"#7FFF00" },
+            { "color_name":"lawngreen","color_hex":"#7CFC00" },
+            { "color_name":"greenyellow","color_hex":"#ADFF2F" },
+            { "color_name":"mediumspringgreen","color_hex":"#00FA9A" },
+            { "color_name":"springgreen","color_hex":"#00FF7F" },
+            { "color_name":"lightgreen","color_hex":"#90EE90" },
+            { "color_name":"palegreen","color_hex":"#98F898" },
+            { "color_name":"aquamarine","color_hex":"#7FFFD4" },
+            { "color_name":"honeydew","color_hex":"#F0FFF0" }
+        ]
+    },{ 
+        "color_title":"藍",
+        "color_group":[
+            { "color_name":"midnightblue","color_hex":"#191970" },
+            { "color_name":"navy","color_hex":"#000080" },
+            { "color_name":"darkblue","color_hex":"#00008B" },
+            { "color_name":"darkslateblue","color_hex":"#483D8B" },
+            { "color_name":"mediumblue","color_hex":"#0000CD" },
+            { "color_name":"royalblue","color_hex":"#4169E1" },
+            { "color_name":"dodgerblue","color_hex":"#1E90FF" },
+            { "color_name":"cornflowerblue","color_hex":"#6495ED" },
+            { "color_name":"deepskyblue","color_hex":"#00BFFF" },
+            { "color_name":"lightskyblue","color_hex":"#87CEFA" },
+            { "color_name":"lightsteelblue","color_hex":"#B0C4DE" },
+            { "color_name":"lightblue","color_hex":"#ADD8E6" },
+            { "color_name":"steelblue","color_hex":"#4682B4" },
+            { "color_name":"darkcyan","color_hex":"#008B8B" },
+            { "color_name":"cadetblue","color_hex":"#5F9EA0" },
+            { "color_name":"darkturquoise","color_hex":"#00CED1" },
+            { "color_name":"mediumturquoise","color_hex":"#48D1CC" },
+            { "color_name":"turquoise","color_hex":"#40E0D0" },
+            { "color_name":"skyblue","color_hex":"#87CECB" },
+            { "color_name":"powderblue","color_hex":"#B0E0E6" },
+            { "color_name":"paleturquoise","color_hex":"#AFEEEE" },
+            { "color_name":"lightcyan","color_hex":"#E0FFFF" },
+            { "color_name":"azure","color_hex":"#F0FFFF" },
+            { "color_name":"aliceblue","color_hex":"#F0F8FF" },
+            { "color_name":"aqua(cyan)","color_hex":"#00FFFF" }
+        ]
+    },{ 
+        "color_title":"黑~灰~白",
+        "color_group":[
+            { "color_name":"black","color_hex":"#000000" },
+            { "color_name":"dimgray","color_hex":"#696969" },
+            { "color_name":"gray","color_hex":"#808080" },
+            { "color_name":"slategray","color_hex":"#708090" },
+            { "color_name":"lightslategray","color_hex":"#778899" },
+            { "color_name":"darkgray","color_hex":"#A9A9A9" },
+            { "color_name":"silver","color_hex":"#C0C0C0" },
+            { "color_name":"lightgray","color_hex":"#D3D3D3" },
+            { "color_name":"gainsboro","color_hex":"#DCDCDC" },
+            { "color_name":"whitesmoke","color_hex":"#F5F5F5" },
+            { "color_name":"ghostwhite","color_hex":"#F8F8FF" },
+            { "color_name":"white","color_hex":"#FFFFFF" }
+        ]
+    }
+]
