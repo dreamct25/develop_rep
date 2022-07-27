@@ -1,6 +1,6 @@
 {
-    "zh":"Chinese",
-    "en":"English",
+    "zh":"Chinese（TW）",
+    "en":"English（US）",
     "nav":{
         "converter":"Color Converter",
         "picker":"Color Picker",
@@ -24,6 +24,9 @@
             "dragImgContent":"Drag image into the frame",
             "cathColorTitle":"Get Color Info",
             "cathMsg":"No color information",
+            "previewColor": "Preview Color"
+        },
+        "colorPicker":{
             "previewColor": "Preview Color"
         }
     }

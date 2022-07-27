@@ -1,6 +1,6 @@
 {
-    "zh":"繁體中文",
-    "en":"英文",
+    "zh":"中文（台灣）",
+    "en":"英文（US）",
     "nav":{
         "converter":"色碼轉換",
         "picker":"色盤檢視",
@@ -24,6 +24,9 @@
             "dragImgContent":"拖曳圖片至框中",
             "cathColorTitle":"取得顏色資訊",
             "cathMsg":"尚未取得顏色資訊",
+            "previewColor": "預覽顏色"
+        },
+        "colorPicker":{
             "previewColor": "預覽顏色"
         }
     }

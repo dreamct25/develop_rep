@@ -4,7 +4,7 @@ import { Container,initStateType } from '.'
 
 const ColorPicker:FC = ():JSX.Element => {
 
-    const { $,PickerUtils } = useContext(NewContext)
+    const { $,PickerUtils,formatLanguage } = useContext(NewContext)
 
     const [{
         width,
@@ -167,7 +167,6 @@ const ColorPicker:FC = ():JSX.Element => {
     }
   
     const updateCanvas:(e:MouseEvent) => void = e => {
-        // console.log(inner)
         let triTemp:any;
         // get mouse pos
         const x = e.clientX - innerRef.current!.offsetLeft;
@@ -235,8 +234,6 @@ const ColorPicker:FC = ():JSX.Element => {
             hslVal:`HSL：${PickerUtils.rgbToHsl(choiceR,choiceG,choiceB).fomat<string>('toElement')}`
         }))
 
-        $('body').styles('set','background-color',`rgba(${choiceR},${choiceG},${choiceB},.5)`)
-
         circle(ctxCRef.current!, x, y, 10, {stroke: '#fff', lineWidth: 3, fill: choiceColor});
     }
 
@@ -256,8 +253,6 @@ const ColorPicker:FC = ():JSX.Element => {
         }))
     },[parent.current])
 
-    useEffect(():() => void => () => $('body').styles('remove','background-color',''),[])
-
     return (
         <Container>
             <div className="picker" ref={parent}></div>
@@ -265,6 +260,9 @@ const ColorPicker:FC = ():JSX.Element => {
               <div>RGB：{rgbVal}</div>
               <div>Hex：{hexVal}</div>
               <div dangerouslySetInnerHTML={{ __html:hslVal }}></div>
+            </div>
+            <div className="color-preview" style={{ backgroundColor: rgbVal }}>
+                <div className="color-preview-frame">{formatLanguage('pages.colorPicker.previewColor')}</div>
             </div>
         </Container>
     )

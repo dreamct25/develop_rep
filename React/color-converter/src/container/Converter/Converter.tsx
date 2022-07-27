@@ -43,24 +43,14 @@ const Converter:FC = ():JSX.Element => {
         const currentVal = target.value;
 
         if (inputName === 'inHex_HexVal') {
-            try {
-                const [R, G, B] = PickerUtils.hexToRgb(target.value)!.split(',')
-                setInitState(prevState => ({
-                    ...prevState,
-                    inHex_RVal: R,
-                    inHex_GVal: G,
-                    inHex_BVal: B,
-                    inHex_HexVal: target.value
-                }))
-            } catch (err) {
-                setInitState(prevState => ({
-                    ...prevState,
-                    inHex_RVal: '0',
-                    inHex_GVal: '0',
-                    inHex_BVal: '0',
-                    inHex_HexVal: '#000000',
-                }))
-            }
+            const [R, G, B] = PickerUtils.hexToRgb(target.value)!.split(',')
+            setInitState(prevState => ({
+                ...prevState,
+                inHex_RVal: R,
+                inHex_GVal: G,
+                inHex_BVal: B,
+                inHex_HexVal: target.value
+            }))
         } else {
             if (currentVal.split('')[0] === '0') {
                 const strTemp = currentVal.split('')

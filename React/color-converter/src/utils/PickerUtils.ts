@@ -33,9 +33,12 @@ class PickerUtils {
 
     hexToRgb(hex:string):(string | null) {
         const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)!;
-        const [,R,G,B]:string[] = result
-
-        return result ? `${parseInt(R, 16)},${parseInt(G, 16)},${parseInt(B, 16)}` : null
+        if(result !== null){
+            const [,R,G,B]:string[] = result
+            return `${parseInt(R, 16)},${parseInt(G, 16)},${parseInt(B, 16)}`
+        } else {
+            return '0,0,0'
+        }
     }
 }
 
