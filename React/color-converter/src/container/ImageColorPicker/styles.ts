@@ -3,6 +3,7 @@ import { containerType } from '.'
 
 const container:containerType = styled.div`
     align-self: center;
+    margin-top: 10px;
     .area-outer{
         display: grid;
         grid-template-columns: 70vw 20vw;

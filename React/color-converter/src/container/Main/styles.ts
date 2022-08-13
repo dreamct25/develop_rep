@@ -145,6 +145,13 @@ const container:containerType = styled.div`
         min-height: 100vh;
         max-width: 1270px;
         margin: 0 auto;
+        .footer{
+            margin: 30px 0;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            text-shadow: 0 0 2px rgba(0,0,0,.7);
+        }
     }
 `
 

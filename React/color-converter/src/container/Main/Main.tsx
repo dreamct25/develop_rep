@@ -78,6 +78,7 @@ const Main:FC = ():JSX.Element => {
                     <Route path="/" element={<Navigate replace={true} to={'/converter'} />} />
                     {$.maps(routerItem,({ path,component }:{ path:string,component:FC },index:number) => <Route key={index} path={path} element={createElement(component)} />)}
                 </Routes>
+                <div className="footer">&copy; CopyRight By Alex Chen</div>
             </div>
         </Container>
     )
