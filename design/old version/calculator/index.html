@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+</head>
+<style type="text/css">
+    html {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(120deg, rgb(0, 0, 0), rgba(0, 0, 0, .9), rgba(0, 0, 0, .8), rgba(0, 0, 0, .7));
+        background-repeat: no-repeat;
+    }
+    
+    html body {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+    }
+    
+    html body .wrap {
+        max-width: 960px;
+        margin: 0 auto;
+    }
+    
+    html body .wrap .header h1 {
+        text-align: center;
+        color: white;
+    }
+    
+    html body .wrap .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        min-height: 85vh;
+    }
+    
+    @media screen and (max-width: 768px) {
+        html body .wrap .container {
+            min-height: 70vh;
+        }
+    }
+    
+    @media screen and (max-width: 414px) {
+        html body .wrap .container {
+            min-height: 76vh;
+        }
+    }
+    
+    html body .wrap .container .main {
+        overflow: hidden;
+        width: 350px;
+        background: linear-gradient(120deg, rgb(0, 0, 0), rgba(20, 20, 20), rgba(40, 40, 40), rgba(60, 60, 60));
+        border-radius: 10px;
+        box-shadow: inset 0 0 0.7px 0.7px rgba(255, 255, 255, 0.3), 0 0 12px rgba(255, 255, 255, .7);
+    }
+    
+    html body .wrap .container .main .row {
+        display: flex;
+    }
+    
+    html body .wrap .container .main .row .col {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+    }
+    
+    html body .wrap .container .main .display-outer {
+        color: white;
+        text-align: right;
+        padding: 45px 20px 20px 20px;
+        border-radius: 10px 10px 0 0;
+        position: relative;
+    }
+    
+    html body .wrap .container .main .display-outer .display-num-outer {
+        overflow: hidden;
+        width: 310px;
+    }
+    
+    html body .wrap .container .main .display-outer .display-num-outer .display-num {
+        display: block;
+        color: white;
+        font-size: 45px;
+        transform: translateY(50px);
+        opacity: 0;
+        transition: 1s ease;
+    }
+    
+    html body .wrap .container .main .btns-outer {
+        padding: 10px;
+    }
+    
+    html body .wrap .container .main .btns-outer .row .col .btns {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        width: 85px;
+        height: 70.5px;
+        color: white;
+        background-color: rgb(40, 40, 40);
+        border: 0.7px solid rgba(255, 255, 255, .7);
+        box-shadow: inset 0 0 0 0 rgba(255, 255, 255, .7);
+        font-size: 30px;
+        transition: .3s ease;
+        cursor: pointer;
+        user-select: none;
+        border-radius: 50%;
+        margin: 5px;
+    }
+    
+    html body .wrap .container .main .btns-outer .row .col .zero {
+        width: 56%;
+        border-radius: 0 0 0 10px;
+        border-radius: 55px;
+    }
+    
+    html body .wrap .container .main .btns-outer .row .col .equal {
+        border-radius: 0 0 10px 0;
+        border-radius: 50%;
+    }
+    
+    html body .wrap .container .main .btns-outer .row .col .btn-active {
+        color: black;
+        background-color: rgb(255, 255, 255);
+        box-shadow: inset 0 0 3px 0.7px rgba(0, 0, 0, .7), 0 0 7px 0px rgba(255, 255, 255, .7);
+    }
+    
+    html body .wrap .container .main .display-outer .display-num-outer .display-num-on {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+    
+    html body .wrap .container .main .btns-outer .row .col .power {
+        transition: .7s ease;
+    }
+    
+    html body .wrap .container .main .btns-outer .row .col .power-link {
+        background-color: white;
+        color: rgb(40, 40, 40);
+        box-shadow: inset 0 0 3px 0.7px rgba(0, 0, 0, .7), 0 0 7px 0 rgba(255, 255, 255, .7);
+    }
+    
+    html body .wrap .container .main .display-outer .icon-group {
+        display: flex;
+        font-size: 10px;
+        top: 0;
+        left: 0;
+        color: white;
+        position: absolute;
+        padding: 3px 0px 0px 5px;
+    }
+    
+    html body .wrap .container .main .display-outer .icon-group .icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        margin: 8px 0px 5px 7px;
+    }
+    
+    html body .wrap .container .main .display-outer .icon-group .icon:nth-of-type(1) {
+        background-color: rgb(187, 0, 0);
+    }
+    
+    html body .wrap .container .main .display-outer .icon-group .icon:nth-of-type(2) {
+        background-color: rgb(209, 178, 0);
+    }
+    
+    html body .wrap .container .main .display-outer .icon-group .icon:nth-of-type(3) {
+        background-color: rgb(42, 211, 0);
+    }
+    
+    html body .wrap .footer {
+        color: white;
+        text-align: center;
+    }
+</style>
+
+<body>
+    <div class="wrap">
+        <div class="header">
+            <h1>Calculator</h1>
+        </div>
+        <div class="container">
+            <div class="main">
+                <div class="display-outer">
+                    <div class="icon-group">
+                        <div class="icon"><i class="fal fa-times"></i>
+                        </div>
+                        <div class="icon"><i class="fal fa-minus"></i>
+                        </div>
+                        <div class="icon"><i class="fal fa-expand-alt"></i>
+                        </div>
+                    </div>
+                    <div class="display-num-outer">
+                        <span class="display-num">0</span>
+                    </div>
+                </div>
+                <div class="btns-outer">
+                    <div class="row">
+                        <div class="col">
+                            <div class="btns btn-another power"><i class="fal fa-power-off"></i></div>
+                            <div class="btns btn-another ac">AC</div>
+                            <div class="btns btn-another back"><i class="fas fa-backspace"></i></div>
+                            <div class="btns count" data-math="/">&divide;</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="btns" data-num="7">7</div>
+                            <div class="btns" data-num="8">8</div>
+                            <div class="btns" data-num="9">9</div>
+                            <div class="btns count" data-math="*">&times;</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="btns" data-num="4">4</div>
+                            <div class="btns" data-num="5">5</div>
+                            <div class="btns" data-num="6">6</div>
+                            <div class="btns count" data-math="-">&ndash;</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="btns" data-num="1">1</div>
+                            <div class="btns" data-num="2">2</div>
+                            <div class="btns" data-num="3">3</div>
+                            <div class="btns count" data-math="+">+</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="btns zero" data-num="0">0</div>
+                            <div class="btns smpoint" data-num="." data-type=".">·</div>
+                            <div class="btns equal count" data-math="=">=</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <h4>&copy&nbspCopyright by Chen</h4>
+        </div>
+    </div>
+</body>
+<script>
+    const querySelectors = classTemp => document.querySelector(classTemp)
+    const querySelectorAlls = classTemp => document.querySelectorAll(classTemp)
+    const viewer = querySelectors('.display-num');
+    let stayArray = [];
+    let stayValue = "";
+
+    function inputItems() {
+        btnAnimate(this)
+        if (this.className.split(" ").indexOf("btn-another") != -1) return
+        const mathIconItem = ["-", "+", "*", "/"]
+        if (stayArray.length >= 3 && this.dataset.math == "=") countCenter(mathIconItem)
+        if (this.dataset.math != undefined && this.dataset.math != "=") {
+            if (stayValue != "") stayArray.push(stayValue)
+            if (stayArray.length == 0 && this.dataset.math == "-") {
+                stayArray.push(this.dataset.math)
+            } else if (stayArray.length >= 1) {
+                stayArray.push(this.dataset.math)
+                dataTrans(mathIconItem)
+            }
+        } else if (this.dataset.num != undefined) {
+            if (stayValue != "") stayValue = ""
+            stayArray.push(this.dataset.num)
+            dataTrans(mathIconItem)
+
+        }
+    }
+
+    function btnAnimate(element) {
+        if (element.className.split(" ").indexOf("power") != -1) return
+        element.classList.add("btn-active")
+        setTimeout(() => element.classList.remove("btn-active"), 300)
+    }
+
+    function dataTrans(mathIconItem) {
+        let matchWithIcon = []
+        let hasMatchIcon = []
+        stayArray.forEach(icon => {
+            mathIconItem.forEach(key => {
+                if (icon == key) {
+                    hasMatchIcon = key
+                    matchWithIcon.push(icon)
+                }
+            })
+        })
+        let showStr = stayArray.join().split(hasMatchIcon)
+        viewer.textContent = matchWithIcon.length == 0 ? stayArray.join("") : showText(showStr, showStr.length)
+    }
+
+    function showText(showStr, currentLength) {
+        let outPutText = ""
+        if (currentLength <= 2) {
+            if (showStr[1] == "") {
+                outPutText = textTrans(showStr[0])
+            } else if (showStr[1] != "") {
+                outPutText = textTrans(showStr[1])
+            }
+        } else {
+            if (showStr[0] == "" && showStr[2] == "") {
+                outPutText = `-${textTrans(showStr[1])}`
+            } else if (showStr[2] != "") {
+                outPutText = textTrans(showStr[2])
+            }
+        }
+        return outPutText
+    }
+
+    function textTrans(text) {
+        let newText = ""
+        newText = text.replace(/,/g, "")
+        return newText
+    }
+
+    function countCenter(mathIcon) {
+        let newStayArray = []
+        let currentMatchIconTemp = []
+        mathIcon.forEach(key => {
+            let matches = stayArray.indexOf(key)
+            if (matches != -1) {
+                let transString = stayArray.join("")
+                transString.split(stayArray[matches]).forEach(key => newStayArray.push(textTrans(key)))
+                currentMatchIconTemp.push(stayArray[matches])
+            }
+        })
+        currentMatchIconTemp.forEach((key, index) => {
+            if (index == (currentMatchIconTemp.length - 1)) equalCenter(newStayArray, key)
+        })
+    }
+
+    function equalCenter(newStayArray, currentMatchIcon) {
+        let newStayArrayTemp = newStayArray
+        if (newStayArray.length >= 3) {
+            newStayArrayTemp = []
+            let count = newStayArray.length == 3 ? 1 : 2
+            for (let x = count; x < newStayArray.length; x++) {
+                x == 1 ? newStayArrayTemp.push(`-${newStayArray[x]}`) : newStayArrayTemp.push(newStayArray[x])
+            }
+        }
+        finallEqual(newStayArrayTemp, currentMatchIcon)
+    }
+
+    function finallEqual(newStayArrayTemp, currentMatchIcon) {
+        let filterEqual = []
+        const matchIconEqual = [{
+            icon: "+",
+            equals: Number(newStayArrayTemp[0]) + Number(newStayArrayTemp[1])
+        }, {
+            icon: "-",
+            equals: Number(newStayArrayTemp[0]) - Number(newStayArrayTemp[1])
+        }, {
+            icon: "*",
+            equals: Number(newStayArrayTemp[0]) * Number(newStayArrayTemp[1])
+        }, {
+            icon: "/",
+            equals: Number(newStayArrayTemp[0]) / Number(newStayArrayTemp[1])
+        }]
+        filterEqual = matchIconEqual.filter(key => key.icon == currentMatchIcon)
+        filterEqual.forEach(key => {
+            stayValue = key.equals
+            viewer.textContent = key.equals
+            setTimeout(() => stayArray = [], 200)
+        })
+    }
+
+    function clearAll() {
+        stayArray = []
+        stayValue = 0
+        viewer.textContent = stayValue
+    }
+
+    function deleteNum() {
+        if (stayValue != "") {
+            let stayValueArray = stayValue.toString().split("")
+            stayValueArray.splice((stayValueArray.length - 1), 1)
+            stayValue = stayValueArray.length == 0 ? "0" : stayValueArray.join("")
+            viewer.textContent = stayValue
+        } else {
+            stayArray.splice((stayArray.length - 1), 1)
+            viewer.textContent = stayArray.length == 0 ? "0" : stayArray.join("")
+        }
+
+    }
+
+    function powerToggle() {
+        this.classList.toggle("power-link")
+        querySelectors(".display-num").classList.toggle("display-num-on")
+        console.log(this.className)
+        if (this.className.split(" ").indexOf("power-link") == -1) {
+            setTimeout(() => {
+                stayValue = ""
+                stayArray = []
+                viewer.textContent = "0"
+            }, 390)
+            querySelectors(".back").removeEventListener("click", deleteNum)
+            querySelectors(".ac").removeEventListener("click", clearAll)
+            querySelectorAlls(".btns").forEach(key => key.removeEventListener("click", inputItems))
+        } else {
+            querySelectors(".back").addEventListener("click", deleteNum)
+            querySelectors(".ac").addEventListener("click", clearAll)
+            querySelectorAlls(".btns").forEach(key => key.addEventListener("click", inputItems))
+        }
+
+    }
+
+    querySelectors(".power").addEventListener("click", powerToggle)
+</script>
+
+</html>

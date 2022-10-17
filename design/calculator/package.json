@@ -1,0 +1,26 @@
+{
+  "name": "calculator-ts",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "parcel index.pug --port=9555 --open",
+    "build": "parcel build index.pug --no-source-maps --dist-dir build --public-url ../",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@parcel/transformer-pug": "^2.7.0",
+    "@parcel/transformer-sass": "^2.7.0",
+    "parcel": "^2.7.0",
+    "typescript": "^4.8.4"
+  },
+  "browserslist": [
+    "> 0.1%",
+    "Chrome >= 48",
+    "Firefox >= 20",
+    "iOS >= 9"
+  ],
+  "dependencies": {}
+}

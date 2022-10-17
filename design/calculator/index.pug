@@ -1,0 +1,59 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible",content="IE=edge")
+    meta(name="viewport",content="width=device-width, initial-scale=1.0")
+    title="Calculator"
+    link(rel="stylesheet",href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css",integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p",crossorigin="anonymous")
+  body
+    div(class="wrap")
+        div(class="header")
+            h1 Calculator
+        div(class="container")
+            div(class="main")
+                div(class="display-outer")
+                    div(class="icon-group")
+                        each val in ["fal fa-times","fal fa-minus","fal fa-expand-alt"]
+                            div(class="icon")
+                                i(class=val)
+                    div(class="display-num-outer")
+                        span(class="display-num") 0
+                div(class="btns-outer")
+                    div(class="row")
+                        div(class="btns power")
+                            i(class="fal fa-power-off")
+                        div(class="btns ac") AC
+                        div(class="btns back")
+                            i(class="fas fa-backspace")
+                        div(class="btns",data-math="/")
+                            span &divide;
+                    div(class="row")
+                        each val,index in [7,8,9,'']
+                            if index != 3
+                                div(class="btns",data-num=val) #{val}
+                            else
+                                div(class="btns",data-math="*")
+                                    span &times;
+                    div(class="row")
+                        each val,index in [4,5,6,'']
+                            if index != 3
+                                div(class="btns",data-num=val) #{val}
+                            else
+                                div(class="btns",data-math="-")
+                                    span &ndash;
+                            
+                    div(class="row")
+                        each val,index in [1,2,3,'']
+                            if index != 3
+                                div(class="btns",data-num=val) #{val}
+                            else
+                                div(class="btns",data-math="+")
+                                    span +
+                    div(class="row")
+                        div(class="btns zero",data-num="0") 0
+                        div(class="btns smpoint",data-num=".",data-type=".") 
+                            span .
+                        div(class="btns equal",data-math="=")
+                            span =
+    script(type="module",src="./index.ts")
