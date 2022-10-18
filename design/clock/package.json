@@ -2,9 +2,17 @@
   "name": "clock-ts",
   "version": "1.0.0",
   "description": "",
+  "source":"index.pug",
+  "targets":{
+    "index":{
+      "distDir": "build",
+      "publicUrl": "../",
+      "sourceMap": false
+    }
+  },
   "scripts": {
-    "start": "parcel index.pug --port=9947 --open",
-    "build": "parcel build index.pug --no-source-maps --dist-dir build --public-url ../",
+    "start": "parcel --port=9947 --open",
+    "build": "parcel build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
