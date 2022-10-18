@@ -1,0 +1,42 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible",content="IE=edge")
+    meta(name="viewport",content="width=device-width, initial-scale=1.0")
+    title="World Clock"
+    link(rel="stylesheet",href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css",integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p",crossorigin="anonymous")
+  body
+    div(class="wrap")
+        div(class="header")
+            h1(class="title") World Clock
+        div(class="main")
+            div(class="clock-outer-fram")
+                div(class="clock-outer")
+                    div(class="clock")
+                        div(class="point-icon-outer")
+                            i(class="fas fa-compact-disc point-icon")
+                        each str in ['XII','I','II','III','IV','V','VI','VII','VIII','IX','X','XI']
+                            div(class="num") #{str}
+                        each str in ['seconds','minute','hour']
+                            div(class=`line ${str}`)
+            div(class="show-text-group")
+                span(class="city-show")
+                span(class="time-show-day")
+                span(class="time-show")
+            div(class="select-group")
+            div(class="loading-outer")
+                div(class="loading")
+                    svg(class="fsg",width="100%",height="100%")
+                        defs
+                            linearGradient(id="a1",x1="0%",y1="0%",x2="100%",y2="100%")
+                                stop(offset="10%",stop-color="rgb(0,162,250)")
+                                stop(offset="50%",stop-color="rgb(0,90,250)",stop-opacity=".5")
+                                stop(offset="70%",stop-color="rgb(0,0,0)",stop-opacity="0")
+                                stop(offset="90%",stop-color="rgb(0,0,0)",stop-opacity="0")
+                                stop(offset="100%",stop-color="rgb(0,0,0)",stop-opacity="0")
+                        circle(cx="100",cy="100",r="80",stroke-width="6",stroke="url(#a1)",fill="none")
+                    div(class="loading-text") Loading
+        div(class="footer")
+            h6 &copy; Copyright By Alex Chen
+    script(type="module",src="./index.ts")

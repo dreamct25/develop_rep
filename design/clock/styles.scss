@@ -1,0 +1,395 @@
+html {
+    background-image: url('https://unsplash.com/photos/YJIH8vK0qFc/download?force=true&w=1920');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    .wrap{
+        margin: 0 auto;
+        max-width: 960px;
+        .header{
+            margin-top: 10px;
+            font-style: italic;
+            font-size: 22px;
+            .title{
+                text-align: center;
+                color: white;
+                opacity: 0;
+                transform: translateY(-100px);
+                transition: 1s ease;
+                text-shadow: 0 2px 2px rgba(0, 0, 0, .7);
+                &.title-in{
+                    /* 標題滑入動畫 */
+                    opacity: 1;
+                    transform: translateY(0px);
+                    transition: 1s ease;
+                }
+            }
+        }
+        .main{
+            .clock-outer-fram{
+                 /* 定位鐘面於中間 */
+                display: flex;
+                justify-content: center;
+                .clock-outer{
+                    /* 時鐘外框架 */
+                    margin-top: 20px;
+                    width: 400px;
+                    height: 400px;
+                    border: 6px solid white;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    position: relative;
+                    opacity: 0;
+                    transform: translateY(240px) rotate(-360deg);
+                    transition: 1s ease;
+                    box-shadow: 
+                        inset 0 0 7px 1px rgba(0, 0, 0, .7),
+                        inset 0 0 5px 1px rgb(255, 255, 255, .9),
+                        0 0 1px 3px rgb(255, 255, 255, .9),
+                        0 0 10px 2px rgba(0, 0, 0, .7);
+
+                    @media screen and (max-width: 768px) {
+                        width: 350px;
+                        height: 350px;
+                    }
+
+                    &.clock-outer-in{
+                        /* 時鐘外框架滑入動畫 */
+                        opacity: 1;
+                        transform: translateY(0px) rotate(0deg);
+                        transition: 1s ease;
+                    }
+
+                    .clock {
+                        width: 100%;
+                        height: 100%;
+                        position: relative;
+                        backdrop-filter: blur(3px);
+
+                        .point-icon-outer {
+                            /* 軸心外框架樣式 */
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%) rotate(45deg);
+                            z-index: 1;
+
+                            .point-icon {
+                                /* 軸心樣式 */
+                                font-size: 20px;
+                                color: white;
+                                text-shadow: 0 0 5px rgba(0, 0, 0, .8);
+                            }
+                        }
+
+                        .num {
+                            /* 鐘面上文字樣式 */
+                            position: absolute;
+                            transform: translate(-50%, -50%);
+                            font-size: 30px;
+                            color: white;
+                            text-shadow: 0 2px 2px rgba(0, 0, 0, .7);
+
+                            $clock-num-pos-array:(
+                                
+                                2: (top:8%,left:50%), /* 定位鐘面上 XII 文字位置 */
+                                3: (top:15%,left:70%), /* 定位鐘面上 I 文字位置 */
+                                4: (top:30%,left:85%), /* 定位鐘面上 II 文字位置 */
+                                5: (top:50%,left:92%), /* 定位鐘面上 III 文字位置 */
+                                6: (top:70%,left:85%), /* 定位鐘面上 IV 文字位置 */
+                                7: (top:85%,left:70%), /* 定位鐘面上 V 文字位置 */
+                                8: (top:92%,left:50%), /* 定位鐘面上 VI 文字位置 */
+                                9: (top:85%,left:30%), /* 定位鐘面上 VII 文字位置 */
+                                10: (top:70%,left:15%), /* 定位鐘面上 VIII 文字位置 */
+                                11: (top:50%,left:8%), /* 定位鐘面上 IX 文字位置 */
+                                12: (top:30%,left:15%), /* 定位鐘面上個 X 文字位置 */
+                                13: (top:15%,left:30%), /* 定位鐘面上 XI 文字位置 */
+                            );
+
+                            @each $key,$value in $clock-num-pos-array {
+                                &:nth-of-type(#{$key}) {
+                                    top: map-get($value ,top);
+                                    left: map-get($value ,left);
+                                }  
+                            }                          
+                        }
+                        
+                        .line {
+                            /* 每根針樣式 */
+                            position: absolute;
+                            width: 100%;
+                            height: 100%;
+
+                            &.seconds{
+                                &::after {
+                                    /* 秒針樣式 */
+                                    content: '';
+                                    width: 1%;
+                                    height: 48%;
+                                    background-color: white;
+                                    border-radius: 10px 10px;
+                                    position: absolute;
+                                    bottom: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, 0%);
+                                    box-shadow: 0 0 5px rgba(255, 255, 255, .7);
+                                }
+                            }
+
+                            &.minute{
+                                &::after {
+                                    /* 分針樣式 */
+                                    content: '';
+                                    width: 2%;
+                                    height: 35%;
+                                    background-color: white;
+                                    border-radius: 10px 10px;
+                                    position: absolute;
+                                    bottom: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, 0%);
+                                    box-shadow: 0 0 5px rgba(255, 255, 255, .7);
+                                }
+                            }
+
+                            &.hour{
+                                &::after {
+                                    /* 時針樣式 */
+                                    content: '';
+                                    width: 3%;
+                                    height: 28%;
+                                    background-color: white;
+                                    border-radius: 10px 10px;
+                                    position: absolute;
+                                    bottom: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, 0%);
+                                    box-shadow: 0 0 5px rgba(255, 255, 255, .7);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .show-text-group{
+                .city-show{
+                    display: block;
+                    text-align: center;
+                    font-size: 40px;
+                    color: white;
+                    font-style: italic;
+                    text-shadow: 0 2px 2px rgba(0, 0, 0, .7);
+                    margin-top: 35px;
+                    opacity: 0;
+                    transform: translateY(-10px);
+                    transition: 1s ease;
+
+                    &.city-show-in{
+                        opacity: 1;
+                        transform: translateY(0px);
+                    }
+                }
+
+                .time-show-day {
+                    /* 星期樣式 */
+                    display: block;
+                    text-align: center;
+                    font-size: 25px;
+                    color: white;
+                    font-style: italic;
+                    text-shadow: 0 2px 2px rgba(0, 0, 0, .7);
+                    margin: 20px 0;
+                    opacity: 0;
+                    transform: translateY(-30px);
+                    transition: 1s ease;
+
+                    &.time-show-day-in{
+                        opacity: 1;
+                        transform: translateY(0px);
+                    }
+                }
+                
+                .time-show {
+                    /* 日期樣式 */
+                    display: block;
+                    text-align: center;
+                    font-size: 25px;
+                    color: white;
+                    font-style: italic;
+                    text-shadow: 0 2px 2px rgba(0, 0, 0, .7);
+                    margin-bottom: 55px;
+                    opacity: 0;
+                    transform: translateY(-60px);
+                    transition: 1s ease;
+
+                    &.time-show-in{
+                        opacity: 1;
+                        transform: translateY(0px);
+                    }
+                }
+            }
+
+            .select-group{
+                width: 110px;
+                position: fixed;
+                bottom:-353px;
+                right:0;
+                color:white;
+                text-align: center;
+                transition: .7s ease;
+
+                @media screen and (max-width: 768px) {
+                    bottom:-353px;
+                }
+
+                &.active{
+                    bottom: 0;
+                }
+
+                .select-outer{
+                    margin: 5px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    backdrop-filter: blur(10px);
+                    -webkit-backdrop-filter: blur(10px);
+                    border-radius: 5px;
+                    box-shadow: 0 0 3px 0 rgba(255, 255, 255, .7);
+                    overflow: hidden;
+
+                    .select-area{
+                        border-radius: 5px 5px 0 0;
+                        padding: 5px 0 8px 0;
+                        cursor: pointer;
+                        user-select: none;
+                        box-shadow: 0 1px 0 0 rgba(255, 255, 255, .7);
+                    }
+
+                    .select-list{
+                        border-radius: 0 0 5px 5px;
+                        overflow-x:hidden;
+                        overflow-y: scroll;
+                        height: 0px;
+                        transition: .7s ease;
+
+                        &::-webkit-scrollbar {
+                            width: 3px;
+                            border-radius: 50%;
+                        }
+
+                        &::-webkit-scrollbar-thumb {
+                            background-color: rgba(255, 255, 255, 0.7);
+                        }
+
+                        .options{
+                            cursor: pointer;
+                            user-select: none;
+                            padding: 5px 5px 8px 5px;
+                            box-shadow: inset 0 0 2px 1px rgba(0, 0, 0, 0);
+                            transition: .7s ease;
+
+                            &.active{
+                                box-shadow: inset 0 0 2px 1px rgba(0, 0, 0, .7);
+                                background-color: white;
+                                color: black;
+                            }
+                        }
+
+                        &.list-toggle{
+                            height: 200px;
+                        }
+                    }
+                }
+
+                .toggle-bar-btn{
+                    margin:0 5px 7px 5px;
+                    border-radius: 5px;
+                    padding: 5px 0 8px 5px;
+                    cursor: pointer;
+                    user-select: none;
+                    backdrop-filter: blur(10px);
+                    -webkit-backdrop-filter: blur(10px);
+                    box-shadow: 0 0 3px 0 rgba(255, 255, 255, .7);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    transition: .7s ease;
+
+                    i{
+                        font-size: 20px;
+                        margin: 0 10px;
+                        transform: rotate(0deg);
+                        transition: .7s ease;
+                    }
+
+                    &.active{
+                        margin:0 5px 0px 5px;
+
+                        i{
+                            transform: rotate(-180deg);
+                        }
+                    }
+                }
+            }
+
+            .loading-outer{
+                position: fixed;
+                top: 0;
+                right: 0;
+                left: 0;
+                bottom: 0;
+                backdrop-filter: blur(5px);
+                -webkit-backdrop-filter: blur(5px);
+                background-color: rgba(0, 0, 0, .3);
+                opacity: 0;
+                z-index: -1;
+                transition: .7s ease;
+
+                .loading{
+                    svg{
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        width: 200px;
+                        height: 198px;
+                        transform:translate(-50%,-50%) rotate(0deg);
+                        animation: loadingFram 1s linear infinite;
+                    }
+                    
+                    @keyframes loadingFram {
+                        0%{
+                            transform:translate(-50%,-50%) rotate(0deg);
+                        }
+                        100%{
+                            transform:translate(-50%,-50%) rotate(360deg);
+                        }
+                    }
+
+                    .loading-text{
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform:translate(-50%,-50%);
+                        color: white;
+                        font-size: 18px;
+                    }
+                }
+
+                &.active{
+                    opacity: 1;
+                    z-index: 10;
+                }
+            }
+        }
+        .footer{
+            h6{
+                font-size: 16px;
+                color: white;
+                text-align: center;
+            }
+        }
+    }
+}
