@@ -51,7 +51,7 @@ const initalRightBarItem:(data:string[]) => void = data => {
     })
 }
 
-const toggleBar = () => {
+const toggleBar:() => void = () => {
     const findClass = $('.select-group').attr('class')
     const props = !$.includes(findClass,'active') ? 'addClass':'removeClass'
     $('.select-group')[props]('active')
@@ -83,10 +83,7 @@ const selectCity:(listIndex:number,optionIndex:number,path:string) => void = (li
         method:'get',
         url:`https://worldtimeapi.org/api/timezone/${path}`,
         beforePost:()=> $('.loading-outer').addClass('active'),
-        successFn:({ data }) => {
-            console.log(data)
-            timeSet(data!.raw_offset,path.split('/')[path.split('/').length - 1].replace(/_/g,' '))
-        },
+        successFn:({ data }) => timeSet(data!.raw_offset,path.split('/')[path.split('/').length - 1].replace(/_/g,' ')),
         excuteDone:() => setTimeout(() => $('.loading-outer').removeClass('active'),1500),
         errorFn:(err) => $.console('log',err.statusText)
     })
