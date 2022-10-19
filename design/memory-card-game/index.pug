@@ -1,0 +1,36 @@
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible",content="IE=edge")
+    meta(name="viewport",content="width=device-width, initial-scale=1.0")
+    title="Memory Card Game"
+    link(rel="stylesheet",href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css",integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p",crossorigin="anonymous")
+  body
+    div(class="header")
+        h1 Memory Card Game
+    div(class="card-frame")
+        each value in ['dog','cat','squirrel','rabbit','alicorn','whale','dove','dragon']
+            div(class="card",data-target=`${value}`)
+                div(class="card-front")
+                    i(class=`fad fa-${value} fa-3x`)
+                div(class="card-back")
+                    i(class="fal fa-star fa-3x")
+            div(class="card",data-target=`${value}`)
+                div(class="card-front")
+                    i(class=`fad fa-${value} fa-3x`)
+                div(class="card-back")
+                    i(class="fal fa-star fa-3x")
+    div(class="footer")
+        h3 &copy; CopyRight By Alex Chen
+    div(class="modal")
+        div(class="modal-body")
+            div(class="modal-header")
+                h2(class="header-text")
+                span(class="close")
+                    span(class="fork")
+                    span(class="fork")
+            div(class="modal-content")
+            div(class="modal-footer")
+                div(class="cancel")
+                div(class="again")
+    script(type="module",src="./index.ts")
