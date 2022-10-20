@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <title>Canvas</title>
+</head>
+<style>
+    html {
+        background-image: url('https://unsplash.com/photos/XFCei-F4mjg/download?force=true&w=1920');
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+    }
+    
+    .wrap {
+        max-width: 960px;
+        margin: 0 auto;
+    }
+    
+    .header {
+        text-align: center;
+        color: white;
+        font-size: 25px;
+        font-style: italic;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: 1s ease;
+        text-shadow: 0 2px 2px rgba(0, 0, 0, .7);
+    }
+    
+    .header-in {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+    
+    .draw-panel-outer {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .draw {
+        background-image: url('https://unsplash.com/photos/3Om4DHcaAc0/download?force=true&w=1920');
+        background-repeat: no-repeat;
+        background-position: right center;
+        background-size: cover;
+        border-radius: 10px;
+        opacity: 0;
+        transform: scale(0.5);
+        transition: 1s ease;
+        box-shadow: inset 0 0 5px 1px rgba(255, 255, 255, .7), 0 0 4px 2px rgba(55, 55, 55, .7), 0 0 3px 1px rgba(55, 55, 55, .7), 0 0 2px 0 rgba(55, 55, 55, .7);
+    }
+    
+    .draw-in {
+        opacity: 1;
+        transform: scale(1);
+    }
+    
+    label {
+        margin: 20px 0px 20px 0px;
+        text-shadow: 0 1px 1px rgba(255, 255, 255, .5);
+    }
+    
+    input {
+        margin: 20px 0px 20px 0px;
+    }
+    
+    select {
+        font-size: 18px;
+        border-radius: 5px;
+        margin: 20px 0px 20px 0px;
+        box-shadow: inset 0 0 1px 1px rgba(255, 255, 255, .7), 0 0 4px 1px rgba(255, 255, 255, .5);
+    }
+    
+    .color-text {
+        transition: 1s ease;
+    }
+    
+    .clear {
+        display: block;
+        font-style: italic;
+        padding: 3px 13px 3px 6px;
+        color: white;
+        border-radius: 20px 8px 20px 8px;
+        background-color: rgba(0, 0, 0, .5);
+        text-shadow: 0 1px 2px rgba(255, 255, 255, .7);
+        box-shadow: inset 0 0 1px 1px rgba(255, 255, 255, .7), 0 0 4px 1px rgba(255, 255, 255, .5);
+        cursor: pointer;
+    }
+    
+    .group-icon {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        padding: 2px 20px 2px 20px;
+        transform: translate(-25%, -99%);
+        color: white;
+        border-radius: 5px 5px 0 0;
+        background-color: rgba(0, 0, 0, .7);
+        cursor: pointer;
+    }
+    
+    .icon {
+        padding: 0 1px 0 1px;
+        transform: rotate(0deg);
+        transition: .5s ease;
+    }
+    
+    .icon-active {
+        transform: rotate(180deg);
+    }
+    
+    .group {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        position: fixed;
+        bottom: -4%;
+        left: 10%;
+        right: 10%;
+        border-radius: 5px 5px 0 0;
+        transform: translate(0%, 100%);
+        color: white;
+        font-size: 18px;
+        z-index: 1;
+        background-color: rgba(0, 0, 0, .7);
+        transition: .5s ease;
+    }
+    
+    .group-active {
+        transform: translate(0%, 0%) !important;
+    }
+    
+    .group-in {
+        bottom: 0%;
+    }
+    
+    .footer {
+        margin: 30px auto;
+    }
+    
+    .footer-text {
+        color: white;
+        font-size: 22px;
+        text-align: center;
+        font-style: italic;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: 1s ease;
+        text-shadow: 0 2px 2px rgba(0, 0, 0, .7);
+    }
+    
+    .footer-text-in {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+    
+    .modal {
+        text-align: center;
+        width: 40%;
+        height: 30%;
+        position: fixed;
+        top: 0%;
+        left: 30%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, .7);
+        box-shadow: inset 0 0 5px 1px rgba(255, 255, 255, .7), 0 0 4px 2px rgba(55, 55, 55, .7), 0 0 3px 1px rgba(55, 55, 55, .7), 0 0 2px 0 rgba(55, 55, 55, .7);
+        opacity: 0;
+        transition: 1s ease;
+    }
+    
+    .modal-show {
+        opacity: 1;
+        top: 30%;
+    }
+    
+    .modal-title {
+        display: block;
+        margin-top: 10px;
+        line-height: 1em;
+        font-weight: bold;
+        font-size: 25px;
+    }
+    
+    .modal-content {
+        line-height: 1.8em;
+        font-weight: bold;
+        font-size: 20px;
+    }
+    
+    .count-center {
+        margin: 0 auto;
+    }
+    
+    .count {
+        display: inline-block;
+        margin: 0 5px 5px 5px;
+    }
+</style>
+
+<body>
+    <div class="wrap">
+        <div class="header">
+            <h1>Canvas</h1>
+        </div>
+        <div class="content">
+            <div class="draw-panel-outer">
+                <canvas class="draw" width="1366" height="768"></canvas>
+            </div>
+        </div>
+        <div class="float-bar">
+            <div class="group">
+                <div class="group-icon">
+                    <i class="fal fa-chevron-up icon"></i>
+                </div>
+                <label for="color">Color：<span class="color-text"></span></label>
+                <input class="color-panel" name="color" type="color" value="#FF0000">
+                <label for="line">Thickness：<span class="line-text"></span> px </label>
+                <input type="range" name="line" class="line-change" min="1" max="50" value="50">
+                <label for="opacity">Opacity：<span class="opacity-text"></span> </label>
+                <input type="range" name="opacity" class="opacity-change" min="0" max="10" value="10">
+                <label for="lineStyle">LineStyle：</label>
+                <select name="lineStyle" class="cap-select">
+                    <option value="B">Butt</option>
+                    <option value="R">Round</option>
+                    <option value="S">Square</option>
+                </select>
+                <label for="eraser">Eraser：<span class="eraser-text"></span> </label>
+                <input type="checkbox" name="eraser" class="eraser">
+                <span class="clear">Clear All</span>
+            </div>
+        </div>
+        <div class="footer">
+            <h3 class="footer-text">&copy Copyright Chen</h3>
+        </div>
+    </div>
+    <div class="modal">
+        <span class="modal-title">How to use</span>
+        <p class="modal-content">Click the button of bottom will show the setting panel<br>Then start drawing any shape on the canvas<br>Hope you have fun<br>Thanks for your use</p>
+        <p class="count-center">window will close after<span class="count"></span>seconds</p>
+    </div>
+</body>
+<script>
+    const headerText = document.querySelector('.header')
+    const canvas = document.querySelector('.draw')
+    const color = document.querySelector('.color-panel')
+    const colorText = document.querySelector('.color-text')
+    const lineChange = document.querySelector('.line-change')
+    const lineText = document.querySelector('.line-text')
+    const opacityChange = document.querySelector('.opacity-change')
+    const opacityText = document.querySelector('.opacity-text')
+    const capSelect = document.querySelector('.cap-select')
+    const group = document.querySelector('.group')
+    const iconIn = document.querySelector('.icon')
+    const icon = document.querySelector('.group-icon')
+    const eraser = document.querySelector('.eraser')
+    const eraserText = document.querySelector('.eraser-text')
+    const clearAll = document.querySelector('.clear')
+    const footerText = document.querySelector('.footer-text')
+
+    // 設定預設値
+    let drawing = canvas.getContext('2d') // 啟用畫布功能
+    let xLine = 0, // 線條位置迄始値
+        yLine = 0
+    let drawingS = false // 畫線開關迄始値
+    drawing.lineWidth = lineChange.value // 迄始線寬
+    drawing.lineCap = capSelect.value // 迄始線條樣式
+    drawing.lineJoin = 'round' // 迄始線條轉折點樣式
+    drawing.strokeStyle = `${color.value}` // 線條迄始顏色
+    colorText.textContent = color.value // 線條迄始顏色代碼文字顯示
+    colorText.style.color = `${color.value}`
+    lineText.textContent = lineChange.value // 迄始線條數値顯示
+    opacityText.textContent = opacityChange.value // 迄始線條透明値數値顯示
+    eraserText.textContent = 'Off' // 迄始橡皮擦開關提示文字顯示
+
+    // 橡皮擦功能觸發設定
+    function clearSwitch() {
+        canvas.addEventListener('mousemove', clearCanvas)
+        canvas.addEventListener('mousedown', () => {
+            canvas.removeEventListener('mousemove', clearCanvas)
+        })
+    }
+
+    // 橡皮擦功能細項與大小設定
+    function clearCanvas(e) {
+        // 清除位置從該元素的位置 x、y 軸 -15，使刪除方塊位置居中
+        drawing.clearRect(e.offsetX - 15, e.offsetY - 15, 30, 30);
+    }
+
+    // 滑鼠點擊畫布時將 drawingS 改為 true，設定迄始位置
+    canvas.addEventListener('mousedown', point => {
+        drawingS = true;
+        // ES6 賦値方式，將滑鼠點擊的該元素相對應 x、y 軸的位置値賦予到 xLine、yLine 兩個變數上
+        [xLine, yLine] = [point.offsetX, point.offsetY]
+        iconIn.classList.remove('icon-active')
+        group.classList.remove('group-active')
+    })
+
+    // 滑鼠滑動時畫出現條，告知 js 要開始畫了
+    canvas.addEventListener('mousemove', point => {
+        if (!drawingS) return; // 如果 drawingS 變數値不等於 true 就不畫出線條，反之則畫出線條
+        drawing.beginPath() // 產生線條路徑
+        drawing.moveTo(xLine, yLine) // 線條迄始位置
+        drawing.lineTo(point.offsetX, point.offsetY) // 線條終點位置
+        drawing.stroke(); // 開始畫
+        [xLine, yLine] = [point.offsetX, point.offsetY]
+    })
+
+    // 滑鼠點擊鍵放開後，將 drawingS 改為 false 取消畫線
+    canvas.addEventListener('mouseup', () => {
+        drawingS = false
+    })
+
+    // 變更線條粗細
+    lineChange.addEventListener('input', () => {
+        drawing.lineWidth = lineChange.value
+        lineText.textContent = lineChange.value
+    })
+
+    // 變更線條透明度
+    opacityChange.addEventListener('input', () => {
+        let opacitys = opacityChange.value / 10
+        drawing.globalAlpha = opacitys
+        opacityText.textContent = opacitys
+        headerText.style.opacity = `${opacitys}`
+        footerText.style.opacity = `${opacitys}`
+    })
+
+    // 變更線條顏色
+    color.addEventListener('change', () => {
+        drawing.strokeStyle = `${color.value}`
+        colorText.style.color = `${color.value}`
+        colorText.textContent = color.value
+        headerText.style.color = `${color.value}`
+        footerText.style.color = `${color.value}`
+    })
+
+    // 變更線條樣式
+    capSelect.addEventListener('change', () => {
+        switch (capSelect.value) {
+            case 'B':
+                drawing.lineCap = 'butt'
+                break
+            case 'R':
+                drawing.lineCap = 'round'
+                break
+            case 'S':
+                drawing.lineCap = 'square'
+                break
+        }
+    })
+
+    // 點擊觸發顯示設定版面
+    icon.addEventListener('click', () => {
+        iconIn.classList.toggle('icon-active')
+        group.classList.toggle('group-active')
+    })
+
+    // 點擊 checkbox 使用橡皮擦，與文字提示切換
+    eraser.addEventListener('click', () => {
+        switch (eraser.checked) {
+            case false:
+                canvas.removeEventListener('mousedown', clearSwitch)
+                eraserText.textContent = 'Off'
+                break
+            case true:
+                canvas.addEventListener('mousedown', clearSwitch)
+                eraserText.textContent = 'On'
+                break
+        }
+    })
+
+    // 點擊清除整個畫布內容
+    clearAll.addEventListener('click', () => {
+        drawing.clearRect(0, 0, canvas.width, canvas.width);
+    })
+
+    // 載入動畫
+    window.addEventListener('load', () => {
+        headerText.classList.add('header-in')
+        setTimeout(() => canvas.classList.add('draw-in'), 1000)
+        setTimeout(() => footerText.classList.add('footer-text-in'), 2000)
+        setTimeout(() => group.classList.add('group-in'), 3000)
+        setTimeout(() => {
+            document.querySelector('.modal').classList.add('modal-show')
+            document.querySelector('.count').textContent = '5'
+            setTimeout(() => document.querySelector('.count').textContent = '4', 2000)
+            setTimeout(() => document.querySelector('.count').textContent = '3', 3000)
+            setTimeout(() => document.querySelector('.count').textContent = '2', 4000)
+            setTimeout(() => document.querySelector('.count').textContent = '1', 5000)
+            setTimeout(() => document.querySelector('.count').textContent = '0', 6000)
+        }, 4000)
+        setTimeout(() => {
+            document.querySelector('.modal').classList.remove('modal-show')
+        }, 11000)
+        setTimeout(() => {
+            document.querySelector('.modal').style.display = 'none'
+        }, 12000)
+    })
+</script>
+
+</html>

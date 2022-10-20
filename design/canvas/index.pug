@@ -1,0 +1,59 @@
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible",content="IE=edge")
+    meta(name="viewport",content="width=device-width, initial-scale=1.0")
+    title="Canvas"
+    link(rel="stylesheet",href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css",integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p",crossorigin="anonymous")
+  body
+    div(class="wrap")
+        div(class="header")
+            h1 Canvas
+        div(class="content")
+            div(class="draw-panel-outer")
+                canvas(class="draw",width="1366",height="768")
+        div(class="controller")
+            i(class="fal fa-tools tools")
+            i(class="fal fa-expand full-panel")
+        div(class="float-bar")
+            div(class="group")
+                div(class="left")
+                    div Line Color：
+                        span(class="color-text")
+                        input(class="color-panel",type="color",value="#FF0000")
+                    div(class="cap-select-group")
+                        div(class="cap-options")
+                            div Line Cap：
+                            each value,index in ['Butt','Round','Square']
+                                div(class=`${index === 1 ? "btn active" : "btn"}`) #{value}
+                    div Use Eraser：
+                        span(class="eraser-text") OFF
+                div(class="right")
+                    div Thickness：
+                        span(class="line-text")
+                        |  %
+                    input(type="range",class="line-change",min="1",max="100",value="50")
+                    div Opacity：
+                        span(class="opacity-text")
+                        |  %
+                    input(type="range",class="opacity-change",min="0",max="100",value="0")
+            div(class="clear") Clear All Drawing
+        div(class="footer")
+            h3(class="footer-text") &copy; CopyRight By Alex Chen
+    div(class="modal")
+        span(class="modal-title") How to use
+        p(class="modal-content") Click the bottom right corner's tools icon
+            br
+            | Will show the setting panel
+            br
+            | Then start drawing any shape on the canvas
+            br
+            | Or click second fullScreen icon
+            br
+            | To drawing at the fullScreen
+            br
+            | Hope you have fun,Thanks for your use.
+        p(class="count-center") window will close after
+            span(class="count")
+            | seconds
+    script(type="module",src="./index.ts")
