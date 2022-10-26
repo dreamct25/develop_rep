@@ -1,0 +1,23 @@
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible",content="IE=edge")
+    meta(name="viewport",content="width=device-width, initial-scale=1.0")
+    title="Travel"
+    link(rel="stylesheet",href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css",integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p",crossorigin="anonymous")
+  body
+    div(id="map")
+    div(class="left-side")
+      div(class="search-bar-outer")
+        div(class="search-bar")
+          input(type="text",name="search-input",placeholder="輸入地名或景點名稱",value="")
+          div(class="search-btn")
+            i(class="far fa-search")
+        div(class="dark-mode")
+          <i class="fas fa-moon"></i>
+      div(class="search-list-outer")
+        div(class="search-list")
+    div(class="right-side")
+      div(class="single-list-outer")
+        div(class="single-list")
+    script(type="module",src="../src/index.ts")
