@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="#" />
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <title>Media Player</title>
+</head>
+<style>
+    html {
+        box-sizing: border-box;
+        background-image: url('https://unsplash.com/photos/evlkOfkQ5rE/download?force=true&w=1920');
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+        font-family: 微軟正黑體;
+    }
+
+    *,
+    *:before,
+    *:after {
+        box-sizing: inherit;
+    }
+
+    /* 清除所有預設值 */
+    input[type=range] {
+        -webkit-appearance: none;
+        background-color: transparent;
+        width: 100%;
+        margin: 0 5px;
+    }
+
+    /* 清除點擊時預設值 */
+    input[type=range]:focus {
+        outline: none;
+    }
+
+    /* 設定滑動條內部圓圈樣式 */
+    input[type=range]::-webkit-slider-thumb {
+        height: 15px;
+        width: 15px;
+        border-radius: 50%;
+        background-color: rgb(0, 89, 255);
+        cursor: pointer;
+        -webkit-appearance: none;
+        margin-top: -5px;
+        box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.8);
+        transition: .5s ease;
+    }
+
+    /* 設定滑動條內部圓圈點擊時樣式 */
+    input[type=range]:focus::-webkit-slider-thumb {
+        transform: scale(1.2);
+        background-color: rgb(162, 0, 255);
+        box-shadow: 0 0 4px 1px rgba(255, 255, 255, 0.8);
+    }
+
+    /* 設定滑動條樣式 */
+    input[type=range]::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 8.2px;
+        cursor: pointer;
+        box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.8);
+        background-color: rgb(0, 140, 255);
+        border-radius: 5px;
+        border: 0.2px solid rgba(1, 1, 1, 0);
+        transition: .5s ease;
+    }
+
+    /* 設定滑動條點擊時樣式 */
+    input[type=range]:focus::-webkit-slider-runnable-track {
+        background-color: rgb(255, 0, 255);
+        box-shadow: 0 0 4px 1px rgba(255, 255, 255, 0.8);
+    }
+
+    span {
+        display: block;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .wrap {
+        margin: 0 auto;
+        max-width: 960px;
+    }
+
+    .top-title {
+        text-align: center;
+        font-size: 40px;
+        font-style: italic;
+        padding-top: 30px;
+        padding-bottom: 25px;
+        color: white;
+        opacity: 0;
+        text-shadow: 0 2px 3px rgba(255, 255, 255, .8);
+    }
+
+    .top-title-in {
+        animation-name: topTitle;
+        animation-duration: .5s;
+        animation-timing-function: ease;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes topTitle {
+        0% {
+            opacity: 0;
+            transform: translateX(100px) skew(-30deg);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateX(0px) skew(0deg);
+        }
+    }
+
+    .main {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .player-outer {
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow: 0 0 10px 1px rgba(255, 255, 255, .7);
+        opacity: 0;
+        transform: scale(0.5);
+        transition: 1s ease;
+    }
+
+    .player-outer-in {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .player {
+        cursor: pointer;
+    }
+
+    .topbar {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        transform: translateY(0px);
+        box-shadow: 0 10px 55px 60px rgba(0, 0, 0, .6);
+        background-color: rgba(0, 0, 0, .6);
+        padding: 16px 10px 5px 5px;
+        color: white;
+        font-size: 20px;
+        font-style: italic;
+        opacity: 0;
+        transition: 1s ease;
+        margin-top: -48px;
+    }
+
+    .topbar-active {
+        opacity: 1;
+        transform: translateY(44px);
+    }
+
+    .circle-outer {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .circle-outer-active {
+        animation-name: circleZoom;
+        animation-duration: 2s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes circleZoom {
+
+        0%,
+        100% {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        50% {
+            opacity: .1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    }
+
+    .circle {
+        padding: 200px;
+        border-radius: 50%;
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+        transition: 1s ease;
+
+    }
+
+    .circle-active {
+        animation-name: circleRun;
+        animation-duration: 1.5s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes circleRun {
+        50% {
+            box-shadow: inset 0 0 5px 1px rgba(255, 255, 255, .4), 0 0 4px 3px rgba(255, 255, 255, .8), 0 0 3px 2px rgba(255, 255, 255, .7), 0 0 2px 1px rgba(255, 255, 255, .6);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .sign-icon-outer {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .movie-icon {
+        color: white;
+        font-size: 55px !important;
+        text-shadow: 0 0 10px rgba(255, 255, 255, .8);
+    }
+
+    .movie-icon,
+    .music-icon {
+        opacity: 0;
+        font-size: 200px;
+        transform: scale(2);
+        transition: 1s ease;
+    }
+
+    .movie-icon-show,
+    .music-icon-show {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .music-trans {
+        animation-name: musicTrans;
+        animation-duration: 2s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes musicTrans {
+
+        0%,
+        100% {
+            transform: scale(1) translate3d(0, 0, 0);
+            text-shadow: 0 0 1px rgba(255, 255, 255, .8);
+        }
+
+        50% {
+            transform: scale(1.3) translate3d(0, 0, 0);
+            text-shadow: 0 0 7px rgba(255, 255, 255, .8);
+        }
+    }
+
+    .player-controls {
+        display: flex;
+        flex-wrap: wrap;
+        transform: translateY(-24px);
+        opacity: 0;
+        transition: 1s ease;
+        width: 100%;
+        margin-bottom: -63px;
+        box-shadow: 0 -10px 55px 60px rgba(0, 0, 0, .6);
+        background: rgba(0, 0, 0, .6);
+        color: white;
+        font-style: italic;
+    }
+
+    .player-controls-active {
+        opacity: 1;
+        transform: translateY(-66px);
+    }
+
+    .controler {
+        display: flex;
+        width: 100%;
+        padding: 10px 5px 8px 5px;
+    }
+
+    .switch {
+        display: block;
+        cursor: pointer;
+        margin: 0 10px 0 10px;
+        color: rgb(0, 174, 255);
+        transition: .5s ease;
+    }
+
+    .switch-toggle {
+        color: rgb(255, 0, 0);
+    }
+
+    .progress-outer {
+        position: relative;
+        display: flex;
+        flex-basis: 100%;
+        height: 20px;
+        overflow: hidden;
+        background-color: rgba(0, 0, 0, .4);
+        cursor: pointer;
+    }
+
+    .progress {
+        width: 50%;
+        background-color: rgb(0, 174, 255);
+        box-shadow: inset 0 0 1px 1px rgba(0, 138, 202, 0.7), 0 0 25px 1px white;
+        flex: 0;
+        flex-basis: 0%;
+    }
+
+    .screen {
+        position: absolute;
+        top: -79%;
+        right: 0%;
+        transform: translate(4%, 50%);
+        background: rgba(0, 0, 0, .7);
+        padding: 5px 10px 5px 10px;
+        border-radius: 5px 0 0 0;
+        cursor: pointer;
+    }
+
+    .changebar {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        top: -140%;
+        right: 0%;
+        transform: translate(88%, 50%);
+        background: rgba(0, 0, 0, .7);
+        padding: 2px 9px 4px 3px;
+        border-radius: 5px;
+        color: white;
+        transition: 1s ease;
+    }
+
+    .changebar-active {
+        transform: translate(4%, 50%);
+    }
+
+    .change-icon {
+        padding: 0px 6px 0 4px;
+        transform: rotate(0deg);
+        cursor: pointer;
+        transition: 1s ease;
+    }
+
+    .change-icon-active {
+        transform: rotate(180deg);
+    }
+
+    .changeV {
+        cursor: pointer;
+    }
+
+    .btn {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        display: block;
+        font-size: 30px;
+        background-color: rgba(0, 0, 0, .7);
+        box-shadow: inset 0 0 5px 1px rgba(0, 0, 0, .4), 0 0 4px 3px rgba(0, 0, 0, .8), 0 0 3px 2px rgba(0, 0, 0, .7), 0 0 2px 1px rgba(0, 0, 0, .6);
+        color: white;
+        text-align: center;
+        text-shadow: 0 1px 2px rgba(255, 255, 255, .8);
+        line-height: 1.5em;
+        border-radius: 10px;
+        padding: 5px 10px 5px 10px;
+        transform: translate(-50%, -100%);
+        opacity: 0;
+        cursor: pointer;
+        transition: 1s ease;
+    }
+
+    .btn-active {
+        transform: translate(-50%, 0%);
+        opacity: 1;
+    }
+
+    .jump {
+        margin-left: 5px;
+        margin-right: 5px;
+        cursor: pointer;
+    }
+
+    .jump-left {
+        transform: rotate(-180deg);
+    }
+
+    .upfile {
+        display: none;
+    }
+
+    .bottom-title {
+        text-align: center;
+        font-style: italic;
+        color: white;
+        padding-bottom: 30px;
+        text-shadow: 0 1px 2px rgba(255, 255, 255, .8);
+        opacity: 0;
+    }
+
+    .bottom-title-in {
+        animation-name: bottomTitle;
+        animation-duration: .5s;
+        animation-timing-function: ease;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes bottomTitle {
+        0% {
+            opacity: 0;
+            transform: translateX(-100px) skew(30deg);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateX(0px) skew(0deg);
+        }
+    }
+
+    /* .message-group {
+        
+    } */
+
+    .message {
+        position: absolute;
+        display: none;
+        color: white;
+        text-align: center;
+        background-color: rgba(0, 0, 0, .7);
+        padding: 2px 5px 3px 5px;
+        border-radius: 5px;
+        box-shadow: 0 0 3px rgba(255, 255, 255, .8);
+    }
+</style>
+
+<body>
+    <div class="wrap">
+        <div class="header">
+            <h1 class="top-title">Media Player</h1>
+        </div>
+        <div class="main">
+            <div class="player-outer">
+                <div class="topbar">
+                    &nbsp<span class="video-name"></span>&nbsp&nbsp
+                    <span class="video-type"></span>
+                </div>
+                <div class="sign-icon-outer"></div>
+                <video class="player" src=""></video>
+                <div class="player-controls">
+                    <div class="changebar">
+                        <i class="far fa-chevron-left change-icon"></i>
+                        <span class="changeV">Choose Other Files</span>
+                    </div>
+                    <span class="screen">Full Screen Mod</span>
+                    <div class="progress-outer">
+                        <div class="progress"></div>
+                    </div>
+                    <div class="controler">
+                        <div class="jump" data-jump="-20">
+                            <i class="fas fa-forward jump-left"></i>
+                        </div>
+                        <div class="switch"></div>
+                        <div class="jump" data-jump="20">
+                            <i class="fas fa-forward jump-right"></i>
+                        </div>
+                        <span>Voice</span>
+                        <input type="range" name="volume" class="video" min="0" max="1" step="0.01" value="1">
+                        <span>Speed</span>
+                        <input type="range" name="playbackRate" class="video" min="0.25" max="1.75" step="0.25"
+                            value="1">
+                    </div>
+                </div>
+            </div>
+            <span class="message"></span>
+            <label class="btn">
+                Click here to choose your local media files<br>Like video or music then watch or listen
+                <input type="file" class="upfile">
+            </label>
+        </div>
+        <div class="footer">
+            <h3 class="bottom-title">&copy Copyright Chen</h3>
+        </div>
+    </div>
+</body>
+<script>
+    const topBar = document.querySelector('.topbar')
+    const player = document.querySelector('.player')
+    const playerOuter = document.querySelector('.player-outer')
+    const playerControls = document.querySelector('.player-controls')
+    const switchs = document.querySelector('.switch')
+    const progressFrame = document.querySelector('.progress-outer')
+    const progress = document.querySelector('.progress')
+    const ranges = document.querySelectorAll('.video')
+    const skips = document.querySelectorAll('.jump')
+    const upFile = document.querySelector('.upfile')
+    const screen = document.querySelector('.screen')
+    const changeIcon = document.querySelector('.change-icon')
+    const changeV = document.querySelector('.changeV')
+    const signIn = document.querySelector('.sign-icon-outer')
+    const btn = document.querySelector('.btn')
+    const message = document.querySelector('.message')
+    let fileTemp;
+    let start = false
+
+    switchs.innerHTML = `<i class="fas fa-play"></i>`
+    switchs.classList.toggle('switch-toggle')
+
+    // 載入媒體檔案內容
+    function fileChange() {
+        const vName = document.querySelector('.video-name')
+        const vType = document.querySelector('.video-type')
+        let file = this.files[0]
+        let fileSrc = window.URL.createObjectURL(file)
+        fileTemp = file
+        progress.style.flexBasis = '0%'
+        playerOuter.classList.remove('player-outer-in')
+        signIn.innerHTML = ''
+        player.style.width = `${window.innerWidth-90}px`
+        btn.classList.toggle('btn-active')
+        switchs.innerHTML = `<i class="fas fa-play"></i>`
+        switchs.classList.toggle('switch-toggle')
+        vName.textContent = `File Name：${file.name.slice(0,-4)}`
+        switch (file.type.slice(0, 5)) {
+            case 'video':
+                vType.textContent = `File Type：${file.type.slice(6,9)=='x-m'? 'mkv':file.type.slice(6,9)}`
+                signIn.innerHTML = `<i class="fas fa-play movie-icon"></i>`
+                setTimeout(() => document.querySelector('.movie-icon').classList.add('movie-icon-show'), 3000)
+                break;
+            case 'audio':
+                vType.textContent = `File Type：${file.type.slice(6,11)=='mpeg'? 'mp3':file.type.slice(7,11)}`
+                signIn.innerHTML = `
+                <div class="circle-outer">
+                    <div class="circle"></div>
+                </div>
+                <i class="fal fa-music music-icon"></i>`
+                setTimeout(() => document.querySelector('.music-icon').classList.add('music-icon-show'), 3000)
+                break;
+        }
+        setTimeout(() => player.setAttribute('src', `${fileSrc}`), 1000)
+        setTimeout(() => playerOuter.classList.add('player-outer-in'), 2000)
+        setTimeout(() => btn.style.display = 'none', 2100)
+    }
+
+    // 設定媒體播放器開關
+    function goSwitch() {
+        const toggle = player.paused ? 'play' : 'pause'
+        player[toggle]();
+        player.webkitDisplayingFullscreen == false ? player.addEventListener('click', goSwitch) : player
+            .removeEventListener('click',
+                goSwitch)
+        fileTemp.type.slice(0, 5) == 'video' ? movieIcon() : null
+    }
+
+    // 設定函式 startIconChange()
+    function startIconChange() {
+        this.paused ? switchs.innerHTML = `<i class="fas fa-play"></i>` : switchs.innerHTML =
+            `<i class="fas fa-pause"></i>`
+        switchs.classList.toggle('switch-toggle')
+    }
+
+    // 設定函式 progressCurrent()
+    function progressCurrent() {
+        const current = (player.currentTime / player.duration) * 100
+        progress.style.flexBasis = `${current}%`
+        musicIcon()
+    }
+
+    // 設定函式 movieIcon()
+    function movieIcon() {
+        if (player.paused) {
+            signIn.innerHTML = `<i class="fas fa-pause movie-icon"></i>`
+            setTimeout(() => {
+                document.querySelector('.movie-icon').classList.add('movie-icon-show')
+            }, 1);
+        } else {
+            signIn.innerHTML = `<i class="fas fa-play movie-icon"></i>`
+            document.querySelector('.movie-icon').classList.add('movie-icon-show')
+            setTimeout(() => {
+                document.querySelector('.movie-icon').classList.remove('movie-icon-show')
+            }, 1);
+        }
+    }
+
+    // 設定函式 musicIcon()
+    function musicIcon() {
+        const musicColor = document.querySelector('.music-icon')
+        const circleShape = document.querySelector('.circle')
+        const circleOuter = document.querySelector('.circle-outer')
+        const num = player.currentTime
+        if (fileTemp.type.slice(0, 5) == 'audio') {
+            if (player.paused) {
+                musicColor.classList.remove('music-trans')
+                musicColor.style.color = 'rgb(185,185,185)'
+                circleShape.style.opacity = '0'
+                circleShape.classList.remove('circle-active')
+                circleOuter.classList.remove('circle-outer-active')
+            } else {
+                musicColor.classList.add('music-trans')
+                musicColor.style.color = `rgb(${num*1.2-162},${num*1.4-81},${num*1.6})`
+                circleShape.style.opacity = '1'
+                circleShape.style.borderTop = `7px solid rgb(${num*1.5-81},${num*1.4-162},${num*1.6})`
+                circleShape.style.borderBottom = `7px solid rgb(${num*1.5-81},${num*1.4-162},${num*1.6})`
+                circleShape.classList.add('circle-active')
+                circleOuter.classList.add('circle-outer-active')
+            }
+        }
+    }
+
+    // 設定函式 changeValue()
+    function changeValue() {
+        player[this.name] = this.value
+    }
+
+    // 設定函式 skip()
+    function skip() {
+        player.currentTime += parseInt(this.dataset.jump)
+    }
+
+    // 設定函式 clickSkip()
+    function clickSkip(e) {
+        const skipTime = (e.offsetX / progressFrame.offsetWidth) * player.duration
+        player.currentTime = skipTime
+    }
+
+    // 設定函式 enaMessage()
+    function enaMessage(e) {
+        const messages = {
+            num1: 'Play',
+            num2: 'Pause',
+            num3: 'Rewind 20s',
+            num4: 'Skip 20s'
+        }
+        const posX = e.pageX - 20
+        const posY = e.pageY - 29
+        message.style.top = `${posY}px`
+        message.style.display = 'block'
+        switch (e.target.className) {
+            case 'fas fa-play':
+                message.style.left = `${posX-3}px`
+                message.textContent = messages.num1
+                break;
+            case 'fas fa-pause':
+                message.style.left = `${posX-8}px`
+                message.textContent = messages.num2
+                break;
+            case 'fas fa-forward jump-left':
+                message.style.left = `${posX-28}px`
+                message.textContent = messages.num3
+                break;
+            case 'fas fa-forward jump-right':
+                message.style.left = `${posX-19}px`
+                message.textContent = messages.num4
+                break;
+            case 'progress-outer':
+                message.style.left = `${posX-3}px`
+                const outBar = (player.currentTime / player.duration) * 100
+                message.textContent = `${Math.floor(outBar)}%`
+                break;
+            case 'progress':
+                message.style.left = `${posX-3}px`
+                const inBar = (player.currentTime / player.duration) * 100
+                message.textContent = `${Math.floor(inBar)}%`
+                break;
+        }
+
+        switch (e.target.name) {
+            case 'volume':
+                ranges.forEach(key => {
+                    message.style.left = `${posX-3}px`
+                    let vText = Math.floor(key.value * 100)
+                    key.name == 'volume' ? message.textContent = `${vText}%` : null
+                    key.addEventListener('input', () => {
+                        key.name == 'volume' ? message.textContent = `${vText}%` : null
+                    })
+                })
+                break;
+            case 'playbackRate':
+                ranges.forEach(key => {
+                    message.style.left = `${posX-7}px`
+                    let pTextS = key.value + (key.value == 0.5 || key.value == 1.5 ? '0' : '')
+                    let pTextL = key.value + (key.value == 1 ? '.00' : '')
+                    let pTextAll = key.value != 1 ? pTextS : pTextL
+                    key.name == 'playbackRate' ? message.textContent = `${pTextAll}x` : null
+                    key.addEventListener('input', () => {
+                        key.name == 'playbackRate' ? message.textContent = `${pTextAll}x` : null
+                    })
+                })
+                break;
+        }
+        switchs.addEventListener('mousemove', enaMessage)
+        skips.forEach(key => key.addEventListener('mousemove', enaMessage))
+        ranges.forEach(key => key.addEventListener('mousemove', enaMessage))
+        progress.addEventListener('mousemove', enaMessage)
+        progressFrame.addEventListener('mousemove', enaMessage)
+    }
+    // 設定函式 disaMessage()
+    function disaMessage() {
+        message.style.display = 'none'
+        switchs.removeEventListener('mousemove', enaMessage)
+        skips.forEach(key => key.removeEventListener('mousemove', enaMessage))
+        ranges.forEach(key => key.removeEventListener('mousemove', enaMessage))
+        progress.removeEventListener('mousemove', enaMessage)
+        progressFrame.removeEventListener('mousemove', enaMessage)
+    }
+
+    // 監聽媒體播放器
+    player.addEventListener('click', goSwitch)
+    player.addEventListener('play', startIconChange)
+    player.addEventListener('pause', startIconChange)
+    player.addEventListener('timeupdate', progressCurrent)
+    player.addEventListener('mouseenter', () => {
+        playerControls.classList.add('player-controls-active')
+        topBar.classList.add('topbar-active')
+    })
+    player.addEventListener('mouseout', () => {
+        playerControls.classList.remove('player-controls-active')
+        topBar.classList.remove('topbar-active')
+    })
+
+    // 監聽媒體播放器控制器
+    playerControls.addEventListener('mouseover', () => {
+        playerControls.classList.add('player-controls-active')
+        topBar.classList.add('topbar-active')
+    })
+    playerControls.addEventListener('mouseout', () => {
+        playerControls.classList.remove('player-controls-active')
+        topBar.classList.remove('topbar-active')
+    })
+
+    // 監聽媒體播放器播放按鈕
+    switchs.addEventListener('click', goSwitch)
+    switchs.addEventListener('mouseover', enaMessage)
+    switchs.addEventListener('mouseout', disaMessage)
+
+    // 監聽媒體播放器快進與倒退按鈕
+    skips.forEach(key => {
+        key.addEventListener('click', skip)
+        key.addEventListener('mouseover', enaMessage)
+        key.addEventListener('mouseout', disaMessage)
+    })
+
+    // 監聽媒體播放器音量與加速滑動條
+    ranges.forEach(key => {
+        key.addEventListener('input', changeValue)
+        key.addEventListener('mouseover', enaMessage)
+        key.addEventListener('mouseout', disaMessage)
+    })
+
+    // 監聽媒體播放器進度條
+    progressFrame.addEventListener('click', clickSkip)
+    progressFrame.addEventListener('mousemove', e => start && clickSkip(e))
+    progressFrame.addEventListener('mousedown', () => start = true)
+    progressFrame.addEventListener('mouseup', () => start = false)
+    progressFrame.addEventListener('mouseover', enaMessage)
+    progressFrame.addEventListener('mouseout', disaMessage)
+
+    // 監聽瀏覽本地媒體按鈕
+    upFile.addEventListener('change', fileChange)
+
+    // 監聽全屏按鈕
+    screen.addEventListener('click', () => player.requestFullscreen())
+
+    // 監聽更換媒體檔案圖示收闔按鈕
+    changeIcon.addEventListener('click', () => {
+        document.querySelector('.changebar').classList.toggle('changebar-active')
+        changeIcon.classList.toggle('change-icon-active')
+    })
+
+    // 監聽更換媒體檔案按鈕
+    changeV.addEventListener('click', () => {
+        btn.style.display = 'block'
+        playerOuter.classList.remove('player-outer-in')
+        changeIcon.classList.toggle('change-icon-active')
+        document.querySelector('.changebar').classList.toggle('changebar-active')
+        player.pause()
+        switchs.classList.toggle('switch-toggle')
+        setTimeout(() => btn.classList.toggle('btn-active'), 1200)
+    })
+
+    // 監聽頁面空白鍵
+    document.addEventListener('keydown', code => {
+        switch (code.keyCode) {
+            case 32:
+                code.preventDefault()
+                const situation = player.paused == false ? 'pause' : 'play'
+                player[situation]()
+                movieIcon()
+                break
+        }
+
+    })
+
+    // 頁面載入時觸發
+    window.addEventListener('load', () => {
+        document.querySelector('.top-title').classList.add('top-title-in')
+        setTimeout(() => document.querySelector('.bottom-title').classList.add('bottom-title-in'), 1000);
+        setTimeout(() => btn.classList.toggle('btn-active'), 2000);
+    })
+</script>
+
+</html>

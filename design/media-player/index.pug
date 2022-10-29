@@ -1,0 +1,45 @@
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible",content="IE=edge")
+    meta(name="viewport",content="width=device-width, initial-scale=1.0")
+    title="Media Player"
+    link(rel="stylesheet",href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css",integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p",crossorigin="anonymous")
+  body
+    div(class="wrap")
+        div(class="header")
+            h1(class="top-title") Media Player
+        div(class="main")
+            div(class="player-outer")
+                div(class="topbar")
+                    span(class="video-name")
+                    span(class="video-type")
+                div(class="sign-icon-outer")
+                video(class="player",type="video/mp4")
+                div(class="player-controls")
+                    div(class="changebar")
+                        i(class="far fa-chevron-left change-icon")
+                        span(class="changeV") Choose other files
+                    div(class="screen") Full screan mod
+                    div(class="progress-outer")
+                        div(class="progress")
+                    div(class="controler")
+                        div(class="jump left",data-jump="-20")
+                            i(class="fas fa-forward jump-left")
+                        div(class="switch switch-toggle")
+                            i(class="fas fa-play")
+                        div(class="jump right",data-jump="20")
+                            i(class="fas fa-forward jump-right")
+                        span Voice
+                        input(type="range",name="volume",class="video",min="0",max="1",step="0.01",value="1")
+                        span Speed
+                        input(type="range",name="playbackRate",class="video",min="0.25",max="1.75",step="0.25",value="1")
+            span(class="message")
+            label(class="btn") 
+                |Click here to choose your local media files
+                br
+                |Like video or music then watch or listen
+                input(type="file",class="upfile")
+        div(class="footer")
+            h3(class="bottom-title") &copy; Copyright By Alex Chen
+    script(type="module",src="./index.ts")

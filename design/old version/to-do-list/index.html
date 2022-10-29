@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../To_Do_List/To_Do_List.css">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <title>ToDo List</title>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="header">
+            <h1>ToDo List</h1>
+        </div>
+        <div class="main">
+            <div class="times"></div>
+            <div class="input-bar">
+                <input class="input-text" type="text" placeholder="-- Enter your todoes --">
+                <div class="add-btn">Add</div>
+            </div>
+            <div class="board">
+                <div class="delete-btn-group">
+                    <div class="delete-btn">Delete</div>
+                    <div class="delete-all-btn">Delete All</div>
+                </div>
+                <div class="table-outer">
+                    <div class="top-btn-group">
+                        <div class="top-btn I">Todo</div>
+                        <div class="top-btn II">Deleted</div>
+                    </div>
+                    <div class="search-bar">
+                        <input class="search-text" type="text" placeholder="-- Enter your todoes --">
+                        <div class="search-btn">Search</div>
+                    </div>
+                    <table class="table">
+                        <thead></thead>
+                        <tbody></tbody>
+                        <tfoot>
+                            <tr>
+                                <td>
+                                    <div class="bottom-text-group">
+                                        <span class="searches"></span>
+                                        <span class="chooses"></span>
+                                        <span class="total"></span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="pagination-group">
+                        <ul></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            &copy CopyRight By Chen
+        </div>
+    </div>
+</body>
+<script src="../To_Do_List/To_Do_List.js"></script>
+
+</html>
