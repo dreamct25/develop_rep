@@ -1,0 +1,62 @@
+{
+    "pages":{
+        "app":{
+            "lang":{
+                "en":"English (en-US)",
+                "tw":"Zhongwen (zh-TW)"
+            },
+            "myCollect":"My Collection",
+            "search":"Search",
+            "placeText":"Typing video name",
+            "back":"Back",
+            "CopyRight":"CopyRight By Alex Chen"
+        },
+        "home":{
+            "views":"Views",
+            "viewTimesM":"{val} M",
+            "viewTimes":"{val}",
+            "prevPage":"Prev Page",
+            "nextPage":"Next Page",
+            "hasAddedToCollection":"Has added to collection",
+            "hasRemoveFromCollection":"Has removed from collection"
+        },
+        "collect":{
+            "title":"My Collection Video",
+            "videoChannel":"video channel",
+            "videoName":"video name",
+            "videoLink":"video link",
+            "views":"views",
+            "DelectCollect":"delect",
+            "playAll":"Play All",
+            "searchCollectsVideoName":"search collect's video name",
+            "collectTotal":"collect total {val} videos",
+            "noCollect":"-- Not adding any collect videos --",
+            "findVideo":"find {val} collect videos , ",
+            "viewTimesM":"{val} M",
+            "viewTimes":"{val}",
+            "deleteBeforeText":"Do you want to delete {val} this video？",
+            "deleteAfterText":"This video has deleted from video collect"
+        },
+        "video":{
+            "views":"Views",
+            "viewTimesM":"{val} M",
+            "viewTimes":"{val}",
+            "channel":"Channel",
+            "operationError":"Operation Error !"
+        },
+        "videoAll":{
+            "views":"Views",
+            "viewTimesM":"{val} M",
+            "viewTimes":"{val}",
+            "channel":"Channel",
+            "operationError":"Operation Error !"
+        }
+    },
+    "component":{
+        "modal":{
+            "title":"Message",
+            "confirm":"Confirm",
+            "cancel":"Cancel"
+        }
+    }
+}

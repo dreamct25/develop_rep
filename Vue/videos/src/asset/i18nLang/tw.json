@@ -1,0 +1,62 @@
+{
+    "pages":{
+        "app":{
+            "lang":{
+                "en":"英文 (en-US)",
+                "tw":"繁體中文 (zh-TW)"
+            },
+            "myCollect":"我的收藏",
+            "search":"搜尋",
+            "placeText":"輸入影片名稱",
+            "back":"返回",
+            "CopyRight":"版權所有 - Alex Chen"
+        },
+        "home":{
+            "views":"觀看次數",
+            "viewTimesM":"{val} 萬次",
+            "viewTimes":"{val} 次",
+            "prevPage":"上一頁",
+            "nextPage":"下一頁",
+            "hasAddedToCollection":"已加入收藏庫",
+            "hasRemoveFromCollection":"已從收藏庫中刪除"
+        },
+        "collect":{
+            "title":"我的收藏影片",
+            "videoChannel":"影片頻道",
+            "videoName":"影片名稱",
+            "videoLink":"影片連結",
+            "views":"觀看次數",
+            "DelectCollect":"刪除收藏",
+            "playAll":"全部播放",
+            "searchCollectsVideoName":"搜尋收藏影片名稱",
+            "collectTotal":"收藏影片總數 {val} 部",
+            "noCollect":"-- 未加入任何收藏影片 --",
+            "findVideo":"已搜尋到 {val} 部收藏影片，",
+            "viewTimesM":"{val} 萬次",
+            "viewTimes":"{val} 次",
+            "deleteBeforeText":"確定要刪除 {val} 這部影片嗎？",
+            "deleteAfterText":"此部影片已從您的影片收藏庫中刪除"
+        },
+        "video":{
+            "views":"觀看次數",
+            "viewTimesM":"{val} 萬次",
+            "viewTimes":"{val} 次",
+            "channel":"頻道",
+            "operationError":"操作錯誤 !"
+        },
+        "videoAll":{
+            "views":"觀看次數",
+            "viewTimesM":"{val} 萬次",
+            "viewTimes":"{val} 次",
+            "channel":"頻道",
+            "operationError":"操作錯誤 !"
+        }
+    },
+    "component":{
+        "modal":{
+            "title":"提示訊息",
+            "confirm":"確定",
+            "cancel":"取消"
+        }
+    }
+}
