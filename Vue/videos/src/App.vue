@@ -694,7 +694,7 @@ export default defineComponent({
                 locale.value = useLang
                 state.togglelanguageList.value = false
             },
-            goHome: () => router.push('/'),
+            goHome: () => router.push({ name:'home' }),
             backPage:() => {
                 state.navBarAnimate.value = false
                 setTimeout(() => {
@@ -706,7 +706,7 @@ export default defineComponent({
                     },201)
                 },701)
 
-                route.name === 'video_all' ? router.back() : router.push('/')
+                route.name === 'video_all' ? router.back() : router.push({ name:'home' })
             },
             scrollEvent: () => {
                 state.toggleBar.value = !(window.scrollY < state.scrollPosTemp.value)

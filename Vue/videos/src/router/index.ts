@@ -23,6 +23,6 @@ const routeSetting:RouteRecordRaw[] = [{
 }]
 
 export default createRouter({
-    history: createWebHistory(),
+    history: createWebHistory('/videos'),
     routes: routeSetting
 })
