@@ -1,0 +1,449 @@
+html{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: rgb(30,30,30);
+        
+        .header{
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            color: white;
+            margin: 20px 0;
+
+            .title{
+                text-align: center;
+                animation: shine_txt 3s linear infinite;
+                transform-origin: bottom;
+                transform: scale(.1);
+                transition: .7s ease;
+                opacity: 0;
+
+                @keyframes shine_txt {
+                    0%{
+                        text-shadow: 0 0 0 rgba(255, 255, 255, 0.7);
+                    }
+                    50%{
+                        text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+                    }
+                    100%{
+                        text-shadow: 0 0 0 rgba(255, 255, 255, 0.7);
+                    }
+                }
+
+                &.title-active{
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+
+            .input-groups{
+                transform-origin: bottom;
+                transform: scale(.1);
+                transition: .7s ease;
+                opacity: 0;
+
+                .height-input{
+                    position: relative;
+
+                    span{
+                        display: block;
+                        margin: 10px 0;
+                    }
+
+                    p {
+                        position: absolute;
+                        left: 50%;
+                        top: 50%;
+                        color: rgba(0, 0, 0, 0.3);
+                        transform: scale(1) translate(-50%, 43%);
+                        background-color: transparent;
+                        pointer-events: none;
+                        padding: 0 5px 0 5px;
+                        border-radius: 5px;
+                        margin-bottom: 0;
+                        font-size: 13px;
+                        box-shadow: inset 0 0 3px 0 transparent;
+                        transition: 0.7s ease;
+                        z-index: 2;
+                    }
+                }
+    
+                .weight-input{
+                    position: relative;
+
+                    span{
+                        display: block;
+                        margin: 10px 0;
+                    }
+
+                    p {
+                        position: absolute;
+                        left: 50%;
+                        top: 50%;
+                        color: rgba(0, 0, 0, 0.3);
+                        transform: scale(1) translate(-50%, 43%);
+                        background-color: transparent;
+                        pointer-events: none;
+                        padding: 0 5px 0 5px;
+                        border-radius: 5px;
+                        margin-bottom: 0;
+                        font-size: 13px;
+                        box-shadow: inset 0 0 3px 0 transparent;
+                        transition: 0.7s ease;
+                    }
+                }
+                
+                input{
+                    text-align: center;
+                    color: black;
+                    border:none;
+                    outline: none;
+                    box-shadow:inset 0 0 2px 0 rgba(0, 0, 0, 0.7);
+                    border-radius: 15px;
+                    padding: 6px;
+                    
+                    &:placeholder-shown::placeholder {
+                        color: transparent;
+                    }
+
+                    &:not(:placeholder-shown) ~ p,
+                    &:focus ~ p {
+                        color: rgba(0, 0, 0, 1);
+                        background-color: white;
+                        box-shadow: inset 0 0 3px 0 rgba(0, 0, 0, 0.7);
+                        transform: scale(0.75) translate(-117px, -15px);
+                    }
+                }
+
+                &.input-group-active{
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+            
+            .add-btn{
+                cursor: pointer;
+                user-select: none;
+                font-size: 35px;
+                background-color: rgb(0, 102, 255);
+                padding: 10px 80px;
+                margin-top: 50px;
+                border-radius: 40px;
+                box-shadow: inset 0 0 2px 1px rgba(255,255,255,.7);
+                transform-origin: bottom;
+                transform: scale(.1);
+                transition: .7s ease;
+                opacity: 0;
+
+                &.add-btn-active{
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+
+            @media screen and (max-width:768px) {
+                flex-direction: column;
+
+                .add-btn{
+                    margin-top: 30px;
+                    margin-bottom: 50px;
+                }
+            }
+        }
+
+        
+
+        .main{
+            position: relative;
+
+            .toggle-data-btn{
+                position: absolute;
+                top:0%;
+                left: 50%;
+                color: white;
+                background-color: rgb(0, 102, 255);
+                box-shadow: inset 0 0 2px 1px rgba(255,255,255,.7);
+                transform: translate(-50%,-50%);
+                z-index: 4;
+                font-size: 18px;
+                padding: 5px 30px;
+                border-radius: 20px;
+                cursor: pointer;
+                user-select: none;
+            }
+
+            .render-data-outer-frame{
+                overflow: hidden;
+                border-top: 0.1px solid rgba(255,255,255,.7);
+                border-bottom: 0.1px solid rgba(255,255,255,.7);
+
+                .render-data-outer{
+                    overflow: hidden;
+                    margin: -251px 0;
+                    transition: .7s ease;
+
+                    .render-data{
+                        max-height: 365px;
+                        padding: 10px 20px 20px 20px;
+                        overflow-y: scroll;
+                        overflow-x: hidden;
+
+                        .list-item{
+                            box-shadow:0 0 2px 1px rgba(255,255,255,.7);
+                            background-color: white;
+                            border-radius: 50px;
+                            margin-top: 20px;
+                            font-size: 18px;
+                            opacity: 1;
+                            overflow: hidden;
+                            transition: 1s ease;
+                            position: relative;
+                            z-index: 3;
+
+                            .pos{
+                                color: black;
+                                position: relative;
+
+                                .col-md-2,.col-md-4{
+
+                                    span{
+                                        display: block;
+                                        text-align: center;
+                                        padding: 22px 3px;
+
+                                        span{
+                                            display: inline;
+                                            padding: 0;
+                                        }
+
+                                        .text-big{
+                                            font-size: 27px;
+                                        }
+
+                                        @media screen and (max-width:768px) {
+                                            display: block;
+                                            text-align: center;
+                                            padding: 8px 3px;
+
+                                            span{
+                                                display: inline;
+                                                padding: 0;
+                                            }
+                                            
+                                            @media screen and (max-width:768px) {
+                                                span{
+                                                    font-size: 27px;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    @media screen and (max-width:768px) {
+                                        &:nth-of-type(1){
+
+                                            span{
+                                                margin-top: 10px;
+                                                font-size: 27px;
+                                            }
+                                        }
+                                    }
+                                }
+
+                               
+
+                                .ref-content,
+                                .delete-content{
+                                    color: white;
+                                    padding: 10px 20px;
+                                    position: absolute;
+                                    border-radius: 50px 0 0 50px;
+                                    background-color: rgb(30,30,30);
+                                    z-index: 1;
+                                    top: 0;
+                                    left: 0;
+                                    right: 0;
+                                    bottom: 0;
+                                    transform: translate(100%,0);
+                                    transition: .7s ease;
+
+                                    span{
+                                        display: block;
+                                        padding: 0;
+                                        font-size: 18px;
+                                    }
+
+                                    .title{
+                                        text-align: center;
+                                    }
+
+                                    .confirm,
+                                    .cancle{
+                                        text-align: center;
+                                        cursor: pointer;
+                                        user-select: none;
+                                    }
+
+                                    .math-val{
+                                        color: rgb(0,255,255);
+                                    }
+
+                                    &.active{
+                                        transform: translate(0,0);
+                                    }
+                                }
+
+                                @media screen and (max-width:768px) {
+                                    .ref-content,
+                                    .delete-content{
+                                        display: flex;
+                                        justify-content: center;
+                                        flex-direction: column;
+                                        border-radius: 50px 50px 0 0;
+                                        transform: translate(0,130%);  
+                                    }
+                                    .ref-content{
+                                        line-height: 40px;
+                                    }
+                                    .delete-content{
+                                        background-color:rgb(0, 102, 255);
+                                        line-height: 80px;
+                                        .title,
+                                        .confirm,
+                                        .cancle{
+                                            margin: 5px 0;
+                                        }
+                                    }
+                                    .active{
+                                        transform: translate(0,0);
+                                    }
+                                }
+                            }
+
+                            .side-btn-group{
+                                color: white;
+                                position: relative;
+                                z-index: 2;
+                                text-align: center;
+
+                                .ref-btn{
+                                    cursor: pointer;
+                                    user-select: none;
+                                    background-color: rgb(30, 30, 30);
+                                    padding: 22px 3px;
+                                }
+
+                                .delete-btn{
+                                    cursor: pointer;
+                                    user-select: none;
+                                    background-color: rgb(0, 102, 255);
+                                    padding: 22px 3px;
+                                }
+                            }
+                        }
+
+                        .delete-active{
+                            opacity: 0;
+                            transform: translateX(100%);
+                        }
+
+                        .no-data-outer{
+                            display: flex;
+                            justify-content: center;
+                            flex-direction: column;
+                            align-items: center;
+                            color: white;
+                            height: 100%;
+                        }
+
+                        .green{
+                            box-shadow:inset 16px 0 9px -6px rgb(0, 130, 0),0 0 2px 1px rgba(255,255,255,.7);
+                        }
+
+                        .pink{
+                            box-shadow:inset 16px 0 9px -6px rgb(255, 192, 202),0 0 2px 1px rgba(255,255,255,.7);
+                        }
+
+                        .orange-sm{
+                            box-shadow:inset 16px 0 9px -6px rgb(255, 166, 0),0 0 2px 1px rgba(255,255,255,.7);
+                        }
+
+                        .orange-md{
+                            box-shadow:inset 16px 0 9px -6px rgb(255, 102, 0),0 0 2px 1px rgba(255,255,255,.7);
+                        }
+
+                        .orange-lg{
+                            box-shadow:inset 16px 0 9px -6px rgb(255, 72, 0),0 0 2px 1px rgba(255,255,255,.7);
+                        }
+
+                        .red{
+                            box-shadow:inset 16px 0 9px -6px rgb(255, 0, 0),0 0 2px 1px rgba(255,255,255,.7);
+                        }
+
+                        @media screen and (max-width:768px) {
+                            max-height: 400px;
+
+                            .green{
+                                box-shadow:inset 0 16px 9px -6px rgb(0, 130, 0),0 0 2px 1px rgba(255,255,255,.7);
+                            }
+                            
+                            .pink{
+                                box-shadow:inset 0 16px 9px -6px rgb(255, 192, 202),0 0 2px 1px rgba(255,255,255,.7);
+                            }
+
+                            .orange-sm{
+                                box-shadow:inset 0 16px 9px -6px rgb(255, 166, 0),0 0 2px 1px rgba(255,255,255,.7);
+                            }
+
+                            .orange-md{
+                                box-shadow:inset 0 16px 9px -6px rgb(255, 102, 0),0 0 2px 1px rgba(255,255,255,.7);
+                            }
+
+                            .orange-lg{
+                                box-shadow:inset 0 16px 9px -6px rgb(255, 72, 0),0 0 2px 1px rgba(255,255,255,.7);
+                            }
+                            
+                            .red{
+                                box-shadow:inset 0 16px 9px -6px rgb(255, 0, 0),0 0 2px 1px rgba(255,255,255,.7);
+                            }
+                        }
+
+                        &::-webkit-scrollbar {
+                            width: 5px;
+                        }
+
+                        &::-webkit-scrollbar-thumb {
+                            background-color: rgb(255, 255, 255);
+                            border-radius: 100px;
+                        }
+                    }
+
+                    &.active{
+                        margin: 0 0;
+                    }
+                }
+            }
+        }
+
+        .footer{
+            margin: 40px 0;
+            text-align: center;
+            color: white;
+
+            .footer-icons{
+                span{
+                    display: block;
+                }
+            }
+
+            @media screen and (max-width:768px) {
+                margin: 40px 0 25px 0;
+            }
+        }
+    }
+}

@@ -1,0 +1,38 @@
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible",content="IE=edge")
+    meta(name="viewport",content="width=device-width, initial-scale=1.0")
+    title="BMI Calculator"
+    link(rel="stylesheet",href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css",integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p",crossorigin="anonymous")
+  body
+    .container
+        .header
+            h1(class="title")
+                i(class="fal fa-male fa-5x mx-1 py-3")
+                i(class="fal fa-female fa-5x mx-1 py-3")
+                br
+                |BMI Calculator
+            .input-groups
+                .height-input
+                    span 身高 ( CM )
+                    input(class="height",type="tel",placeholder="請輸入您的身高")
+                    p(class="height-check") 請輸入身高
+                .weight-input
+                    span 體重 ( KG )
+                    input(class="weight",type="tel",placeholder="請輸入您的體重")
+                    p(class="weight-check") 請輸入體重
+            .add-btn 檢測
+        .container
+            .main
+                .toggle-data-btn 檢測紀錄
+                .render-data-outer-frame
+                    .render-data-outer
+                        .render-data
+        .footer
+            .footer-icons
+                i(class="fal fa-male fa-3x")
+                i(class="fal fa-female fa-3x")
+                span BMI Calculator
+            h6 &copy; CopyRight By Alex Chen
+    script(type="module",src="./index.ts")
