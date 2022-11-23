@@ -301,10 +301,11 @@ const Main:FC = ():TSX => {
                 const { startTime,endTime:endTimeTemp,valueGroup:[weatherSign,weatherSignState,feelTemp,temp,wetEqualPercent,comferPercent] } = item
                 
                 const [date,] = startTime.split(' ')
+                const [,month,day] = date.split('-')
                 const [,endTimes] = endTimeTemp.split(' ')
                 const endTime = endTimes.split(':').removeLast().join(':')
-
-                filterDate.append(date)
+console.log(date)
+                filterDate.append(`${month}-${day}`)
 
                 return { startTime,endTime,weatherSign,weatherSignState,feelTemp,temp,wetEqualPercent,comferPercent }
             })
@@ -313,7 +314,7 @@ const Main:FC = ():TSX => {
                 date,
                 descItem:$.filter(repackData,({ startTime }:{ startTime:string }):any => startTime.match(date)).map(item => ({
                     ...item,
-                    startTime:item.startTime.replace(`${date} `,'').split(':').removeLast().join(':')
+                    startTime:item.startTime.split(' ')[1].split(':').removeLast().join(':')
                 }))
             }))
 
@@ -519,13 +520,10 @@ const Main:FC = ():TSX => {
                                         <div className="data-list">
                                             {singleTownData.length > 0 && $.maps(singleTownData,(item:singleTownObjType,index:number) => (
                                                 <Fragment key={index}>
-                                                    <div className="date-outer">
-                                                        <div className='date'>{item.date}</div>
-                                                    </div>
                                                     <div className="data-row-outer">
                                                         {$.maps(item.descItem,(descDataRow:descItemType,descIndex:number) => (
                                                             <div className='data-row' key={descIndex}>
-                                                                <div className='time'><i className="far fa-clock" />&nbsp;{descDataRow.startTime} ~ {descDataRow.endTime}</div>
+                                                                <div className='time'><i className="far fa-clock" />&nbsp;{item.date}&nbsp;{descDataRow.startTime} ~ {descDataRow.endTime}</div>
                                                                 {rwdStatus ? (
                                                                     <div className='bottom'>
                                                                         <div>
@@ -668,25 +666,27 @@ const Main:FC = ():TSX => {
 
     return (
         <Container isMoon={isMoon}>
-            <div className="container-fluid">
-                <div className={toggleBar ? 'header header-toggle' : 'header'}>
-                    <i className="fab fa-cloudversify fa-3x mx-2"></i>
-                    <h1>Weather</h1>
-                </div>
-                <div className="main">
-                    {renderCityData.length > 0 && renderDataElemet(renderType,renderCityData)}
-                </div>
-                <div className="footer">&copy; CopyRight 2022-11 Alex Chen.</div>
-                <div className={toggleGoTop ? 'go-top go-top-toggle' : 'go-top'} onClick={() => $('html').scrollToTop({ scrollTop:0,duration:2000 })}>
-                    <i className="fas fa-chevron-up" />
-                </div>
-                <div className={isMoon ? 'mode mode-toggle' : 'mode'} onClick={() => setIsMoon(!isMoon)}>
-                    <i className="fad fa-moon" />
-                </div>
-                <div className={loadingStatus ? 'loading-outer loading-outer-toggle' : 'loading-outer'}>
-                    <div className="loading-text">{loadingStatus ? 'Loading' : 'Complated'}</div>
-                    <div className="circle-I"></div>
-                    <div className="circle-II"></div>
+            <div className={isMoon ? 'layout night' : 'layout morning'}>
+                <div className="container-fluid">
+                    <div className={toggleBar ? 'header header-toggle' : 'header'}>
+                        <i className="fab fa-cloudversify fa-3x mx-2"></i>
+                        <h1>Weather</h1>
+                    </div>
+                    <div className="main">
+                        {renderCityData.length > 0 && renderDataElemet(renderType,renderCityData)}
+                    </div>
+                    <div className="footer">&copy; CopyRight 2022-11 Alex Chen.</div>
+                    <div className={toggleGoTop ? 'go-top go-top-toggle' : 'go-top'} onClick={() => $('html').scrollToTop({ scrollTop:0,duration:2000 })}>
+                        <i className="fas fa-chevron-up" />
+                    </div>
+                    <div className={isMoon ? 'mode mode-toggle' : 'mode'} onClick={() => setIsMoon(!isMoon)}>
+                        <i className="fad fa-moon" />
+                    </div>
+                    <div className={loadingStatus ? 'loading-outer loading-outer-toggle' : 'loading-outer'}>
+                        <div className="loading-text">{loadingStatus ? 'Loading' : 'Complated'}</div>
+                        <div className="circle-I"></div>
+                        <div className="circle-II"></div>
+                    </div>
                 </div>
             </div>
         </Container>
