@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="../Weather/Weather.css">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <script src="../my_library/Library.js"></script>
+    <title>Weather</title>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="header">
+            <i class="fab fa-cloudversify fa-3x mx-2"></i>
+            <h1>Weather</h1>
+        </div>
+        <div class="main">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-10">
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="go-back-options-outer">
+                                <div class="go-back-options">返回</div>
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <div class="background-controller-outer">
+                                <div class="background-controller">
+                                    <div class="background-text"></div>
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                            <div class="date-group">
+                                <span class="date"></span>
+                                <span class="time"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="option-group">
+                        <div class="loading-outer">
+                            <span class="loading-text"></span>
+                            <div class="circle-I"></div>
+                            <div class="circle-II"></div>
+                        </div>
+                        <div class="select-group select-toggle">
+                            <div class="current-select"></div>
+                            <i class="fas fa-chevron-up arrow"></i>
+                            <div class="select-city-outer">
+                                <div class="select-city"></div>
+                            </div>
+
+                        </div>
+                        <div class="other-block other-block-toggle">各地區氣象資訊</div>
+                    </div>
+                </div>
+            </div>
+            <div class="weather-outer-frame">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-md-10">
+                        <div class="weathers-outer">
+                            <div class="btn-session-group"></div>
+                            <div class="weathers"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="go-top">
+                <i class="fas fa-chevron-up go-top-icon"></i>
+            </div>
+        </div>
+        <div class="footer">
+            <i class="far fa-copyright"></i>Copyright By Chen
+        </div>
+    </div>
+    <script src="../Weather/Weather.js"></script>
+</body>
+
+</html>

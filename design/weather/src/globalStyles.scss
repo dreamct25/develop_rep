@@ -1,0 +1,19 @@
+html {
+    &::-webkit-scrollbar {
+        width: 12px;
+        background-color: rgba(100, 100, 100, 0.7);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 20px;
+        background-color: rgba(255, 255, 255, 0.7);
+        border: 3px solid rgba(100, 100, 100, 0.7);
+    }
+
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    body {
+        background-color: transparent !important;
+        line-height: unset;
+    }
+}
