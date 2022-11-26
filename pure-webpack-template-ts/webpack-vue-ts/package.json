@@ -1,0 +1,33 @@
+{
+  "name": "webpack-vue-ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rm dist/bundle.js",
+    "start": "cross-env NODE_ENV=development webpack serve --hot",
+    "build": "cross-env NODE_ENV=production webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.19.3",
+    "@babel/preset-env": "^7.19.3",
+    "babel-loader": "^8.2.5",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.7.1",
+    "node-sass": "^7.0.3",
+    "sass-loader": "^13.1.0",
+    "ts-loader": "^9.4.1",
+    "typescript": "^4.8.4",
+    "vue-loader": "^17.0.0",
+    "vue-template-compiler": "^2.7.10",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.11.1"
+  },
+  "dependencies": {
+    "vue": "^3.2.40"
+  }
+}
