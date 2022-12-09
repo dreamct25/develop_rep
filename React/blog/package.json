@@ -1,0 +1,56 @@
+{
+  "name": "blog-ts",
+  "version": "1.0.0",
+  "description": "",
+  "source": "public/index.pug",
+  "targets": {
+    "index": {
+      "distDir": "build",
+      "publicUrl": "/"
+    }
+  },
+  "scripts": {
+    "start": "parcel --port=9998 --open",
+    "build": "parcel build --no-source-maps",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.18.6",
+    "@parcel/transformer-pug": "^2.7.0",
+    "@types/markdown-it": "^12.2.3",
+    "@types/react": "^18.0.25",
+    "@types/react-dom": "^18.0.9",
+    "@types/react-helmet": "^6.1.6",
+    "@types/styled-components": "^5.1.26",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-plugin-transform-react-pug": "^7.0.1",
+    "parcel": "^2.7.0",
+    "process": "^0.11.10",
+    "punycode": "^1.4.1",
+    "redux-devtools-extension": "^2.13.9",
+    "sharp": "^0.31.1",
+    "typescript": "^4.9.3"
+  },
+  "dependencies": {
+    "@uiw/react-md-editor": "^3.19.7",
+    "bootstrap": "^5.2.3",
+    "markdown-it": "^13.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-helmet": "^6.1.0",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.4.3",
+    "redux": "^4.2.0",
+    "styled-components": "^5.3.6"
+  },
+  "browserslist": [
+    "> 0.1%",
+    "Chrome >= 48",
+    "Firefox >= 20",
+    "iOS >= 9"
+  ]
+}
