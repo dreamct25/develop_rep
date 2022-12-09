@@ -6,18 +6,30 @@ html(lang="en")
     title="Travel"
     link(rel="stylesheet",href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css",integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p",crossorigin="anonymous")
   body
-    div(id="map")
-    div(class="left-side")
-      div(class="search-bar-outer")
-        div(class="search-bar")
+    #map
+    .left-side
+      .search-bar-outer
+        .search-bar
           input(type="text",name="search-input",placeholder="輸入地名或景點名稱",value="")
-          div(class="search-btn")
+          .search-btn
             i(class="far fa-search")
-        div(class="dark-mode")
-          <i class="fas fa-moon"></i>
-      div(class="search-list-outer")
-        div(class="search-list")
-    div(class="right-side")
-      div(class="single-list-outer")
-        div(class="single-list")
+        .dark-mode
+            i(class="fas fa-moon")
+      .search-list-outer
+        .search-list
+    .right-side
+      .single-list-outer
+        .single-list
+    .loading-outer
+      .loading-circle
+          svg(className="fsg",width="100%",height="100%")
+              defs
+                  linearGradient(id="a1",x1="0%",y1="0%",x2="100%",y2="100%")
+                      stop(offset="10%",stop-color="rgb(0,162,250)")
+                      stop(offset="50%",stop-color="rgb(0,90,250)",stop-opacity=".5")
+                      stop(offset="70%",stop-color="rgb(0,0,0)",stop-opacity="0")
+                      stop(offset="90%",stop-color="rgb(0,0,0)",stop-opacity="0")
+                      stop(offset="100%",stop-color="rgb(0,0,0)",stop-opacity="0")
+              circle(cx="105",cy="105",r="100",stroke-width="6",stroke="url(#a1)",fill="none")
+      .loading-text Loading
     script(type="module",src="../src/index.ts")
