@@ -3,7 +3,6 @@ import { OpenStreetMapProvider } from 'leaflet-geosearch'
 import 'leaflet/dist/leaflet.css'
 import './styles.scss'
 import pin from '../public/images/pin.png'
-import data from './json/data.json'
 import './lib/Library'
 import $ from './lib/Library'
 import type { fetchDataType,travelDataType } from './types'
@@ -171,8 +170,14 @@ const toggleDarkMode:(event?:MouseEvent) => void = event => {
     }
 }
 
-$(document).useMounted(() => {
-    travelData = (data as any).data as travelDataType[]
+$(document).useMounted(async () => {
+    $('.loading-outer').addClass('active')
+
+    const result = await $.fetch?.get<{ XML_Head:{ Infos:{ Info:travelDataType[] } } }>('https://trevnoc.deta.dev/test/travels')
+
+    $('.loading-outer').removeClass('active')
+
+    travelData = result?.data?.XML_Head.Infos.Info!
 
     $('.search-btn').listener('click',searchPos)
     $('[name="search-input"]').listener('keydown',searchPosWhenEnter)
