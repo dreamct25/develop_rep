@@ -29,8 +29,14 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        min-height: 100vh;
+        min-height: 98vh;
         background-color: rgb(30,30,30);
+    }
+
+    @media screen and (max-width:414px) {
+        html body {
+            min-height: 97vh;
+        }
     }
 
     html body .bottom{
@@ -165,7 +171,7 @@
             const minute = (hour - hourFix) * 60
             const minuteFix = Math.floor((hour - hourFix) * 60)
             const secondesFix = Math.floor((minute - minuteFix) * 60)
-            const bindRemainTime = `${dayFix} dd ${addZero(hourFix)} hh ${addZero(minuteFix)} mm ${addZero(secondesFix)} ss` 
+            const bindRemainTime = `${dayFix} dd ${hourFix} hh ${addZero(minuteFix)} mm ${addZero(secondesFix)} ss` 
 
             if(lang === 'en'){
                 $('.remain-title').text(isChangeBg ? 'Happ New Year !' : `To ${newYearTime.getFullYear()} New Year`)
