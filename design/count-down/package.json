@@ -2,7 +2,7 @@
   "name": "count-down",
   "version": "1.0.0",
   "description": "",
-  "source": "index.pug",
+  "source": "index.html",
   "targets": {
     "index": {
       "distDir": "build",
@@ -18,15 +18,20 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@parcel/transformer-pug": "^2.7.0",
-    "@parcel/transformer-sass": "^2.7.0",
-    "@types/alpinejs": "^3.7.1",
+    "@types/react": "^18.0.26",
+    "@types/react-dom": "^18.0.9",
+    "@types/styled-components": "^5.1.26",
     "parcel": "^2.7.0",
+    "process": "^0.11.10",
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "alpinejs": "^3.10.5",
-    "alpinejs-i18n": "^2.3.0",
+    "i18next": "^22.4.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^12.1.1",
+    "react-particles": "^2.6.0",
+    "styled-components": "^5.3.6",
     "tsparticles": "^2.6.0",
     "tsparticles-engine": "^2.6.0"
   },

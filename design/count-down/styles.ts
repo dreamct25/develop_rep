@@ -1,21 +1,27 @@
-html {
-    position: relative;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
+import styled,{ createGlobalStyle } from "styled-components";
 
-    body {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        min-height: 98vh;
-        background-color: rgb(30,30,30);
+export const GlobalStyles = createGlobalStyle`
+    html {
+        position: relative;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
 
-        @media screen and (max-width:414px) {
-            min-height: 97vh;
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 98vh;
+            background-color: rgb(30,30,30);
+
+            @media screen and (max-width:414px) {
+                min-height: 97vh;
+            }
         }
     }
+`
 
+export const Styles = styled.div`
     .center{
         position: relative;
         z-index: 10;
@@ -76,6 +82,11 @@ html {
             cursor: pointer;
             user-select: none;
             backdrop-filter: blur(5px);
+
+            @media screen and (max-width:1024px){
+                width: 180px;
+                padding: 5px;
+            }
 
             svg{
                 width: 20px;
@@ -154,6 +165,10 @@ html {
         backdrop-filter: blur(5px);
         transition: .5s ease;
 
+        @media screen and (max-width:414px){
+            font-size: 14px;
+        }
+
         &.active{
             transform: translateX(0px);
         }
@@ -168,4 +183,4 @@ html {
         bottom: 0;
         background-color: rgba(30,30,30,.5);
     }
-}
+`
