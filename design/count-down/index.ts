@@ -129,19 +129,13 @@ Alpine.data('initData',() => ({
     
             if(31536000000 -  timeRange <= 300000) {
                 if(!this.data.isChangeBg){
-                    tsParticles
-                        .load("tsparticles", activeAnimate as SingleOrMultiple<RecursivePartial<IOptions>>).then(() => this.data.isChangeBg = true)
-                        const particles = tsParticles.domItem(0);
-
-                        particles?.play()
+                    tsParticles.load("tsparticles", activeAnimate as SingleOrMultiple<RecursivePartial<IOptions>>).then(() => this.data.isChangeBg = true)
+                        tsParticles.domItem(0)?.play();
                 }
             } else {
                 if(this.data.isChangeBg){
-                    tsParticles
-                        .load("tsparticles", defaultAnimate as SingleOrMultiple<RecursivePartial<IOptions>>).then(() => this.data.isChangeBg = false)
-                        const particles = tsParticles.domItem(0);
-
-                        particles?.play()
+                    tsParticles.load("tsparticles", defaultAnimate as SingleOrMultiple<RecursivePartial<IOptions>>).then(() => this.data.isChangeBg = false)
+                    tsParticles.domItem(0)?.play()
                 }
             }
         },1000)
