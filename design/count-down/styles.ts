@@ -140,7 +140,7 @@ export const Styles = styled.div`
 
                 &.active{
                     opacity: 1;
-                    max-height: 148px;
+                    max-height: 100vh;
                 }
             }
         }
