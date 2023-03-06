@@ -173,7 +173,7 @@ const toggleDarkMode:(event?:MouseEvent) => void = event => {
 $(document).useMounted(async () => {
     $('.loading-outer').addClass('active')
 
-    const result = await $.fetch?.get<{ XML_Head:{ Infos:{ Info:travelDataType[] } } }>('https://trevnoc.deta.dev/test/travels')
+    const result = await $.fetch?.get<{ XML_Head:{ Infos:{ Info:travelDataType[] } } }>('https://proxyservice-1-t7335739.deta.app/test/travels')
 
     $('.loading-outer').removeClass('active')
 

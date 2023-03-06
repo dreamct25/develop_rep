@@ -38,8 +38,7 @@ export class GetDataService {
   constructor() { }
 
   async datas() {
-    let cros = "https://cors-anywhere.herokuapp.com/"
-    let res = await fetch(`${cros}https://gis.taiwan.net.tw/XMLReleaseALL_public/hotel_C_f.json`)
+    let res = await fetch('https://proxyservice-1-t7335739.deta.app/test/hotels')
     if (res.status === 200) {
       await res.json().then(res => this.data = res.XML_Head.Infos.Info)
       let dataTemp = this.data.map((item: dataKeysType) => {
