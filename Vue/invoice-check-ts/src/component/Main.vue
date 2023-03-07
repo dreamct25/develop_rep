@@ -2,7 +2,7 @@
 .main
     .invoic-layout
         .invoic(v-for="(item,index) in renderData",:key="index")
-            .title {{ item.year }} 年 {{ item.betweenMonth.join(' ~ ') }} 月發票
+            .title {{ item.year }} 年 {{ item.betweenMonth.join('~') }} 月發票
                 .function-group(v-if="!rwdStatus")
                     .open-scanner-btn(@click="openScanner") 發票 QR Code
                     .change-date-btn-outer
@@ -655,7 +655,7 @@ export default defineComponent({
                         state.respResult.value = repackData
                         state.renderData.value = [fstObj]
                         state.currentChoiceDate.value = `${fstObj.year}-${fstObj.betweenMonth.join('-')}`
-                        state.invoiceDateData.value = $.maps(repackData,({ year,betweenMonth }) => ({ label:`${year} 年 ${betweenMonth.join(' ~ ')} 月`,value:`${year}-${betweenMonth.join('-')}` }))
+                        state.invoiceDateData.value = $.maps(repackData,({ year,betweenMonth }) => ({ label:`${year} 年 ${betweenMonth.join('~')} 月`,value:`${year}-${betweenMonth.join('-')}` }))
                         state.staticAwardsData.value =  self.createStaticAwardsData()
 
                         state.loadingStatus.value = false
