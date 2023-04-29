@@ -1,0 +1,1 @@
+declare const pug:(...str:any) => JSX.Element

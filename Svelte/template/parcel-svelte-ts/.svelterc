@@ -1,0 +1,3 @@
+{
+    "preprocessors": ["svelte-preprocess"]
+}

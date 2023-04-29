@@ -1,0 +1,17 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "module": "es2020",
+    "importHelpers": true,
+    "target": "es2017",
+    "noEmit": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "lib": [
+      "es2018",
+      "dom"
+    ]
+  }
+}

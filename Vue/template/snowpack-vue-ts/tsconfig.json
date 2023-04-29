@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "sourceMap": true,
+        "target": "ES6",
+        "module": "ESNext",
+        "lib": ["ESNext","DOM"],
+        "strict": true,
+        "skipLibCheck": true,
+        "baseUrl": "./",
+        "allowSyntheticDefaultImports":true,
+        "esModuleInterop": true,
+        "typeRoots": ["node_modules/@types"],
+        "forceConsistentCasingInFileNames": true,
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+    },
+    "include": [
+        "src/**/*"
+    ]
+}

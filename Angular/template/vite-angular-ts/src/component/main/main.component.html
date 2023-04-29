@@ -1,0 +1,8 @@
+<div>
+    <h1>Vite & Angular 15</h1>
+    <div class="route-container">
+        <router-outlet />
+    </div>
+    <div class="btn" [class.toggle]="currentPathName === 'pageI'" (click)="goPage('pageI')">{{ currentPathName === 'pageI' ? 'Now In' : 'Go'}} PageI</div>
+    <div class="btn" [class.toggle]="currentPathName === 'pageII'" (click)="goPage('pageII')">{{ currentPathName === 'pageII' ? 'Now In' : 'Go'}} PageII</div>
+</div>
