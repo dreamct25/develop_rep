@@ -34,24 +34,6 @@ fn get_sys_info() -> String {
 
     sys.refresh_all();
 
-    // println!("disk => \n {:?}",sys.disks());
-
-    // println!("network => \n {:?}",sys.networks());
-
-    // println!("templature => \n {:?}",sys.components());
-
-    // println!("total RAM: {total_m} used RAM: {used_m}",total_m = sys.total_memory(),used_m = sys.used_memory());
-    // println!("{:?}",sys.global_cpu_info());
-    // println!("{}",sys.free_memory());
-    // println!("{}",sys.host_name().unwrap());
-    // println!("{sys_name} {sys_os}",sys_name = sys.name().unwrap(),sys_os = sys.os_version().unwrap());
-
-    // println!("CPUs: {:?}",sys.cpus().iter().map(|cpu_obj| {
-    //     format!("{}",cpu_obj)
-    // }));
-
-    // println!("{} {}",num_cpus::get(),num_cpus::get_physical())
-
     let mut result_obj:HashMap<&str, SysInfo> = HashMap::new();
 
     let computer_info = SysInfo {

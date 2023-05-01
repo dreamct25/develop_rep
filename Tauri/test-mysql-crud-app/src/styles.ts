@@ -159,7 +159,7 @@ export default styled.div`
                         .logo {
                             will-change: filter;
                             transition: 0.75s;
-                            weight: 25px;
+                            width: 25px;
                             height: 25px;
                             padding: 0;
 
