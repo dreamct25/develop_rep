@@ -17,20 +17,23 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@angular/common": "^15.2.8",
-    "@angular/compiler": "^15.2.8",
-    "@angular/core": "^15.2.8",
-    "@angular/platform-browser": "^15.2.8",
-    "@angular/platform-browser-dynamic": "^15.2.8",
-    "@angular/router": "^15.2.8",
-    "rxjs": "^7.8.0",
+    "@angular/common": "^13.4.0",
+    "@angular/compiler": "^13.4.0",
+    "@angular/core": "^13.4.0",
+    "@angular/forms": "^13.4.0",
+    "@angular/platform-browser": "^13.4.0",
+    "@angular/platform-browser-dynamic": "^13.4.0",
+    "@angular/router": "^13.4.0",
+    "rxjs": "^7.8.1",
     "sass": "^1.62.1",
-    "zone.js": "^0.13.0"
+    "zone.js": "^0.11.4"
   },
   "devDependencies": {
     "@parcel/transformer-inline-string": "^2.8.3",
     "@parcel/transformer-sass": "^2.8.3",
+    "@types/node": "^20.1.4",
     "parcel": "^2.8.3",
+    "process": "^0.11.10",
     "typescript": "^5.0.4"
   }
 }

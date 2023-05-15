@@ -40,9 +40,6 @@ build({
     target:['chrome58','safari11'],
     plugins:[
         decodeVue(),
-        sassPlugin({
-            type: "css-text"
-        }),
         ...envObj.useDevServer
     ]
 }).then(() => {

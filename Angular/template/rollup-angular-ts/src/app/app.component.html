@@ -1,3 +1,8 @@
 <div>
     <app-main></app-main>
+    <input type="text" [(ngModel)]="inputVal" />
+    <div>
+        <div *ngIf="inputVal.length >= 5; else elseT">Current character's lenght is {{ inputVal.length }} too big</div>
+        <ng-template #elseT>Current character's lenght is {{ inputVal.length }} small</ng-template>
+    </div>
 </div>

@@ -1,4 +1,5 @@
 <div>
-    <h1>99</h1>
     <app-main></app-main>
+    <input type="text" [(ngModel)]="inputVal" (ngModelChange)="onInputChange()" />
+    {{ inputVal }}
 </div>

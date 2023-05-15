@@ -8,4 +8,6 @@ import scss from './app.component.scss'
   styles: [`${scss}`],
 })
 
-export class AppComponent { }
+export class AppComponent { 
+  public inputVal:string = ""
+}

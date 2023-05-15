@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, NavigationExtras,ActivationEnd } from '@angular/router';
-import html from 'bundle-text:./main.component.html'
+import { Component, Inject, OnInit } from '@angular/core';
+import { Router, NavigationExtras,ActivationEnd } from '@angular/router';
+import { HttpService } from './fetch'
+import html from './main.component.html'
 import scss from 'bundle-text:./main.component.scss'
 
 @Component({
@@ -8,12 +9,14 @@ import scss from 'bundle-text:./main.component.scss'
   template: `${html}`,
   styles: [`${scss}`],
 })
-
 export class MainComponent implements OnInit {
-  constructor(){
-    
-  }
-  /* constructor(private route:ActivatedRoute,private router:Router){}
+  public currentPathName:string
+  public respData:string
+
+  constructor(
+    @Inject(Router) private router:Router,
+    @Inject(HttpService) private httpService:HttpService
+  ){}
 
   goPage(routPath:string): void {
     const obj:NavigationExtras = routPath === 'pageI' ? {
@@ -31,15 +34,11 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.httpService.getPosts().subscribe(data => this.respData = JSON.stringify(data))
     this.router.events.subscribe(obj => {
       if(obj instanceof ActivationEnd){
         this.currentPathName = obj.snapshot.routeConfig.path
       }
     })
-  } */
-
-  ngOnInit(): void {
-    console.log(this)
-    console.log(scss)
   }
 }

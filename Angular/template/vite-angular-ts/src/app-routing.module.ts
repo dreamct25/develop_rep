@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PageI,PageII } from './container';
+import { PageIContainer,PageIIContainer } from './container';
 // import { Resovles } from './resovle/resovle'
 
 const routes: Routes = [{
@@ -10,11 +10,11 @@ const routes: Routes = [{
 }, {
   path: "pageI",
   title: `${document.title}-PageI`,
-  component: PageI
+  component: PageIContainer
 }, {
   path: "pageII",
   title: `${document.title}-PageII`,
-  component: PageII
+  component: PageIIContainer
 }];
 
 @NgModule({

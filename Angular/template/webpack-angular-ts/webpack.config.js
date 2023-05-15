@@ -8,12 +8,13 @@ const webpackConfig = {
     entry: './src/entry.ts',
     output: {
         path: path.resolve(__dirname, './build'),
-        filename: 'bundle.js',
+        filename: './bundle.js',
     },
     devtool: process.env.APP_ENV === 'development' ? 'source-map' : false,
     devServer:{
         port:9901,
-        host: '0.0.0.0'
+        host: '0.0.0.0',
+        historyApiFallback:true
     },
     module: {
         rules: [

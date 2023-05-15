@@ -41,7 +41,7 @@ build({
     target:['chrome58','safari11'],
     plugins:[
         sassPlugin({
-            type: "css-text"
+            type: "css-text",
         }),
         ...envObj.useDevServer
     ]

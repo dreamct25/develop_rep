@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, NavigationExtras,ActivationEnd } from '@angular/router';
+import { Router, NavigationExtras,ActivationEnd } from '@angular/router';
+import { HttpService } from './fetch'
 
 @Component({
   selector: 'app-main',
@@ -7,9 +8,13 @@ import { ActivatedRoute, Router, NavigationExtras,ActivationEnd } from '@angular
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
-  public currentPathName:string = ''
+  public currentPathName:string
+  public respData:string
 
-  constructor(private route:ActivatedRoute,private router:Router){}
+  constructor(
+    private router:Router,
+    private httpService:HttpService
+  ){}
 
   goPage(routPath:string): void {
     const obj:NavigationExtras = routPath === 'pageI' ? {
@@ -27,6 +32,7 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.httpService.getPosts().subscribe(data => this.respData = JSON.stringify(data))
     this.router.events.subscribe(obj => {
       if(obj instanceof ActivationEnd){
         this.currentPathName = obj.snapshot.routeConfig.path

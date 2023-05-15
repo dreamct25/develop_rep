@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import html from 'bundle-text:./app.component.html'
+import html from './app.component.html'
 import scss from 'bundle-text:./app.component.scss'
 
 @Component({
@@ -7,4 +7,10 @@ import scss from 'bundle-text:./app.component.scss'
   template: `${html}`,
   styles: [`${scss}`],
 })
-export class AppComponent { }
+export class AppComponent {
+  public inputVal:string = ""
+
+  onInputChange() {
+    console.log(this.inputVal);
+  }
+}

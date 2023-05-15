@@ -9,6 +9,7 @@ export default defineConfig({
     host: '0.0.0.0',
     open: true,
   },
+  mode: process.env.NODE_ENV.trim(),
   build:{
     assetsDir:'./js'
   }

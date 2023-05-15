@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Inject } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras,ActivationEnd } from '@angular/router';
+import { HttpService } from './fetch'
 import html from './main.component.html'
 import scss from './main.component.scss'
-
-console.log(scss)
 
 @Component({
   selector: 'app-main',
@@ -12,9 +11,13 @@ console.log(scss)
 })
 
 export class MainComponent implements OnInit {
-  public currentPathName:string = ''
+  public currentPathName:string
+  public respData:string
 
-  /* constructor(private route:ActivatedRoute,private router:Router){}
+  constructor(
+    @Inject(Router) private router:Router,
+    @Inject(HttpService) private httpService:HttpService
+  ){}
 
   goPage(routPath:string): void {
     const obj:NavigationExtras = routPath === 'pageI' ? {
@@ -32,14 +35,11 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.httpService.getPosts().subscribe(data => this.respData = JSON.stringify(data))
     this.router.events.subscribe(obj => {
       if(obj instanceof ActivationEnd){
         this.currentPathName = obj.snapshot.routeConfig.path
       }
     })
-  } */
-
-  ngOnInit(): void {
-
   }
 }

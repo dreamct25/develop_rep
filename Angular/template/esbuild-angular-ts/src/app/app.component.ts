@@ -7,4 +7,6 @@ import scss from './app.component.scss'
   template: `${html}`,
   styles: [`${scss}`],
 })
-export class AppComponent { }
+export class AppComponent {
+  public inputVal:string = ""
+}

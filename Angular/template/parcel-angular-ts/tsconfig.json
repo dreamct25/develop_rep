@@ -2,16 +2,23 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "module": "es2020",
+    "module": "ESNext",
     "importHelpers": true,
     "target": "es2017",
     "noEmit": true,
     "moduleResolution": "node",
-    "sourceMap": true,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata":true,
+    "allowSyntheticDefaultImports": true,
     "lib": [
       "es2018",
       "dom"
-    ]
-  }
+    ],
+    "paths": {
+      "@angular/*": ["node_modules/@angular/*"],
+      "rxjs/*": ["node_modules/rxjs/*"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"],
 }
