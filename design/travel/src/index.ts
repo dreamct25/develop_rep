@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css'
 import './styles.scss'
 import pin from '../public/images/pin.png'
 import './lib/Library'
-import $ from './lib/Library'
+import $ ,{ fetchClassReturnType }from './lib/Library'
 import type { fetchDataType,travelDataType } from './types'
 
 declare global {
@@ -13,6 +13,7 @@ declare global {
     }
 }
 
+const urlQuerys = new URLSearchParams(new URL(window.location.href).search)
 const provider = new OpenStreetMapProvider()
 let travelData:travelDataType[] = []
 let currentSelectItem:travelDataType
@@ -55,10 +56,7 @@ const searchPos:() => void = async () => {
 
             isZoom = true
 
-            setTimeout(() => {
-                renderData(filterItem)
-                // toggleDarkMode()
-            },3000)
+            setTimeout(() => renderData(filterItem),3000)
         }
     }
 }
@@ -173,7 +171,9 @@ const toggleDarkMode:(event?:MouseEvent) => void = event => {
 $(document).useMounted(async () => {
     $('.loading-outer').addClass('active')
 
-    const result = await $.fetch?.get<{ XML_Head:{ Infos:{ Info:travelDataType[] } } }>('https://proxyservice-1-t7335739.deta.app/test/travels')
+    const result = await $.fetch?.get<fetchDataType>('https://proxyservice-1-t7335739.deta.app/test/travels',{
+        queryParams:{ qc:urlQuerys.get('qc') ? urlQuerys.get('qc') : 1000  }
+    }) as fetchClassReturnType<fetchDataType>
 
     $('.loading-outer').removeClass('active')
 
