@@ -172,7 +172,7 @@ $(document).useMounted(async () => {
     $('.loading-outer').addClass('active')
 
     const result = await $.fetch?.get<fetchDataType>('https://proxyservice-1-t7335739.deta.app/test/travels',{
-        queryParams:{ qc:urlQuerys.get('qc') ? urlQuerys.get('qc') : 1000  }
+        queryParams:{ qc:urlQuerys.get('qc') || 1000 }
     }) as fetchClassReturnType<fetchDataType>
 
     $('.loading-outer').removeClass('active')
