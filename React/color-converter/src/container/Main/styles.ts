@@ -17,7 +17,7 @@ const container:containerType = styled.div`
             display: flex;
             align-items: center;
             color: white;
-            padding: 8px;
+            padding: 8px 3px 8px 8px;
             background-color: rgb(60, 60, 60);
             cursor: pointer;
             user-select: none;
@@ -35,9 +35,10 @@ const container:containerType = styled.div`
             bottom: 0;
             z-index: -1;
             transition: .5s ease;
+
             .language-list-item{
                 color: white;
-                padding: 8px;
+                padding: 8px 3px 8px 8px;
                 background-color: rgb(60, 60, 60);
                 cursor: pointer;
                 user-select: none;

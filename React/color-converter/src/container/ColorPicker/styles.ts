@@ -31,7 +31,7 @@ const container:containerType = styled.div`
 
     .color-preview{
         position: fixed;
-        top: 14%;
+        top: 15%;
         left: 0;
         background-color: rgba(0, 0, 0, 0.7);
         color: white;
@@ -43,6 +43,7 @@ const container:containerType = styled.div`
         width: 80px;
         height: 94px;
         box-shadow: inset 0 0 2px 1px rgba(255, 255, 255, 0.5),0 0 6px 1px rgba(0, 0, 0, 0.5);
+
         .color-preview-frame{
             color: white;
             display: flex;

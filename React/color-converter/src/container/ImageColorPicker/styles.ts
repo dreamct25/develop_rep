@@ -24,14 +24,61 @@ const container:containerType = styled.div`
 
                 .img{
                     width: 100%;
-                    height: 100%;
+                    height: auto;
                     opacity: 0;
                     border-radius: 5px;
                     user-select: none;
+                    transform: scale(2);
+
                     &.toggle{
                         opacity: 1;
                     }
                 }
+
+                .zoom-controller{
+                    position: absolute;
+                    right: 0;
+                    bottom: 0;
+                    opacity: 1;
+                    border-radius: 5px;
+                    box-shadow: 0 0 2px rgba(30,30,30,.7);
+                    background-color: white;
+                    transform: translate(-8px, -8px);
+                    
+                    .plus{
+                        display: flex;
+                        justify-content: center;
+                        padding: 13px 8px 10px 8px;
+                        border-bottom: .5px solid rgba(30,30,30,.5);
+                        cursor: pointer;
+                        user-select: none;
+
+                        .line{
+                            width: 15px;
+                            height: 3px;
+                            background-color: rgba(30,30,30);
+
+                            &:nth-of-type(2){
+                                transform: translateY(-3px) rotate(90deg);
+                            }
+                        }
+                    }
+
+                    .minus{
+                        display: flex;
+                        justify-content: center;
+                        padding: 13px 8px;
+                        cursor: pointer;
+                        user-select: none;
+
+                        .line{
+                            width: 15px;
+                            height: 3px;
+                            background-color: rgba(30,30,30);
+                        }
+                    }
+                }
+
                 .img-frame{
                     color: white;
                     font-weight: bold;

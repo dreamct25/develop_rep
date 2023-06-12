@@ -4,7 +4,7 @@ import { faCopy } from '@fortawesome/free-solid-svg-icons'
 import { NewContext } from '../../App'
 import { Container,initStateType } from '.'
 
-const Converter:FC = ():JSX.Element => {
+const Converter:FC = ():TSX => {
 
     const { $,formatLanguage,PickerUtils } = useContext(NewContext)
 
@@ -93,26 +93,26 @@ const Converter:FC = ():JSX.Element => {
         <Container>
             <div className="board-outer-frame">
                 <div className="board-outer">
-                    <div className="converter-btn" onClick={toggleBoard.bind(this, !toggleMode)}>{formatLanguage('pages.converter.toggleConverter')}</div>
+                    <div className="converter-btn" onClick={toggleBoard.bind(undefined, !toggleMode)}>{formatLanguage('pages.converter.toggleConverter')}</div>
                     <div className={toggleMode ? "board-to-rgb" : "board-to-rgb active"}>
                         <div className="input-groups">
                             <div className="converter-rgb-title">{formatLanguage('pages.converter.rgbToHex')}</div>
                             <div className="R-input-group">
-                                <input type="number" inputMode="numeric" value={inRGB_RVal} onChange={setInputVal.bind(this, 'inRGB_RVal')}/>
+                                <input type="number" inputMode="numeric" value={inRGB_RVal} onChange={setInputVal.bind(undefined, 'inRGB_RVal')}/>
                                 <p>R</p>
                             </div>
                             <div className="G-input-group">
-                                <input type="number" inputMode="numeric" value={inRGB_GVal} onChange={setInputVal.bind(this, 'inRGB_GVal')} />
+                                <input type="number" inputMode="numeric" value={inRGB_GVal} onChange={setInputVal.bind(undefined, 'inRGB_GVal')} />
                                 <p>G</p>
                             </div>
                             <div className="B-input-group">
-                                <input type="number" inputMode="numeric" value={inRGB_BVal} onChange={setInputVal.bind(this, 'inRGB_BVal')} />
+                                <input type="number" inputMode="numeric" value={inRGB_BVal} onChange={setInputVal.bind(undefined, 'inRGB_BVal')} />
                                 <p>B</p>
                             </div>
                             <div className="converter-rgb-footer">{formatLanguage('pages.converter.toHex')}</div>
                             <div className="to-hex-input-group">
                                 <input type="text" readOnly value={inRGB_HexVal} />
-                                <div className="copy-btn" onClick={copyText.bind(this, inRGB_HexVal)}>
+                                <div className="copy-btn" onClick={copyText.bind(undefined, inRGB_HexVal)}>
                                     <FontAwesomeIcon icon={faCopy} />
                                     <div className="tooltip">{formatLanguage(`pages.converter.${isCopyed ? "copied" : "copy"}`)}</div>
                                 </div>
@@ -127,7 +127,7 @@ const Converter:FC = ():JSX.Element => {
                         <div className="input-groups">
                             <div className="converter-rgb-title">{formatLanguage('pages.converter.hexToRGB')}</div>
                             <div className="hex-input-group">
-                                <input type="text" value={inHex_HexVal} onChange={setInputVal.bind(this, 'inHex_HexVal')}/>
+                                <input type="text" value={inHex_HexVal} onChange={setInputVal.bind(undefined, 'inHex_HexVal')}/>
                             </div>
                             <div className="converter-hex-footer">{formatLanguage('pages.converter.toRGB')}</div>
                             <div className="hex-RGB-input-group">
@@ -146,7 +146,7 @@ const Converter:FC = ():JSX.Element => {
                             </div>
                             <div className="full-rgb-input-group">
                                 <input type="text" readOnly value={`rgb(${inHex_RVal},${inHex_GVal},${inHex_BVal})`} />
-                                <div className="copy-btn" onClick={copyText.bind(this, `rgb(${inHex_RVal},${inHex_GVal},${inHex_BVal})`)}>
+                                <div className="copy-btn" onClick={copyText.bind(undefined, `rgb(${inHex_RVal},${inHex_GVal},${inHex_BVal})`)}>
                                     <FontAwesomeIcon icon={faCopy} />
                                     <div className="tooltip">{formatLanguage(`pages.converter.${isCopyed ? "copied" : "copy"}`)}</div>
                                 </div>

@@ -56,8 +56,8 @@ const Main:FC = ():JSX.Element => {
                     <div className="language-display">{formatLanguage(i18next.language)}</div>
                 </div>
                 <div className={toggleLanguageList ? "language-list toggle" : "language-list"}>
-                    <div className="language-list-item" onClick={changeLanguage.bind(this, 'zh')}>{formatLanguage('zh')}</div>
-                    <div className="language-list-item" onClick={changeLanguage.bind(this, 'en')}>{formatLanguage('en')}</div>
+                    <div className="language-list-item" onClick={changeLanguage.bind(undefined, 'zh')}>{formatLanguage('zh')}</div>
+                    <div className="language-list-item" onClick={changeLanguage.bind(undefined, 'en')}>{formatLanguage('en')}</div>
                 </div>
             </div>
             <div className={toggleNavStatus ? "nav-list toggle" : "nav-list"} onClick={toggleNavBar}>
@@ -67,10 +67,10 @@ const Main:FC = ():JSX.Element => {
                     <div className="line"></div>
                 </div>
                 <div className={toggleNavStatus ? `nav-btn-group-${i18next.language} toggle` : `nav-btn-group-${i18next.language}`}>
-                    <div className="converter" onClick={goPage.bind(this, '/converter')}>{formatLanguage('nav.converter')}</div>
-                    <div className="picker" onClick={goPage.bind(this, '/picker')}>{formatLanguage('nav.picker')}</div>
-                    <div className="color-card" onClick={goPage.bind(this, '/color_card')}>{formatLanguage('nav.card')}</div>
-                    <div className="image-picker" onClick={goPage.bind(this, '/image_picker')}>{formatLanguage('nav.imagePicker')}</div>
+                    <div className="converter" onClick={goPage.bind(undefined, '/converter')}>{formatLanguage('nav.converter')}</div>
+                    <div className="picker" onClick={goPage.bind(undefined, '/picker')}>{formatLanguage('nav.picker')}</div>
+                    <div className="color-card" onClick={goPage.bind(undefined, '/color_card')}>{formatLanguage('nav.card')}</div>
+                    <div className="image-picker" onClick={goPage.bind(undefined, '/image_picker')}>{formatLanguage('nav.imagePicker')}</div>
                 </div>
             </div>
             <div className="container">

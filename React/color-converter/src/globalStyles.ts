@@ -33,6 +33,7 @@ const globalStyle = createGlobalStyle`
         background-repeat: no-repeat;
         background-size: cover;
         position: relative;
+        
         &::after{
             content: '';
             position: absolute;
@@ -40,7 +41,7 @@ const globalStyle = createGlobalStyle`
             left: 0;
             right: 0;
             bottom: 0;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px) brightness(0.8);
             z-index: -1;
         }
     }
