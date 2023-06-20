@@ -6,8 +6,21 @@ let hasOpenCard:boolean = false;
 let cardFrt:HTMLDivElement | undefined, cardScd:HTMLDivElement | undefined;
 let lock:boolean = false;
 let cardTimes:number = 0;
+let pageToken:string = '';
+let pageUd:string = '';
+let inputVal:string = '';
+let rageTime:number = 0;
+let rankingData:RankingDataType[] = []
+
+interface RankingDataType {
+    createTime:string
+    key:string
+    name:string
+    time:number
+}
 
 const cardChage:({ target }:{ target:HTMLDivElement }) => void = ({ target }) => {
+    // console.dir(target)
     if (lock === true) return
     if (target === cardFrt) return;
 
@@ -21,7 +34,10 @@ const cardChage:({ target }:{ target:HTMLDivElement }) => void = ({ target }) =>
 
     cardScd = target
 
-    if ($(cardFrt!).attr('data-target') === $(cardScd!).attr('data-target')) {
+    const [,matchI,] = (cardFrt?.childNodes[0].childNodes[0] as HTMLDivElement).className.split(' ')
+    const [,matchII,] = (cardScd?.childNodes[0].childNodes[0] as HTMLDivElement).className.split(' ')
+
+    if (matchI === matchII) {
         disableEvent()
         return
     }
@@ -38,10 +54,14 @@ const cardChage:({ target }:{ target:HTMLDivElement }) => void = ({ target }) =>
 const disableEvent:() => void = () => {
     cardTimes += 1
 
+    if(rageTime === 0){
+        rageTime = +new Date()
+    }
+
     if ((($('.card') as unknown as HTMLDivElement[]).length / 2) === cardTimes) {
         cardTimes = 0
-        initialModal(false,false)
-        $('.modal').addClass('modal-toggle')
+        rageTime = +new Date() - rageTime
+        initAddRankingModal(true,false)
     }
 
     $(cardFrt!).removeListener('click', cardChage)
@@ -64,7 +84,42 @@ const resetAll:() => void = () => {
     })
 }
 
-const initialModal:(isOnload:boolean,whenClose:boolean) => void = (isOnload,whenClose) => {
+const initAddRankingModal:(isOpen:boolean,isCreateRanking:boolean) => Promise<void> = async (isOpen,isCreateRanking) => {
+    if(isCreateRanking){
+        const res = await $.fetch.post<{ message:string }>('/card_game/v1/create_ranking',{
+            headers: { 
+                Authorization: pageToken,
+                'Content-Type': 'application/json' 
+            },
+            data:{
+                name: inputVal,
+                time: Math.toFixedNum({ value:rageTime / 1000,toFloatPos:0 }),
+                createTime: $.formatDateTime({ formatDate:new Date(),formatType: 'yyyy-MM-dd HH:mm:ss' })
+            }
+        })
+
+        if(res.data.message === 'success'){
+            inputVal = ''
+            $('.input-box').val('')
+        } else {
+            console.log(res.data.message)
+        }
+    }
+
+    if(isOpen){
+        $('.ranking-modal').addClass('modal-toggle')
+    } else {
+        $('.ranking-modal').removeClass('modal-toggle')
+    }
+
+    if(!$('.modal').attr('class')!.split(' ').includes('modal-toggle') && !isOpen){
+        initialModal(false,false)
+        $('.modal').addClass('modal-toggle')
+        rageTime = 0
+    }
+}
+
+const initialModal:(isOnload:boolean,whenClose:boolean) => Promise<void> = async (isOnload,whenClose) => {
     if(!whenClose){
         $('.header-text').texts({
             '':'遊戲說明',
@@ -88,14 +143,66 @@ const initialModal:(isOnload:boolean,whenClose:boolean) => void = (isOnload,when
     } else {
         $('.modal').removeClass('modal-toggle')
         resetAll()
+
+        await gerRankingData()
     }
 }
 
-$(document).useMounted(() => {
+const setInputVal:({ target }:{ target:HTMLInputElement }) => void = ({ target }) => inputVal = target.value
+
+const gerRankingData:() => Promise<void> = async () => {
+    const res = await $.fetch.get<{ data:RankingDataType[] }>('/card_game/v1/get_ranking',{
+        headers: { Authorization: pageToken }
+    })
+
+    try {
+        if(res.status >= 200 && res.status <= 399){
+            rankingData = $.sort(res.data.data,(a,b) => +new Date(a.time) - + new Date(b.time))
+            
+            $('.ranking-list').html(rankingData.length > 0 ? `
+                ${$.maps(rankingData,(item,index) => `
+                    <div class="ranking-item ${index <= 2 ? 'with-crown' : ''}">
+                        ${index <= 2 ? `<span><i class="fas fa-crown"></i></span>` : ''}
+                        <span>${item.name}</span>
+                        <span>${item.time} 秒</span>
+                    </div>
+                `).join('')}` : `
+                    <div class="no-data">--- 無排名紀錄 ---</div>
+                `)
+
+        } else {
+            throw new Error('fetch error')
+        }
+    } catch (error:any) {
+        console.log(error.message ?? error)   
+    }
+}
+
+$(document).useMounted(async () => {
+    $.fetch.createBase({ baseUrl:'https://v4p0gs.deta.dev' })
+
+    pageToken = await $.useSHA('SHA-256',$.createArray({ type: 'fake',item: { random: 10 }},() => (Math.random() * 100).toFixed(0))!.join(''))
+    
+    const pageTokenTemp = `${pageToken}&${$.useBase64('encode','/Memory_Card_Game' || window.location.pathname)}`
+
+    const res = await $.fetch.post<{ ud:string }>('/pages/v1/on_in',{
+        data: { token:pageTokenTemp }
+    })
+
+    pageUd = res.data.ud
+
     initialModal(true,false)
+
     $('.modal').addClass('modal-toggle')
-    $('.again').listener('click', () => initialModal(false,true))
-    $('.close').listener('click', () => initialModal(false,true))
-    $('.cancel').listener('click',() => initialModal(false,true))
+    $('.again').listener('click', initialModal.bind(this,false,true))
+    $('.close').listener('click', initialModal.bind(this,false,true))
+    $('.ranking-confirm').listener('click', initAddRankingModal.bind(this,false,true))
+    $('.ranking-cancel').listener('click', initAddRankingModal.bind(this,false,false))
+    $('.cancel').listener('click',initialModal.bind(this,false,true))
+    $('.input-box').listener('input',setInputVal)
+    $('.switch-time-list').listener('click',({ target }) => {
+        $(target).toggleClass('toggle')
+        $('.ranking-list-outer-frame').toggleClass('toggle')
+    })
     $(window).listener('click',({ target }) => target === $('.modal') && initialModal(false,true))
 })

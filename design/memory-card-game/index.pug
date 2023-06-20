@@ -6,31 +6,47 @@ html(lang="en")
     title="Memory Card Game"
     link(rel="stylesheet",href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css",integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p",crossorigin="anonymous")
   body
-    div(class="header")
+    .header
         h1 Memory Card Game
-    div(class="card-frame")
-        each value in ['dog','cat','squirrel','rabbit','alicorn','whale','dove','dragon']
-            div(class="card",data-target=`${value}`)
-                div(class="card-front")
-                    i(class=`fad fa-${value} fa-3x`)
-                div(class="card-back")
-                    i(class="fal fa-star fa-3x")
-            div(class="card",data-target=`${value}`)
-                div(class="card-front")
-                    i(class=`fad fa-${value} fa-3x`)
-                div(class="card-back")
-                    i(class="fal fa-star fa-3x")
-    div(class="footer")
-        h3 &copy; CopyRight By Alex Chen
-    div(class="modal")
-        div(class="modal-body")
-            div(class="modal-header")
-                h2(class="header-text")
-                span(class="close")
-                    span(class="fork")
-                    span(class="fork")
-            div(class="modal-content")
-            div(class="modal-footer")
-                div(class="cancel")
-                div(class="again")
+    .main
+        .card-frame
+            each value,index in ['dog','cat','squirrel','rabbit','alicorn','dove','dragon','kiwi-bird','narwhal','elephant']
+                .card
+                    .card-front
+                        i(class=`fad fa-${value} fa-3x`)
+                    .card-back
+                        i(class="fal fa-star fa-3x")
+                .card
+                    .card-front
+                        i(class=`fad fa-${value} fa-3x`)
+                    .card-back
+                        i.fal.fa-star.fa-3x
+        .ranking-list-outer-frame
+            .ranking-list-outer
+                .ranking-list
+        .switch-time-list 計時排名
+    .footer
+        h3 &copy; CopyRight 2020-10 Alex Chen .
+    .modal
+        .modal-body
+            .modal-header
+                h2.header-text
+                span.close
+                    span.fork
+                    span.fork
+            .modal-content
+            .modal-footer
+                .cancel
+                .again
+    .ranking-modal
+        .ranking-modal-body
+            .ranking-modal-header
+                h2.header-text 新增排名
+            .ranking-modal-content
+                input.input-box
+            .ranking-modal-footer
+                span (可新增排名紀錄 如不新增也可點取消)
+                .right-group
+                    .ranking-confirm 確定
+                    .ranking-cancel 取消
     script(type="module",src="./index.ts")
