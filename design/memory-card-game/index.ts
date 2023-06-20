@@ -20,7 +20,6 @@ interface RankingDataType {
 }
 
 const cardChage:({ target }:{ target:HTMLDivElement }) => void = ({ target }) => {
-    // console.dir(target)
     if (lock === true) return
     if (target === cardFrt) return;
 
@@ -183,11 +182,9 @@ $(document).useMounted(async () => {
 
     pageToken = await $.useSHA('SHA-256',$.createArray({ type: 'fake',item: { random: 10 }},() => (Math.random() * 100).toFixed(0))!.join(''))
     
-    const pageTokenTemp = `${pageToken}&${$.useBase64('encode','/Memory_Card_Game' || window.location.pathname)}`
+    const pageTokenTemp = `${pageToken}&${$.useBase64('encode', window.location.pathname)}`
 
-    const res = await $.fetch.post<{ ud:string }>('/pages/v1/on_in',{
-        data: { token:pageTokenTemp }
-    })
+    const res = await $.fetch.post<{ ud:string }>('/pages/v1/on_in',{ data: { token:pageTokenTemp }})
 
     pageUd = res.data.ud
 
