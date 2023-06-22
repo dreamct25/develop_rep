@@ -91,13 +91,13 @@ const ArticleAll:FC = ():TSX => {
                                     .left
                                         div #{item.articleTitle}
                                         div
-                                            i(className="far fa-calendar-star")
+                                            i.far.fa-calendar-star
                                             |&nbsp;&nbsp;#{item.fullDate}
                                         div #{item.articleShortContent}
 
                                         div
                                             div
-                                                i(className="fas fa-tag")
+                                                i.fas.fa-tag
                                                 |&nbsp;#{articleCategoryDesc[item.collectType]}
                                             div(onClick=goSingleArticle.bind(this,item.uuid)) （繼續閱讀 ...）
                                     .right
@@ -109,13 +109,13 @@ const ArticleAll:FC = ():TSX => {
                                 .article-item(key=index)
                                     div #{item.articleTitle}
                                     div
-                                        i(className="far fa-calendar-star")
+                                        i.far.fa-calendar-star
                                         |&nbsp;&nbsp;#{item.fullDate}
                                     div #{item.articleShortContent}
 
                                     div
                                         div
-                                            i(className="fas fa-tag")
+                                            i.fas.fa-tag
                                             |&nbsp;#{articleCategoryDesc[item.collectType]}
                                         div(onClick=goSingleArticle.bind(this,item.uuid)) （繼續閱讀 ...）
                                     .img(style={ backgroundImage:item.cardImg ? 'url(' +  item.cardImg + ')' : 'url(' + imgUrlGroup[item.collectType]  + ')' })

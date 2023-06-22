@@ -17,7 +17,7 @@ export default styled.div`
         @media screen and (min-width:415px){
             .article-list{
                 padding: 10px;
-                height: 74vh;
+                height: 79vh;
                 overflow-y: auto;
                 overflow-x: hidden;
 
@@ -161,7 +161,7 @@ export default styled.div`
         @media screen and (max-width:414px){
             .article-list{
                 padding: 10px;
-                height: 74vh;
+                height: 73vh;
                 margin-bottom: 16px;
                 overflow-y: auto;
                 overflow-x: hidden;

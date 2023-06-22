@@ -13,7 +13,7 @@ export default createGlobalStyle`
             right: 0;
             bottom: 0;
             z-index: -1;
-            backdrop-filter: blur(10px) brightness(65%);
+            backdrop-filter: blur(5px) brightness(50%);
         }
         
         &:after{

@@ -10,6 +10,11 @@ export default styled.div`
         font-style: italic;
         text-shadow: 0 2px 3px rgba(0,0,0,.7);
 
+        h1{
+            cursor: pointer;
+            user-select: none;
+        }
+
         span{
             display: block;
             font-size: 14px;
@@ -37,7 +42,7 @@ export default styled.div`
         .right-bar{
             overflow-y: auto;
             overflow-x: hidden;
-            height: 83vh;
+            height: 85vh;
             margin-right: 2px;
             padding: 0 30px;
 
@@ -167,6 +172,28 @@ export default styled.div`
                     margin: 30px 0;
                 }
             }
+        }
+    }
+
+    .footer{
+        position: relative;
+        text-align: center;
+        padding: 12px 0;
+
+        &:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: rgba(255,255,255,.5);
+            box-shadow: 0 0 1px 0 rgba(0,0,0,.7);
+        }
+
+        h6{
+            color: white;
+            margin-bottom: 0;
         }
     }
 

@@ -36,10 +36,11 @@ export default styled.div`
         .next-angle{
             position: absolute;
             border-radius: 50%;
-            background-color: rgb(100,100,100);
             cursor: pointer;
             user-select: none;
             z-index: 4;
+            box-shadow: inset 0 0 2px 1px rgba(255,255,255,.7);
+            backdrop-filter: blur(5px);
 
             i{
                 pointer-events: none;
@@ -55,6 +56,7 @@ export default styled.div`
             padding: 5px 15px 5px 13px;
 
             @media screen and (max-width:414px){
+                top: 42%;
                 margin-left: 4px;
             }
         }
@@ -67,6 +69,7 @@ export default styled.div`
             padding: 5px 13px 5px 15px;
 
             @media screen and (max-width:414px){
+                top: 42%;
                 margin-right: 10px;
             }
         }
@@ -136,6 +139,14 @@ export default styled.div`
                             }
                         }
                         
+                        pre{
+                            padding: 0 12px;
+
+                            code{
+                                border-radius: 5px;
+                                box-shadow: inset 0 0 2px 1px rgba(255,255,255,.7);
+                            }
+                        }
                     }
 
                     .bottom{

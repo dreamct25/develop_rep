@@ -46,7 +46,7 @@ const Main:FC = ():TSX => {
     return pug`
         Container
             .header
-                h1 Alex Chen
+                h1(onClick = () => router({ pathname:'/' })) Alex Chen
                     br
                     span 菜菜的工程獅，喜歡四處流浪學習新知 ~
             .main
@@ -93,6 +93,8 @@ const Main:FC = ():TSX => {
                             each item,index in topArticleDate
                                 .article-title(key=index,onClick=goSingleArticle.bind(this,item.uuid)) #{item.articleTitle}
                         .to-board-btn(onClick=goAdminDash) 管理文章
+            .footer 
+                h6 &copy; CopyRight 2022-12 Alex Chen .
 
     `
 }

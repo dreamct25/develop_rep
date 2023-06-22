@@ -1,15 +1,19 @@
 import React,{ useContext,useEffect,useState,ChangeEvent } from "react";
 import { useLocation,useNavigate } from 'react-router-dom'
 import MarkDownIt from 'markdown-it'
+import MarkdownCodeHighLight from 'markdown-it-highlightjs'
 import { NewContext } from '../../App'
 import { CustomInput,CustomTextArea,Loading } from '../../component'
 import { articleObjType } from '../ArticleAll'
 import { Container,leaveMsgObjType } from '.'
+import 'highlight.js/scss/github-dark.scss'
 
 const SingleArticle:FC = ():TSX => {
     const { $,Fetch,getReducer,changeWebTitle } = useContext(NewContext)
     const router = useNavigate() 
     const { pathname } = useLocation()
+
+    const markDown = new MarkDownIt().use(MarkdownCodeHighLight,{ inline:true })
     
     const [{
         singleArticleData,
@@ -189,7 +193,7 @@ const SingleArticle:FC = ():TSX => {
                                 .context
                                     .top
                                         .title #{item.articleTitle}
-                                        div(dangerouslySetInnerHTML={ __html:new MarkDownIt().render(item.articleContent) })
+                                        div(dangerouslySetInnerHTML={ __html: markDown.render(item.articleContent) })
                                     .bottom
                                         div 留言 ( #{singleArticleMsgData.length} )
                                         div 
