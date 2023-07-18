@@ -1,10 +1,11 @@
 import React,{ FC } from "react";
-import * as ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { App } from './App'
 
+const root = createRoot(document.querySelector('#app')!)
 
 const AppEntry:FC = ():JSX.Element => (
     <App />
 );
 
-ReactDOM.render(<AppEntry />,document.querySelector('#app')!);
+root.render(<AppEntry />,);

@@ -32,13 +32,14 @@ const envObj = {
 }[process.env.NODE_ENV.trim()]
 
 build({
-    entryPoints:['./src/entry.ts'],
+    entryPoints:['./src/entry.tsx'],
     outfile:`./${envObj.outDir}/bundle.js`,
-    format:'cjs',
-    minify: !envObj.minify,
+    format:'iife',
+    minify: envObj.minify,
     bundle: true,
     sourcemap: env.sourcemap,
     target:['chrome58','safari11'],
+    tsconfig: 'tsconfig.json',
     plugins:[
         linaria(),
         babel({

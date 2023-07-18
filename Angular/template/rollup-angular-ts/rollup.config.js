@@ -33,7 +33,8 @@ export default {
         //     extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue']
         // }),
         typescript({
-            sourceMap: process.env.APP_ENV === 'development'
+            sourceMap: process.env.APP_ENV === 'development',
+            tsconfig: 'tsconfig.json'
         }),
         sass({
             output: false,

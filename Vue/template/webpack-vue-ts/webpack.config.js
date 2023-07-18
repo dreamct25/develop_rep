@@ -1,7 +1,7 @@
-const webpack = require('webpack');
-const path = require('path');
+const { ProvidePlugin,EnvironmentPlugin,DefinePlugin } = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
-
+const path = require('path');
 
 /** @type {import('webpack').Configuration} */
 const configs = {
@@ -52,49 +52,28 @@ const configs = {
       '.vue',
       '.tsx',
       '.ts'
-    ]
+    ],
+    fallback: {
+        'util': require.resolve('util/')
+    }
   },
   plugins: [
+    new ProvidePlugin({
+        process: 'process/browser'
+    }),
+    new DefinePlugin({
+      'process.env': JSON.stringify(process.env),
+    }),
+    new EnvironmentPlugin({
+        ...process.env
+    }),
+    new HtmlWebpackPlugin({
+        template: "./public/index.html",
+        inject: "body",
+        scriptLoading: "blocking"
+    }),
     new VueLoaderPlugin()
   ]
 };
-// const configs = {
-//     mode:'development',
-//     entry:'./src/entry.ts',
-//     devServer:{
-//         port:9901,
-//         open:true
-//     },
-//     output:{
-//         path:path.resolve(__dirname,'public'),
-//         publicPath:'auto',
-//         filename:'bundle.js'
-//     },
-//     module:{
-//         rules:[
-//             {
-//                 test:/\.ts$/,
-//                 use:{
-//                     loader:'ts-loader',
-//                     options: {
-//                         appendTsSuffixTo: [/\.vue$/],
-//                     },
-//                 },
-//                 include:[path.resolve(__dirname,'src')]
-//             },
-//             {
-//                 test:/\.vue$/,
-//                 use:{
-//                     loader:'vue-loader'
-//                 },
-//                 include:[path.resolve(__dirname,'src')]
-//             }
-//         ]
-//     },
-//     resolve:{
-//         extensions:[".vue",".ts",".js"]
-//     },
-//     plugins:[new VueLoaderPlugin()]
-// }
 
 module.exports = configs

@@ -35,13 +35,22 @@ const envObj = {
 build({
     entryPoints:['./src/entry.ts'],
     outfile:`./${envObj.outDir}/bundle.js`,
-    format:'cjs',
+    format:'iife',
     minify: envObj.minify,
     bundle: true,
     sourcemap: env.sourcemap,
     target:['chrome58','safari11'],
+    tsconfig: 'tsconfig.json',
     plugins:[
-        sveltePlugin({ preprocess: sveltePreprocess() }),
+        sveltePlugin({
+            preprocess: sveltePreprocess(),
+            compilerOptions:{
+                css:'external',
+                dev: env,
+                sourcemap: env
+            },
+            filterWarnings:(() => false)
+        }),
         ...envObj.useDevServer
     ]
 }).then(() => {

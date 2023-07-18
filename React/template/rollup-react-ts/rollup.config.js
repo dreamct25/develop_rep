@@ -31,7 +31,9 @@ export default {
             extensions:['.js', '.jsx', '.ts', '.tsx']
         }),
         css({ output: 'styles.css' }),
-        typescript(),
+        typescript({
+            tsconfig: 'tsconfig.json'
+        }),
         commonjs(),
         serve({
             open: true,

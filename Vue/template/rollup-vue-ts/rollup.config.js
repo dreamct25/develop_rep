@@ -30,7 +30,9 @@ export default {
             exclude: 'node_modules/**',
             extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue']
         }),
-        typscript(),
+        typscript({
+            tsconfig: 'tsconfig.json'
+        }),
         livereload({ watch:'dist' }),
         serve({
             open:true,

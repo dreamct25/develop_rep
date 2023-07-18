@@ -33,11 +33,12 @@ const envObj = {
 build({
     entryPoints:['./src/entry.ts'],
     outfile:`./${envObj.outDir}/bundle.js`,
-    format:'cjs',
+    format:'iife',
     minify: envObj.minify,
     bundle: true,
     sourcemap: env.sourcemap,
     target:['chrome58','safari11'],
+    tsconfig: 'tsconfig.json',
     plugins:[
         decodeVue(),
         ...envObj.useDevServer

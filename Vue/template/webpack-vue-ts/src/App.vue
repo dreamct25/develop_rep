@@ -6,9 +6,11 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent,ref } from 'vue'
+import { defineComponent,ref,onMounted } from 'vue'
+
 export default defineComponent({
     setup(){
+        
         const state = {
             count:ref<number>(0)
         }
