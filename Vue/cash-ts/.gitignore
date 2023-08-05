@@ -1,0 +1,7 @@
+node_modules
+package-lock.json
+dist
+.DS_Store
+public/css/*.css
+public/js/*.js
+public/js/*.js.map

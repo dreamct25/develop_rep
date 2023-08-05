@@ -1,0 +1,34 @@
+[
+    {  
+        "selectName": "新增支出", 
+        "selectUrl": "add_expenditure" 
+    },
+    {  
+        "selectName": "新增收入", 
+        "selectUrl": "add_income" 
+    },
+    {
+        "selectName": "當月支出",
+        "selectUrl": "current_expenditure_month"
+    },
+    {
+        "selectName": "每月支出",
+        "selectUrl": "every_expenditure_month"
+    },
+    {
+        "selectName": "當月收入",
+        "selectUrl": "current_income_month"
+    },
+    {
+        "selectName": "每月收入",
+        "selectUrl": "every_income_month"
+    },
+    {
+        "selectName": "剩餘總額",
+        "selectUrl": "lastest_total"
+    },
+    {
+        "selectName": "支出試算",
+        "selectUrl": "cost_test"
+    }
+]
