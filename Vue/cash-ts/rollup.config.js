@@ -62,8 +62,8 @@ export default {
                 const orginHTML = fs.readFileSync('public/index.html').toString('utf8')
 
                 const newHTML = orginHTML
-                    .replace('/css/bundle.css','/css/bundle.min.css')
-                    .replace('/js/bundle.js','/js/bundle.min.js')
+                    .replace('/css/bundle.css','/cash/css/bundle.min.css')
+                    .replace('/js/bundle.js','/cash/js/bundle.min.js')
 
                 fs.writeFileSync('./build/index.html',newHTML)
 
