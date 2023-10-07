@@ -1,7 +1,7 @@
 import $,{ fetchClassReturnType } from '../lib/Library'
 
 $.fetch?.createBase({
-    baseUrl:'https://v4p0gs.deta.dev/blog/v1',
+    baseUrl:'https://fordb-1-f6742337.deta.app/blog/v1',
     // baseUrl:'http://localhost:9999/blog/v1',
     baseHeaders:{}
 })
