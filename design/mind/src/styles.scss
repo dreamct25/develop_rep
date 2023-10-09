@@ -975,6 +975,10 @@ html {
                         transition: .5s ease;
                         user-select: none;
                         transform: scale(.5);
+
+                        @media screen and (max-width: 414px) {
+                            margin: 3px 0 5px 0;
+                        }
     
                         &.start-btn-in {
                             opacity: 1;

@@ -44,9 +44,7 @@ window.choose = (index,type) => {
         }["true"]
     }
 
-    if(count === 27){
-        window.nextStep()
-    }
+    if(count === 27) window.nextStep()
 }
 
 const modalHide:({ target }:{ target:HTMLDivElement }) => void = ({ target }) => {
@@ -57,6 +55,22 @@ const modalHide:({ target }:{ target:HTMLDivElement }) => void = ({ target }) =>
 
 // 設定點擊下一題時的函式內容
 window.nextStep = () => {
+
+    if(count === 29){
+        count = -1
+        array = []
+        strTemp = ''
+
+        $('.start-btn').removeClass('start-btn-in')
+        $('.start-btn-outer-frame').addClass('start-btn-outer-frame-hide')
+
+        $('.type-text-content').removeClass('type-text-content-in')
+        setTimeout(() => {
+            $('.type-text-content').styles('remove',"display", "flex")
+            window.nextStep()
+        },699)
+        return
+    }
 
     if (count >= 0 && !strTemp) {
         $('.custom-modal-outer').addClass('modal-toggle')
@@ -118,21 +132,6 @@ window.nextStep = () => {
         },699)
     }
 
-    if(count === 29){
-        count = -1
-        array = []
-        strTemp = ''
-
-        $('.start-btn').removeClass('start-btn-in')
-        $('.start-btn-outer-frame').addClass('start-btn-outer-frame-hide')
-
-        $('.type-text-content').removeClass('type-text-content-in')
-        setTimeout(() => {
-            $('.type-text-content').styles('remove',"display", "flex")
-            window.nextStep()
-        },699)
-    }
-
     if(count === 27){
         $('.next').addClass('next-hide')
     }
@@ -150,6 +149,7 @@ window.nextStep = () => {
 }
 
 window.countingAllTest = () => {
+    count++
     $('.Q-outer-frame').removeClass('Q-outer-frame-in')
     finalSum()
 }
