@@ -48,6 +48,7 @@ const App:FC = ():TSX => {
     })
 
     const isChangeBg = useRef<boolean>(false)
+
     const changeSomthing:() => void = () => {
         const addZero:(num:number) => string = num => num >= 10 ? num.toString() : `0${num}`
 
@@ -97,6 +98,8 @@ const App:FC = ():TSX => {
 
         setInitState(prevState => ({ ...prevState,toggleLanguageList: false }))
 
+        localStorage.setItem('lang',lang)
+
         document.title = {
             en: 'New Year Count Down',
             zh: '跨年倒數',
@@ -108,6 +111,17 @@ const App:FC = ():TSX => {
     const particlesInit = useCallback(async (engine: Engine) => {
         await loadFull(engine);
     }, []);
+
+    useEffect(() => {
+        if(localStorage.getItem('lang')){
+            const currentLang = localStorage.getItem('lang')!
+            changeLanguage(currentLang)
+            return
+        }
+
+        localStorage.setItem('lang',i18n.language)
+
+    }, [localStorage.getItem('lang')])
 
     useEffect(() => {
         changeSomthing()
@@ -138,7 +152,7 @@ const App:FC = ():TSX => {
                 <div className={ isChangeBg.current ? 'remain-middle active' : 'remain-middle' }>{t(isChangeBg.current ? 'middleText' : '',{ year:newYear })}</div>
                 <div className={ remainContentAnimate ? 'remain-text active' : 'remain-text' }>{t('countDownText',{ day:currentCountText.dd,hh:currentCountText.hh,mm:currentCountText.mm,ss:currentCountText.ss })}</div>
             </div>
-            <div className={ footerAnimate ? 'footer active' : 'footer' }>&copy; CopyRight 2022-12 Alex Chen.</div>
+            <div className={ footerAnimate ? 'footer active' : 'footer' }>CopyRight &copy; 2022-12 Alex Chen.</div>
         </Styles>
     )
 }

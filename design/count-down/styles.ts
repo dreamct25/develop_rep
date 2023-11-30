@@ -48,6 +48,10 @@ export const Styles = styled.div`
                 font-size: 32px;
             }
 
+            @media screen and (max-width:390px) {
+                font-size: 28px;
+            }
+
             &.active{
                 opacity: 1;
                 transform: translateX(0);
@@ -59,6 +63,10 @@ export const Styles = styled.div`
 
             @media screen and (max-width:414px) {
                 font-size: 32px;
+            }
+
+            @media screen and (max-width:390px) {
+                font-size: 28px;
             }
         }
     }
