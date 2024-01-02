@@ -59,10 +59,14 @@ const App:FC = ():TSX => {
             newYearTime.setFullYear(new Date().getFullYear() + 1,0,1)
             newYearTime.setHours(0,0,0,0)
 
+            const minusAtFiveMinute = new Date()
+            minusAtFiveMinute.setFullYear(new Date().getFullYear(),0,1)
+            minusAtFiveMinute.setHours(0,5,0,0)
+
             const endTime = +newYearTime
             const startTime = +new Date()
-            
-            const timeRange = Math.abs(endTime - startTime)
+
+            const timeRange = Math.abs(endTime - +startTime)
             const day = timeRange / (24 * 60 * 60 * 1000)
             const dayFix = Math.floor(day)
             const hour = (day - dayFix) * 24
@@ -82,7 +86,7 @@ const App:FC = ():TSX => {
                 newYear:newYearTime.getFullYear().toString()
             }))
 
-            isChangeBg.current = (31536000000 - timeRange) <= 300000
+            isChangeBg.current = +minusAtFiveMinute >= +startTime
         },1000)
 
         setTimeout(() => setInitState(prevState => ({ ...prevState,remainTitleAnimate:true })),1001)
