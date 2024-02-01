@@ -1,20 +1,27 @@
 @echo off
+chcp 65001
+
+echo.
+echo --- CopyRight © 2023-02 Alex Chen. ---
+echo.
 
 net session >nul 2>&1
 
 if NOT %errorLevel% == 0 (
-    echo "Please Use Administrator To Open Bat."
+    echo 提示訊息:請使用系統管理員開啟此批次檔
     call pause
     exit
 ) else (
-    echo "In Administrator Environment."
+    echo 提示訊息:已使用系統管理員開啟
+    echo.
 )
 
-echo What Do you want to do to NVM manager (typing 'help' can see helper list) ?
+echo --- NVM Manager (可輸入 help 查看使用列表) ---
+echo.
 
 :default
     
-    set /p ANS= Choose action : 
+    set /p ANS= 請輸入要使用的功能項目 : 
 
     if /i %ANS% == i goto actionI
     if /i %ANS% == uni goto actionII
@@ -26,53 +33,56 @@ echo What Do you want to do to NVM manager (typing 'help' can see helper list) ?
     if /i %ANS% == e exit
 
     echo.
-    echo "Wrong keyword !"
+    echo 輸入使令錯誤請重新輸入
     echo.
 
     goto default
 :actionI
     echo.
-    set /p versionNum= Install Version:
+    set /p versionNum= 請輸入安裝版本 : 
     nvm install %versionNum%
     echo.
     goto default
 :actionII
     echo.
-    set /p versionNum= Uninstall Version:
+    set /p versionNum= 請輸入移除版本 : 
     nvm uninstall %versionNum%
     echo.
     goto default
 :actionIII
     echo.
-    set /p versionNum= Change Version:
+    set /p versionNum= 請輸入更換版本 : 
     nvm use %versionNum%
     echo.
     goto default
 :actionIV
     echo.
     for /f %%m in ('node -v') do set v=%%m
-    echo Your currrent node version is %v%
+    echo Node 當前使用版本 : %v%
     echo.
     goto default
 :actionV
+    echo.
+    echo   目前已安裝 Node 版本
     nvm ls
     echo.
     goto default
 :actionVI
     echo.
+    echo --- 目前可安裝 Node 版本列表 ---
     nvm list available
     echo.
     goto default
 :actionVII
     echo.
-    echo Usage:
+    echo 可輸入指令列表 :
     echo.
-    echo    i               :Install new node version
-    echo    uni             :Uninstall old node version
-    echo    c               :Change node version
-    echo    nv              :Show current node version
-    echo    ll              :Show installed node version list
-    echo    lv              :Show node all version list
-    echo    e               :Exit cmd
+    echo    i               :安裝新 Node 版本
+    echo    uni             :移除 Node 版本
+    echo    c               :更改 Node 版本
+    echo    nv              :顯示當前 Node 版本
+    echo    ll              :顯示已安裝 Node 版本列表
+    echo    lv              :顯示 Node 最新可安裝列表
+    echo    e               :關閉命令提示字元
     echo.
     goto default
