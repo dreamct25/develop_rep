@@ -33,7 +33,7 @@ echo.
     if /i %ANS% == e exit
 
     echo.
-    echo 輸入使令錯誤請重新輸入
+    echo 輸入指令錯誤請重新輸入
     echo.
 
     goto default
