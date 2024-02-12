@@ -1,6 +1,6 @@
 import { styled } from '@linaria/react'
 
-export default styled.div`
+export default styled.div<{ isMoon: boolean }>`
     .layout{
         min-height: 100vh;
         box-shadow: inset 0 0 2000px 2000px rgba(0, 0, 0, 0.3);
@@ -515,7 +515,7 @@ export default styled.div`
                             @media screen and (min-width:768px){
                                 .board-header{
                                     display: grid;
-                                    grid-template-columns: 6.2% 13.4% 13.4% 13.4% 13.4% 13.4% 13.4% 13.4%;
+                                    grid-template-columns: 0.3fr repeat(7,1fr);
                                     
                                     div{
                                         text-align: center;
@@ -526,7 +526,7 @@ export default styled.div`
 
                                 .board-body{
                                     display: grid;
-                                    grid-template-columns: 6.2% 13.4% 13.4% 13.4% 13.4% 13.4% 13.4% 13.4%;
+                                    grid-template-columns: 0.3fr repeat(7,1fr);
 
                                     div{
                                         padding: 20px 12px 25px 12px;
@@ -552,11 +552,10 @@ export default styled.div`
                                             }
                                         }
 
-                                        &.box-i{
+                                        &:nth-child(even) {
                                             background-color: rgba(30,30,30,.5)
                                         }
-
-                                        &.box-ii{
+                                        &:nth-child(odd) {
                                             background-color: rgba(30,30,30,.2)
                                         }
 
@@ -574,7 +573,7 @@ export default styled.div`
                             @media screen and (max-width:768px){
                                 .board-header{
                                     display: grid;
-                                    grid-template-columns: 20% 40% 40%;
+                                    grid-template-columns: 1fr 2fr 2fr;
                                     
                                     div{
                                         text-align: center;
@@ -585,9 +584,11 @@ export default styled.div`
                                 
                                 .board-body{
                                     display: grid;
-                                    grid-template-columns: 20% 40% 40%;
+                                    grid-template-columns: 1fr 2fr 2fr;
 
                                     .child-group{
+                                        display: grid;
+                                        grid-template-rows: repeat(7,1fr);
 
                                         div{
                                             padding: 20px 12px 25px 12px;
@@ -600,7 +601,7 @@ export default styled.div`
                                                 display: flex;
                                                 flex-direction: column;
                                                 justify-content: center;
-                                                height: 181px;
+                                                height: 100%;
                                             }
                                         }
                                         
