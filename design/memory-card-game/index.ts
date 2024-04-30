@@ -178,7 +178,7 @@ const gerRankingData:() => Promise<void> = async () => {
 }
 
 $(document).useMounted(async () => {
-    $.fetch.createBase({ baseUrl:'https://v4p0gs.deta.dev' })
+    $.fetch.createBase({ baseUrl:'https://fordb-1-f6742337.deta.app' })
 
     pageToken = await $.useSHA('SHA-256',$.createArray({ type: 'fake',item: { random: 10 }},() => (Math.random() * 100).toFixed(0))!.join(''))
     
