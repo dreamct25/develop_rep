@@ -1,5 +1,6 @@
-# Develop Repository（個人開發源碼庫）
-***
+# Develop Repository
+- 此倉庫為個人開發源碼庫
+- [個人作品發佈頁點此](https://github.com/dreamct25/dreamct25.github.io)
 ## Table Of Contents（目錄）
 ### Angular
  - 包含有開發過的專案與各腳手架的範例
