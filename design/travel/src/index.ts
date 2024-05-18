@@ -68,6 +68,7 @@ const searchPosWhenEnter:({ keyCode,target }:KeyboardEvent) => void = ({ keyCode
 }
 
 const renderData:(objTemp?:travelDataType | travelDataType[]) => void = objTemp => {
+    
     if(objTemp){
 
         if($.typeOf(objTemp,'Object')) {
@@ -148,9 +149,9 @@ const renderData:(objTemp?:travelDataType | travelDataType[]) => void = objTemp 
         if(!$('.right-side').className.includes('active')){
             $('.search-list-outer-frame').addClass('active')
         }
+    } else {
+        $('.search-list').html('<div class="no-data">無周圍景點資料</div>')
     }
-
-    $('.search-list').html('<div class="no-data">無周圍景點資料</div>')
 }
 
 window.dinamicSingleData = name => {
