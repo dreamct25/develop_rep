@@ -1,0 +1,60 @@
+{
+    "webTitle":"File Shared Server",
+    "currentPath":"Current Path",
+    "uploadBtn":"Upload",
+    "uploadStatus":{
+        "ready":"Ready",
+        "uploading":"Uploading...",
+        "uploaded":"Upload Success"
+    },
+    "prevFolder":"Back to previous level",
+    "shortList":"Short List",
+    "detailList":"Detail List",
+    "sortLatestDate":"Sort Latest Date",
+    "sortLateDate":"Sort Late Date",
+    "openCurrentFolder":"Open Current Folder",
+    "noAnyFile":"No Any File",
+    "optionMenuItem":{
+        "previewImg":"Preview Image",
+        "previewVideo":"Preview Video",
+        "newFolder":"New Folder",
+        "rename":"Rename",
+        "delete":"Delete",
+        "download":"Download"
+    },
+    "modal":{
+        "header":{
+            "create":"Create Folder",
+            "rename":"Rename {{ type }}",
+            "file":"File",
+            "folder":"Folder"
+        },
+        "footer":{
+            "confirm":"Confirm",
+            "cancel":"Cancel"
+        }
+    },
+    "deleteModal":{
+        "header":"Prompt Message",
+        "body":"Do you want to delete {{ name }} ?",
+        "footer":{
+            "confirm":"Confirm",
+            "cancel":"Cancel"
+        }
+    },
+    "downloadStatusGroup":{
+        "downloadFileName": "File Name",
+        "prepareDownload": "Prepare Download ...",
+        "convertFile": "Converting File ...", 
+        "done": "Done !"
+    },
+    "loadingPhoto": "Loading Photo ...",
+    "copyRight":"CopyRight © 2022-08 ~ 2024-06 Alex Chen. Beta v0.6.5",
+    "inputModal" : {
+        "header": "Typing Upload Path First",
+        "headerNotFirstTime": "Change Upload Path",
+        "body": "（You can change path at next time）",
+        "footerBtn": "Confirm Setting"
+    },
+    "changeFolderPath":"Change Upload Folder"
+}
