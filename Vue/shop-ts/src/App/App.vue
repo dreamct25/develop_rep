@@ -25,15 +25,15 @@ router-view
 
           &.Vue-Toastification__toast--error {
             
-            background-color: rgba(255,51,51,.5);
+            background-color: rgba(255,51,51,.7);
           }
 
           &.Vue-Toastification__toast--info {
-            background-color: rgba(255,0,200,.5);
+            background-color: rgba(255,0,200,.7);
           }
 
           &.Vue-Toastification__toast--success {
-            background-color: rgb(76,175,80,.5);
+            background-color: rgb(76,175,80,.7);
           }
 
           .Vue-Toastification__icon {

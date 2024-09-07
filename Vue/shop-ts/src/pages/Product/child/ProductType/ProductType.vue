@@ -95,12 +95,14 @@ Loading(:toggleLoadingStatus="toggleLoadingStatus")
         gap: 12px;
         padding-bottom: 12px;
         overflow-x: scroll;
+        scroll-snap-type: x mandatory;
 
         &.un-scroll {
           overflow-x: unset;
         }
 
         .new-product-card {
+          scroll-snap-align: center;
           overflow: hidden;
           height: 300px;
           border-radius: 10px;
@@ -162,6 +164,7 @@ Loading(:toggleLoadingStatus="toggleLoadingStatus")
       @media screen and (max-width: 540px) {
         overflow-y: auto;
         overflow-x: hidden;
+        scroll-snap-type: y mandatory;
         height: 600px;
         margin: 0 24px 12px 24px;
 
@@ -205,6 +208,7 @@ Loading(:toggleLoadingStatus="toggleLoadingStatus")
 
           @media screen and (max-width: 540px) {
             height: 400px;
+            scroll-snap-align: center;
           }
 
           .list-col {

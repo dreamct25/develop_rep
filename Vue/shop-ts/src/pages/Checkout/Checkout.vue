@@ -1,6 +1,6 @@
 <template lang="pug">
 .bg
-  .step-1(:class="{ 'page-animate': stepAnimateCount === 1 }", v-if="stepCount === 1")
+  .step-1(:class="{ 'page-animate': stepAnimateCount === 1, 'd-block': stepCount === 1 }")
     .row.no-gutters.justify-content-center
       .col-11.col-md-8
         .step-status
@@ -12,7 +12,7 @@
             .card
               .card-header#checkout-list
                 span.mb-0.checkout-list-title 結帳商品
-                span.all-cash.ml-auto {{ totalTemp !== 0 ? `NT $${Math.floor((totalTemp) * cpCount)}` : '---' }}
+                span.all-cash.ml-auto {{ originTotal !== 0 ? `NT $${finalTotal || originTotal}` : '---' }}
                 i.fal.fa-angle-down.list-switch.fa-2x(
                   :class="{ 'list-switch-active': isListActive }"
                   data-toggle="collapse"
@@ -50,32 +50,32 @@
                           .table-col {{ row.orderAllCash }}
                     .bottom
                       .table-footer
-                        .table-row(v-if="cpCount !== 1")
-                          .table-col
-                          .table-col
-                          .table-col
-                          .table-col 原總額
-                          .table-col {{ totalTemp }}
                         .table-row
                           .table-col
                           .table-col
                           .table-col
-                          .table-col 優惠券
+                          .table-col.font-weight-bold 原總額
+                          .table-col {{ originTotal }}
+                        .table-row
+                          .table-col
+                          .table-col
+                          .table-col
+                          .table-col.font-weight-bold 優惠券
                           .table-col.notice(v-if="!ticketValue") 否
-                          .table-col.notice(v-else-if="!cpValid && cpCount === 1") 無效代碼
+                          .table-col.notice(v-else-if="cpValid === false") 無效代碼
                           .table-col.success(v-else) 是
-                        .table-row(v-if="cpCount !== 1")
+                        .table-row(v-if="cpValid")
                           .table-col
                           .table-col
                           .table-col
-                          .table-col 折扣
-                          .table-col {{ cpCount * 100 }} %
+                          .table-col.font-weight-bold 折扣
+                          .table-col.notice {{ cpCount }} %
                         .table-row
                           .table-col
                           .table-col
                           .table-col
-                          .table-col 總額
-                          .table-col {{ Math.floor(totalTemp * cpCount) }}
+                          .table-col.font-weight-bold 總額
+                          .table-col {{ finalTotal || originTotal }}
         .order-info
           h2 訂單資訊
           .row
@@ -177,7 +177,7 @@
                   :inputValTemp="ticketValue"
                   @blurEvent="ticketCheck"
                 )
-  .step-2(:class="{ 'page-animate': stepAnimateCount === 2 }", v-if="stepCount === 2")
+  .step-2(:class="{ 'page-animate': stepAnimateCount === 2, 'd-block': stepCount === 2 }")
     .row.no-gutters.justify-content-center
       .col-11.col-md-8
         .row.justify-content-center
@@ -290,7 +290,7 @@
               .post-account-group(:class="{ 'post-account-group-active': postMethod === 'bank'}")
                 span.post-account 請將金額匯款到以下帳號
                 p 066-6666-6666-6666
-  .step-3(:class="{ 'page-animate': stepAnimateCount === 3 }", v-if="stepCount === 3")
+  .step-3(:class="{ 'page-animate': stepAnimateCount === 3, 'd-block': stepCount === 3 }")
     .row.no-gutters.justify-content-center
       .col-11.col-md-8
         .row.justify-content-center
@@ -327,7 +327,7 @@
                   .foot-col
                   .foot-col
                   .foot-col 總額
-                  .foot-col {{ totalTemp }}
+                  .foot-col {{ originTotal }}
           .order-profile(:class="{ 'order-info-active': !toggleOrderListPayDownStatus }")
             span.order-profile-title 買家資料
             .order-profile-table
@@ -345,14 +345,17 @@
                   .table-col 收件地址
                   .table-col {{ getNowPayInfo.PMAddress }}
                 .table-row
+                  .table-col 付款金額
+                  .table-col NT ${{ getNowPayInfo.PMTotal }}
+                .table-row
                   .table-col 付款方式
                   .table-col {{ getNowPayInfo.PMMethod }}
                 .table-row
                   .table-col 付款狀態
-                  .table-col(:class=`{ 
+                  .table-col.font-weight-bold(:class=`{ 
                     notice: !getNowPayInfo.PMState, 
                     success: getNowPayInfo.PMState 
-                  }`) {{ getNowPayInfo.PMState ? '是' : '否' }}
+                  }`) {{ getNowPayInfo.PMState ? '付款完成' : '尚未付款' }}
           span.completed-footer(
             :class="{ 'completed-footer-active': !toggleOrderListPayDownStatus }"
           ) {{ getNowPayInfo?.PMState ? '付款成功' : `請確認內容無誤後點${nextText}按鈕` }}
@@ -391,6 +394,7 @@ Loading(:toggleLoadingStatus="toggleLoadingStatus")
 }
 
 .step-1 {
+  display: none;
   opacity: 0;
   transform: translateX(100px);
   transition: 1s ease;
@@ -597,6 +601,7 @@ Loading(:toggleLoadingStatus="toggleLoadingStatus")
 }
 
 .step-2 {
+  display: none;
   opacity: 0;
   transform: translateX(100px);
   transition: 1s ease;
@@ -874,6 +879,7 @@ Loading(:toggleLoadingStatus="toggleLoadingStatus")
 }
 
 .step-3 {
+  display: none;
   opacity: 0;
   transform: translateX(100px);
   transition: 1s ease;
@@ -905,7 +911,7 @@ Loading(:toggleLoadingStatus="toggleLoadingStatus")
     box-shadow: inset 0 0 2px 1px rgba(255, 255, 255, 0.7),
       0 0 2px 1px rgba(0, 0, 0, 0.7);
     position: relative;
-    height: 420px;
+    height: 455px;
 
     .order-list-switch {
       position: absolute;
@@ -1211,7 +1217,8 @@ interface PageStateType {
       orderSingleItemID: string
     }[]
   }>,
-  totalTemp: Ref<number>,
+  originTotal: Ref<number>,
+  finalTotal: Ref<number>
   isListActive: Ref<boolean>,
   cityAll: Ref<string[]>,
   paymentName: Ref<string>,
@@ -1224,7 +1231,7 @@ interface PageStateType {
   postNum: Ref<any>,
   address: Ref<string>,
   ticketValue: Ref<string>,
-  cpValid: Ref<boolean>,
+  cpValid: Ref<boolean | undefined>,
   cpCount: Ref<number>,
   stepCount: Ref<number>,
   stepAnimateCount: Ref<number>,
@@ -1243,7 +1250,7 @@ interface PageStateType {
   postType: Ref<string>,
   choosePayDown: Ref<boolean>,
   getNowPayInfo: Ref<{
-    CPID?: number,
+    CPID?: string | number,
     PMAddress: string,
     PMCouponIsUse: number,
     PMCreateDate?: string,
@@ -1251,6 +1258,7 @@ interface PageStateType {
     PMMethod:string,
     PMName: string,
     PMNum: number,
+    PMTotal: number,
     PMState: boolean,
     PMTel: string,
     PMID?: string
@@ -1299,7 +1307,8 @@ export default defineComponent({
 
     const pageState: PageStateType = {
       otLocation: ref({ orderID: '', orderLists: [] }),
-      totalTemp: ref(0),
+      originTotal: ref(0),
+      finalTotal: ref(0),
       isListActive: ref(false),
       cityAll: ref($.createArray({ type: 'new', item: new Set(twZipCode.map(row => row.city)) })),
       paymentName: ref(""),
@@ -1312,7 +1321,7 @@ export default defineComponent({
       postNum: ref(null),
       address: ref(""),
       ticketValue: ref(""),
-      cpValid: ref(false),
+      cpValid: ref(undefined),
       cpCount: ref(1),
       stepCount: ref(1),
       stepAnimateCount: ref(1),
@@ -1357,11 +1366,12 @@ export default defineComponent({
         if(!pageState.ticketValue.value){
           pageState.cpValid.value = false;
           pageState.cpCount.value = 1;
+          pageState.finalTotal.value = 0
 
           return
         }
 
-        const res = await Fetch.get<{ data: {
+        const res = await Fetch.get<{ data?: {
           CPCode: string,
           CPCreateDate: string,
           CPDisableDate: string | null,
@@ -1369,7 +1379,7 @@ export default defineComponent({
           CPName: string,
           CPPercent: number,
           CPState: number,
-          CPID: string
+          CPID: string | number
         } }>(`/coupon/get/${pageState.ticketValue.value}`,{ token: token.value })
 
         if(res.status === 200){
@@ -1377,8 +1387,10 @@ export default defineComponent({
           if(res.data.data?.CPState !== undefined){
 
             if(Boolean(res.data.data.CPState)){
-              pageState.cpCount.value = res.data.data.CPPercent / 100;
+              pageState.cpCount.value = res.data.data.CPPercent;
               pageState.cpValid.value = true;
+
+              pageState.finalTotal.value = Math.floor(pageState.originTotal.value * (res.data.data.CPPercent / 100))
               return
             }
 
@@ -1647,6 +1659,7 @@ export default defineComponent({
       beforePay: () => {
 
         pageState.getNowPayInfo.value = {
+          CPID: pageState.cpValid.value ? pageState.ticketValue.value : 0,
           PMAddress: `${pageState.postNum.value}${pageState.cityName.value}${pageState.blockName.value}${pageState.address.value}`,
           PMCouponIsUse: pageState.ticketValue.value ? Number(false) : Number(true),
           PMEmail: pageState.paymentEmail.value,
@@ -1654,6 +1667,7 @@ export default defineComponent({
           PMName: pageState.paymentName.value,
           PMNum: +new Date(),
           PMState: false,
+          PMTotal: pageState.finalTotal.value || pageState.originTotal.value,
           PMTel: pageState.paymentTel.value,
         }
       },
@@ -1677,8 +1691,6 @@ export default defineComponent({
             toast.error('網路異常')
             return
           }
-
-          method.cardChoose('')
 
           pageState.getNowPayInfo.value = undefined
           pageState.nextText.value = "下一步";
@@ -1714,7 +1726,8 @@ export default defineComponent({
             paymentAddress: pageState.getNowPayInfo.value.PMAddress,
             payMethod: pageState.getNowPayInfo.value.PMMethod,
             paymentCouponUse: pageState.getNowPayInfo.value.PMCouponIsUse,
-            paymentCouponID: pageState.cpValid.value ? pageState.ticketValue.value : 0,
+            paymentCouponID: pageState.getNowPayInfo.value.CPID,
+            paymentTotal: pageState.getNowPayInfo.value.PMTotal,
             payStatus: pageState.getNowPayInfo.value.PMState,
             createDate: $.formatDateTime({ formatDate: new Date(), formatType: 'yyyy-MM-dd HH:mm:ss' }),
           },
@@ -1845,7 +1858,7 @@ export default defineComponent({
             orderLists
           }
 
-          pageState.totalTemp.value = $.sum(pageState.otLocation.value.orderLists.map(row => row.orderAllCash), (a, b) => a + b)
+          pageState.originTotal.value = $.sum(pageState.otLocation.value.orderLists.map(row => row.orderAllCash), (a, b) => a + b)
         }
       },
       getPaymentList: async () => {

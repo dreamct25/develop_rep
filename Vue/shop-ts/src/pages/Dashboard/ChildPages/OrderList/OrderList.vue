@@ -4,7 +4,7 @@
     .header
       .list-item-row
         .list-item-col(
-          v-for="(item,index) in ['訂單編號','買家名稱','買家電話','買家地址','付款方式','付款狀態','建單日期']"
+          v-for="(item,index) in ['訂單編號','買家名稱','買家電話','買家地址','付款金額','付款方式','付款狀態','建單日期']"
           :key="index"
         ) {{ item }}
     .body
@@ -14,6 +14,7 @@
           .list-item-col {{ item.PMName }}
           .list-item-col {{ item.PMTel }}
           .list-item-col {{ item.PMAddress }}
+          .list-item-col NT ${{ item.PMTotal }}
           .list-item-col {{ item.PMMethod }}
           .list-item-col(:class=`{ 
             success: item.PMState, 
@@ -62,8 +63,8 @@
 
   .header {
 
-    @media screen and (max-width: 1234px) {
-      width: 1068px;
+    @media screen and (max-width: 1540px) {
+      width: 1286px;
     }
 
     .list-item-row {
@@ -73,6 +74,7 @@
         minmax(105px, 1fr) 
         minmax(105px, 1fr) 
         minmax(359px, 2.5fr) 
+        minmax(125px, 1fr) 
         minmax(125px, 1fr) 
         minmax(105px, 1fr) 
         minmax(125px, 1fr);
@@ -112,8 +114,8 @@
     overflow-y: auto;
     overflow-x: hidden;
 
-    @media screen and (max-width: 1234px) {
-      width: 1068px;
+    @media screen and (max-width: 1540px) {
+      width: 1286px;
     }
 
     &::-webkit-scrollbar {
@@ -136,6 +138,7 @@
           minmax(105px, 1fr) 
           minmax(105px, 1fr) 
           minmax(359px, 2.5fr) 
+          minmax(125px, 1fr) 
           minmax(125px, 1fr) 
           minmax(105px, 1fr) 
           minmax(125px, 1fr);
@@ -230,8 +233,6 @@
         }
       }
     }
-
-    
   }
 }
 </style>
@@ -253,7 +254,8 @@ interface PageStateType {
     PMName: string
     PMNum: string
     PMState: boolean
-    PMTel: string
+    PMTel: string,
+    PMTotal: number
   }[]>,
   pdLocationTemp: PageStateType['pdLocation'],
   stateText: Ref<string>,

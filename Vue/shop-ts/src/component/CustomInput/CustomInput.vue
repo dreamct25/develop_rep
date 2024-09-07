@@ -444,7 +444,7 @@ interface CustomInputProps {
     size: string
     inputValTemp?: string
     selectedRowTemp?: string
-    options?: any[]
+    options?: { key: string, value: string }[]
     disabled?:boolean
     readOnly?:boolean
     usingType:string

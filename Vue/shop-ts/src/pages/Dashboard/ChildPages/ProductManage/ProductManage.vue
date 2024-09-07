@@ -124,7 +124,7 @@
                       type="text"
                       useStyle="white"
                       :selectedRowTemp="productType"
-                      :options="productTypeData.map(row => row.typeName)"
+                      :options="productTypeData"
                       @getOptionVal="val => productType = val"
                     )
                 .col-md-4
@@ -150,7 +150,7 @@
                       size="sm"
                       label="輸入原價"
                       usingType="input"
-                      type="number"
+                      :type="rwdMod ? 'tel' : 'number'"
                       useStyle="white"
                       :inputValTemp="productOriginPrice"
                       @changeEvent="val => productOriginPrice = val"
@@ -161,7 +161,7 @@
                       size="sm"
                       label="輸入售價"
                       usingType="input"
-                      type="number"
+                      :type="rwdMod ? 'tel' : 'number'"
                       useStyle="white"
                       :inputValTemp="productOnSalePrice"
                       @changeEvent="val => productOnSalePrice = val"
@@ -172,7 +172,7 @@
                       size="sm"
                       label="輸入庫存量"
                       usingType="input"
-                      type="number"
+                      :type="rwdMod ? 'tel' : 'number'"
                       useStyle="white"
                       :inputValTemp="productPice"
                       @changeEvent="val => productPice = val"
@@ -740,7 +740,7 @@ interface PageStateType {
   uploadStatus: Ref<boolean>,
   uploadStartChange: Ref<boolean>,
   productName: Ref<string>,
-  productType: Ref<string | null>,
+  productType: Ref<string>,
   productNew: Ref<boolean>,
   productOriginPrice: Ref<string>,
   productOnSalePrice: Ref<string>,
@@ -764,11 +764,12 @@ interface PageStateType {
     hasNext: boolean
   }>,
   productTypeData: Ref<{
-    typeName: string,
-    typeNameEn: string,
+    key: string,
+    value: string,
   }[]>,
   linkStatus: Ref<boolean>
   toggleModalStatus: Ref<boolean>
+  rwdMod: Ref<boolean>
 }
 
 interface MethodType {
@@ -819,7 +820,7 @@ export default defineComponent({
       uploadStatus: ref(false),
       uploadStartChange: ref(false),
       productName: ref(""),
-      productType: ref(null),
+      productType: ref(""),
       productNew: ref(false),
       productOriginPrice: ref(""),
       productOnSalePrice: ref(""),
@@ -844,7 +845,8 @@ export default defineComponent({
       }),
       productTypeData: ref([]),
       linkStatus: ref(false),
-      toggleModalStatus: ref(false)
+      toggleModalStatus: ref(false),
+      rwdMod
     }
 
     const method:MethodType = {
@@ -900,10 +902,17 @@ export default defineComponent({
       getProductTypeList: async () => {
         pageState.productTypeData.value = [];
 
-        const res = await Fetch.get<{ data: PageStateType['productTypeData']['value'] }>("/product/types?t=1",{ token: token.value })
+        const res = await Fetch.get<{ data: {
+          createDate: string,
+          isEnable: boolean,
+          typeName: string,
+          typeNameEn: string,
+          updateDate: string,
+          TPID: string
+        }[] }>("/product/types?t=1",{ token: token.value })
         
         if (res.status == 200) {
-          pageState.productTypeData.value = res.data.data;
+          pageState.productTypeData.value = $.maps(res.data.data,row => ({ key: row.typeName, value: row.typeNameEn }));
 
           if (pageState.ptLocation.value.length === 0) {
             pageState.stateText.value = "目前無任何產品，請點擊右下角按鈕新增商品";
@@ -1087,7 +1096,7 @@ export default defineComponent({
         pageState.imgDescOtherTempI.value = "";
         pageState.imgDescOtherTempII.value = "";
         pageState.productName.value = "";
-        pageState.productType.value = null;
+        pageState.productType.value = "";
         pageState.productNew.value = false;
         pageState.productOriginPrice.value = "";
         pageState.productOnSalePrice.value = "";
@@ -1191,9 +1200,8 @@ export default defineComponent({
         }
       },
       renderProductName: productType => {
-        const [filterItem] = $.filter(pageState.productTypeData.value, (key) => key.typeNameEn === productType);
-
-        return filterItem ? filterItem.typeName : '無產品名稱'
+        const [filterItem] = $.filter(pageState.productTypeData.value, row => row.value  === productType);
+        return filterItem ? filterItem.key : '無產品名稱'
       }
     }
 
