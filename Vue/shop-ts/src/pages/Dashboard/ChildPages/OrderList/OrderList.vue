@@ -25,12 +25,12 @@
     .top
       div
         span(class="notice") 未付款
-        span ：{{ unPayCount }} 筆訂單
+        span ：{{ unPayCount }} 筆
       div
         span(class="success") 已付款
-        span ：{{ hasPayCount }} 筆訂單
+        span ：{{ hasPayCount }} 筆
       div
-        span 總計 {{ pdLocation.length }} 筆訂單
+        span 共 {{ totalPayCount }} 筆
     Pagination(
       :pageItem="pagination"
       @prev="getPayDownList"
@@ -259,6 +259,7 @@ interface PageStateType {
   stateText: Ref<string>,
   hasPayCount: Ref<number>,
   unPayCount: Ref<number>,
+  totalPayCount: Ref<number>
   pagination: Ref<{
     totalLength: number,
     partPage: number,
@@ -285,6 +286,7 @@ export default defineComponent({
       stateText: ref(""),
       hasPayCount: ref(0),
       unPayCount: ref(0),
+      totalPayCount: ref(0),
       pagination: ref({
         totalLength: 0,
         partPage: 0,
@@ -350,6 +352,7 @@ export default defineComponent({
 
           pageState.hasPayCount.value = hasPayCountArray.length;
           pageState.unPayCount.value = unPayCountArray.length;
+          pageState.totalPayCount.value = res.data.data.length
           
           if (pageState.pdLocation.value.length == 0) {
             pageState.stateText.value = "目前無任何訂單";

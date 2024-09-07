@@ -282,7 +282,7 @@
 
   .add-coupon-btn {
     position: fixed;
-    bottom: 6%;
+    bottom: 115px;
     right: 0;
     z-index: 2;
     margin: 12px;

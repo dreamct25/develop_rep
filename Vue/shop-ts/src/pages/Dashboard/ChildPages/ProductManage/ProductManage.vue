@@ -428,8 +428,8 @@ DeleteModal(
 }
 
 .add-btn {
-  position: absolute;
-  bottom: 0;
+  position: fixed;
+  bottom: 115px;
   right: 0;
   z-index: 2;
   margin: 0 10px 12px 0;
@@ -525,7 +525,9 @@ DeleteModal(
           height: 250px;
           margin-bottom: 0;
           overflow: hidden;
-          border: 2px dashed white;
+          box-shadow: 0 0 0 1px rgba(255, 255, 255, .5);
+          border-radius: 5px;
+          overflow: hidden;
 
           span {
             display: block;

@@ -29,7 +29,7 @@
     @current="getTypeListData"
     @next="getTypeListData"
   )
-  .add-coupon-btn(@click="showModal")
+  .add-type-btn(@click="showModal")
     i.fas.fa-plus
   .modal-add(:class="{ 'modal-add-toggle': toggleModalStatus }")
     .modal-add-body
@@ -265,9 +265,9 @@
     bottom: 0;
   }
 
-  .add-coupon-btn {
+  .add-type-btn {
     position: fixed;
-    bottom: 6%;
+    bottom: 115px;
     right: 0;
     z-index: 2;
     margin: 12px;
