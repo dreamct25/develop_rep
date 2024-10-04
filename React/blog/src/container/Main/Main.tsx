@@ -60,7 +60,7 @@ const Main:FC = ():TSX => {
                                     .about-layout
                                         .title 關於我
                                         .img-outer
-                                            img(src="https://drive.google.com/uc?export=view&id=1B3t1sGrCXUosm5ZLxD63pXi1E2UlXn1x")
+                                            img(src="https://lh3.googleusercontent.com/u/0/d/1B3t1sGrCXUosm5ZLxD63pXi1E2UlXn1x")
                                         .under Alex Chen
                                         .desc 四處流浪的工程師，平時喜歡四處拍拍照，學習新技術，偶爾也會看看心理學的東西分享所知，希望此處的內容對你有幫助 ~
                                 .bottom
@@ -84,7 +84,7 @@ const Main:FC = ():TSX => {
                         .about-layout
                             .title 關於我
                             .img-outer
-                                img(src="https://drive.google.com/uc?export=view&id=1B3t1sGrCXUosm5ZLxD63pXi1E2UlXn1x")
+                                img(src="https://lh3.googleusercontent.com/u/0/d/1B3t1sGrCXUosm5ZLxD63pXi1E2UlXn1x")
                             .under Alex Chen
                             .desc 四處流浪的工程師，平時喜歡四處拍拍照，學習新技術，偶爾也會看看心理學的東西分享所知，希望此處的內容對你有幫助 ~
                     .bottom

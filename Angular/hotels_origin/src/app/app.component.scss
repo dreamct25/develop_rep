@@ -75,6 +75,16 @@
     }
 }
 
+.footer{
+    color: white;
+    text-align: center;
+    padding: 15px 0 25px 0;
+    background:linear-gradient(transparent,rgba(70,70,70,.3),rgba(50,50,50,.5),rgba(50,50,50,.7),rgba(10,10,10,.7),rgba(0,0,0,.7));
+    h6{
+        margin-bottom: 0;
+    }
+}
+
 @media screen and (max-width:414px) {
     .main{
         .header{

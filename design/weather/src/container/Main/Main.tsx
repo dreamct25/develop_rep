@@ -77,14 +77,14 @@ const Main:FC = ():TSX => {
 
     const filterOptionData:<T>(data:T[],type:string) => optionListObjType[] = (data,type) => {
         if(type === 'citys'){
-            const retunArr = $.maps(data as citysDatasObjType[],({ geocode:posGeoCode,locationName:posName }:citysDatasObjType) => ({ posName,posGeoCode })) as optionListObjType[]
+            const retunArr = $.maps(data,({ geocode:posGeoCode,locationName:posName }:citysDatasObjType) => ({ posName,posGeoCode })) as optionListObjType[]
             
             return $.maps(orderCityCode,(orderCode:string) => {
                 const pos = $.findIndexOfObj(retunArr,({ posGeoCode }:optionListObjType) => posGeoCode === orderCode)
                 return retunArr[pos]
             })
         } else {
-            const retunArr = $.maps(data as repackCitysBlocksDatasObjType[],({ blockGeoCode:posGeoCode,blockName:posName }) => ({ posName,posGeoCode })) as optionListObjType[]
+            const retunArr = $.maps(data,({ blockGeoCode:posGeoCode,blockName:posName }:repackCitysBlocksDatasObjType) => ({ posName,posGeoCode })) as optionListObjType[]
             
             return $.sort(retunArr,(a:optionListObjType,b:optionListObjType) => parseInt(a.posGeoCode) - parseInt(b.posGeoCode))
         }
@@ -101,7 +101,7 @@ const Main:FC = ():TSX => {
         
         for (let num = 1; num <= 85; num += 4) {
             const orders = num <= 9 ? '00':'0'
-            promisAllBlocks.append($.fetch?.get<citysBlocksDatasType>(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-D0047-093`,{
+            promisAllBlocks.append($.fetch?.get<citysBlocksDatasType>(`https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-093`,{
                 queryParams:{
                     Authorization:`CWB-6BEED9AA-24B5-4569-BB51-FC0BCFA7595B&locationId=F-D0047-${orders}${num}`
                 }
@@ -110,14 +110,14 @@ const Main:FC = ():TSX => {
         
         const citysBlocksDatasRes = await Promise.all(promisAllBlocks).then(arrays => $.maps(arrays,({ data }:{ data:citysBlocksDatasType }) => data.records?.locations[0]))
         
-        const citysDatasRes = await $.fetch?.get<citysDatasType>('https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-D0047-091',{
+        const citysDatasRes = await $.fetch?.get<citysDatasType>('https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091',{
             queryParams:{
                 Authorization:'CWB-6BEED9AA-24B5-4569-BB51-FC0BCFA7595B'
             }
         })
 
         const getIp = await $.fetch?.get<string>('https://api.ipify.org',{ returnType:'text' })
-        const getGeo = await $.fetch?.get<{ ll:number[] }>(`https://proxyservice-1-t7335739.deta.app/uts/get_geo/${btoa(getIp?.data!)}`)
+        const getGeo = await $.fetch?.get<{ ll:number[] }>(`https://proxy-service-three.vercel.app/uts/get_geo/${btoa(getIp?.data!)}`)
 
         if(citysDatasRes?.data){
             citysDatasTemp = citysDatasRes.data.records?.locations[0].location
@@ -304,7 +304,7 @@ const Main:FC = ():TSX => {
                 const [,month,day] = date.split('-')
                 const [,endTimes] = endTimeTemp.split(' ')
                 const endTime = endTimes.split(':').removeLast().join(':')
-
+console.log(date)
                 filterDate.append(`${month}-${day}`)
 
                 return { startTime,endTime,weatherSign,weatherSignState,feelTemp,temp,wetEqualPercent,comferPercent }
@@ -336,7 +336,7 @@ const Main:FC = ():TSX => {
                         weatherDesc: weatherElement[6].time[num].elementValue[0].value,
                         minTemp:  convertMatchSign<string>('temperatureSign',weatherElement[8].time[num].elementValue[0].value),
                         maxTemp: convertMatchSign<string>('temperatureSign',weatherElement[12].time[num].elementValue[0].value),
-                        rainPerc: weatherElement[0].time[num].elementValue[0].value.trim() ? `降雨機率 ${convertMatchSign<string>('percentSign',weatherElement[0].time[num].elementValue[0].value)}` : '暫無資料'
+                        rainPerc: weatherElement[0].time[num].elementValue[0].value.trim() ? `降雨機率 ${convertMatchSign<string>('percentSign',weatherElement[0].time[num].elementValue[0].value)}` : '氣象局暫無資料'
                     })
                 } else if (parseInt(hour) === 18) {
                     nightData.push({
@@ -345,15 +345,13 @@ const Main:FC = ():TSX => {
                         weatherDesc: weatherElement[6].time[num].elementValue[0].value,
                         minTemp: convertMatchSign<string>('temperatureSign',weatherElement[8].time[num].elementValue[0].value),
                         maxTemp: convertMatchSign<string>('temperatureSign',weatherElement[12].time[num].elementValue[0].value),
-                        rainPerc: weatherElement[0].time[num].elementValue[0].value.trim() ? `降雨機率 ${convertMatchSign<string>('percentSign',weatherElement[0].time[num].elementValue[0].value)}` : '暫無資料'
+                        rainPerc: weatherElement[0].time[num].elementValue[0].value.trim() ? `降雨機率 ${convertMatchSign<string>('percentSign',weatherElement[0].time[num].elementValue[0].value)}` : '氣象局暫無資料'
                     })
                 }
             })
 
             weekItem = { moringData,nightData }
         }
-
-        console.log(weekItem)
 
         return (
             <div className="row justify-content-center">
@@ -570,7 +568,7 @@ const Main:FC = ():TSX => {
                                                     </div>
                                                     <div className='child-group'>
                                                         {$.maps(weekItem.moringData,({ weatherDescState,weatherDesc:weekWeatherDesc,minTemp:weekMinTemp,maxTemp:weekMaxTemp,rainPerc }:weekItemObjType,index:number) => (
-                                                            <div key={index}>
+                                                            <div className={index % 2 ? 'box-ii' : 'box-i'} key={index}>
                                                                 <span>
                                                                     {weatherDescState}
                                                                     {weekWeatherDesc}
@@ -582,15 +580,17 @@ const Main:FC = ():TSX => {
                                                     </div>
                                                     <div className='child-group'>
                                                         {$.maps(weekItem.nightData,({ weatherDescState,weatherDesc:weekWeatherDesc,minTemp:weekMinTemp,maxTemp:weekMaxTemp,rainPerc }:weekItemObjType,index:number) => (
-                                                            <div key={index}>
-                                                                <span>
-                                                                    {weatherDescState}
-                                                                    {weekWeatherDesc}
-                                                                </span>
-                                                                <span>{weekMinTemp} ~ {weekMaxTemp}</span>
-                                                                <span>{rainPerc}</span>
-                                                            </div>
-                                                        ))}
+                                                            index !== 0 && (
+                                                                <div className={index % 2 ? 'box-i' : 'box-ii'} key={index}>
+                                                                    <span>
+                                                                        {weatherDescState}
+                                                                        {weekWeatherDesc}
+                                                                    </span>
+                                                                    <span>{weekMinTemp} ~ {weekMaxTemp}</span>
+                                                                    <span>{rainPerc}</span>
+                                                                </div>
+                                                            )
+                                                        )).filter((item:weekItemObjType | boolean) => item !== false)}
                                                     </div>
                                                 </div>
                                             </div>
@@ -603,7 +603,7 @@ const Main:FC = ():TSX => {
                                                 <div className="board-body">
                                                     <div>白天</div>
                                                     {$.maps(weekItem.moringData,({ weatherDescState,weatherDesc:weekWeatherDesc,minTemp:weekMinTemp,maxTemp:weekMaxTemp,rainPerc }:weekItemObjType,index:number) => (
-                                                        <div key={index}>
+                                                        <div className={index % 2 ? 'box-ii' : 'box-i'} key={index}>
                                                             <span>
                                                                 {weatherDescState}
                                                                 {weekWeatherDesc}
@@ -614,15 +614,17 @@ const Main:FC = ():TSX => {
                                                     ))}
                                                     <div>夜晚</div>
                                                     {$.maps(weekItem.nightData,({ weatherDescState,weatherDesc:weekWeatherDesc,minTemp:weekMinTemp,maxTemp:weekMaxTemp,rainPerc }:weekItemObjType,index:number) => (
-                                                        <div key={index}>
-                                                            <span>
-                                                                {weatherDescState}
-                                                                {weekWeatherDesc}
-                                                            </span>
-                                                            <span>{weekMinTemp} ~ {weekMaxTemp}</span>
-                                                            <span>{rainPerc}</span>
-                                                        </div>
-                                                    ))}
+                                                        index !== 0 && (
+                                                            <div className={index % 2 ? 'box-i' : 'box-ii'} key={index}>
+                                                                <span>
+                                                                    {weatherDescState}
+                                                                    {weekWeatherDesc}
+                                                                </span>
+                                                                <span>{weekMinTemp} ~ {weekMaxTemp}</span>
+                                                                <span>{rainPerc}</span>
+                                                            </div>
+                                                        )
+                                                    )).filter((item:weekItemObjType | boolean) => item !== false)}
                                                 </div>
                                             </div>
                                         )}

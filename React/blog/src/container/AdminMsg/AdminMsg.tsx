@@ -124,6 +124,7 @@ const AdminMsg:FC = ():TSX => {
     }
 
     const showSingleMsg:(currentAction:string,valGroups:valGroupsType) => void = (currentAction,valGroups) => {
+
         if(currentAction === 'DELETE'){
             setInitState(prevState => ({
                 ...prevState,

@@ -9,7 +9,7 @@
                 span.time-show {{ timeShow }}
         router-view
 .footer
-    h6 &copy; CopyRight 2023-07 Alex Chen .
+    h6 CopyRight &copy; 2023-07 Alex Chen .
 </template>
 <style lang="scss" scoped>
     .header{
@@ -111,9 +111,7 @@ export default defineComponent({
         const loginOff:() => Promise<void> = async () => {
             const obj =  JSON.parse(sessionStorage.getItem('temp')) as {[key:string]:any}
             const res = await Fetch.get<{ ac:string,token:string,createDate:string }>('/logout',{
-                headers:{
-                    authorization: obj.token
-                }
+                token: obj.token
             })
 
             if(res.status >= 200 && res.status <= 399){

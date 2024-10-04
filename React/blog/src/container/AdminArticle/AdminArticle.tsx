@@ -111,6 +111,7 @@ const AdminArticle:FC = ():TSX => {
         setLoadingStatus(true)
 
         Fetch.get<articleDatasType[]>('/back_view_all',{ token:authInfo.token }).then(res => {
+
             const { pageObj,renderItem } = PaginationConfig.createParts<articleDatasType>(res.data!,1,10,10)
             
             setInitState(prevState => ({
@@ -121,7 +122,11 @@ const AdminArticle:FC = ():TSX => {
             }))
 
             setLoadingStatus(false)
-        }).catch(() => alert('error'))
+        }).catch((e) => {
+            console.log(e)
+            setLoadingStatus(false)
+            alert('error')
+        })
     }
 
     const setVal:(type:string,{ target }:ChangeEvent<HTMLInputElement>) => void = (type,{ target }) => {

@@ -56,5 +56,6 @@ export interface methodType {
     openScanner():void
     closeScanner():void
     qrResult(result:QrScanner.ScanResult):void
-    controlBadgeCotent(content:string):void
+    controlBadgeCotent(content:string):void,
+    formatDateTime({ formatDate,formatType,toTcYear }:{ formatDate: string | Date,formatType: string,toTcYear?:boolean }):string
 }

@@ -7,7 +7,7 @@
                     .open-scanner-btn(@click="openScanner") 發票 QR Code
                     .change-date-btn-outer
                         .change-date-btn(@click="toggleInvoiceDateList = !toggleInvoiceDateList")
-                            |發票年月
+                            |切換月份
                             i(class="fal fa-angle-up arrow",:class="{ active:toggleInvoiceDateList }")
                         .date-list-outer(:class="{ active:toggleInvoiceDateList }")
                             .option(
@@ -17,10 +17,10 @@
                                 @click="changeInvoiceDate(optionItem.value)"
                             ) {{ optionItem.label }}
                 .function-group-rwd(v-else)
-                    .open-scanner-btn(@click="openScanner") 發票 QR Code
+                    .open-scanner-btn(@click="openScanner") 掃描發票
                     .change-date-btn-outer
                         .change-date-btn(@click="toggleInvoiceDateList = !toggleInvoiceDateList")
-                            |發票年月
+                            |切換月份
                             i(class="fal fa-angle-up arrow",:class="{ active:toggleInvoiceDateList }")
                         .date-list-outer(:class="{ active:toggleInvoiceDateList }")
                             .option(
@@ -52,13 +52,32 @@
                     div {{ staticItem.title }}
                     div {{ staticItem.desc }}
                 .bottom-outer
-                    div 兌獎日期
-                    div {{ renderAwardsDateRange[0] }} ~ {{ renderAwardsDateRange[1] }}
+                    div 領獎注意事項
+                    div
+                        |1.領獎期間自 {{ renderAwardsDateRange[0] }}起至 {{ renderAwardsDateRange[1] }}止，中獎人請於領獎期間攜帶國民身分證(非本國國籍人士得以護照、居留證或內政部移民署核發入出境許可證等替代)及中獎統一發票，依代發獎金單位公告之兌獎營業時間臨櫃兌領，逾期不得領獎。
+                        br
+                        br
+                        |2.統一發票未依規定載明金額者，不得領獎。
+                        br
+                        br
+                        |3.統一發票買受人為政府機關、公營事業、公立學校、部隊及營業人者，不得領獎。
+                        br
+                        br
+                        |4.中三獎(含)以上者，依規定應由發獎單位扣繳 20% 所得稅款。
+                        br
+                        br
+                        |5.中五獎 及雲端發票專屬獎500元（含）以上者，依規定應繳納0.4%印花稅款，但已於財政部電子發票整合服務平臺或統一發票兌獎APP設定領獎帳戶兌領獎金者，免繳納印花稅。
+                        br
+                        br
+                        |6.中獎之統一發票如同時對中多數獎項，以兌領一個獎項為限。
+                        br
+                        br
+                        |7.詳細領獎規定，請查閱「統一發票給獎辦法」。若有疑義，請洽財金公司客服專線：4128282(手機請撥：02-4128282)，或至財金公司網站查詢。
         .qr-scanner-frame(:class="{ active:toggleSannerFrame }")
             video(ref="videoRef")
             .close-scanner-btn(@click="closeScanner") 關閉掃描視窗
         .badge-alert-frame(:class="{ active:toggleBadgeContent.status }")
-            .content 掃描狀態：{{ toggleBadgeContent.content }}
+            .content {{ toggleBadgeContent.content }}
         .loading-outer(:class="{ active:loadingStatus }")
             .loading
             .loading-line-out
@@ -85,7 +104,6 @@
                     text-align: center;
                     padding: 30px;
                     font-size: 50px;
-                    border-radius: 10px 10px 0 0;
                     box-shadow: inset 0 0 2px 1px rgba(255,255,255,.7);
 
                     @media screen and (max-width:414px) {
@@ -149,14 +167,17 @@
                                 top: 35px;
                                 left: 0;
                                 right: 0;
+                                bottom: 0;
                                 opacity: 0;
-                                z-index: 10;
+                                z-index: 2;
                                 font-size: 14px;
                                 overflow-x: hidden;
-                                overflow-y: auto;
+                                overflow-y: scroll;
                                 max-height: 0;
                                 transition: .5s ease;
-                                background-color: rgba(30,30,30,.8);
+                                background-color: rgba(30,30,30,.3);
+                                backdrop-filter: blur(8px);
+                                -webkit-backdrop-filter: blur(8px);
                                 border-radius: 5px;
                                 box-shadow: inset 0 0 2px 1px rgba(255,255,255,.7);
 
@@ -171,7 +192,7 @@
 
                                 &.active{
                                     opacity: 1;
-                                    max-height: 120px;
+                                    max-height: 100%;
                                 }
 
                                 .option{
@@ -250,7 +271,9 @@
                                 overflow-y: scroll;
                                 max-height: 0;
                                 transition: .5s ease;
-                                background-color: rgba(30,30,30,.8);
+                                background-color: rgba(30,30,30,.3);
+                                backdrop-filter: blur(8px);
+                                -webkit-backdrop-filter: blur(8px);
                                 border-radius: 5px;
                                 box-shadow: inset 0 0 2px 1px rgba(255,255,255,.7);
 
@@ -438,7 +461,7 @@
                             box-shadow: inset 0 0 0px .5px rgba(255,255,255,.7);
 
                             @media screen and (max-width:414px) {
-                                padding: 15px;
+                                padding: 10px 15px;
                             }
 
                             &:nth-of-type(1){
@@ -447,19 +470,17 @@
                                 justify-content: center;
                                 text-align: center;
                                 font-size: 30px;
+                                height: 100%;
 
                                 @media screen and (max-width:414px) {
-                                    font-size: 20px;
+                                    font-size: 25px;
                                 }
                             }
 
                             &:nth-of-type(2){
-                                display: flex;
-                                flex-direction: column;
-                                justify-content: center;
-                                align-items: center;
                                 font-size: 16px;
-                                text-align: center;
+                                text-align: justify;
+                                line-height: 25px;
 
                                 @media screen and (max-width:414px) {
                                     font-size: 14px;
@@ -489,10 +510,6 @@
                 video{
                     width: 100% !important;
                     height: auto !important;
-
-                    @media screen and (max-width: 414px){
-                        transform: scale(4) !important;
-                    }
                 }
 
                 .close-scanner-btn{
@@ -521,23 +538,23 @@
 
             .badge-alert-frame{
                 position: fixed;
-                right: 0;
-                left: 0;
-                bottom: 0;
+                top: 0;
+                width: 185px;
                 color: white;
                 text-align: center;
                 opacity: 0;
-                transform: translateY(100%);
+                transform: translateY(-100%);
                 transition: .5s ease;
-                background: linear-gradient(0deg,rgba(30,30,30,1),rgba(30,30,30,.8),rgba(30,30,30,.6),rgba(30,30,30,.4),rgba(30,30,30,.2),rgba(30,30,30,0));
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(8px);
+                background-color: rgba(30,30,30,.5);
+                box-shadow: inset 0 0 2px 1px rgba(255,255,255,.7);
                 border-radius: 5px;
-                padding: 15px 0;
-                font-size: 18px;
-                z-index: 3;
+                padding: 8px 0;
 
                 &.active{
                     opacity: 1;
-                    transform: translateY(0%);
+                    transform: translateY(75%);
                 }
             }
 
@@ -645,7 +662,7 @@ export default defineComponent({
                 try {
                     state.loadingStatus.value = true
 
-                    const res = await $.fetch.get<{ data:{ result:invoiceDataType[],title:string } }>('https://proxyservice-1-t7335739.deta.app/test/invoice')
+                    const res = await $.fetch.get<{ data:{ result:invoiceDataType[],title:string } }>('https://proxy-service-three.vercel.app/test/invoice')
                     
                     if(res.status >= 200 && res.status <= 399){
                         const { data:{ result } } = res.data
@@ -667,15 +684,27 @@ export default defineComponent({
                 }
                 
             },
-            repackRenderData: arr => {
+            repackRenderData(arr) {
+                const self = this as methodType
                 const data = $.maps<invoiceDataType,invoiceDataRepackType>(arr,(item => {
                     item.description.topAwards = (item.description.topAwards as string).split('、')
-                    item.publishDate = $.formatDateTime({ formatDate: item.publishDate,formatType:'yyyy-MM-dd HH:mm:ss',toTcYear:true }) as string
+                    item.publishDate = self.formatDateTime({ formatDate: item.publishDate,formatType:'yyyy-MM-dd HH:mm:ss',toTcYear:true }) as string
 
                     return item as invoiceDataRepackType
                 }))
 
                 return data
+            },
+            formatDateTime:({ formatDate,formatType,toTcYear }) => {
+                const dateStr: string = new Date(+new Date(formatDate) + new Date().getLocalTimeZone() * 60 * 60 *1000).toJSON();
+                const dateSplit: string[] = dateStr.replace(/T/g, "-").replace(/:/g, "-").split(".")[0].split("-");
+                const [yearTemp, month, date, hour, minute, second] = dateSplit;
+
+                const year = toTcYear ? (parseInt(yearTemp) - 1911).toString() : yearTemp
+
+                // 更新是否格式化 AM 或 PM 2022/03/19
+
+                return formatType.replace(/yyyy/g, year).replace(/MM/g, month).replace(/dd/g, date).replace(/HH/g, hour).replace(/mm/g, minute).replace(/ss/g, second)
             },
             changeInvoiceDate:val => {
                 state.toggleInvoiceDateList.value = false
@@ -691,7 +720,7 @@ export default defineComponent({
                     monthDate: monthWords[num]
                 }))
 
-                return $.filter(awardsDateRange,({ monthRange }) => monthRange === `${monthPrev}-${monthNext}`).map(({ monthDate }) => monthDate).reduce((emtyArr,item) =>  emtyArr.concat(item.map(monthDates => monthDates.replace('y','年').replace('m','月').replace('d','日'))),[])
+                return $.filter(awardsDateRange,({ monthRange }) => monthRange === `${monthPrev}-${monthNext}`).map(({ monthDate }) => monthDate).reduce((emtyArr,item) =>  emtyArr.concat(item.map(monthDates => monthDates.replace('y',' 年 ').replace('m',' 月 ').replace('d',' 日'))),[])
             },
             createStaticAwardsData:() => {
                 const cashes:string[][] = [['二','40000 元'],['三','10000 元'],['四','4000 元'],['五','1000 元'],['六',' 200 元']]
@@ -705,25 +734,18 @@ export default defineComponent({
                     }
                 })
             },
-            openScanner() {
-                const self = this as methodType
-
-                if(QrScanner.hasCamera()){
-                    state.QrSannerRef.value.start()
-                    state.toggleSannerFrame.value = true
-                    self.controlBadgeCotent('未掃描')
-                } else {
-                    alert('請使用有攝像頭設備')
-                }
+            openScanner:() => {
+                // JR2483319711202030170000000000000004f0000000070772
+                state.QrSannerRef.value.start()
+                state.toggleSannerFrame.value = true
             },
-            closeScanner() {
-                const self = this as methodType
+            closeScanner:() => {
                 state.QrSannerRef.value.stop()
                 setTimeout(() => state.toggleSannerFrame.value = false,800)
-                self.controlBadgeCotent('')
             },
             controlBadgeCotent: content => {
-                state.toggleBadgeContent.value = { status: content !== '',content }
+                state.toggleBadgeContent.value = { status:true,content }
+                setTimeout(() => state.toggleBadgeContent.value = { status:false,content:'' },501)
             },
             qrResult:(result) => {
                 const getAwardsDesc:{[key:string]:any} = {

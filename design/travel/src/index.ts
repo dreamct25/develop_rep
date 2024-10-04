@@ -25,7 +25,7 @@ const popup = L.popup()
 
 const layerGroup = L.layerGroup().addTo(map)
 
-L.tileLayer('https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}',{ attribution:'&copy; CopyRight By Alex Chen - Travel 2022-10' }).addTo(map)
+L.tileLayer('https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}',{ attribution:'CopyRight &copy; 2022-10 Alex Chen' }).addTo(map)
 
 const removeSingleDataView:() => void = () => $('.right-side').removeClass('active')
 
@@ -195,7 +195,7 @@ const toggleDarkMode:(event?:MouseEvent) => void = event => {
 $(document).useMounted(async () => {
     $('.loading-outer').addClass('active')
 
-    const result = await $.fetch.get<fetchDataType>('https://proxyservice-1-t7335739.deta.app/test/travels',{
+    const result = await $.fetch.get<fetchDataType>('https://proxy-service-three.vercel.app/test/travels',{
         queryParams:{ qc:urlQuerys.get('qc') || 1000 }
     })
 

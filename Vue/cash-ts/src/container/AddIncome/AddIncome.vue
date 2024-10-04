@@ -217,7 +217,7 @@ export default defineComponent({
     setup(){
         const router = useRouter()
 
-        const { $,getReducer,Fetch,toast } = inject<ProviderObjType>('NewProvider')
+        const { $,getReducer,Fetch,toast } = inject<ProviderObjType>('NewProvider')!
 
         const { incomeCatagoryOrder,auth } = getReducer(({ Main,Login }) => ({ 
           incomeCatagoryOrder: Main.incomeCatagoryOrder,

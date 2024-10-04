@@ -62,8 +62,10 @@
                           .table-col
                           .table-col.font-weight-bold 優惠券
                           .table-col.notice(v-if="!ticketValue") 否
+                          
                           .table-col.notice(v-else-if="cpValid === false") 無效代碼
-                          .table-col.success(v-else) 是
+                          .table-col.success(v-else-if="cpValid") 是
+                          .table-col.notice(v-else-if="ticketValue") 檢驗代碼中
                         .table-row(v-if="cpValid")
                           .table-col
                           .table-col
@@ -1363,13 +1365,9 @@ export default defineComponent({
 
         pageState.ticketValue.value = ticketVal
 
-        if(!pageState.ticketValue.value){
-          pageState.cpValid.value = false;
-          pageState.cpCount.value = 1;
-          pageState.finalTotal.value = 0
-
-          return
-        }
+        pageState.cpValid.value = undefined;
+        pageState.cpCount.value = 1;
+        pageState.finalTotal.value = 0
 
         const res = await Fetch.get<{ data?: {
           CPCode: string,
@@ -1397,6 +1395,9 @@ export default defineComponent({
             pageState.cpValid.value = false;
             pageState.cpCount.value = 1;
           }
+
+          pageState.cpValid.value = false;
+          pageState.cpCount.value = 1;
         }
       },
       paymentValueCheck: type => {

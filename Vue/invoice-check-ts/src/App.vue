@@ -4,7 +4,7 @@
         h1 統一發票開獎號碼
     Main(:rwdStatus="rwdStatus")
     .footer
-        h6 &copy; CopyRight 2023-03 Alex Chen .
+        h6 CopyRight &copy; 2023-03 Alex Chen .
 </template>
 <style lang="scss">
     html, body, div, span, applet, object, iframe,
@@ -65,7 +65,7 @@
                     font-size: 45px;
                     color: white;
                     text-align: center;
-                    padding: 30px 0 25px 0;
+                    margin: 25px 0;
                     text-shadow: 0 1px 1px rgba(0,0,0,.7);
 
                     @media screen and (max-width:414px) {
@@ -78,7 +78,7 @@
                 color: white;
                 text-align: center;
                 text-shadow: 0 1px 1px rgba(0,0,0,.7);
-                padding: 20px 0 25px 0;
+                padding: 20px 0;
             }
         }
 

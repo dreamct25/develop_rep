@@ -1,8 +1,8 @@
 import $,{ fetchClassReturnType } from '../lib/Library'
 
 $.fetch?.createBase({
-    baseUrl:'https://fordb-1-f6742337.deta.app/blog/v1',
-    // baseUrl:'http://localhost:9999/blog/v1',
+    baseUrl:'https://collect-service.vercel.app/blog/v1',
+    // baseUrl:'http://localhost:9992/blog/v1',
     baseHeaders:{}
 })
 

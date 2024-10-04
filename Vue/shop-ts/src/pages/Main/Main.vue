@@ -649,10 +649,7 @@ export default defineComponent({
       async loginOff (){
         const res = await Fetch
           .post("/account/login_off", {
-            token: '',
-            data: {
-              id: '',
-            }
+            token: pageState.token.value
           })
 
         if(res.status === 200){
