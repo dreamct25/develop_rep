@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fullscreen</title>
+</head>
+<style>
+    /* fullscreen resovle method 2 */
+    body {
+        margin: 0;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        min-height: 100vh;
+        overflow: hidden;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body .youtube-rwd {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    body .youtube-rwd iframe {
+        width: 100%;
+        height: 100%;
+    }
+
+    /* fullscreen resovle method 1 */
+    /* body {
+        margin: 0;
+    }
+
+    body .youtube-rwd iframe {
+        margin-bottom: -3px;
+    } 
+
+    body .youtube-rwd iframe {
+        width: 100%;
+        height: 1077px;
+    }  */
+
+    /* else setting */
+    iframe {
+        display: block;
+    }
+
+    iframe.hidden {
+        display: none;
+    }
+
+    .info-text {
+        display: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+        font-size: 25px;
+        font-weight: bold;
+        background-color: rgb(30,30,30);
+        color: white;
+    }
+
+    .info-text.show {
+        display: flex;
+    }
+
+</style>
+<body>
+    <div class="youtube-rwd">
+        <iframe 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerpolicy="strict-origin-when-cross-origin" 
+            allowfullscreen
+        ></iframe>
+        <div class="info-text">No Query Parameter iq</div>
+    </div>
+    <script>
+        const url = new URL(location.href);
+        const query = new URLSearchParams(url.search)
+        const iq = query.get('iq')
+        const iframeDom = document.querySelector('iframe')
+        const infoTextDom = document.querySelector('.info-text')
+
+        if(iq){
+            iframeDom.classList.add('show')
+            iframeDom.src = iq
+        } else {
+            infoTextDom.classList.add('show')
+        }
+    </script>
+</body>
+</html>
