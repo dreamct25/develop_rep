@@ -1,0 +1,54 @@
+{
+    "frontend": {
+        "startUp": "Start Up",
+        "radioList":"Radio List",
+        "collectList":"Collect List",
+        "radio":"Music Stream",
+        "topRadioRack":"Top Radio Ranking",
+        "changeLanguage":"Language",
+        "searchRadio":"search radio",
+        "searchCollectionRadio":"search collection radio",
+        "noSearchResults":"No Search Results",
+        "noCollectData":"No Collection Radio",
+        "openFunctionList":"open function list",
+        "closeFunctionList":"close function list",
+        "qrLink":"QRCode link",
+        "qrDesc":"Please connect device to wifi before<br />scan which is the same with computer",
+        "deviceConnected":"Device connected",
+        "deviceNotConnect":"Device disconnect",
+        "radioProgramList":"Radio Program List",
+        "currentProgram":"Current Program：{{program}}",
+        "addSuccess":"Add Success",
+        "deleteSuccess":"Delete Success",
+        "addToCollect":"Add To Collection",
+        "deleteCollect":"Delete From Collection",
+        "alreadyInCollection":"Already In Collection",
+        "message":"Message",
+        "prompt":"Prompt",
+        "confirm":"Confirm",
+        "cancel":"Cancel",
+        "doYouWantToDelete":"Do you want to delete  {{itemName}} radio ?",
+        "doYouWantToCloseApplication":"Do you want to close application ?",
+        "copyRight":"CopyRight \u00A9 2022-02 {{ author }}<br /> Appliction Version v{{ version }}",
+        "checkIsOnline":"Please check if your network connection is working properly then click reload button to try again !",
+        "redirectMessage":"Network is connected, will redirect screen view after {{ seconds }} seconds",
+        "retryButton":"Reload",
+        "about":"Abount",
+        "radioDesc":"Please click right upper corner switch inside of black box will open the function list ,then choose radio who want to listen",
+        "remote":{
+            "currentPlay":"Current Playing",
+            "voice":"Voice",
+            "radioList":"Radio list",
+            "noChannel":"No choice Channel",
+            "getRadioList":"Get radio list"
+        }
+    },
+    "backend": {
+        "menuItem": {
+            "delete": "Delete",
+            "edit": "Edit",
+            "addToPlayList": "Add To PlayList",
+            "removeFromPlayList": "Remove From PlayList"
+        }
+    }
+}
