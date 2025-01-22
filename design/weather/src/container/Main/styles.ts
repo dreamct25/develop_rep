@@ -515,7 +515,7 @@ export default styled.div`
                             @media screen and (min-width:768px){
                                 .board-header{
                                     display: grid;
-                                    grid-template-columns: 6.2% 13.4% 13.4% 13.4% 13.4% 13.4% 13.4% 13.4%;
+                                    grid-template-columns: 6.2% 1fr 1fr 1fr 1fr 1fr 1fr;
                                     
                                     div{
                                         text-align: center;
@@ -526,7 +526,7 @@ export default styled.div`
 
                                 .board-body{
                                     display: grid;
-                                    grid-template-columns: 6.2% 13.4% 13.4% 13.4% 13.4% 13.4% 13.4% 13.4%;
+                                    grid-template-columns: 6.2% 1fr 1fr 1fr 1fr 1fr 1fr;
 
                                     div{
                                         padding: 20px 12px 25px 12px;
@@ -561,7 +561,7 @@ export default styled.div`
                                         }
 
                                         &:nth-of-type(1),
-                                        &:nth-of-type(9){
+                                        &:nth-of-type(8){
                                             display: flex;
                                             flex-direction: column;
                                             justify-content: center;
@@ -588,6 +588,8 @@ export default styled.div`
                                     grid-template-columns: 20% 40% 40%;
 
                                     .child-group{
+                                        display: grid;
+                                        grid-template-rows: repeat(6, 1fr);
 
                                         div{
                                             padding: 20px 12px 25px 12px;
