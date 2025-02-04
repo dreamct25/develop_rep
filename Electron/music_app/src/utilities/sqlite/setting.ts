@@ -3,8 +3,8 @@ import sqlite3,{ Database as sqlite3DB , Statement } from 'sqlite3'
 import fs from 'fs'
 import path from 'path'
 
-export const fileUrl = process.env.APP_ENV.trim() === 'pdt' ? 
-    path.join(__dirname.replace(process.platform === 'win32' ? 'app.asar\\.webpack\\main' : '', ''),'xyz.db') : 
+export const fileUrl = process.env.APP_ENV === 'pdt' ? 
+    path.join(__dirname.replace(process.platform === 'win32' ? 'app.asar\\.webpack\\main' : 'app.asar/.webpack/main', ''),'xyz.db') : 
     path.join(__dirname.replace(process.platform === 'win32' ? '.webpack\\main' : '.webpack/main',''), 'src/utilities/sqlite/xyz.db')
 
 const { Database } = sqlite3.verbose()

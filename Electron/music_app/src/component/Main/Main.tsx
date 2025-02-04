@@ -1,5 +1,5 @@
 import { useEffect, useState, createElement, useContext, useRef, ChangeEventHandler } from "react";
-import { useNavigate, Routes, Route } from 'react-router-dom'
+import { useNavigate, Routes, Route, Navigate } from 'react-router-dom'
 import { Trans } from 'react-i18next'
 import { ipcRenderer } from "electron";
 import ReactPlayer from "react-player";
@@ -200,13 +200,11 @@ const Main: FC = (): TSX => {
 
         const action:Record<typeof type, () => void> = {
             lang: () => {
-
                 const data = { uuid: 1, language: val, remote_language: val, type };
 
                 ipcRenderer.send('updateUserSetting', data);
             },
             bg_buf: () => {
-
                 const data = { uuid: 1, bg_buf: val, type };
 
                 ipcRenderer.send('updateUserSetting', data);
@@ -269,7 +267,7 @@ const Main: FC = (): TSX => {
     const initView: () => Promise<void> = async () => {
 
         try {
-            await fetch("https://www.google.com");
+            await fetch("https://proxy-service-three.vercel.app/uts/check_net");
 
         } catch(e){
 
@@ -318,7 +316,6 @@ const Main: FC = (): TSX => {
         })
 
         socketClient.on('respWhenChangeLaguageFromRemote',({ language }:{ language:string }) => {
-            console.log(language)
             setInitState(prevState => ({ ...prevState,language }))
         })
 
@@ -410,7 +407,7 @@ const Main: FC = (): TSX => {
                 })
             ,500)
         }
-    },[playerVolume,isPlayStatus, language])
+    },[playerVolume, isPlayStatus, language])
 
     useEffect(() => {
         isPlayStatusRef.current = isPlayStatus
@@ -419,8 +416,6 @@ const Main: FC = (): TSX => {
     useEffect(() => {
         initView()
     }, [])
-
-    console.log(songSwitchControl)
 
     return (
         <StyledLayout
@@ -467,6 +462,7 @@ const Main: FC = (): TSX => {
                     <Routes>
                         <Route path="/music" element={createElement(Music)} />
                         <Route path="/wrong" element={createElement(NetworkWrong)} />
+                        <Route path="/" element={createElement(Navigate, { replace: true, to: '/music' })} />
                     </Routes>
                 </div>
                 {/* music search and collect end */}

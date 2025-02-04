@@ -23,19 +23,22 @@ const platformPath:{
   // mainImgLocalPath: string,
   // mainImgDistDirPath: string,
   // mainImgDistPath: string,
-  iniFileDistPath: string
+  iniFileDistPath: string,
+  iconDistPath: string
 } = {
   darwin: {
     // mainImgLocalPath: 'src/asset/img/main-bg.jpg',
     // mainImgDistDirPath: 'resources/asset/img',
     // mainImgDistPath: 'resources/asset/img/main-bg.jpg',
-    iniFileDistPath: `${productName}.app/Contents/Resources/${settingFile}`
+    iniFileDistPath: `${productName}.app/Contents/Resources/${settingFile}`,
+    iconDistPath: './src/asset/icon/radio-waves.icns'
   },
   win32: {
     // mainImgLocalPath: 'src\\asset\\img\\main-bg.jpg',
     // mainImgDistDirPath: 'resources\\asset\\img',
     // mainImgDistPath: 'resources\\asset\\img\\main-bg.jpg',
-    iniFileDistPath: settingFile
+    iniFileDistPath: settingFile,
+    iconDistPath: './src/asset/icon/radio-waves-icon.ico'
   }
 }[process.platform]
 
@@ -46,7 +49,7 @@ const platformPath:{
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
-    icon: "./src/asset/icon/radio-waves-icon",
+    icon: platformPath.iconDistPath,
   },
   hooks:{
     // 編譯 (make) 完應用後複製 ini 到資料匣內

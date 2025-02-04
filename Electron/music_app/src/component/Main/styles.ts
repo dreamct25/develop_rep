@@ -355,6 +355,7 @@ export default styled.div<{
 
             &.hidden {
                 background-color: rgba(30, 30, 30, 0);
+                cursor: none;
             }
         }
 
@@ -466,7 +467,7 @@ export default styled.div<{
 
         .prev-btn {
             position: absolute;
-            top: 50%;
+            top: 45%;
             left: 0;
             z-index: 2;
             cursor: pointer;
@@ -488,7 +489,7 @@ export default styled.div<{
 
         .next-btn {
             position: absolute;
-            top: 50%;
+            top: 45%;
             right: 0;
             z-index: 2;
             cursor: pointer;

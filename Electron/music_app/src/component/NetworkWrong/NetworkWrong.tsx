@@ -16,7 +16,7 @@ const NetworkWrong: FC = (): TSX => {
     const reloadPage: () => Promise<void> = async () => {
 
         try {
-            await fetch("https://www.google.com");
+            await fetch("https://proxy-service-three.vercel.app/uts/check_net");
 
             setIsCountDown(true)
 
@@ -50,7 +50,7 @@ const NetworkWrong: FC = (): TSX => {
     return (
         <StyledLayout>
             <div className="message">{count === 4 ? formatLanguage('checkIsOnline') : formatLanguage('redirectMessage',{ seconds : count })}</div>
-            <div className="reload-btn" onClick={reloadPage}>{formatLanguage('retryButton')}</div>
+            {count === 4 && <div className="reload-btn" onClick={reloadPage}>{formatLanguage('retryButton')}</div>}
         </StyledLayout>
     )
 }

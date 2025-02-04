@@ -33,7 +33,6 @@ const Music: FC = (): TSX => {
     const currentSelctCollectID = params.get('collect_id')
 
     const [{
-        currentSelectSonyId,
         searchText,
         searchResult,
         collectListResult,
@@ -47,7 +46,6 @@ const Music: FC = (): TSX => {
         stopClickWhenCollectDrag,
         isRemoteStart
     }, setInitState] = useState<{
-        currentSelectSonyId: string,
         searchText: string,
         searchResult: {
             songUUID: number,
@@ -95,7 +93,6 @@ const Music: FC = (): TSX => {
         stopClickWhenCollectDrag: boolean,
         isRemoteStart: boolean
     }>({
-        currentSelectSonyId: '',
         searchText: '',
         searchResult: [],
         collectListResult: [],
@@ -223,9 +220,6 @@ const Music: FC = (): TSX => {
     const initPage: () => Promise<void> = async () => {
 
         //#region socket listens
-
-        // console.log(process.env.ELECTRON_SERVER_PORT)
-
         socketClient.on('respRemoteIsStart',(result: { isStart: boolean }) => {
 
             setInitState(prevState => ({
@@ -239,6 +233,8 @@ const Music: FC = (): TSX => {
                     fromRemote: false
                 })
             }
+
+            toast.info(result.isStart ? '遠端已連線' : '遠端已關閉')
         })
 
         socketClient.on('respSearchResult',result => {
@@ -546,9 +542,9 @@ const Music: FC = (): TSX => {
         searchResultRef.current = JSON.parse(JSON.stringify(searchResult))
     }, [searchResult])
 
-    useEffect(() => {
-        toast.info(isRemoteStart ? '遠端已連線' : '遠端已關閉')
-    }, [isRemoteStart])
+    // useEffect(() => {
+    //     toast.info(isRemoteStart ? '遠端已連線' : '遠端已關閉')
+    // }, [isRemoteStart])
 
     useEffect(() => {
         
