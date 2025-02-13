@@ -17,6 +17,8 @@
  - 包含有測試過的專案
 ### Vue
  - 包含有開發過的專案與各腳手架的範例
+### chrome-extension
+ - 包含有開發過的 chrome 擴展專案
 ### design
  - 包含有開發過的專案主要是 vanilla ts
 ### test-area
