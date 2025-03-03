@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useContext, ChangeEventHandler } from "react";
+import { useEffect, useRef, useState, useContext, ChangeEventHandler, ChangeEvent } from "react";
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { 
     AiOutlineSearch, 
@@ -20,7 +20,7 @@ import { actionCreator, actionCreator as MainActionCreator, initStoreType } from
 import { ipcRenderer } from "electron";
 
 const Music: FC = (): TSX => {
-    const { setReducer, $, socketClient, toast, getReducer } = useContext(NewContext)
+    const { setReducer, $, socketClient, toast, getReducer, formatLanguage } = useContext(NewContext)
     const { 
         isPlayStatus, 
         songSwitchControl, 
@@ -34,6 +34,7 @@ const Music: FC = (): TSX => {
 
     const [{
         searchText,
+        searchCollectText,
         searchResult,
         collectListResult,
         collectListSongResult,
@@ -47,6 +48,7 @@ const Music: FC = (): TSX => {
         isRemoteStart
     }, setInitState] = useState<{
         searchText: string,
+        searchCollectText: string,
         searchResult: {
             songUUID: number,
             artist: string
@@ -94,6 +96,7 @@ const Music: FC = (): TSX => {
         isRemoteStart: boolean
     }>({
         searchText: '',
+        searchCollectText: '',
         searchResult: [],
         collectListResult: [],
         collectListSongResult: [],
@@ -134,12 +137,12 @@ const Music: FC = (): TSX => {
         fromRemote: false
     })
 
-    const setInputVal:ChangeEventHandler<HTMLInputElement> = event => {
+    const setInputVal:(type:'searchText' | 'seachCollectText', event: ChangeEvent<HTMLInputElement>) => void = (type, event) => {
         const { value } = event.target
     
         setInitState(prevState => ({
             ...prevState,
-            searchText: value
+            [type]: value
         }))
     }
 
@@ -217,6 +220,71 @@ const Music: FC = (): TSX => {
         }))
     }
 
+    const renderCollectList:() => TSX | TSX[] = () => {
+
+        if(searchCollectText) {
+
+            const filterItem = $.filter(collectListResult,row => row.collect_name.match(searchCollectText) as any)
+
+            if(filterItem.length > 0){
+            
+                return $.maps(filterItem, (row, index) => (
+                    <div 
+                        className="list-item" 
+                        key={index}
+                        onContextMenu={(e) => {
+                            e.stopPropagation()
+                            contextListMenu('action-collect-list', true, undefined, row.uuid)
+                        }}
+                        onClick={() => {
+                            ipcRenderer.send('getSongCollectWithSongList', { song_collect_uuid: row.uuid })
+                            setInitState(prevState => ({ 
+                                ...prevState, 
+                                currentSelectCollectInfos: { 
+                                    name: row.collect_name,
+                                    desc: row.collect_desc,
+                                    bgColor: row.collect_bg,
+                                    collect_uuid: row.uuid
+                                }
+                            }))
+                            router({ pathname: '/music', search: `collect_id=${row.uuid}` })
+                        }}
+                    >
+                        <div className="title">{row.collect_name}</div>
+                    </div>
+                ))
+            }
+
+            return (<div className="no-filter-result">查無播放列表</div>)
+        }
+
+        return $.maps(collectListResult, (row, index) => (
+            <div 
+                className="list-item" 
+                key={index}
+                onContextMenu={(e) => {
+                    e.stopPropagation()
+                    contextListMenu('action-collect-list', true, undefined, row.uuid)
+                }}
+                onClick={() => {
+                    ipcRenderer.send('getSongCollectWithSongList', { song_collect_uuid: row.uuid })
+                    setInitState(prevState => ({ 
+                        ...prevState, 
+                        currentSelectCollectInfos: { 
+                            name: row.collect_name,
+                            desc: row.collect_desc,
+                            bgColor: row.collect_bg,
+                            collect_uuid: row.uuid
+                        }
+                    }))
+                    router({ pathname: '/music', search: `collect_id=${row.uuid}` })
+                }}
+            >
+                <div className="title">{row.collect_name}</div>
+            </div>
+        ))
+    }
+
     const initPage: () => Promise<void> = async () => {
 
         //#region socket listens
@@ -234,7 +302,7 @@ const Music: FC = (): TSX => {
                 })
             }
 
-            toast.info(result.isStart ? '遠端已連線' : '遠端已關閉')
+            toast.info(formatLanguage(`component.Music.${result.isStart ? 'remoteToastMsgOn' : 'remoteToastMsgOff'}`))
         })
 
         socketClient.on('respSearchResult',result => {
@@ -258,27 +326,20 @@ const Music: FC = (): TSX => {
             }))
         })
 
-        ipcRenderer.on('respCreateSongCollectList',(_, result) => {
+        ipcRenderer.on('respCreateSongCollectList',(_, result: { message: string }) => {
 
-            if(result.message === 'already have') {
+            const [message, collecName] = result.message.split('|')
+            
+            if(message === 'already have') {
 
-                // setInitState(initState => ({
-                //     ...initState,
-                //     alertBageText: formatLanguage('alreadyInCollection'),
-                //     toggleAlertBageText: true
-                // }))
+                toast.error("已有相同播放列表")
+
                 return
-            } 
+            }
+
+            toast.success(`${collecName} 播放列表建立成功`)
 
             ipcRenderer.send('getSongCollectList')
-                // setInitState(initState => ({
-                //     ...initState,
-                //     alertBageText: formatLanguage('addSuccess'),
-                //     toggleAlertBageText: true
-                // }))
-    
-                // getAllChannel()
-            
 
         })
 
@@ -309,51 +370,29 @@ const Music: FC = (): TSX => {
             }))
         })
 
-        ipcRenderer.on('respEditSongCollectList',(_, result) => {
+        ipcRenderer.on('respEditSongCollectList',(_, result: { message: string }) => {
 
-            if(result.message === 'already have') {
+            const [message, collectName] = result.message.split('|')
 
-                // setInitState(initState => ({
-                //     ...initState,
-                //     alertBageText: formatLanguage('alreadyInCollection'),
-                //     toggleAlertBageText: true
-                // }))
-            } else {
-                // setInitState(initState => ({
-                //     ...initState,
-                //     alertBageText: formatLanguage('addSuccess'),
-                //     toggleAlertBageText: true
-                // }))
-    
-                // getAllChannel()
-                ipcRenderer.send('getSongCollectList')
-            }
+            if(message === 'already have') {
+
+                toast.error("已有相同播放列表")
+
+                return
+            } 
+            
+            toast.success(`${collectName} 播放列表修改成功`)
+            
+            ipcRenderer.send('getSongCollectList')
         })
 
         ipcRenderer.on('respDeleteSongCollectList',(_, result) => {
 
-            if(result.message === 'already have') {
+            searchAction()
 
-                // setInitState(initState => ({
-                //     ...initState,
-                //     alertBageText: formatLanguage('alreadyInCollection'),
-                //     toggleAlertBageText: true
-                // }))
-            } else {
-                // setInitState(initState => ({
-                //     ...initState,
-                //     alertBageText: formatLanguage('addSuccess'),
-                //     toggleAlertBageText: true
-                // }))
-    
-                // getAllChannel()
+            router({ pathname: '/music', search: '' })
 
-                searchAction()
-
-                router({ pathname: '/music', search: '' })
-
-                ipcRenderer.send('getSongCollectList')
-            }
+            ipcRenderer.send('getSongCollectList')
 
         })
 
@@ -376,19 +415,19 @@ const Music: FC = (): TSX => {
 
             if(message === 'already have') {
 
-                toast.error(`歌曲已在 ${collectName} 播放清單中`)
+                toast.error(formatLanguage('component.Music.addSongError',{ collectName }))
                 
                 return
             }
 
-            toast.success(`歌曲已新增至 ${collectName} 播放清單中`)
+            toast.success(formatLanguage('component.Music.addSongSuccess',{ collectName }))
         })
 
         ipcRenderer.on('respDeleteFromCollect',(_, result) => {
 
             const [message, collectName] = result.message.split('|')
 
-            toast.success(`歌曲已從 ${collectName} 播放清單中刪除`)
+            toast.success(formatLanguage('component.Music.deleteSongSuccess',{ collectName }))
         })
 
         ipcRenderer.on('respGetSongCollectWithSongList',(_, result) => {
@@ -542,17 +581,7 @@ const Music: FC = (): TSX => {
         searchResultRef.current = JSON.parse(JSON.stringify(searchResult))
     }, [searchResult])
 
-    // useEffect(() => {
-    //     toast.info(isRemoteStart ? '遠端已連線' : '遠端已關閉')
-    // }, [isRemoteStart])
-
-    useEffect(() => {
-        
-        initPage()
-
-    }, [])
-
-    // $(window).on('keydown', whenKeyDown)
+    useEffect(() => { initPage() }, [])
 
     return (
         <StyledLayout themColorRgba={themColorRgbaStr}>
@@ -565,15 +594,15 @@ const Music: FC = (): TSX => {
                                     <div>
                                         <div className="current-path-outer">
                                             <div className={currentSelctCollectID ? 'play-list-title active' : 'play-list-title'}>
-                                                <div>播放清單</div>
+                                                <div>{formatLanguage('component.Music.playList')}</div>
                                                 <div 
                                                     className="add-list-icon"
-                                                    onClick={() => {
-                                                        setInitState(prevState => ({ 
+                                                    onClick={
+                                                        setInitState.bind(this, (prevState => ({ 
                                                             ...prevState, 
                                                             toggleListModalActionStatus: true
-                                                        }))
-                                                    }}
+                                                        })))
+                                                    }
                                                 >
                                                     <IoMdAddIcon />
                                                 </div>
@@ -585,43 +614,15 @@ const Music: FC = (): TSX => {
                                                     router({ pathname: '/music', search: '' })
                                                 }
                                             }>
-                                                返回找音樂
+                                                {formatLanguage('component.Music.backToFindMusic')}
                                             </div>
                                         </div>
                                         <div className="search-collect-outer">
                                             <AiOutlineSearch />
-                                            <input type="text" />
+                                            <input type="text" placeholder={formatLanguage('component.Music.searchCollectList')} onChange={setInputVal.bind(this, 'searchCollectText')} />
                                         </div>
                                     </div>
-                                    <div className="list-outer">
-                                        {
-                                            $.maps(collectListResult,(row,index) => (
-                                                <div 
-                                                    className="list-item" 
-                                                    key={index}
-                                                    onContextMenu={(e) => {
-                                                        e.stopPropagation()
-                                                        contextListMenu('action-collect-list', true, undefined, row.uuid)
-                                                    }}
-                                                    onClick={() => {
-                                                        ipcRenderer.send('getSongCollectWithSongList', { song_collect_uuid: row.uuid })
-                                                        setInitState(prevState => ({ 
-                                                            ...prevState, 
-                                                            currentSelectCollectInfos: { 
-                                                                name: row.collect_name,
-                                                                desc: row.collect_desc,
-                                                                bgColor: row.collect_bg,
-                                                                collect_uuid: row.uuid
-                                                            }
-                                                        }))
-                                                        router({ pathname: '/music', search: `collect_id=${row.uuid}` })
-                                                    }}
-                                                >
-                                                    <div className="title">{row.collect_name}</div>
-                                                </div>
-                                            ))
-                                        }
-                                    </div>
+                                    <div className="list-outer">{renderCollectList()}</div>
                                 </div>
                             ) : (
                                 <div className="create-list-btn-outer">
@@ -633,7 +634,7 @@ const Music: FC = (): TSX => {
                                                 toggleListModalActionStatus: true
                                             }))
                                         }}
-                                    >建立播放清單</div>
+                                    >{formatLanguage('component.Music.createPlayList')}</div>
                                 </div>
                             )
                         }
@@ -643,12 +644,12 @@ const Music: FC = (): TSX => {
                     <div className="top">
                         <div className="search-outer">
                             <AiOutlineSearch />
-                            <input type="text" placeholder="想聽甚麼呢 ~" value={searchText} onChange={setInputVal} />
+                            <input type="text" placeholder={formatLanguage('component.Music.whatKindSongSearch')} value={searchText} onChange={setInputVal.bind(this, 'searchText')} />
                         </div>
                         <div className="right-outer">
                             <Tippy 
                                 theme="light-border" 
-                                content='設定' 
+                                content={formatLanguage('component.Main.settingBar.setting')} 
                                 animation="scale-subtle"
                             >
                                 <div className="setting-btn" onClick={setReducer.bind(this, MainActionCreator, 'setToggleSettingListStatus', true)}>
@@ -657,7 +658,7 @@ const Music: FC = (): TSX => {
                             </Tippy>
                             <Tippy
                                 theme="light-border" 
-                                content='遠端連線 QRCode'
+                                content={formatLanguage('component.Music.remoteConnectQRCode')}
                                 animation="scale-subtle"
                             >
                                 <div className="open-qr-btn" onClick={setReducer.bind(this, MainActionCreator, 'setToggleQRCodeModalStatus', true)}>
@@ -666,7 +667,7 @@ const Music: FC = (): TSX => {
                             </Tippy>
                             <Tippy
                                 theme="light-border"  
-                                content={`遠端連線狀態:${isRemoteStart ? '已開啟' : '已關閉'}`}
+                                content={formatLanguage('component.Music.remoteConnected',{ status: formatLanguage(`component.Music.${isRemoteStart ? 'remoteOn' : 'remoteOff'}`) })}
                                 animation="scale-subtle"
                             >
                                 <div className={isRemoteStart ? 'is-remote-connect active' : 'is-remote-connect'}>
@@ -733,9 +734,9 @@ const Music: FC = (): TSX => {
                                                     <div className="is-in-collect">{row.isSongInCollect && <AiFillStarIcon />}</div>
                                                 </div>
                                             )) : (isSearching && searchResult.length === 0) ? (
-                                                <div className="is-searching">搜尋中</div>
+                                                <div className="is-searching">{formatLanguage('component.Music.searching')}</div>
                                             ) : (
-                                                <div className="no-data">尚未搜尋</div>
+                                                <div className="no-data">{formatLanguage('component.Music.noSearchResults')}</div>
                                             )
                                         }
                                     </div>
@@ -848,7 +849,7 @@ const Music: FC = (): TSX => {
                                                                 router({ pathname: '/music', search: '' })
                                                                 searchAction()
                                                             }
-                                                        }>無歌曲，來去找歌</div>
+                                                        }>{formatLanguage('component.Music.goToFindSong')}</div>
                                                     </div>
                                                 )
                                             }
@@ -861,7 +862,7 @@ const Music: FC = (): TSX => {
                 </div>
             </div>
             <Modal
-                modalTitle={isListModalEditActionStatus ? '編輯播放清單' : '建立播放清單'}
+                modalTitle={formatLanguage(`component.Music.${isListModalEditActionStatus ? 'editPlayList' : 'createPlayList'}`)}
                 toggleModal={toggleListModalActionStatus}
                 setToggleModal={(status, method) => {
                     toggleCollectSaveModal(status, `${isListModalEditActionStatus ? 'edit' : 'create'}|${method}`)
@@ -869,7 +870,7 @@ const Music: FC = (): TSX => {
                 withOptions
             >
                 <Input 
-                    label="播放清單名稱"
+                    label={formatLanguage('component.Music.playListName')}
                     labelAlign="default" 
                     inputStyle="default" 
                     usingType="input"
@@ -889,7 +890,7 @@ const Music: FC = (): TSX => {
                     }} 
                 />
                 <Input 
-                    label="播放清單說明"
+                    label={formatLanguage('component.Music.playListDesc')}
                     labelAlign="default"
                     inputStyle="default"
                     usingType="input"
@@ -911,14 +912,14 @@ const Music: FC = (): TSX => {
                 />
             </Modal>
             <Modal
-                modalTitle="刪除歌單"
+                modalTitle={formatLanguage('component.Music.deletePlayList')}
                 toggleModal={toggleDeleteListModalStatus}
                 setToggleModal={(status, method) => {
                     toggleCollectSaveModal(status, `delete|${method}`)
                 }}
                 withOptions
             >
-                <div>確定要刪除{deleteCollectSingleItem.collect_name}嗎</div>
+                <div>{formatLanguage('component.Music.doYouWantToDeletePlayList', { playListName: deleteCollectSingleItem.collect_name })}</div>
             </Modal>
         </StyledLayout>
     )

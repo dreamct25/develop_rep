@@ -1,4 +1,4 @@
-import { useEffect, useState, createElement, useContext, useRef, ChangeEventHandler } from "react";
+import { useEffect, useState, createElement, useContext, useRef, ChangeEventHandler, KeyboardEventHandler } from "react";
 import { useNavigate, Routes, Route, Navigate } from 'react-router-dom'
 import { Trans } from 'react-i18next'
 import { ipcRenderer } from "electron";
@@ -45,7 +45,6 @@ interface initStateType {
     moveXY:{ baseX: number,baseY: number }
     appInfo:{ author: string, version: string },
     playerDuration: number,
-    playerVideoDuration: number,
     playerEndDuration: number,
     playerVolume: number,
     remoteIp: string,
@@ -90,7 +89,6 @@ const Main: FC = (): TSX => {
         moveXY,
         appInfo,
         playerDuration,
-        playerVideoDuration,
         playerEndDuration,
         playerVolume,
         remoteIp,
@@ -110,9 +108,7 @@ const Main: FC = (): TSX => {
         moveXY:{ baseX: -1, baseY: -1 },
         appInfo: { author: '', version: '' },
         playerDuration: 0,
-        playerVideoDuration: 0,
         playerEndDuration: 0,
-        // playerVolume: .5,
         playerVolume: 0,
         remoteIp: '',
         toggleVideoModalStatus: false,
@@ -133,6 +129,8 @@ const Main: FC = (): TSX => {
     const debunceWhenMouseMoveInVideoFrame = useRef<NodeJS.Timeout>(undefined)
 
     const isPlayStatusRef = useRef<boolean>(false)
+
+    const playerDurationRef = useRef<number>(0)
 
     const controlRightFunsGroups:{ className: string, iconTSX: FC, actionNum: number }[] = [{
         className: 'single-loop-controll',
@@ -194,7 +192,7 @@ const Main: FC = (): TSX => {
     const goPage: (pathname: string) => void = pathname => route({ pathname: navigator.onLine ? pathname : '/wrong' })
 
     const setUserSetting:<T>(
-        type: 'lang' | 'bg_buf' | 'bg_blur_pec' | 'bg_mask_pec' | 'them_color' ,
+        type: 'lang' | 'bg_buf' | 'bg_blur_pec' | 'bg_mask_pec' | 'them_color' | 'player_volume' ,
         val?: T
     ) => void = (type,val) => {
 
@@ -223,7 +221,12 @@ const Main: FC = (): TSX => {
                 const data = { uuid: 1, them_color: val, type };
 
                 ipcRenderer.send('updateUserSetting', data);
-            }
+            },
+            player_volume: () => {
+                const data = { uuid: 1, player_volume: val, type };
+
+                ipcRenderer.send('updateUserSetting', data);
+            },
         }
 
         action[type]()
@@ -264,6 +267,47 @@ const Main: FC = (): TSX => {
         }
     }
 
+    const whenKeyDown: (_: Window, event: KeyboardEvent) => void = (_, event) => {
+
+        const target = event.target as Document
+
+        if(target.nodeName === 'BODY') {
+
+            if (event.key === " " && !event.ctrlKey && !event.altKey && !event.metaKey) {
+                event.preventDefault();
+            }
+    
+            const action:Record<number, () => void> = {
+                [event.keyCode]: () => {},
+                32: () => {
+                    setReducer(actionCreator, 'setIsPlayStatus', !isPlayStatus)
+                },
+                37: () => {
+                    playerDurationRef.current -= 10
+                    playerDomRef.current.seekTo(playerDurationRef.current <= 0 ? 0 : playerDurationRef.current , 'seconds')
+                },
+                38: () => {
+                    setInitState(prevState => ({
+                        ...prevState,
+                        playerVolume: playerVolume >= 1 ? 1 : playerVolume + 0.05
+                    }))
+                },
+                39: () => {
+                    playerDurationRef.current += 10
+                    playerDomRef.current.seekTo(playerDurationRef.current >= playerEndDuration ? playerEndDuration : playerDurationRef.current, 'seconds')
+                },
+                40: () => {
+                    setInitState(prevState => ({
+                        ...prevState,
+                        playerVolume: playerVolume <= 0 ? 0 : playerVolume - 0.05
+                    }))
+                }
+            }
+    
+            action[event.keyCode]()
+        }
+    }
+
     const initView: () => Promise<void> = async () => {
 
         try {
@@ -280,7 +324,8 @@ const Main: FC = (): TSX => {
         ipcRenderer.on('getCopyrightInfo', () => setToggleModalFn(true, 'copyRight'))
 
         ipcRenderer.on('respGetUserSetting',async (_,data: {
-            language?: string, 
+            language: string,
+            player_volume: number,
             bg_buf?: ArrayBuffer,
             bg_blur_pec?: number,
             bg_mask_pec?: number,
@@ -289,9 +334,11 @@ const Main: FC = (): TSX => {
 
             if(data.length > 0){
 
-                const [{ language, bg_buf, bg_blur_pec, bg_mask_pec, them_color }] = data
+                const [{ language, player_volume , bg_buf, bg_blur_pec, bg_mask_pec, them_color }] = data
 
                 if(language) setInitState(prevState => ({ ...prevState,language }))
+
+                if(player_volume) setInitState(prevState => ({ ...prevState,playerVolume: player_volume }))
 
                 if(bg_buf !== null) {
                     // 創建 Blob
@@ -340,8 +387,6 @@ const Main: FC = (): TSX => {
         socketClient.on('respSetVoiceFromRemote',(result: { voiceVal: number }) => {
             setInitState(prevState => ({ ...prevState, playerVolume: result.voiceVal }))
         })
-
-        
 
         socketClient.on('respSetPlayingLoopFromRemote',(action: boolean) => {
 
@@ -405,6 +450,7 @@ const Main: FC = (): TSX => {
                     isPlayStatus,
                     language    
                 })
+
             ,500)
         }
     },[playerVolume, isPlayStatus, language])
@@ -416,6 +462,8 @@ const Main: FC = (): TSX => {
     useEffect(() => {
         initView()
     }, [])
+
+    $(window).on('keydown', whenKeyDown)
 
     return (
         <StyledLayout
@@ -439,10 +487,10 @@ const Main: FC = (): TSX => {
             <div className="top-bar" onMouseDown={dragStart} onMouseUp={dragEnd}>
                 <div className="top-bar-title">
                     <img src="/asset/icon/radio-waves.png" />
-                    <span>{formatLanguage('radio')}</span>
+                    <span>{formatLanguage('component.Main.radio')}</span>
                 </div>
                 <div className="top-bar-controller">
-                    {process.platform !== 'darwin' && <div className="abount-text" onClick={setToggleModalFn.bind(this,true, 'copyRight')}>{formatLanguage('about')}</div>}
+                    {process.platform !== 'darwin' && <div className="abount-text" onClick={setToggleModalFn.bind(this,true, 'copyRight')}>{formatLanguage('component.Main.about')}</div>}
                     <div className="min" onClick={minScreen}>
                         <FiMinusIcon className="min-icon" />
                     </div>
@@ -559,10 +607,15 @@ const Main: FC = (): TSX => {
                                         min={0}
                                         max={100}
                                         onChange={(val: number) => {
+
+                                            const v = val / 100
+
                                             setInitState(prevState => ({ 
                                                 ...prevState,
-                                                playerVolume: val / 100,
+                                                playerVolume: v,
                                             }))
+
+                                            setUserSetting('player_volume', v)
                                         }}
                                         value={playerVolume * 100}
                                     />
@@ -613,12 +666,12 @@ const Main: FC = (): TSX => {
             {/* main-layout end */}
             {/* close application modal */}
             <Modal
-                modalTitle={formatLanguage('prompt')}
+                modalTitle={formatLanguage('common.prompt')}
                 toggleModal={toggleModal}
                 setToggleModal={setToggleModalFn}
                 withOptions
             >
-                <div>{formatLanguage('doYouWantToCloseApplication')}</div>
+                <div>{formatLanguage('component.Main.doYouWantToCloseApplication')}</div>
             </Modal>
             {/* close application modal end */}
             {/* about application description */}
@@ -630,7 +683,7 @@ const Main: FC = (): TSX => {
                 onlyInfo
             >
                 <Trans 
-                    i18nKey='copyRight'
+                    i18nKey='component.Main.copyRight'
                     components={{ br: <br /> }}
                     values={{ author: appInfo.author, version:  appInfo.version }}
                 />
@@ -643,7 +696,7 @@ const Main: FC = (): TSX => {
                 closeCodeModal={val => setReducer(actionCreator, 'setToggleQRCodeModalStatus', val)}
                 renderText={
                     <Trans 
-                        i18nKey='qrDesc'
+                        i18nKey='component.QRCodeModal.qrDesc'
                         components={{ br: <br /> }}
                     />
                 }
@@ -698,6 +751,7 @@ const Main: FC = (): TSX => {
                         playing={isPlayStatus}
                         volume={playerVolume}
                         onProgress={obj => {
+                            playerDurationRef.current = obj.playedSeconds
                             setInitState(prevState => ({ 
                                 ...prevState,
                                 playerDuration: obj.playedSeconds,
@@ -813,7 +867,7 @@ const Main: FC = (): TSX => {
             <div className={toggleSettingListStatus ? "setting-list-outer-frame toggle" : "setting-list-outer-frame"}>
                 <div className="setting-list-outer">
                     <div className="top">
-                        <div className="title">設定</div>
+                        <div className="title">{formatLanguage('component.Main.settingBar.setting')}</div>
                         <div className="close-btn" onClick={setReducer.bind(this, actionCreator, 'setToggleSettingListStatus', false)}>
                             <IoMdCloseIcon />
                         </div>
@@ -821,7 +875,7 @@ const Main: FC = (): TSX => {
                     <div className="bottom">
                         <div className="list-outer">
                             <div className="list-row">
-                                <div className="left-title">語系</div>
+                                <div className="left-title">{formatLanguage('component.Main.settingBar.changeLanguage')}</div>
                                 <div className="right-option">
                                     <div className="change-language-list">
                                         <div 
@@ -852,16 +906,16 @@ const Main: FC = (): TSX => {
                                 </div>
                             </div>
                             <div className="list-row">
-                                <div className="left-title">變更背景</div>
+                                <div className="left-title">{formatLanguage('component.Main.settingBar.changeBg')}</div>
                                 <div className="right-option">
                                     <div className="change-bg-btn">
-                                        {'選擇圖片'}
+                                        {formatLanguage('component.Main.settingBar.pickImg')}
                                         <input type="file" className="change-bg-input" accept="image/*" onChange={changeBgAction} />
                                     </div>
                                 </div>
                             </div>
                             <div className="list-row with-slide">
-                                <div className="left-title">背景模糊</div>
+                                <div className="left-title">{formatLanguage('component.Main.settingBar.changeBgBlur')}</div>
                                 <div className="right-option">
                                     <Slider 
                                         min={0}
@@ -880,7 +934,7 @@ const Main: FC = (): TSX => {
                                 </div>
                             </div>
                             <div className="list-row with-slide">
-                                <div className="left-title">背景遮罩</div>
+                                <div className="left-title">{formatLanguage('component.Main.settingBar.changeBgMask')}</div>
                                 <div className="right-option">
                                     <Slider 
                                         min={0}
@@ -899,11 +953,11 @@ const Main: FC = (): TSX => {
                                 </div>
                             </div>
                             <div className="list-row">
-                                <div className="left-title">{'變更主題色'}</div>
+                                <div className="left-title">{formatLanguage('component.Main.settingBar.changeBgMask')}</div>
                                 <div className="right-option with-picker">
                                     <div className="color-picker-btn" onClick={() => setInitState(prevState => ({ ...prevState, toggleThemColorPicker: !toggleThemColorPicker }))}>
                                         <div className="color-box" style={{ backgroundColor: themColorRgbaStr }}></div>
-                                        {'選擇顏色'}
+                                        {formatLanguage('component.Main.settingBar.pickColor')}
                                     </div>
                                     <div className={`picker-outer ${toggleThemColorPicker ? 'toggle' : ''}`}>
                                         <RgbaColorPicker color={themColorRgba} onChange={pickColorRgba => {
@@ -918,7 +972,7 @@ const Main: FC = (): TSX => {
                 </div>
             </div>
             {/* setting navbar end */}
-            <Loading loadingStatus={loadSetting} infoText="取得設定中" />
+            <Loading loadingStatus={loadSetting} infoText={formatLanguage('component.Main.getSetting')} />
         </StyledLayout>
     )
 }

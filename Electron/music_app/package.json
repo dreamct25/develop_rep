@@ -5,9 +5,9 @@
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {
-    "start": "APP_ENV=dev electron-forge start",
+    "start": "SET APP_ENV=dev && electron-forge start",
     "package": "electron-forge package",
-    "make": "APP_ENV=pdt electron-forge make",
+    "make": "SET APP_ENV=pdt && electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx ."
   },

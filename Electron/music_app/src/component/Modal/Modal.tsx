@@ -26,11 +26,11 @@ const Modal: FC<ModalProps> = (props: ModalProps): TSX => {
                     <div className={props?.onlyInfo ? 'modal-info-footer' : 'modal-footer'}>
                         {props?.withOptions ? (
                             <>
-                                <div onClick={setToggleModal.bind(this, false, 'confirm')}>{formatLanguage('confirm')}</div>
-                                <div onClick={setToggleModal.bind(this, false, 'cancel')}>{formatLanguage('cancel')}</div>
+                                <div onClick={setToggleModal.bind(this, false, 'confirm')}>{formatLanguage('common.confirm')}</div>
+                                <div onClick={setToggleModal.bind(this, false, 'cancel')}>{formatLanguage('common.cancel')}</div>
                             </>
                         ) : (
-                            <div onClick={setToggleModal.bind(this, false, 'confirm')}>{formatLanguage('confirm')}</div>
+                            <div onClick={setToggleModal.bind(this, false, 'confirm')}>{formatLanguage('common.confirm')}</div>
                         )}
                         
                     </div>

@@ -118,6 +118,10 @@ export default styled.div<{ themColorRgba: string }>`
                             color: white;
                             width: 100%;
                             height: 100%;
+
+                            &::placeholder {
+                                font-size: 16px;
+                            }
                         }
                     }
 
@@ -126,6 +130,14 @@ export default styled.div<{ themColorRgba: string }>`
                         overflow-y: auto;
                         margin: 6px 3px 6px 6px;
                         transition: .5s ease;
+
+                        .no-filter-result {
+                            height: 100%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            font-weight: bold;
+                        }
 
                         &:hover {
 

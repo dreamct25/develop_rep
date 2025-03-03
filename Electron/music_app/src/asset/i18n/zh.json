@@ -1,46 +1,71 @@
 {
     "frontend": {
-        "startUp": "啟動中",
-        "radioList":"廣播列表",
-        "collectList":"收藏列表",
-        "radio":"音樂串流",
-        "topRadioRack":"熱門電台排行",
-        "changeLanguage":"語系",
-        "searchRadio":"搜尋電台",
-        "searchCollectionRadio":"搜尋收藏電台",
-        "noSearchResults":"無搜尋結果",
-        "noCollectData":"無收藏電台",
-        "openFunctionList":"開啟功能列",
-        "closeFunctionList":"關閉功能列",
-        "qrLink":"QRCode 連結",
-        "qrDesc":"請將裝置連接到與電腦<br />相同的 WIFI 中後再掃描",
-        "deviceConnected":"設備已連接",
-        "deviceNotConnect":"設備未連接",
-        "radioProgramList":"廣播節目表",
-        "currentProgram":"當前節目：{{ program }}",
-        "addSuccess":"新增成功",
-        "deleteSuccess":"刪除成功",
-        "addToCollect":"加入收藏",
-        "deleteCollect":"刪除收藏",
-        "alreadyInCollection":"已在收藏中",
-        "message":"訊息",
-        "prompt":"提示",
-        "confirm":"確定",
-        "cancel":"取消",
-        "doYouWantToDelete":"確定要刪除 {{itemName}} 電台嗎 ?",
-        "doYouWantToCloseApplication":"確定要關閉應用程式嗎 ?",
-        "copyRight":"CopyRight \u00A9 2022-02 {{ author }} 版權所有<br /> 應用程式版本 v{{ version }}",
-        "checkIsOnline":"請檢查您的網絡狀態是否正常，確認後再點擊重新加載按鈕進行檢查",
-        "redirectMessage":"網路已連接,將在 {{ seconds }} 秒後重新導向畫面",
-        "retryButton":"重新加載",
-        "about":"關於",
-        "radioDesc":"請點擊黑框內右上角的開關會打開功能列表，然後選擇要收聽的電台",
+        "common": {
+            "message":"訊息",
+            "prompt":"提示",
+            "confirm":"確定",
+            "cancel":"取消"
+        },
+        "component": {
+            "WhenStartLoading": {
+                "startUp": "啟動中"
+            },
+            "Main": {
+                "radio":"音樂串流",
+                "qrLink":"QRCode 連結",
+                "deviceConnected":"設備已連接",
+                "deviceNotConnect":"設備未連接",
+                "doYouWantToCloseApplication":"確定要關閉應用程式嗎 ?",
+                "copyRight":"CopyRight \u00A9 2022-02 {{ author }} 版權所有<br /> 應用程式版本 v{{ version }}",
+                "about":"關於",
+                "settingBar": {
+                    "setting": "設定",
+                    "changeLanguage":"語系",
+                    "changeBg":"變更背景",
+                    "pickImg":"選擇圖片",
+                    "changeBgBlur":"背景模糊",
+                    "changeBgMask":"背景遮罩",
+                    "changeMainThemColor":"變更主題色",
+                    "pickColor":"選擇顏色"
+                },
+                "getSetting": "取得設定中"
+            },
+            "QRCodeModal": {
+                "qrDesc":"請將裝置連接到與電腦<br />相同的 WIFI 中後再掃描"
+            },
+            "Music": {
+                "playList": "播放清單",
+                "backToFindMusic": "返回找音樂",
+                "createPlayList": "建立播放清單",
+                "editPlayList": "編輯播放清單",
+                "deletePlayList": "刪除播放清單",
+                "playListName": "播放清單名稱",
+                "playListDesc": "播放清單說明",
+                "doYouWantToDeletePlayList": "確定要刪除 {{playListName}} 播放清單？",
+                "searching": "搜尋中",
+                "noSearchResults":" 尚未搜尋",
+                "addSongSuccess": "歌曲已新增至 {{collectName}} 播放清單中",
+                "addSongError": "歌曲已在 {{collectName}} 播放清單中",
+                "deleteSongSuccess": "歌曲已從 {{collectName}} 播放清單中刪除",
+                "remoteConnectQRCode": "遠端連線 QRCode",
+                "remoteConnected": "遠端連線狀態：{{status}}",
+                "goToFindSong": "無歌曲，來去找歌",
+                "remoteOn": "已開啟",
+                "remoteOff": "已關閉",
+                "remoteToastMsgOn": "遠端已連線",
+                "remoteToastMsgOff": "遠端已關閉",
+                "whatKindSongSearch": "想聽甚麼呢 ~",
+                "searchCollectList": "搜尋播放列表"
+            },
+            "NetworkWrong": {
+                "checkIsOnline":"請檢查您的網絡狀態是否正常，確認後再點擊重新加載按鈕進行檢查",
+                "redirectMessage":"網路已連接,將在 {{ seconds }} 秒後重新導向畫面",
+                "retryButton":"重新加載"
+            }
+        },
         "remote":{
             "currentPlay":"正在播放",
-            "voice":"音量",
-            "radioList":"廣播列表",
-            "noChannel":"無選擇電台",
-            "getRadioList":"取得廣播列表中"
+            "voice":"音量"
         }
     },
     "backend": {

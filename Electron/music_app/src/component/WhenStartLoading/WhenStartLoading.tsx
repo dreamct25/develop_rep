@@ -21,7 +21,7 @@ const WhenStartLoading:FC = ():TSX => {
         <StyledLayout>
             <div className={showLoading ? "loading-outer toggle" : "loading-outer"}>
                 <div className="loading"></div>
-                <div className="loading-text">{formatLanguage('startUp')}</div>
+                <div className="loading-text">{formatLanguage('component.WhenStartLoading.startUp')}</div>
             </div>
         </StyledLayout>
     )

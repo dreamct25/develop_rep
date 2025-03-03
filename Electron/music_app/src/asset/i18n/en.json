@@ -1,46 +1,71 @@
 {
     "frontend": {
-        "startUp": "Start Up",
-        "radioList":"Radio List",
-        "collectList":"Collect List",
-        "radio":"Music Stream",
-        "topRadioRack":"Top Radio Ranking",
-        "changeLanguage":"Language",
-        "searchRadio":"search radio",
-        "searchCollectionRadio":"search collection radio",
-        "noSearchResults":"No Search Results",
-        "noCollectData":"No Collection Radio",
-        "openFunctionList":"open function list",
-        "closeFunctionList":"close function list",
-        "qrLink":"QRCode link",
-        "qrDesc":"Please connect device to wifi before<br />scan which is the same with computer",
-        "deviceConnected":"Device connected",
-        "deviceNotConnect":"Device disconnect",
-        "radioProgramList":"Radio Program List",
-        "currentProgram":"Current Program：{{program}}",
-        "addSuccess":"Add Success",
-        "deleteSuccess":"Delete Success",
-        "addToCollect":"Add To Collection",
-        "deleteCollect":"Delete From Collection",
-        "alreadyInCollection":"Already In Collection",
-        "message":"Message",
-        "prompt":"Prompt",
-        "confirm":"Confirm",
-        "cancel":"Cancel",
-        "doYouWantToDelete":"Do you want to delete  {{itemName}} radio ?",
-        "doYouWantToCloseApplication":"Do you want to close application ?",
-        "copyRight":"CopyRight \u00A9 2022-02 {{ author }}<br /> Appliction Version v{{ version }}",
-        "checkIsOnline":"Please check if your network connection is working properly then click reload button to try again !",
-        "redirectMessage":"Network is connected, will redirect screen view after {{ seconds }} seconds",
-        "retryButton":"Reload",
-        "about":"Abount",
-        "radioDesc":"Please click right upper corner switch inside of black box will open the function list ,then choose radio who want to listen",
+        "common": {
+            "message":"Message",
+            "prompt":"Prompt",
+            "confirm":"Confirm",
+            "cancel":"Cancel"
+        },
+        "component": {
+            "WhenStartLoading": {
+                "startUp": "Start Up"
+            },
+            "Main": {
+                "radio":"Music Stream",
+                "qrLink":"QRCode link",
+                "deviceConnected":"Device connected",
+                "deviceNotConnect":"Device disconnect",
+                "doYouWantToCloseApplication":"Do you want to close application ?",
+                "copyRight":"CopyRight \u00A9 2022-02 {{ author }}<br /> Appliction Version v{{ version }}",
+                "about":"Abount",
+                "settingBar": {
+                    "setting": "Setting",
+                    "changeLanguage":"Language",
+                    "changeBg":"change background",
+                    "pickImg":"pick images",
+                    "changeBgBlur":"change blur",
+                    "changeBgMask":"change mask",
+                    "changeMainThemColor":"change Them",
+                    "pickColor":"pick color"
+                },
+                "getSetting": "Get Setting"
+            },
+            "QRCodeModal": {
+                "qrDesc":"Please connect device to wifi before<br />scan which is the same with computer"
+            },
+            "Music": {
+                "playList": "PlayList",
+                "backToFindMusic": "Back To Find Songs",
+                "createPlayList": "Create PlayList",
+                "editPlayList": "Edit PlayList",
+                "deletePlayList": "Delete PlayList",
+                "playListName": "PlayList Name",
+                "playListDesc": "PlayList Description",
+                "doYouWantToDeletePlayList": "Do you want to delete {{playListName}} playlist？",
+                "searching": "Searing ...",
+                "noSearchResults":"No Search Results",
+                "addSongSuccess": "Song added to {{collectName}} playlist",
+                "addSongError": "Song is existing in {{collectName}} playlist",
+                "deleteSongSuccess": "Song remove from {{collectName}} playlist",
+                "remoteConnectQRCode": "Remote QRCode",
+                "remoteConnected": "Remote Connected：{{status}}",
+                "goToFindSong": "Is empty, go to find another song",
+                "remoteOn": "On",
+                "remoteOff": "Off",
+                "remoteToastMsgOn": "Remote Connected",
+                "remoteToastMsgOff": "Remote Disconnected",
+                "whatKindSongSearch": "What kind song you want to listen ~",
+                "searchCollectList": "Search playlist"
+            },
+            "NetworkWrong": {
+                "checkIsOnline":"Please check if your network connection is working properly then click reload button to try again !",
+                "redirectMessage":"Network is connected, will redirect screen view after {{ seconds }} seconds",
+                "retryButton":"Reload"
+            }
+        },
         "remote":{
             "currentPlay":"Current Playing",
-            "voice":"Voice",
-            "radioList":"Radio list",
-            "noChannel":"No choice Channel",
-            "getRadioList":"Get radio list"
+            "voice":"Voice"
         }
     },
     "backend": {

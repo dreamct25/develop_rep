@@ -114,16 +114,8 @@ export const ipcListenGroup:(
         
         const result = await db.all("SELECT * FROM user_setting")
 
-        if(result.length === 0){
+        if(result.length > 0){
 
-          await db.run(`
-            INSERT INTO user_setting (
-              language,
-              remote_language,
-              create_date
-            ) VALUES ('en','en',datetime('now','localtime'))
-          `)
-        } else {
           const [{ language }] = result
           ipcMain.emit('change-backend-lang', null, language)
         }
@@ -139,11 +131,12 @@ export const ipcListenGroup:(
       uuid: string, 
       language?: string, 
       remote_language?:string,
+      player_volume?: number,
       bg_buf?: ArrayBuffer,
       bg_blur_pec?: number,
       bg_mask_pec?: number,
       them_color?: string
-      type: 'lang' | 'bg_buf' | 'bg_blur_pec' | 'bg_mask_pec' | 'them_color'
+      type: 'lang' | 'bg_buf' | 'bg_blur_pec' | 'bg_mask_pec' | 'them_color' | 'player_volume'
     }) => {
       
       const { uuid, type } = result
@@ -194,7 +187,15 @@ export const ipcListenGroup:(
              update_date = datetime('now','localtime') 
              WHERE uuid = ?
             `, [result?.them_color, uuid])
-          }
+          },
+          player_volume: async () => {
+            await db.run(`
+             UPDATE user_setting 
+             SET player_volume = ?,
+             update_date = datetime('now','localtime') 
+             WHERE uuid = ?
+            `, [result?.player_volume, uuid])
+          },
         }
 
         try {
@@ -301,7 +302,7 @@ export const ipcListenGroup:(
             ]
           )
   
-          view.webContents.send('respCreateSongCollectList',{ message: 'add success' })
+          view.webContents.send('respCreateSongCollectList',{ message: `add success|${collect_name}` })
         } catch(err) {
           view.webContents.send('respCreateSongCollectList',{ message: err.message })
         }
@@ -322,6 +323,15 @@ export const ipcListenGroup:(
 
         try {
 
+          const result = await db.all(
+            "SELECT * FROM song_collect_list WHERE collect_name = ?",
+            [collect_name]
+          )
+
+          if(result.length > 0){
+            throw new Error('already have')
+          }
+
           await db.run(
             `UPDATE song_collect_list 
              SET collect_name = ?,
@@ -331,9 +341,9 @@ export const ipcListenGroup:(
             `, [collect_name, collect_desc, collect_uuid]
           )
   
-          view.webContents.send('respEditSongCollectList',{ message: 'update success' })
+          view.webContents.send('respEditSongCollectList',{ message: `update success|${collect_name}` })
         } catch(err) {
-          view.webContents.send('respEditSongCollectList',{ message: err.message })
+          view.webContents.send('respEditSongCollectList',{ message: `${err.message}|${collect_name}` })
         }
 
         await db.close()

@@ -23,7 +23,7 @@ interface InputProps {
     getOptionVal?<T>(val:T):void
 }
 
-const ContextMenu: FC<InputProps> = (props): TSX => {
+const Input: FC<InputProps> = (props): TSX => {
 
     const { label, type, inputStyle, labelAlign, size, usingType } = props
 
@@ -162,4 +162,4 @@ const ContextMenu: FC<InputProps> = (props): TSX => {
     )
 }
 
-export default ContextMenu
+export default Input

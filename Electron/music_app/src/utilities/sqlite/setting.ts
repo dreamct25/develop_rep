@@ -3,7 +3,7 @@ import sqlite3,{ Database as sqlite3DB , Statement } from 'sqlite3'
 import fs from 'fs'
 import path from 'path'
 
-export const fileUrl = process.env.APP_ENV === 'pdt' ? 
+export const fileUrl = process.env.APP_ENV.trim() === 'pdt' ? 
     path.join(__dirname.replace(process.platform === 'win32' ? 'app.asar\\.webpack\\main' : 'app.asar/.webpack/main', ''),'xyz.db') : 
     path.join(__dirname.replace(process.platform === 'win32' ? '.webpack\\main' : '.webpack/main',''), 'src/utilities/sqlite/xyz.db')
 
@@ -44,6 +44,7 @@ if (!fs.existsSync(fileUrl)) {
                 uuid INTEGER PRIMARY KEY NOT NULL,
                 language TEXT NULL,
                 remote_language TEXT NULL,
+                player_volume INTEGER NULL,
                 bg_buf BLOB NULL,
                 bg_blur_pec INTEGER NULL,
                 bg_mask_pec INTEGER NULL,
@@ -51,6 +52,15 @@ if (!fs.existsSync(fileUrl)) {
                 update_date TEXT NULL,
                 create_date TEXT NOT NULL
             )
+        `)
+
+        sqliteDB.run(`
+            INSERT INTO user_setting (
+                language,
+                remote_language,
+                player_volume,
+                create_date
+            ) VALUES ('en','en',0.5,datetime('now','localtime'))
         `)
     })
 
