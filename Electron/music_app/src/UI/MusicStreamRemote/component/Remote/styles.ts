@@ -275,13 +275,6 @@ export default styled.div`
                 }
 
                 .list-outer-frame {
-                    /* position: absolute;
-                    top: 0;
-                    right: 0;
-                    left: 0;
-                    bottom: 0;
-                    display: grid;
-                    grid-template-rows: 0fr 1fr; */
 
                     .search-collect-outer {
                         overflow: hidden;
@@ -335,8 +328,7 @@ export default styled.div`
 
                         .list-item {
                             margin: 0 3px 6px 0;
-                            height: 42px;
-                            padding: 0 12px;
+                            padding: 16px 12px;
                             border-radius: 5px;
                             box-shadow: inset 0 0 2px 0 rgba(255, 255, 255, .5);
                             display: flex;
@@ -389,11 +381,6 @@ export default styled.div`
                 }
 
                 .list-outer {
-                    /* position: absolute;
-                    top: 5px;
-                    left: 0;
-                    right: 0;
-                    bottom: 45px; */
                     overflow-x: hidden;
                     overflow-y: auto;
                     margin: 8px 0;
@@ -537,6 +524,14 @@ export default styled.div`
                                 }
                             }
                         }
+                    }
+
+                    .no-songs {
+                        height: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center
                     }
                 }
 
@@ -784,17 +779,18 @@ export default styled.div`
 
             .action-angle {
                 position: absolute;
+                top: 28px;
                 right: 0;
-                bottom: 0;
                 margin-right: 20px;
                 z-index: 7;
                 cursor: pointer;
                 user-select: none;
-                transform: translateY(-19px) rotate(0);
+                transform: rotate(0);
                 transition: .5s ease;
 
                 &.toggle {
-                    transform: translateY(-519px) rotate(-.5turn);
+                    top: 20px;
+                    transform: rotate(-.5turn);
                 }
 
                 svg {
@@ -822,9 +818,8 @@ export default styled.div`
     .footer {
         
         h6 {
-            padding: 6px 0;
+            padding: 6px 0 12px 0;
             text-align: center;
-            line-height: 24px;
         }
     }
 

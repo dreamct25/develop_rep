@@ -19,7 +19,7 @@ const Modal: FC<ModalProps> = (props: ModalProps): TSX => {
 
     return (
         <StyledLayout>
-            <div className={toggleModal ? "modal-outer-fram toggle" : "modal-outer-fram"}>
+            <div className={toggleModal ? "modal-outer-frame toggle" : "modal-outer-frame"}>
                 <div className={`${props?.onlyInfo ? 'modal-outer-info' : 'modal-outer'} ${toggleModal ? 'toggle' : ''}`}>
                     {modalTitle && (<div className="modal-title">{modalTitle}</div>)}
                     <div className={props?.onlyInfo ? 'modal-info-body' : 'modal-body' }>{props.children}</div>

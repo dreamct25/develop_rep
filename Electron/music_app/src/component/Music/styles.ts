@@ -159,8 +159,7 @@ export default styled.div<{ themColorRgba: string }>`
 
                         .list-item {
                             margin: 0 3px 6px 0;
-                            height: 42px;
-                            padding: 0 12px;
+                            padding: 11px 12px;
                             border-radius: 5px;
                             box-shadow: inset 0 0 2px 0 rgba(255, 255, 255, .5);
                             display: flex;

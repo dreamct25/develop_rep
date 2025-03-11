@@ -1,4 +1,5 @@
 export interface LoadingPropsType {
-    loadingStatus: boolean
-    infoText: string
+    loadingStatus: boolean,
+    infoText: string,
+    isInMobile?: boolean
 }

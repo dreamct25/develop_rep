@@ -1,9 +1,11 @@
 import { StyledLayout, LoadingPropsType } from '.'
 
-const Loading: FC<LoadingPropsType> = ({ loadingStatus, infoText }): TSX => {
+const Loading: FC<LoadingPropsType> = (props): TSX => {
+    
+    const { loadingStatus, infoText } = props
     
     return (
-        <StyledLayout>
+        <StyledLayout isInMobile={props?.isInMobile}>
             <div className={loadingStatus ? "loading-outer loading-outer-active" : "loading-outer"}>
                 <div className={loadingStatus ? "left-line active" : "left-line"}></div>
                 <div className="loading">

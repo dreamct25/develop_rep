@@ -318,31 +318,6 @@ const Music: FC = (): TSX => {
         //#endregion socket listens
 
         //#region ipcRenderer listens
-        ipcRenderer.on('respGetSongCollectList',(_, result) => {
-
-            setInitState(prevState => ({
-                ...prevState,
-                collectListResult: result
-            }))
-        })
-
-        ipcRenderer.on('respCreateSongCollectList',(_, result: { message: string }) => {
-
-            const [message, collecName] = result.message.split('|')
-            
-            if(message === 'already have') {
-
-                toast.error("已有相同播放列表")
-
-                return
-            }
-
-            toast.success(`${collecName} 播放列表建立成功`)
-
-            ipcRenderer.send('getSongCollectList')
-
-        })
-
         ipcRenderer.on('contextMenuEditCollectOpen',(_, status, collectUID) => {
             const [filterItem] = $.filter(collectListResultRef.current,row => row.uuid === collectUID)
 
@@ -370,6 +345,34 @@ const Music: FC = (): TSX => {
             }))
         })
 
+        //#region song_collect_list CRUD
+        ipcRenderer.on('respGetSongCollectList',(_, result) => {
+
+            setInitState(prevState => ({
+                ...prevState,
+                collectListResult: result
+            }))
+        })
+
+        ipcRenderer.on('respCreateSongCollectList',(_, result: { message: string }) => {
+
+            const [message, collecName] = result.message.split('|')
+            
+            if(message === 'already have') {
+
+                toast.error("已有相同播放列表")
+
+                return
+            }
+
+            toast.success(`${collecName} 播放列表建立成功`)
+
+            socketClient.emit('update_remote_song_collect_list')
+
+            ipcRenderer.send('getSongCollectList')
+
+        })
+
         ipcRenderer.on('respEditSongCollectList',(_, result: { message: string }) => {
 
             const [message, collectName] = result.message.split('|')
@@ -383,6 +386,8 @@ const Music: FC = (): TSX => {
             
             toast.success(`${collectName} 播放列表修改成功`)
             
+            socketClient.emit('update_remote_song_collect_list')
+            
             ipcRenderer.send('getSongCollectList')
         })
 
@@ -392,10 +397,12 @@ const Music: FC = (): TSX => {
 
             router({ pathname: '/music', search: '' })
 
+            socketClient.emit('update_remote_song_collect_list')
+
             ipcRenderer.send('getSongCollectList')
 
         })
-
+        //#endregion
 
         ipcRenderer.on('respAddSongUpdateView',(_, result) => {
             const songPos = $.findIndexOfObj(searchResultRef.current,row => row.songId === result.songId)

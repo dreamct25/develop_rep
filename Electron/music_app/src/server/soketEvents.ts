@@ -102,6 +102,19 @@ export const socketChannelEvents: (
         })
     })
 
+    socket.on('update_remote_song_collect_list',() => {
+
+        useSqlite(async db => {
+          
+            const result = await db.all("SELECT * FROM song_collect_list")
+    
+            await db.close()
+            
+            socket.broadcast.emit('respGetSongCollectList_socket',result)
+          
+          })
+    })
+
     socket.on('getSongCollectWithSongList_socket',(result: { song_collect_uuid: number }) => {
 
         useSqlite(async db => {

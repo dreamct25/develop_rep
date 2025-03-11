@@ -1,10 +1,10 @@
 import { styled } from '@linaria/react';
 
-export default styled.div`
+export default styled.div<{ isInMobile: boolean }>`
 
     .loading-outer{
         position: absolute;
-        top: 33px;
+        top: ${props => props.isInMobile ? '0' : '33px'};
         left: 0;
         right: 0;
         bottom: 0;
@@ -25,7 +25,7 @@ export default styled.div`
             opacity: 0;
 
             &.active{
-                width: 39vw;
+                width: ${props => props.isInMobile ? '32vw' : '39vw'};
                 animation: rightLight 1s linear infinite;
             }
 
@@ -55,7 +55,7 @@ export default styled.div`
             transition: .7s ease;
 
             &.active{
-                width: 39vw;
+                width: ${props => props.isInMobile ? '32vw' : '39vw'} ;
                 animation: leftLight 1s linear infinite;
             }
             
@@ -92,7 +92,7 @@ export default styled.div`
         }
 
         &.loading-outer-active{
-            z-index: 10;
+            z-index: 26;
             opacity: 1;
         }
     }

@@ -682,9 +682,16 @@ const Main: FC = (): TSX => {
                 withOptions={false}
                 onlyInfo
             >
+                <div className="scroll-content">
+                    <Trans 
+                        i18nKey='component.Main.disclaimer'
+                        components={{ br: <br />, strong: <strong />, div: <div /> }}
+                        values={{ author: appInfo.author, version:  appInfo.version }}
+                    />
+                </div>
                 <Trans 
                     i18nKey='component.Main.copyRight'
-                    components={{ br: <br /> }}
+                    components={{ br: <br />, div: <div /> }}
                     values={{ author: appInfo.author, version:  appInfo.version }}
                 />
             </Modal>
@@ -953,7 +960,7 @@ const Main: FC = (): TSX => {
                                 </div>
                             </div>
                             <div className="list-row">
-                                <div className="left-title">{formatLanguage('component.Main.settingBar.changeBgMask')}</div>
+                                <div className="left-title">{formatLanguage('component.Main.settingBar.changeMainThemColor')}</div>
                                 <div className="right-option with-picker">
                                     <div className="color-picker-btn" onClick={() => setInitState(prevState => ({ ...prevState, toggleThemColorPicker: !toggleThemColorPicker }))}>
                                         <div className="color-box" style={{ backgroundColor: themColorRgbaStr }}></div>

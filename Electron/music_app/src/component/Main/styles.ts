@@ -339,6 +339,87 @@ export default styled.div<{
         }
     }
 
+    .modal-outer-frame {
+
+        .scroll-content {
+            text-align: left;
+            margin: 0 8px 0 12px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            height: 300px;
+            padding-right: 10px;
+            margin-bottom: 8px;
+
+            &::-webkit-scrollbar {
+                width: 5px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                border-radius: 20px;
+                background-color: rgba(255, 255, 255, 0.7);
+            }
+            
+            strong {
+                display: block;
+                font-weight: bold;
+                font-size: 22px;
+                text-align: center;
+                margin-bottom: 12px;
+            }
+
+            .inside-content {
+
+                .top {
+                    text-align: justify;
+                }
+
+                .bottom {
+                    margin-top: 12px;
+
+                    .item {
+                        display: grid;
+                        grid-template-columns: 0fr 1fr;
+                        margin-bottom: 12px;
+
+                        &:last-child {
+                            margin-bottom: 0;
+                        }
+
+                        div {
+
+                            &:first-child {
+                                margin-right: 12px;
+                            }
+
+                            &:last-child {
+                                text-align: justify;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .copy-right {
+            position: relative;
+            margin: 0 12px;
+            padding-top: 8px;
+
+            &::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                background-color: rgba(255, 255, 255, .5);
+                height: .5px;
+            }
+
+        }
+    }
+
+    
+
     .video-modal {
         position: relative;
         height: 100%;

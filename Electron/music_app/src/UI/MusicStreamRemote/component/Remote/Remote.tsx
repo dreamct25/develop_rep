@@ -22,6 +22,7 @@ import {
     FaAngleUp as FaAngleUpIcon
 } from "react-icons/fa6";
 import { NewContext } from '@/UI/MusicStreamRemote/App'
+import { Loading } from '@/component/Loading'
 import { StyledLayout } from ".";
 import langList from '@/asset/i18n/lang_list.json'
 
@@ -91,7 +92,7 @@ const controlFunsGroups:{ className: string, iconTSX: FC, actionNum: number }[] 
     actionNum: 3
 }]
 
-const App:FC = (): TSX => {
+const Remote:FC = (): TSX => {
     const { socketClient, $ } = useContext(NewContext)
     const { t: formatLanguage, i18n } = useTranslation()
 
@@ -160,6 +161,8 @@ const App:FC = (): TSX => {
     const playFunctionsActionNumRef = useRef<number>(-1)
 
     const [isSearching, setIsSearching] = useState<boolean>(false)
+
+    const [loadSetting, setLoadSetting] = useState<boolean>(false)
 
     const changeVoice:(value:number) => void = value => {
 
@@ -245,6 +248,8 @@ const App:FC = (): TSX => {
 
     const initView:() => Promise<void> = async () => {
 
+        setLoadSetting(true)
+
         setInitState(prevState => ({
             ...prevState,
             currentIp: window.location.host,
@@ -276,6 +281,8 @@ const App:FC = (): TSX => {
                     language: remote_language
                 }))
             }
+
+            setLoadSetting(false)
         })
 
         socketClient.on('respSearchResult',result => {
@@ -475,10 +482,6 @@ const App:FC = (): TSX => {
 
     useEffect(() => {
         initView()
-
-        // return () => {
-        //     socketClient.emit('remote_is_start', { remoteStatus: false })
-        // }
     },[])
 
     window.onbeforeunload = () => {
@@ -500,13 +503,13 @@ const App:FC = (): TSX => {
                         className={currentAction === 'search-action' ? 'search-action active' : 'search-action'}
                         onClick={setInitState.bind(this,prevState => ({ ...prevState, currentAction: 'search-action' }))}
                     >
-                        搜尋
+                        {formatLanguage('remote.search')}
                     </div>
                     <div 
                         className={currentAction === 'playlist-action' || currentAction === 'playlist-song-action' ? 'playlist-action active' : 'playlist-action'}
                         onClick={setInitState.bind(this,prevState => ({ ...prevState, currentAction: 'playlist-action' }))}
                     >
-                        播放清單
+                        {formatLanguage('remote.playList')}
                     </div>
                </div>
                <div className="bottom">
@@ -516,7 +519,7 @@ const App:FC = (): TSX => {
                                 <div className={togglePlayerStatus ? 'template-search when-playing' : 'template-search'}>
                                     <div className="search-outer">
                                         <AiOutlineSearchIcon />
-                                        <input type="text" placeholder="想聽甚麼呢 ~" value={searchText} onChange={setInputVal} />
+                                        <input type="text" placeholder={formatLanguage('remote.whatKindSongSearch')} value={searchText} onChange={setInputVal} />
                                     </div>
                                     <div className="list-outer">
                                         {
@@ -550,9 +553,9 @@ const App:FC = (): TSX => {
                                                     <div className="is-in-collect">{row.isSongInCollect && <AiFillStarIcon />}</div>
                                                 </div>
                                             )) : (isSearching && searchResult.length === 0) ? (
-                                                <div className="is-searching">搜尋中</div>
+                                                <div className="is-searching">{formatLanguage('remote.searching')}</div>
                                             ) : (
-                                                <div className="no-data">尚無搜尋</div>
+                                                <div className="no-data">{formatLanguage('remote.noSearchResults')}</div>
                                             )
                                         }
                                     </div>
@@ -646,7 +649,7 @@ const App:FC = (): TSX => {
                                                     }
                                                 </div>
                                             )) : (
-                                                <div>未新增</div>
+                                                <div className="no-songs">{formatLanguage('remote.noSongs')}</div>
                                             )
                                         }
                                     </div>
@@ -660,7 +663,7 @@ const App:FC = (): TSX => {
                                             }))
                                         }}
                                     >
-                                        返回
+                                        {formatLanguage('common.back')}
                                     </div>
                                 </div>
                             ),
@@ -793,8 +796,8 @@ const App:FC = (): TSX => {
             <div className="footer">
                 <h6>
                     <Trans 
-                        i18nKey='copyRight'
-                        components={{ br: <br /> }}
+                        i18nKey='remote.copyRight'
+                        components={{ br: <br />, div: <div /> }}
                         values={{ author: appInfo.author, version: appInfo.version }}
                     />
                 </h6>
@@ -806,7 +809,7 @@ const App:FC = (): TSX => {
                 >
                     <IoEarthOutline />
                     &nbsp;
-                    {formatLanguage('changeLanguage')}
+                    {formatLanguage('remote.changeLanguage')}
                 </div>
                 <div className={languageToggleListStatus ? "language-list-item-outer toggle" : "language-list-item-outer"}>
                     {
@@ -822,8 +825,9 @@ const App:FC = (): TSX => {
                     }
                 </div>
             </div>
+            <Loading isInMobile loadingStatus={loadSetting} infoText={formatLanguage('component.Main.getSetting')} />
         </StyledLayout>
     )
 }
 
-export default App
+export default Remote
