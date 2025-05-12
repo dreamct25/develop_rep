@@ -1,0 +1,1 @@
+export { default as ShortModal } from './ShortModal.vue'

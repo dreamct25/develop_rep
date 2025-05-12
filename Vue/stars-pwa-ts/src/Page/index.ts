@@ -1,0 +1,11 @@
+export { StarExplain } from './StarExplain'
+export { StarExplainDetails } from './StarExplainDetails'
+export { StarForecast } from './StarForecast'
+export { StarForecastDetails } from './StarForecastDetails'
+export { StarMatch } from './StarMatch'
+export { StarMatchDetails } from './StarMatchDetails'
+
+export { About } from './About'
+export { Setting } from './Setting'
+export { Base } from './Base'
+export { WelCome } from './WelCome'

@@ -1,0 +1,1 @@
+export { default as IonContentWrapper } from './IonContentWrapper.vue'

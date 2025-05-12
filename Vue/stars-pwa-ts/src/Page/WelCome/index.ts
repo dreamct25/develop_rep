@@ -1,0 +1,1 @@
+export { default as WelCome } from './WelCome.vue'

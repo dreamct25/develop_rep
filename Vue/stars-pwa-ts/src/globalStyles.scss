@@ -1,0 +1,41 @@
+html {
+    background-color: rgb(30,30,30);
+
+    body {
+        max-width: 390px;
+        margin: 0 auto;
+        position: relative;
+
+        ion-picker {
+            overflow: hidden;
+
+            ion-picker-column {
+                width: 100%;
+            }
+        }
+    }
+
+    ion-content {
+
+        --background: url('/img/bg.jpg') center center / cover;
+
+        .bg {
+            height: 100%;
+            background-color: rgba(30,30,30, .7);
+        }
+        
+    }
+
+    *::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        border-radius: 20px;
+        background-color: rgba(255, 255, 255, .5);
+    }
+}
+
+:root.ios {
+    --ion-background-color: transparent !important;
+}
