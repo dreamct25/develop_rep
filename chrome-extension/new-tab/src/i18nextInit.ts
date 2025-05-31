@@ -1,22 +1,27 @@
 import i18next from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import en from '@/assert/i18n/en_US.json'
-import zh from '@/assert/i18n/zh_TW.json'
+import enUrl from '/assets/i18n/en_US.json?url'
+import zhUrl from '/assets/i18n/zh_TW.json?url'
+import $ from './utiles/Library'
 
-const result = {
-    en : {
-        translation : en
-    },
-    zh : {
-        translation: zh
-    }
-}
+export default (callback: () => void): Promise<void> => 
+    $.createPromiseAll([
+        $.fetch.get<{ data: Record<string, any> }>(enUrl),
+        $.fetch.get<{ data: Record<string, any> }>(zhUrl)
+    ]).then(async ([{ data: en }, { data: zh }]) => {
 
-i18next.use(initReactI18next).init({
-    resources: result,
-    lng: 'en',
-    fallbackLng: 'zh',
-    interpolation: {
-        escapeValue: false
-    }
-})
+        await i18next.use(initReactI18next).init({
+            resources: {
+                en : { translation : en },
+                zh : { translation: zh }
+            },
+            lng: 'en',
+            fallbackLng: 'zh',
+            interpolation: {
+                escapeValue: false
+            }
+        })
+
+        callback.call(callback)
+    })
+

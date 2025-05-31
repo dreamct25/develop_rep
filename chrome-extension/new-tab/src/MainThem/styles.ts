@@ -33,26 +33,31 @@ export default styled.div<{
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
-                margin-top: ${props => props.topSiteShowCount === 0 ? '43px' : '140px'};
+                margin-top: ${props => props.topSiteShowCount === 0 ? '43px' : '130px'};
+                overflow: hidden;
                 transition: .3s ease;
 
                 .current-time {
-                    position: relative;
                     color: ${props => props.useClockColor};
-                    font-size: ${props => props.useClockFontSize};
+                    font-size: 90px;
                     text-align: center;
                     text-shadow: ${props => `0 0 ${props.useClockFontShadow} rgba(30,30,30,.5)`};
-                    height: 134px;
                     display: flex;
+                    flex-direction: column;
                     justify-content: center;
+                    align-items: center;
+                    margin-bottom: 16px;
+                    zoom: ${props => `${props.useClockFontSize}%`};
+
+                    &.hidden {
+                        display: none;
+                    }
 
                     .top {
-                        position: absolute;
-                        top: 12px;
                         display: flex;
                         justify-content: center;
-                        align-items: center;
                         transition: .5s ease;
+                        transform: translateY(0px);
                         
                         @media screen and (min-width: 450px) {
                             padding-right: 10px;
@@ -60,33 +65,36 @@ export default styled.div<{
 
                         span {
                             display: block;
-                            margin: 0 15px;
-                            transform: translateY(-12px);
+                            
+                        }
+
+                        .split-time {
+                            margin: -6px 15px 0 15px;
                         }
 
                         .display-amorpm {
-                            display: block;
                             align-self: end;
                             font-size: 20px;
                             font-weight: bold;
+                            margin: 0 16px 5px 0;
                         }
 
                         &:hover {
 
-                            top: 0;
+                            transform: translateY(-12px);
 
                             & ~ .bottom {
-                                bottom: 3px;
+                                transform: translateY(-4px);
                                 opacity: 1;
                             }
                         }
                     }
 
                     .bottom {
-                        position: absolute;
-                        bottom: 20px;
                         font-size: 17px;
+                        text-shadow: ${props => `0 0 ${props.useClockFontShadow} rgba(30,30,30,.5)`};
                         opacity: 0;
+                        transform: translateY(-20px);
                         transition: .5s ease;
 
                         @media screen and (min-width: 450px) {
@@ -96,8 +104,12 @@ export default styled.div<{
                 }
 
                 .search-bar {
-                    margin: 16px auto 15px auto;
+                    margin: 0 auto 15px auto;
                     position: relative;
+
+                    &.hidden {
+                        display: none;
+                    }
 
                     .search-icon {
                         color: white;
@@ -479,24 +491,167 @@ export default styled.div<{
             backdrop-filter: blur(10px);
             transform: translateX(420px);
             transition: .5s ease;
+            display: grid;
+            grid-template-rows: 0fr 1fr 0fr;
 
             &.toggle {
                 transform: translateX(0);
             }
 
-            .back-btn {
-                position: absolute;
-                top: 0;
-                left: 0;
-                padding: 10px 0 0 10px;
-                color: white;
-                cursor: pointer;
-                user-select: none;
+            .header {
+                display: flex;
+                justify-content: space-between;
                 font-size: 20px;
+                padding: 12px;
+
+                .title {
+                    text-align: center;
+                    
+                    color: white;
+                }
+
+                .back-btn {
+                    color: white;
+                    cursor: pointer;
+                    user-select: none;
+                }
             }
 
-            .current-date {
-                color: white;
+            .body {
+                border-top: 1px solid rgba(255, 255, 255, .3);
+
+                .calendar-outer {
+                    margin: 5px;
+                    position: relative;
+                    height: 100%;
+
+                    .calendar {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 10px;
+                        display: grid;
+                        gap: 12px;
+                        padding: 0 6px;
+                        overflow-y: auto;
+                        overflow-x: hidden;
+
+                        &::-webkit-scrollbar {
+                            width: 5px;
+                        }
+
+                        &::-webkit-scrollbar-thumb {
+                            border-radius: 20px;
+                            background-color: rgba(255, 255, 255, 0.7);
+                        }
+
+                        .month-outer {
+
+                            .month {
+
+                                .title {
+                                    color: #fff;
+                                    margin: 0;
+                                    padding: 10px;
+                                    text-align: center;
+                                    font-size: 25px;
+                                    font-weight: bold;
+                                    font-style: italic;
+                                    letter-spacing: 2.5px;
+                                }
+
+                                .weekdays,
+                                .days {
+                                    display: grid;
+                                    grid-template-columns: repeat(7,1fr);
+
+                                    .weekday {
+                                        text-align: center;
+                                        padding: 12px 5.5px;
+                                        color: rgba(255,255,255,.8);
+                                        font-size: 18px;
+                                    }
+                                    
+                                    .day {
+                                        text-align: center;
+                                        padding: 19px 5.5px;
+                                        color: rgba(255,255,255,.8);
+                                        font-size: 18px;
+                                    }
+                                }
+
+                                .days {
+                                    position: relative;
+
+                                    &::after {
+                                        content: '';
+                                        position: absolute;
+                                        left: 0;
+                                        right: 0;
+                                        bottom: 0;
+                                        background-color: rgba(255,255,255,.1);
+                                        height: .1px;
+                                        pointer-events: none;
+                                    }
+                                }
+
+                                .weekdays {
+                                    font-weight: bold;
+                                    font-style: italic;
+                                }
+
+                                .day {
+                                    box-shadow: inset -.5px .5px 0 .1px rgba(255,255,255,.1);
+                                    
+                                    &.other-month {
+                                        color: rgba(255,255,255,.3);
+                                    }
+
+                                    &.last {
+                                        box-shadow: inset 0 .5px 0 .1px rgba(255,255,255,.1);
+                                    }
+
+                                    &.holiday {
+                                        background-color: rgba(119,68,255, .3);
+                                    }
+
+                                    /* &.normal-holiday {
+                                        background-color: rgb(204,187,255);
+                                        color: white;
+                                    } */
+
+                                    &.highlight {
+                                        background-color: rgb(255,62,255, .3);
+                                        color: rgba(255,255,255);
+                                        font-weight: bold;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .footer {
+                border-top: 1px solid rgba(255, 255, 255, .3);
+                display: flex;
+                justify-content: center;
+                gap: 12px;
+                padding: 12px 0;
+                color: rgb(255,255,255);
+                font-size: 20px;
+                font-style: italic;
+
+                .time {
+
+                    .display-amorpm {
+                        font-size: 11px;
+                        margin-right: 3px;
+                    }
+                }
+
+                
             }
         }
 

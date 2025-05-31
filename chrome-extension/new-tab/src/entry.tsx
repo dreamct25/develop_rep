@@ -1,11 +1,12 @@
-import ReactDOM from 'react-dom/client'
+import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import GlobalStyles from './globalStyles.ts'
-import './i18nextInit.ts'
+import WaitingI18NInit from './i18nextInit.ts'
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <div className={GlobalStyles}>
-    <App />
-  </div>
-  ,
+WaitingI18NInit(() => 
+  createRoot(document.getElementById('root')!).render(
+    <div className={GlobalStyles}>
+      <App />
+    </div>
+  )
 )

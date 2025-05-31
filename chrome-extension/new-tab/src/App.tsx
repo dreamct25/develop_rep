@@ -3,7 +3,7 @@ import { TFunction, i18n as i18nType } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-import { IndexedDB } from './utiles'
+import { IndexedDB, $ } from './utiles'
 import { MainThem } from './MainThem'
 
 interface ProvideType {
@@ -11,13 +11,15 @@ interface ProvideType {
   formatLanguage: TFunction<"translation", undefined> 
   i18n: i18nType,
   toast: typeof toast
+  $: $
 }
 
 export const NewContext = createContext<ProvideType>({
   IndexedDB,
   formatLanguage:  {} as TFunction<"translation", undefined>,
   i18n: {} as i18nType,
-  toast
+  toast,
+  $
 })
 
 const App:FC = (): TSX => {
@@ -28,7 +30,8 @@ const App:FC = (): TSX => {
     IndexedDB,
     formatLanguage,
     i18n,
-    toast
+    toast,
+    $
   }
 
   return (

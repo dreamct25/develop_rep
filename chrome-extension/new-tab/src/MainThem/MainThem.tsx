@@ -6,7 +6,7 @@ import { SwitchBar, Toast, Loading, Slide, Tooltip, DropDownList } from '@/compo
 
 const MainThem:FC = ():TSX => {
 
-    const { IndexedDB,formatLanguage,i18n } = useContext(NewContext)
+    const { IndexedDB,formatLanguage,i18n, $ } = useContext(NewContext)
 
     const currentLang = i18n.language
 
@@ -51,9 +51,12 @@ const MainThem:FC = ():TSX => {
         displayTopSiteCount,
         showPath,
         browserUILang,
-        backgroundDisplayMode
+        backgroundDisplayMode,
+        monthDays,
+        isDisplaySearchBar,
+        isDisplayTime
     },setInitState] = useState<{
-        currentTimes: { hour: string,minute: string },
+        currentTimes: { hour: string,minute: string,seconds: string },
         currentDate: string
         browsPastList: chrome.topSites.MostVisitedURL[],
         toggleControlModal: boolean,
@@ -73,9 +76,37 @@ const MainThem:FC = ():TSX => {
         displayTopSiteCount: number,
         showPath: string,
         browserUILang: string,
-        backgroundDisplayMode: string
+        backgroundDisplayMode: string,
+        monthDays: {
+            monthCount: number;
+            weekdays: number[];
+            days: {
+                month: number,
+                day: number;
+                dayType: {
+                    prevMonth: boolean;
+                    currentMonth: boolean;
+                    nextMonth: boolean;
+                    isHoliday: boolean
+                    dayName: string
+                };
+            }[]
+        }[]
+        holidays: {
+            month: number,
+            day: number;
+            dayType: {
+                prevMonth: boolean;
+                currentMonth: boolean;
+                nextMonth: boolean;
+                isHoliday: boolean
+                dayName: string
+            };
+        }[],
+        isDisplaySearchBar: boolean,
+        isDisplayTime: boolean
     }>({
-        currentTimes: { hour: '--', minute: '--' },
+        currentTimes: { hour: '--', minute: '--', seconds: '--' },
         currentDate: '----',
         browsPastList: [],
         toggleControlModal: false,
@@ -95,26 +126,204 @@ const MainThem:FC = ():TSX => {
         displayTopSiteCount: 0,
         showPath: '',
         browserUILang: '',
-        backgroundDisplayMode: 'Fill'
+        backgroundDisplayMode: 'Fill',
+        monthDays: [],
+        holidays: [],
+        isDisplaySearchBar: true,
+        isDisplayTime: true
     })
 
     let timer = useRef<any>(undefined)
+
+    const calenderBodyDomRef = useRef<HTMLDivElement | null>(null)
 
     const themColorRgbaToStr = `rgba(${Object.values(themColorRgba).map(row => row).join(',')})`
     const clockColorRgbaToStr = `rgba(${Object.values(clockColorRgba).map(row => row).join(',')})`
 
     const { initializeIndexedDB,readFromIndexedDB,saveToIndexedDB } = IndexedDB
 
+        const monthCounts = [
+            1, 2, 3, 4, 5, 6,
+            7, 8, 9, 10, 11, 12
+        ]
+
+    const weekdays = [0, 1, 2, 3, 4, 5, 6]
+
+    const addZero: (num: number) => string = num => `${num < 10 ? `0${num}` : num}`
+
+    const generateCalendar: (year: number) => Promise<void> = async (year) => {
+
+        const holidayDisplayNameMatch: Record<string, string> = {
+            ['開國紀念日']: '元旦',
+            ['和平紀念日']: '二二八和平紀念日',
+            ['國慶日']: '雙十節'
+        }
+
+        const monthDaysResult = $.maps(monthCounts, (monthCount, index) => {
+
+            // 當月第一天是星期幾
+            const firstDay = new Date(year, index, 1).getDay();
+
+            // 當月總天數
+            const daysInMonth = new Date(year, index + 1, 0).getDate();
+            
+            // 前一個月的總天數
+            const daysInPrevMonth = new Date(year, index, 0).getDate();
+
+            // 填充前一個月的日期
+            const prev = $.createArray({ type: 'fake', item: { random: firstDay }},num => {
+                
+                return {
+                    month: ((index + 1) - 1) === 0 ? 12 : (index + 1) - 1,
+                    day: daysInPrevMonth - ((firstDay - 1) - num),
+                    dayType: {
+                        prevMonth: true,
+                        currentMonth: false,
+                        nextMonth: false,
+                        isHoliday: false,
+                        dayName: ''
+                    },
+                }
+            })
+            
+            // 填充當月的日期
+            const cur = $.createArray({ type: 'fake', item: { random: daysInMonth }},num => {
+                
+                return {
+                    month: index + 1,
+                    day: num + 1,
+                    dayType: {
+                        prevMonth: false,
+                        currentMonth: true,
+                        nextMonth: false,
+                        isHoliday: false,
+                        dayName: ''
+                    }
+                }
+            })
+
+            // 填充下個月的日期
+            const daysAfter = 42 - (firstDay + daysInMonth);
+            
+            const next = $.createArray({ type: 'fake', item: { random: daysAfter }},num => {
+                
+                return {
+                    month: (index + 2) > 12 ? 1 : (index + 2),
+                    day: num + 1,
+                    dayType: {
+                        prevMonth: false,
+                        currentMonth: false,
+                        nextMonth: true,
+                        isHoliday: false,
+                        dayName: ''
+                    }
+                }
+            })
+
+            return {
+                monthCount,
+                weekdays,
+                days: [...prev,...cur,...next]
+            }
+        });
+
+        try {
+
+            const result = await fetch(
+                `https://raw.githubusercontent.com/ruyut/TaiwanCalendar/refs/heads/master/data/${year}.json`
+            ).then(res => res)
+
+            if(result.status !== 200) throw new Error()
+
+            const data = await result.json() as {
+                date: string
+                description: string
+                isHoliday: boolean
+                week: string
+            }[]
+
+            const repack = $.maps(monthDaysResult, row => {
+
+                row.days = $.maps(row.days, (daysRow => {
+
+                    if(daysRow.dayType.currentMonth){
+
+                        const matchDate = `${year}${addZero(daysRow.month)}${addZero(daysRow.day)}`
+                        const specialDate = `${addZero(daysRow.month)}${addZero(daysRow.day)}`
+                        const [filterItem] = $.filter(data, filterRow => filterRow.date === matchDate && filterRow.isHoliday === true)
+        
+                        if(filterItem){
+                            daysRow.dayType.isHoliday = filterItem.isHoliday
+                            daysRow.dayType.dayName = 
+                                holidayDisplayNameMatch.hasOwnProperty(filterItem.description) ? 
+                                    holidayDisplayNameMatch[filterItem.description] : filterItem.description
+
+                            if(specialDate === '0404') daysRow.dayType.dayName = '兒童節'
+                            
+                            if(specialDate === '0405') daysRow.dayType.dayName = '清明節'
+                        }
+        
+                        return daysRow
+                    }
+
+                    return daysRow
+                }))
+
+                return row
+            })
+
+            const holidaysResult = 
+                $.maps(monthDaysResult, row => row.days)
+                    .reduce((a, b) => a.concat(b),[])
+                    .filter(row => row.dayType.isHoliday && row.dayType.dayName && row.dayType.currentMonth)
+
+            setInitState(prevState => ({ 
+                ...prevState, 
+                monthDays: repack,
+                holidays: holidaysResult
+            }))
+
+        } catch {
+
+            const holidaysResult = 
+                $.maps(monthDaysResult, row => row.days)
+                .reduce((a, b) => a.concat(b),[])
+                .map(daysRow => {
+
+                    if(daysRow.dayType.currentMonth){
+
+                        const matchDate = `${year}-${addZero(daysRow.month)}-${addZero(daysRow.day)}`
+
+                        const getRest = new Date(matchDate)
+
+                        if([0, 6].includes(getRest.getDay())) daysRow.dayType.isHoliday = true
+        
+                        return daysRow
+                    }
+
+                    return daysRow
+                })
+                .filter(row => row.dayType.isHoliday && row.dayType.dayName && row.dayType.currentMonth)
+
+            setInitState(prevState => ({ 
+                ...prevState, 
+                monthDays: monthDaysResult,
+                holidays: holidaysResult
+            }))
+        }
+    }
+
     const setTime: () => void = () => {
         const [fullTime,] = new Date(+new Date() + (Math.abs(new Date().getTimezoneOffset()) * 60 * 1000)).toJSON().split('.')
-        const [year,month,date,hour,minute,] = fullTime.replace('T','-').replace(/:/g,'-').split('-')
+        const [year,month,date,hour,minute,seconds] = fullTime.replace('T','-').replace(/:/g,'-').split('-')
 
         setInitState(prevState => ({
             ...prevState,
             currentTimes: {
                 ...prevState.currentTimes,
                 hour,
-                minute
+                minute,
+                seconds
             },
             currentDate: `${year}-${month}-${date}`
         }))
@@ -129,7 +338,7 @@ const MainThem:FC = ():TSX => {
         try {
             const binaryData = await  readFromIndexedDB()
         
-            const bodyBgImgDom = document.querySelector('body')!
+            const bodyBgImgDom = document.body
     
             if(binaryData){
                 // 創建 Blob
@@ -139,11 +348,11 @@ const MainThem:FC = ():TSX => {
                 const imageUrl = URL.createObjectURL(blob);
     
                 // 顯示圖片
-                bodyBgImgDom.style.cssText = `background-image: url('${imageUrl}');`
+                bodyBgImgDom.style.setProperty('--bg', `url('${imageUrl}')`)
                 return
             }
     
-            bodyBgImgDom.style.cssText = "background-image: url('/assets/default_bg.jpg');"
+            bodyBgImgDom.style.setProperty('--bg', "url('/assets/default_bg.jpg')")
         } catch (error) {
             console.log(error)
         }
@@ -179,7 +388,7 @@ const MainThem:FC = ():TSX => {
 
                 const imagePath = URL.createObjectURL(selectedFile);
 
-                document.querySelector('body')!.style.cssText = `background-image: url('${imagePath}');`
+                document.body.style.setProperty('--bg',  `url('${imagePath}')`)
             };
 
             reader.readAsArrayBuffer(selectedFile);
@@ -211,6 +420,8 @@ const MainThem:FC = ():TSX => {
         const saveBackgroundBlackMaskPercent: { backgroundBlackMaskPercent?: number } = await chrome.storage.local.get('backgroundBlackMaskPercent')
         const saveBackgroundDisplayMode: { bgDisplayMode?: string } = await chrome.storage.local.get('bgDisplayMode')
         const saveDisplayTopSiteCount: { displayTopSiteCount?: number } = await chrome.storage.local.get('displayTopSiteCount')
+        const saveIsDisplaySearchBar: { isDisplaySearchBar?: boolean } = await chrome.storage.local.get('isDisplaySearchBar')
+        const saveIsDisplayTime: { isDisplayTime?: boolean } = await chrome.storage.local.get('isDisplayTime')
 
         saveLang?.UILang && changeLang(saveLang.UILang!,true)
         saveBackgroundDisplayMode?.bgDisplayMode && changeBackgroundDisplayMode(saveBackgroundDisplayMode.bgDisplayMode,true)
@@ -240,7 +451,7 @@ const MainThem:FC = ():TSX => {
 
                 return prevState.clockColorRgba
             })(),
-            clockFontSize: saveClockFontSize?.clockFontSize ? saveClockFontSize.clockFontSize : 168,
+            clockFontSize: saveClockFontSize?.clockFontSize ? saveClockFontSize.clockFontSize : 100,
             clockFontShadow: saveClockFontShadow?.clockFontShadow ? saveClockFontShadow.clockFontShadow : 8,
             isLockSettingBar: saveIsLockSettingBar?.isLockSettingBar !== undefined ? saveIsLockSettingBar.isLockSettingBar : true,
             toggleSettingBar: saveIsLockSettingBar?.isLockSettingBar !== undefined ? saveIsLockSettingBar.isLockSettingBar : true,
@@ -251,6 +462,8 @@ const MainThem:FC = ():TSX => {
                 getTopSiteResult(count)
                 return count
             })(),
+            isDisplaySearchBar: saveIsDisplaySearchBar?.isDisplaySearchBar !== undefined ? saveIsDisplaySearchBar.isDisplaySearchBar : true,
+            isDisplayTime: saveIsDisplayTime?.isDisplayTime !== undefined ? saveIsDisplayTime.isDisplayTime : true,
         }))
     }
 
@@ -263,6 +476,8 @@ const MainThem:FC = ():TSX => {
 
         await getChromeLocalSaveSettings()
 
+        await generateCalendar(new Date().getFullYear())
+
         setTime()
 
         setTimeout(() => {
@@ -272,7 +487,7 @@ const MainThem:FC = ():TSX => {
         timer.current = setInterval(() => setTime(),1000)
     }
 
-    const changeSwitchEvent:(type: 'AMORPM' | 'settingBar') => Promise<void> = async type => {
+    const changeSwitchEvent:(type: 'AMORPM' | 'settingBar' | 'displaySearchBar' | 'displayTime') => Promise<void> = async type => {
         
         const switchType: Record<string,any> = {
             [type]: undefined,
@@ -285,7 +500,17 @@ const MainThem:FC = ():TSX => {
                 const isToggle = !isLockSettingBar
                 await chrome.storage.local.set({ isLockSettingBar: isToggle  })
                 setInitState(prevState => ({ ...prevState,isLockSettingBar: isToggle, toggleSettingBar: !toggleSettingBar  }))
-            }
+            },
+            displaySearchBar: async () => {
+                const isToggle = !isDisplaySearchBar
+                await chrome.storage.local.set({ isDisplaySearchBar: isToggle  })
+                setInitState(prevState => ({ ...prevState,isDisplaySearchBar: isToggle  }))
+            },
+            displayTime: async () => {
+                const isToggle = !isDisplayTime
+                await chrome.storage.local.set({ isDisplayTime: isToggle  })
+                setInitState(prevState => ({ ...prevState,isDisplayTime: isToggle  }))
+            },
         }
 
         switchType[type] && switchType[type]()
@@ -370,12 +595,16 @@ const MainThem:FC = ():TSX => {
         }))
     }
 
-    const convertDateShow: (datef: string) => string = datef => {
+    const convertDateShow: (datef: string) => { text: string, date: string } = datef => {
         const [year, month, date] = datef.split('-')
 
-        const fullDateFormat = currentLang === 'zh' ? { year, month: parseInt(month) , date: parseInt(date) } : { year, month, date }
+        const fullDateFormat = {
+            [currentLang]: { year, month, date },
+            zh: { year, month: parseInt(month) , date: parseInt(date) },
+            en: { year, month: formatLanguage(`monthName.${parseInt(month) - 1}`), date }
+        }[currentLang]
 
-        return formatLanguage('currentDateShow',fullDateFormat)
+        return { text: formatLanguage('currentDateShow',fullDateFormat), date:`${parseInt(month)}${parseInt(date)}` }
     }
 
     useEffect(() => {
@@ -399,7 +628,7 @@ const MainThem:FC = ():TSX => {
             <StyledLayout 
                 useThemColor={themColorRgbaToStr}
                 useClockColor={clockColorRgbaToStr}
-                useClockFontSize={`${clockFontSize}px`}
+                useClockFontSize={`${clockFontSize === 1 ? 100 : 100 + clockFontSize}`}
                 useClockFontShadow={`${clockFontShadow}px`}
                 useBackgroundBlackMaskPercente={backgroundBlackMaskPercent}
                 topSiteShowCount={displayTopSiteCount}
@@ -411,14 +640,14 @@ const MainThem:FC = ():TSX => {
 
                         </div>
                         <div className="medium">
-                            <div className="current-time">
-                                <div className='top'>
+                            <div className={isDisplayTime ? 'current-time' : 'current-time hidden'}>
+                                <div className="top">
                                     {isUseAMPM ? <span className='display-amorpm'>{convertTime(currentTimes.hour)?.displayAMPM}</span>: ''}
-                                    {isUseAMPM ? convertTime(currentTimes.hour)?.hour || '--' : currentTimes.hour}<span>:</span>{currentTimes.minute}
+                                    {isUseAMPM ? convertTime(currentTimes.hour)?.hour || '--' : currentTimes.hour}<span className='split-time'>:</span>{currentTimes.minute}
                                 </div>
-                                <div className="bottom">{convertDateShow(currentDate)}</div>
+                                <div className="bottom">{convertDateShow(currentDate).text}</div>
                             </div>
-                            <div className="search-bar">
+                            <div className={isDisplaySearchBar ? 'search-bar' : 'search-bar hidden'}>
                                 <i className="far fa-search search-icon"></i>
                                 <input className="search-input" type="text" placeholder={formatLanguage('searchDesc')} onKeyPress={({ which,target }) => {
                                     const inputElement = target as HTMLInputElement
@@ -466,7 +695,13 @@ const MainThem:FC = ():TSX => {
                             <div className="setting-btn" onClick={() => setInitState(prevState => ({ ...prevState,toggleControlModal: !toggleControlModal }))}>
                                 <i className="fas fa-cog"></i>
                             </div>
-                            <div className="calender-btn" onClick={() => setInitState(prevState => ({ ...prevState,toggleCalenderSlider: !toggleCalenderSlider }))}>
+                            <div className="calender-btn" onClick={() => {
+
+                                const todayDom = document.querySelector<HTMLDivElement>('.highlight')!
+                                const todayMonth = todayDom.parentNode!.parentNode as HTMLDivElement
+                                $(calenderBodyDomRef.current).scrollToPos({ direction: 'top', scrollPos: todayMonth.offsetTop - todayMonth.offsetHeight / 3, duration: 0 })
+                                setInitState(prevState => ({ ...prevState,toggleCalenderSlider: !toggleCalenderSlider }))
+                            }}>
                                 <i className="fas fa-calendar-alt"></i>
                             </div>
                         </div>
@@ -525,14 +760,6 @@ const MainThem:FC = ():TSX => {
                                     </div>
                                 </div>
                                 <div className="list-row">
-                                    <div className="func-name">{formatLanguage('use24h')}</div>
-                                    <div className="func-action">
-                                        <div className="slide-btn-outer">
-                                            <SwitchBar isSlide={!isUseAMPM} clickEvent={changeSwitchEvent.bind(this,'AMORPM')} />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="list-row">
                                     <div className="func-name">{formatLanguage('changeClockColor')}</div>
                                     <div className="func-action use-picker">
                                         <div className="color-picker-btn" onClick={() => setInitState(prevState => ({ ...prevState, toggleClockColorPicker: !toggleClockColorPicker }))}>
@@ -548,7 +775,7 @@ const MainThem:FC = ():TSX => {
                                     <div className="func-name">{formatLanguage('changeClockSize')}</div>
                                     <div className="func-action use-range">
                                         <div className="range-input-outer size">
-                                            <Slide min={90} max={168} slideNum={clockFontSize} changeEvent={clockSetting.bind(this, 'size')} />
+                                            <Slide min={1} max={100} slideNum={clockFontSize} changeEvent={clockSetting.bind(this, 'size')} />
                                         </div>
                                     </div>
                                 </div>
@@ -578,6 +805,14 @@ const MainThem:FC = ():TSX => {
                                     </div>
                                 </div>
                                 <div className="list-row">
+                                    <div className="func-name">{formatLanguage('use24h')}</div>
+                                    <div className="func-action">
+                                        <div className="slide-btn-outer">
+                                            <SwitchBar isSlide={!isUseAMPM} clickEvent={changeSwitchEvent.bind(this,'AMORPM')} />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="list-row">
                                     <div className="func-name">{formatLanguage('lockSettingBar')}</div>
                                     <div className="func-action">
                                         <div className="slide-btn-outer">
@@ -585,14 +820,73 @@ const MainThem:FC = ():TSX => {
                                         </div>
                                     </div>
                                 </div>
+                                <div className="list-row">
+                                    <div className="func-name">{formatLanguage('displaySearchBar')}</div>
+                                    <div className="func-action">
+                                        <div className="slide-btn-outer">
+                                            <SwitchBar isSlide={isDisplaySearchBar} clickEvent={changeSwitchEvent.bind(this,'displaySearchBar')} />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="list-row">
+                                    <div className="func-name">{formatLanguage('displayTime')}</div>
+                                    <div className="func-action">
+                                        <div className="slide-btn-outer">
+                                            <SwitchBar isSlide={isDisplayTime} clickEvent={changeSwitchEvent.bind(this,'displayTime')} />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    {/* calendar modal */}
                     <div className={`calender-right-slider ${toggleCalenderSlider ? 'toggle' : ''}`}>
-                        <div className="back-btn" onClick={() => setInitState(prevState => ({ ...prevState,toggleCalenderSlider: false }))}>
-                            <i className="far fa-arrow-right"></i>
+                        <div className="header">
+                            <div className="title">{formatLanguage("almanac")}</div>
+                            <div className="back-btn" onClick={() => setInitState(prevState => ({ ...prevState,toggleCalenderSlider: false }))}>
+                                <i className="far fa-arrow-right"></i>
+                            </div>
                         </div>
-                        <div className="current-date">{currentDate}</div>
+                        <div className="body">
+                            <div className="calendar-outer">
+                                <div className="calendar" ref={calenderBodyDomRef}>
+                                    {$.maps(monthDays, (row, rowIndex) => 
+                                        <div className="month-outer" key={rowIndex}>
+                                            <div className='month'>
+                                                <div className='title'>{formatLanguage(`monthName.${row.monthCount - 1}`)}</div>
+                                                <div className="weekdays">
+                                                    {$.maps(row.weekdays, (weekdaysRow, wIndex) => <div className="weekday" key={wIndex}>{formatLanguage(`weekDaysShortName.${weekdaysRow}`)}</div>)}
+                                                </div>
+                                                <div className="days">{
+                                                    $.maps(row.days, (daysRow, dIndex) => 
+                                                        <div 
+                                                            className={
+                                                                `${daysRow.dayType.prevMonth || daysRow.dayType.nextMonth ? 'day other-month' : 'day'} ${
+                                                                    !(daysRow.dayType.prevMonth || daysRow.dayType.nextMonth) && daysRow.dayType.isHoliday && daysRow.dayType.dayName ? 
+                                                                    'holiday' : !(daysRow.dayType.prevMonth || daysRow.dayType.nextMonth) && daysRow.dayType.isHoliday ? 'normal-holiday' : ''
+                                                                }
+                                                                ${(dIndex + 1) % 7 === 0 ? 'last' : ''}
+                                                                ${(convertDateShow(currentDate).date === `${daysRow.month}${daysRow.day}`) && daysRow.dayType.currentMonth ? 'highlight' : ''}
+                                                                `
+                                                            } 
+                                                            key={dIndex}
+                                                        >{daysRow.day}</div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="footer">
+                            <div className='day'>{formatLanguage(`weekDaysFullName.${new Date().getDay()}`)}</div>
+                            <div className="date">{convertDateShow(currentDate).text}</div>
+                            <div className='time'>
+                                {isUseAMPM ? <span className='display-amorpm'>{convertTime(currentTimes.hour)?.displayAMPM}</span>: ''}
+                                {isUseAMPM ? convertTime(currentTimes.hour)?.hour || '--' : currentTimes.hour}<span>：</span>{currentTimes.minute}<span>：</span>{currentTimes.seconds}
+                            </div>
+                        </div>
                     </div>
                     <div className={`show-path ${toggleShowPath ? 'toggle' : ''}`}>{decodeURIComponent(showPath)}</div>
                     <div className="copy-right">

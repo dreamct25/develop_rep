@@ -1,10 +1,9 @@
 import { css } from '@linaria/core'
-import SegoeuiFont from '@/assert/font/segoeui.ttf'
 
 export default css`
     @font-face {
         font-family: 'Segoeui_Custom';
-        src: url(${SegoeuiFont}) format('truetype');
+        src: url('/assets/font/segoeui.ttf') format('truetype');
         font-style: normal;
         font-display: auto;
     }
@@ -65,13 +64,14 @@ export default css`
 
         body {
             position: relative;
-            background-repeat: no-repeat;
             background-position: center center;
+            background-image: var(--bg);
             transition: .5s ease;
         }
 
         body.bg-fill {
             background-size: cover;
+            background-repeat: no-repeat;
         }
 
         body.bg-tile {
@@ -80,7 +80,35 @@ export default css`
         }
 
         body.bg-fit{
+            background-repeat: no-repeat;
             background-size: contain;
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: -1;
+                backdrop-filter: blur(10px);
+                background-color: rgba(30,30,30,.3);
+            }
+
+            &::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-size: cover;
+                background-image: var(--bg);
+                z-index: -2;
+                transition: .5s ease;
+            }
         }
     }
 `
