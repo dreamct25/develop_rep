@@ -1,0 +1,87 @@
+{
+    "frontend": {
+        "common": {
+            "message":"Message",
+            "prompt":"Prompt",
+            "confirm":"Confirm",
+            "cancel":"Cancel",
+            "back": "Back"
+        },
+        "component": {
+            "WhenStartLoading": {
+                "startUp": "Start Up"
+            },
+            "Main": {
+                "radio":"Music Stream",
+                "qrLink":"QRCode link",
+                "deviceConnected":"Device connected",
+                "deviceNotConnect":"Device disconnect",
+                "doYouWantToCloseApplication":"Do you want to close application ?",
+                "copyRight":"<div class='copy-right'>CopyRight \u00A9 2022-02 {{ author }}. v{{ version }}</div>",
+                "disclaimer": "<strong>Disclaimer</strong><div class='inside-content'><div class='top'>This application uses ytmusic-api (npm package) to access public data from YouTube Music. It is for portfolio demonstration only, with no commercial intent, and does not store, download, or redistribute any music or video content.</div><div class='bottom'><div class='item'><div>-</div><div>Only public metadata (video ID, URL, artist name, thumbnail, etc.) is stored; no music or video files are saved.</div></div><div class='item'><div>-</div><div>This application is not affiliated with or authorized by YouTube, YouTube Music, or Google LLC.</div></div><div class='item'><div>-</div><div>All copyrights belong to their respective owners. Users should comply with YouTube Music’s terms of service.</div></div><div class='item'><div>-</div><div>For any concerns, please contact me to adjust or remove relevant features.</div></div></div></div>",
+                "about":"Abount",
+                "settingBar": {
+                    "setting": "Setting",
+                    "changeLanguage":"Language",
+                    "changeBg":"Background",
+                    "pickImg":"pick image",
+                    "changeBgBlur":"Blur",
+                    "changeBgMask":"Black mask",
+                    "changeMainThemColor":"Them color",
+                    "pickColor":"pick color"
+                },
+                "getSetting": "Get Setting"
+            },
+            "QRCodeModal": {
+                "qrDesc":"Please connect device to wifi before<br />scan which is the same with computer"
+            },
+            "Music": {
+                "playList": "PlayList",
+                "backToFindMusic": "Back To Find Songs",
+                "createPlayList": "Create PlayList",
+                "editPlayList": "Edit PlayList",
+                "deletePlayList": "Delete PlayList",
+                "playListName": "PlayList Name",
+                "playListDesc": "PlayList Description",
+                "doYouWantToDeletePlayList": "Do you want to delete {{playListName}} playlist？",
+                "searching": "Searing ...",
+                "noSearchResults":"No Search Results",
+                "addSongSuccess": "Song added to {{collectName}} playlist",
+                "addSongError": "Song is existing in {{collectName}} playlist",
+                "deleteSongSuccess": "Song remove from {{collectName}} playlist",
+                "remoteConnectQRCode": "Remote QRCode",
+                "remoteConnected": "Remote Connected：{{status}}",
+                "goToFindSong": "Is empty, go to find another song",
+                "remoteOn": "On",
+                "remoteOff": "Off",
+                "remoteToastMsgOn": "Remote Connected",
+                "remoteToastMsgOff": "Remote Disconnected",
+                "whatKindSongSearch": "What kind song you want to listen ~",
+                "searchCollectList": "Search playlist"
+            },
+            "NetworkWrong": {
+                "checkIsOnline":"Please check if your network connection is working properly then click reload button to try again !",
+                "redirectMessage":"Network is connected, will redirect screen view after {{ seconds }} seconds",
+                "retryButton":"Reload"
+            }
+        },
+        "remote":{
+            "whatKindSongSearch": "What kind song you want to listen ~",
+            "changeLanguage":"Language",
+            "search": "Search",
+            "playList": "PlayList",
+            "searching": "Searing ...",
+            "noSearchResults":"No Search Results",
+            "noSongs": "No Songs",
+            "copyRight":"CopyRight \u00A9 2022-02 {{ author }}"
+        }
+    },
+    "backend": {
+        "menuItem": {
+            "delete": "Delete",
+            "edit": "Edit",
+            "addToPlayList": "Add To PlayList",
+            "removeFromPlayList": "Remove From PlayList"
+        }
+    }
+}

@@ -1,0 +1,87 @@
+{
+    "frontend": {
+        "common": {
+            "message":"訊息",
+            "prompt":"提示",
+            "confirm":"確定",
+            "cancel":"取消",
+            "back": "返回"
+        },
+        "component": {
+            "WhenStartLoading": {
+                "startUp": "啟動中"
+            },
+            "Main": {
+                "radio":"音樂串流",
+                "qrLink":"QRCode 連結",
+                "deviceConnected":"設備已連接",
+                "deviceNotConnect":"設備未連接",
+                "doYouWantToCloseApplication":"確定要關閉應用程式嗎 ?",
+                "copyRight":"<div class='copy-right'>CopyRight \u00A9 2022-02 {{ author }} v{{ version }}</div>",
+                "disclaimer": "<strong>免責聲明</strong><div class='inside-content'><div class='top'>本應用程式使用 ytmusic-api (npm 套件) 存取 YouTube Music 公開數據，僅供 作品集展示，無商業用途，亦不存儲、下載或再分發任何音樂或影片內容。</div><div class='bottom'><div class='item'><div>-</div><div>本應用程式僅儲存 API 取得的公開元數據（影片 ID、網址、歌手名稱、歌曲封面等），不包含音樂或影片本體。</div></div><div class='item'><div>-</div><div>本應用程式與 YouTube、YouTube Music 或 Google LLC 無關，亦未獲官方授權。</div></div><div class='item'><div>-</div><div>所有版權歸原始權利人所有，請使用者遵守 YouTube Music 服務條款。</div></div><div class='item'><div>-</div><div>若有疑慮，請聯繫我，我將調整或移除相關功能。</div></div></div></div>",
+                "about":"關於",
+                "settingBar": {
+                    "setting": "設定",
+                    "changeLanguage":"語系",
+                    "changeBg":"變更背景",
+                    "pickImg":"選擇圖片",
+                    "changeBgBlur":"背景模糊",
+                    "changeBgMask":"背景遮罩",
+                    "changeMainThemColor":"變更主題色",
+                    "pickColor":"選擇顏色"
+                },
+                "getSetting": "取得設定中"
+            },
+            "QRCodeModal": {
+                "qrDesc":"請將裝置連接到與電腦<br />相同的 WIFI 中後再掃描"
+            },
+            "Music": {
+                "playList": "播放清單",
+                "backToFindMusic": "返回找音樂",
+                "createPlayList": "建立播放清單",
+                "editPlayList": "編輯播放清單",
+                "deletePlayList": "刪除播放清單",
+                "playListName": "播放清單名稱",
+                "playListDesc": "播放清單說明",
+                "doYouWantToDeletePlayList": "確定要刪除 {{playListName}} 播放清單？",
+                "searching": "搜尋中",
+                "noSearchResults":" 尚未搜尋",
+                "addSongSuccess": "歌曲已新增至 {{collectName}} 播放清單中",
+                "addSongError": "歌曲已在 {{collectName}} 播放清單中",
+                "deleteSongSuccess": "歌曲已從 {{collectName}} 播放清單中刪除",
+                "remoteConnectQRCode": "遠端連線 QRCode",
+                "remoteConnected": "遠端連線狀態：{{status}}",
+                "goToFindSong": "無歌曲，來去找歌",
+                "remoteOn": "已開啟",
+                "remoteOff": "已關閉",
+                "remoteToastMsgOn": "遠端已連線",
+                "remoteToastMsgOff": "遠端已關閉",
+                "whatKindSongSearch": "想聽甚麼呢 ~",
+                "searchCollectList": "搜尋播放列表"
+            },
+            "NetworkWrong": {
+                "checkIsOnline":"請檢查您的網絡狀態是否正常，確認後再點擊重新加載按鈕進行檢查",
+                "redirectMessage":"網路已連接,將在 {{ seconds }} 秒後重新導向畫面",
+                "retryButton":"重新加載"
+            }
+        },
+        "remote":{
+            "whatKindSongSearch": "想聽甚麼呢 ~",
+            "changeLanguage":"語系",
+            "search": "搜尋",
+            "playList": "播放清單",
+            "searching": "搜尋中",
+            "noSearchResults":"尚未搜尋",
+            "noSongs": "無歌曲",
+            "copyRight":"CopyRight \u00A9 2022-02 {{ author }} 版權所有"
+        }
+    },
+    "backend": {
+        "menuItem": {
+            "delete": "刪除",
+            "edit": "編輯",
+            "addToPlayList": "加入歌單",
+            "removeFromPlayList": "從歌單中移除"
+        }
+    }
+}
