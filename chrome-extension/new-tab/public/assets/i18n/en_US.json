@@ -1,0 +1,35 @@
+{
+    "searchDesc" : "Search",
+    "UILanguage": "Language",
+    "setting": "Setting",
+    "changeBackgroundImage": "Change Background Image",
+    "backgroundDisplayMode": "Background Display Mode",
+    "backgroundDisplayModeOption": ["Fill","Tile","Fit"],
+    "changeImage": "Change Image",
+    "use24h": "Use 24-hour Clock",
+    "changeThemColor": "Change Them Color",
+    "changeClockColor": "Change Clock Color",
+    "changeClockSize": "Change Clock Size",
+    "changeClockShadow": "Change Clock Shadow",
+    "changeColor": "Change Color",
+    "loadingSetting": "Loading Setting",
+    "copyRight": "CopyRight",
+    "lockSettingBar": "Lock Setting Bar",
+    "displaySearchBar": "Display Search Bar",
+    "displayTime": "Display Time",
+    "backgroundBlackMask": "Background Black Mask",
+    "AMPMDesc": {
+        "AM": "AM",
+        "PM": "PM"
+    },
+    "action": {
+        "delete": "Delete"
+    },
+    "displayTopSiteCount": "Top Site Visited Count",
+    "webTitle": "New Tab",
+    "currentDateShow": "{{ month }} {{ date }}, {{ year }}",
+    "almanac": "Almanac",
+    "monthName": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    "weekDaysShortName": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    "weekDaysFullName": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+}

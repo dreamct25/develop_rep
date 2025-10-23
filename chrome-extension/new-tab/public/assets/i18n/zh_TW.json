@@ -1,0 +1,35 @@
+{
+    "searchDesc" : "搜尋",
+    "UILanguage": "介面語言",
+    "setting": "設定",
+    "changeBackgroundImage":"改變背景圖片",
+    "backgroundDisplayMode":"背景顯示模式",
+    "backgroundDisplayModeOption": ["填滿","並排","置中"],
+    "changeImage": "改變圖片",
+    "use24h": "使用 24 時制",
+    "changeThemColor": "調整主題顏色",
+    "changeClockColor": "調整時鐘顏色",
+    "changeClockSize": "調整時鐘大小",
+    "changeClockShadow": "調整時鐘陰影",
+    "changeColor": "調整顏色",
+    "loadingSetting": "載入設定中",
+    "copyRight": "版權所有",
+    "lockSettingBar": "鎖定設定列",
+    "displaySearchBar": "顯示搜尋欄",
+    "displayTime": "顯示時間",
+    "backgroundBlackMask": "黑遮罩背景",
+    "AMPMDesc": {
+        "AM": "上午",
+        "PM": "下午"
+    },
+    "action": {
+        "delete": "刪除"
+    },
+    "displayTopSiteCount": "常用瀏覽數",
+    "webTitle": "新分頁",
+    "currentDateShow": "{{ year }} 年 {{ month }} 月 {{ date }} 日",
+    "almanac": "行事曆",
+    "monthName": ["1 月", "2 月", "3 月", "4 月", "5 月", "6 月", "7 月", "8 月", "9 月", "10 月", "11 月", "12 月"],
+    "weekDaysShortName": ["日", "一", "二", "三", "四", "五", "六"],
+    "weekDaysFullName": ["週日", "週一", "週二", "週三", "週四", "週五", "週六"]
+}
