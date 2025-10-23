@@ -1,0 +1,39 @@
+{
+  "name": "esbuild-svelte-ts",
+  "version": "0.6.0",
+  "description": "",
+  "scripts": {
+    "start": "env-cmd -f .env.dev node esbuild.config.js",
+    "build": "env-cmd -f .env.pdt node esbuild.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@tsconfig/svelte": "^3.0.0",
+    "esbuild": "^0.15.13",
+    "esbuild-plugin-dev-server": "^1.1.3",
+    "esbuild-sass-plugin": "^2.4.5",
+    "esbuild-svelte": "^0.7.1",
+    "svelte-preprocess": "^4.10.7",
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.26",
+    "@fortawesome/free-solid-svg-icons": "^6.1.2",
+    "artplayer": "^5.1.1",
+    "env-cmd": "^10.1.0",
+    "fontawesome-svelte": "^2.0.1",
+    "hls.js": "^1.5.8",
+    "i18next": "^22.5.0",
+    "jsencrypt": "^3.3.2",
+    "longpress-svelte": "^1.0.0",
+    "sass": "^1.56.0",
+    "svelte": "^3.59.1",
+    "svelte-gestures": "^1.5.2",
+    "svelte-i18next": "^2.0.0",
+    "svelte-qrcode-image": "^1.0.0-rc.2"
+  }
+}

@@ -1,0 +1,60 @@
+{
+    "webTitle":"文件共享服務器",
+    "currentPath":"當前路徑",
+    "uploadBtn":"上傳",
+    "uploadStatus":{
+        "ready":"準備就緒",
+        "uploading":"上傳中...",
+        "uploaded":"上傳成功"
+    },
+    "prevFolder":"返回上一層",
+    "shortList":"縮圖列表",
+    "detailList":"詳細列表",
+    "sortLatestDate":"最新日期排序",
+    "sortLateDate":"最舊日期排序",
+    "openCurrentFolder":"開啟當前資料匣",
+    "noAnyFile":"無任何檔案",
+    "optionMenuItem":{
+        "previewImg":"預覽圖片",
+        "previewVideo":"預覽影片",
+        "newFolder":"新增資料夾",
+        "rename":"重新命名",
+        "delete":"刪除",
+        "download":"下載"
+    },
+    "modal":{
+        "header":{
+            "create":"新建資料夾",
+            "rename":"重新命名{{ type }}",
+            "file":"檔案",
+            "folder":"資料夾"
+        },
+        "footer":{
+            "confirm":"確定",
+            "cancel":"取消"
+        }
+    },
+    "deleteModal":{
+        "header":"提示訊息",
+        "body":"確定要刪除 {{ name }} 嗎 ?",
+        "footer":{
+            "confirm":"確定",
+            "cancel":"取消"
+        }
+    },
+    "downloadStatusGroup":{
+        "downloadFileName": "檔名",
+        "prepareDownload": "準備下載 ...",
+        "convertFile": "轉換檔案中 ...", 
+        "done": "完成 !"
+    },
+    "loadingPhoto": "讀取圖片中 ...",
+    "copyRight":"Alex Chen 版權所有 © 2022-08 ~ 2024-06. Beta v0.6.5",
+    "inputModal" : {
+        "header": "請先輸入上傳路徑",
+        "headerNotFirstTime": "更改上傳路徑",
+        "body": "（您可在下次進行更改）",
+        "footerBtn": "確認設定"
+    },
+    "changeFolderPath":"更改上傳路徑"
+}
