@@ -1,5 +1,6 @@
 # Develop Repository
-- 此倉庫為個人開發源碼庫
+![Minion](https://raw.githubusercontent.com/kheireddinebou/kheireddinebou/output/snake.svg)
+- 此倉庫僅為個人作品集開發源碼庫
 - [個人作品發佈頁點此](https://github.com/dreamct25/dreamct25.github.io)
 ## Table Of Contents（目錄）
 ### Angular
@@ -16,6 +17,8 @@
  - 包含有測試過的專案
 ### Vue
  - 包含有開發過的專案與各腳手架的範例
+### chrome-extension
+ - 包含有開發過的 chrome 擴展專案
 ### design
  - 包含有開發過的專案主要是 vanilla ts
 ### test-area
