@@ -1,31 +1,27 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './styles.scss'
 import './lib/Library'
-import $,{ Self } from './lib/Library'
+import $ from './lib/Library'
 import { qItemsType,typeItemsType,progressItemType,countItemType } from './types'
 
 let array:string[] = []
 let strTemp:string = ""
 let count:number = -1
+let switchs:boolean | null = false
+let stopTimeSet:number;
 let Qitems: qItemsType[] = []
 let typeItems: typeItemsType[] = []
 
-declare global {
-    interface Window {
-        choose(index: number,type:string): void
-        backStep():void
-        nextStep():void
-        countingAllTest(): void
-    }
-}
+
 
 // 設定點擊內容所加入的文字
-window.choose = (index,type) => {
+const choose:({ target }:{ target:HTMLDivElement }) => void = ({ target }) => {
+    switchs = true
 
-    if (type === "A") {
-        $(($('.text-first') as unknown as Self[])[index]).addClass('texts-trans')
+    if (target.dataset.choose === "A") {
+        $(".text-first").addClass('texts-trans')
+        $(".text-second").removeClass('texts-trans')
 
-        $(($(".text-second") as unknown as Self[])[index]).removeClass('texts-trans')
         strTemp = {
             [`${count >= 0 && count <= 6}`]: 'E',
             [`${count >= 7 && count <= 13}`]: 'N',
@@ -33,8 +29,8 @@ window.choose = (index,type) => {
             [`${count >= 21 && count <= 27}`]: 'J'
         }["true"]
     } else {
-        $(($(".text-second") as unknown as Self[])[index]).addClass('texts-trans')
-        $(($('.text-first') as unknown as Self[])[index]).removeClass('texts-trans')
+        $(".text-second").addClass('texts-trans')
+        $(".text-first").removeClass('texts-trans')
         
         strTemp = {
             [`${count >= 0 && count <= 6}`]: 'I',
@@ -43,8 +39,6 @@ window.choose = (index,type) => {
             [`${count >= 21 && count <= 27}`]: 'P'
         }["true"]
     }
-
-    if(count === 27) window.nextStep()
 }
 
 const modalHide:({ target }:{ target:HTMLDivElement }) => void = ({ target }) => {
@@ -54,145 +48,191 @@ const modalHide:({ target }:{ target:HTMLDivElement }) => void = ({ target }) =>
 }
 
 // 設定點擊下一題時的函式內容
-window.nextStep = () => {
-
-    if(count === 29){
-        count = -1
-        array = []
-        strTemp = ''
-
-        $('.start-btn').removeClass('start-btn-in')
-        $('.start-btn-outer-frame').addClass('start-btn-outer-frame-hide')
-
-        $('.type-text-content').removeClass('type-text-content-in')
-        setTimeout(() => {
-            $('.type-text-content').styles('remove',"display", "flex")
-            window.nextStep()
-        },699)
-        return
-    }
-
-    if (count >= 0 && !strTemp) {
+const nextStep:({ target }:{ target:HTMLDivElement }) => void = ({ target }) => {
+    console.log(Qitems)
+    if (!switchs && count !== -2 && count !== -1) {
         $('.custom-modal-outer').addClass('modal-toggle')
         return
-    }
 
-    count++
-
-    count >= 1 && array.append(strTemp)
-
-    strTemp = ''
-
-    if(count === 0){
-
-        const renderQ = $.maps(Qitems,({ qNum,qT,ansA,ansB }) => {
-            const titleSet = window.innerWidth <= 768 ? qT.length > 20 ? 'text-justify' : 'text-center' : 'text-center'
-            const ansASet = window.innerWidth <= 768 ? ansA.length > 16 ? 'text-justify' : 'text-center' : 'text-center'
-            const ansBSet = window.innerWidth <= 768 ? ansB.length > 16 ? 'text-justify' : 'text-center' : 'text-center'
-
-            return `<div class="Q-outer justify-content-center">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="quest ${titleSet}">${qT}</div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="row justify-content-center">
-                            <div class="col-md-8">
-                                <span class="texts text-first ${ansASet}" onclick="choose(${qNum},'A')">${ansA}</span>
-                                <span class="texts text-second ${ansBSet}" onclick="choose(${qNum},'B')">${ansB}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `}).concat(`
-            <div class="Q-outer justify-content-center">
-                <div class="go-counting">
-                    <div class="working-count-btn" onclick="countingAllTest()">計算結果</div>
-                    <div class="change-ans-btn" onclick="backStep()">改變作答</div>
-                </div>
-            </div>
-        `).concat(`
-            <div class="prev prev-hide" onclick="backStep()">
-                <i class="fas fa-2x fa-chevron-left"></i>
-            </div>
-            <div class="next" onclick="nextStep()">
-                <i class="fas fa-2x fa-chevron-right"></i>
-            </div>
-        `).join('')
-
-        $('.Q-outer-frame').html(renderQ)
-
-        $('.start-btn').removeClass('start-btn-in')
-        $('.start-btn-outer-frame').addClass('start-btn-outer-frame-hide')
-        $('.explain').removeClass('explain-show')
+    } else if (($(".Q-outer").attr('class') as string).split(' ').length >= 3) {
+        $(".Q-outer").removeClass('Qadd-in').addClass('Qadd-out')
 
         setTimeout(() => {
-            $('.Q-outer-frame').addClass('Q-outer-frame-in')
-        },699)
+            $(".text-first").removeClass('texts-trans')
+            $(".text-second").removeClass('texts-trans')
+        }, 900)
+
+        stopTimeSet = setTimeout(() => {
+            $(".Q-outer").removeClass('Qadd-out').addClass('Qadd-in')
+        }, 1000)
+
+    } else {
+        setTimeout(() => $(".Q-outer").addClass('Qadd-in'), 1000)
+        $(".Q-outer").removeClass('Qadd-out')
     }
 
-    if(count === 27){
-        $('.next').addClass('next-hide')
+    if (count <= 0) {
+        $(target).addClass('next-trans')
+        setTimeout(() => $(target).removeClass('next-trans'), 490)
+    } else {
+        $(target).addClass('next-trans-pos').removeClass('next-trans')
+        setTimeout(() => $(target).removeClass('next-trans-pos'), 490)
     }
 
-    if(count >= 1){
-        $('.prev').removeClass('prev-hide')
+    if (count === -1) {
+        $(target).addClass('next-trans')
+        $(target).styles('set','opacity','0')
 
-        if(count >= 28){
-            count = 28
-            $('.prev').addClass('prev-hide')
-        }
+        $(".explain").removeClass('explain-show')
 
-        $.each($('.Q-outer') as unknown as Self[],(slide => $(slide).styles('set','transform',`translateX(-${count * 100}%)`)));
+        $(window).removeListener('scroll', scrolls)
+
+        scrollTop()
+
+        setTimeout(() => {
+            $(target).removeClass('next-trans')
+            $(target).styles('set','opacity','1')
+        }, 1000)
+
+        setTimeout(() => $(".explain").styles("set","display", "none"), 1001);
+
+        setTimeout(() => $(".Q-outer").styles("set","display", "block"), 1003);
+    } else if (count === -2) {
+        strTemp = ''
+
+        $(target).addClass('next-move-out')
+
+        $(".type-text-content").addClass('type-text-content-hide')
+        
+        $(window).listener('scroll', scrolls)
+        
+        scrollTop()
+        
+        setTimeout(() => {
+            $(".explain").styles("set","display", "block")
+            $(".type-text-content").styles("set","display", "")
+            $(".type-text-content").texts("")
+            $(target).addClass('next-small')
+        }, 990);
+        
+        setTimeout(() => {
+            $(".explain").addClass('explain-show')
+            $(".type-text-content").removeClass('type-text-content-hide').removeClass('type-text-content-in')
+            $(target).removeClass('next-move-out').removeClass('next-move')
+        }, 1110);
+        
+        setTimeout(() => {
+            $(target).removeClass('next-small')
+            $(".next").texts('開始')
+            $(target).styles('set','opacity','1')
+        }, 1310);
     }
-}
 
-window.countingAllTest = () => {
+    switchs = false
+    
     count++
-    $('.Q-outer-frame').removeClass('Q-outer-frame-in')
-    finalSum()
+    
+    count >= 1 && array.append(strTemp)
+
+    setTimeout(() => {
+        if (count === 28) {
+            count = -2
+
+            clearTimeout(stopTimeSet)
+            setTimeout(() => finalSum(), 500)
+
+            $(target).removeClass('next-active').removeClass('btn-start')
+            $(target).styles('set','opacity','0')
+            $(".prev").removeClass('prev-active').removeClass('btn-start')
+            $(target).addClass('next-trans-hide')
+        } else if (count > -1) {
+            const { qNum,qT,ansA,ansB } = Qitems[count] as qItemsType
+
+            $(".quest").texts(qT)
+            $(".text-first").texts(ansA)
+            $(".text-second").texts(ansB)
+
+            if (qNum === 0 && count === 0) {
+                $(target).texts('下一題')
+                $(target).addClass('btn-start')
+                $(".text-first").removeClass('texts-hide')
+                $(".text-second").removeClass('texts-hide')
+            } else if (qNum === 1 && count === 1) {
+                $(target).addClass('next-active')
+                $(".prev").addClass('prev-active').addClass('btn-start')
+                $(".prev").texts('上一題')
+            } else if (qNum === 27 && count === 27) {
+                $(target).texts('查詢結果')
+            }
+        }
+    }, 900)
+    setTimeout(() => {
+        const { quest,chooseFt,chooseSd } = textLength()
+        $(".quest").styles("set","text-align", quest)
+        $(".text-first").styles("set","text-align", chooseFt)
+        $(".text-second").styles("set","text-align", chooseSd)
+    }, 910)
 }
 
 // 設定點擊上一題的函式內容
-window.backStep = () => {
+const backStep:({ target }:{ target:HTMLDivElement }) => void = ({ target }) => {
     count--
-    
-    if(count <= 0){
-        count = 0
-        $('.prev').addClass('prev-hide')
-
-        $.each($('.Q-outer') as unknown as Self[],(slide => $(slide).styles('set','transform',`translateX(-${count * 100}%)`)));
-
-        $(($('.text-first') as unknown as Self[])[count]).removeClass('texts-trans')
-
-        $(($(".text-second") as unknown as Self[])[count]).removeClass('texts-trans')
-
-        return
+    if (count === 0) {
+        $(".next").removeClass('next-active')
+        $(".prev").removeClass('prev-active')
+    } else if (count >= 0) {
+        $(target).addClass('prev-trans-pos')
+        setTimeout(() => $(target).removeClass('prev-trans-pos'), 490)
     }
+    if (($(".Q-outer").attr('class') as string).split(' ').length >= 3) {
 
-    if(count === 27){
-        $('.next').addClass('next-hide')
-        $('.prev').removeClass('prev-hide')
+        $(".Q-outer").addClass('Qremove-in').removeClass('Qadd-in')
 
-        $.each($('.Q-outer') as unknown as Self[],(slide => $(slide).styles('set','transform',`translateX(-${count * 100}%)`)));
-    
-        $(($('.text-first') as unknown as Self[])[count]).removeClass('texts-trans')
-    
-        $(($(".text-second") as unknown as Self[])[count]).removeClass('texts-trans')
-    }
+        setTimeout(() => {
+            $(".text-first").removeClass('texts-trans')
+            $(".text-second").removeClass('texts-trans')
+        }, 900)
 
-    if(count <= 26) {
-        $('.next').removeClass('next-hide')
-
-        $.each($('.Q-outer') as unknown as Self[],(slide => $(slide).styles('set','transform',`translateX(-${count * 100}%)`)));
-    
-        $(($('.text-first') as unknown as Self[])[count]).removeClass('texts-trans')
-    
-        $(($(".text-second") as unknown as Self[])[count]).removeClass('texts-trans')
+        setTimeout(() => {
+            $(".Q-outer").removeClass('Qremove-in').addClass('Qadd-in')
+        }, 1000)
     }
 
     array.removeLast()
+
+    setTimeout(() => {
+        const { qNum,qT,ansA,ansB } = Qitems[count] as qItemsType
+
+        $(".quest").texts(qT)
+        $(".text-first").texts(ansA)
+        $(".text-second").texts(ansB)
+
+        qNum === 27 && $(".next").texts('下一題')
+
+    }, 900)
+
+    setTimeout(() => {
+        const { quest,chooseFt,chooseSd } = textLength()
+        $(".quest").styles("set","text-align", quest)
+        $(".text-first").styles("set","text-align", chooseFt)
+        $(".text-second").styles("set","text-align", chooseSd)
+    }, 910)
+}
+
+const textLength:() => { quest:string,chooseFt:string,chooseSd:string } = () => {
+    const questText = $(".quest").texts() as string
+    const textFirst = $(".text-first").texts() as string
+    const textSecond = $(".text-second").texts() as string
+
+    return window.innerWidth <= 768 ? {
+        quest: questText.length > 16 ? 'justify' : 'center',
+        chooseFt: textFirst.length > 17 ? 'justify' : 'center',
+        chooseSd: textSecond.length > 17 ? 'justify' : 'center'
+    } : {
+        quest: questText.length > 27 ? 'justify' : 'center',
+        chooseFt: textFirst.length > 27 ? 'justify' : 'center',
+        chooseSd: textSecond.length > 27 ? 'justify' : 'center'
+    }
 }
 
 // 設定統計字數函式
@@ -211,6 +251,7 @@ const finalSum:() => void = () => {
         return { num,type,typeName,count: 0 }
     })
 
+
     const testText = $.maps(countAll,(item:countItemType) => {
         item.count = $.filter(array,filterItem => filterItem === item.type).length;
         return item.count >= 4 && item.type
@@ -226,11 +267,10 @@ const isType:(text:string) => string = text => $.maps([
     ["T","理性","F","情感"],
     ["J","判斷","P","理解"]
 ],(item:string[]) => {
-    const [typeSortA,typeNameA,typeSortB,typeNameB] = item
+    const [a,aName,b,bName] = item
+    if (text === a) return `${b} ( ${bName} )`
 
-    if (text === typeSortA) return `${typeSortB} ( ${typeNameB} )`
-
-    if (text === typeSortB) return `${typeSortA} ( ${typeNameA} )`
+    if (text === b) return `${a} ( ${aName} )`
 
     return false
 }).filter((str:string | boolean) => str !== false).join('') as string
@@ -252,7 +292,8 @@ const transType:(array:{ percent:number,maxType:string,minType:string }[]) => st
 // 設定載入解析內容前與後
 const typeDetails:(countAll:countItemType[], testText:string) => void = (countAll,testText) => {
     let loadingCount = 0
-
+    
+    $(".Q-outer").styles("set","display", "")
     $('.type-text-content').styles("set","display", "flex")
     
     setTimeout(() => {
@@ -280,14 +321,15 @@ const typeDetails:(countAll:countItemType[], testText:string) => void = (countAl
     const filterArray = $.maps(testText.split(""),str => {
         const filterItem = $.filter(countAll,({ type }:{ type:string }):any => type === str) as { num:number,type:string,typeName:string,count:number }[]
         
-        return filterItem.length > 0 && (
-            $.maps(filterItem,({ count,type,typeName }:countItemType) => ({
+        return filterItem.length > 0 &&
+            (arr => arr[0])($.maps(filterItem,(
+                { count,type,typeName }:countItemType
+            ) => ({
                 percent: Math.floor(100 / (Math.floor((7 / count) * 100) / 100)),
                 maxType: `${type} ( ${typeName} )`,
                 minType: isType(type)
-            })).at(0) 
-        ) as progressItemType
-    }).filter(item => item !== false) as progressItemType[]
+            })) as progressItemType[])
+    }).filter((item:object | boolean) => item !== false) as progressItemType[]
 
     const dom = $.filter(typeItems,(item:typeItemsType):any => item.originsType === testText).map((item:typeItemsType) => `
         <div class="row">
@@ -374,9 +416,11 @@ const typeDetails:(countAll:countItemType[], testText:string) => void = (countAl
     },9700)
 
     dom && setTimeout(() => {
-        $('.start-btn').addClass('start-btn-in')
-        $('.start-btn-outer-frame').removeClass('start-btn-outer-frame-hide')
-        $(".start-btn").texts('重新測驗')
+        setTimeout(() => {
+            $(".prev").removeClass('next-trans-hide')
+            $(".next").addClass('next-move').removeClass('next-trans-hide')
+        }, 200);
+        $(".next").texts('重新測驗')
 
         array = []
     }, 26500);
@@ -384,13 +428,11 @@ const typeDetails:(countAll:countItemType[], testText:string) => void = (countAl
 
 // 設定滾動到底部時顯示按鈕函式
 const scrolls:() => void = () => {
-    const { top,height } = $('.start-btn-outer').getDomPos()
+    const { top,height } = $('.next-outer').getDomPos()
     const windowTop = window.scrollY
     const windowBottom = window.innerHeight + windowTop
     const nextY = top + height / 2
-    if(count === -1){
-        $(".start-btn")[nextY < windowBottom ? 'addClass' : 'removeClass']('start-btn-in')
-    }
+    nextY < windowBottom ? $(".next").addClass('next-in') : $(".prev").removeClass('next-in')
 }
 
 // 設定返回頂部函式
@@ -398,11 +440,11 @@ const scrollTop:() => void = () => $('body').scrollToTop({ scrollTop:0,duration:
 
 // 設定畫面載入時函式
 const loadIn:() => Promise<void> = async () => {
-    const qItemsResult = await $.fetch.get<{ data: qItemsType[] }>('https://fordb-1-f6742337.deta.app/mind/v1/questions')
+    const qItemsResult = await $.fetch.get<{ data: qItemsType[] }>('https://collect-service.vercel.app/mind/v1/questions')
 
     Qitems = qItemsResult.data.data
 
-    const typeItemsResult = await $.fetch.get<{ data: typeItemsType[] }>('https://fordb-1-f6742337.deta.app/mind/v1/final_test')
+    const typeItemsResult = await $.fetch.get<{ data: typeItemsType[] }>('https://collect-service.vercel.app/mind/v1/final_test')
 
     typeItems = typeItemsResult.data.data
 
@@ -412,7 +454,7 @@ const loadIn:() => Promise<void> = async () => {
     let strCountTemp = ""
 
     $('.title').addClass('title-in')
-    $(".start-btn").texts('開始')
+    $(".next").texts('開始')
 
     const strIn = setInterval(() => {
         if (strCountF === titleString.length -1 && strCountB === titleString.length) {
@@ -476,9 +518,15 @@ const loadIn:() => Promise<void> = async () => {
 
 $(document).useMounted(() => {
     loadIn()
+
+    // 監聽選項內按鈕
+    $.each($(".texts") as unknown as any[],(element:HTMLDivElement) => $(element).listener('click',choose))
+    
+    // 監聽上一題按鈕
+    $(".prev").listener('click', backStep)
     
     // 監聽下一題按鈕
-    $(".start-btn").listener('click', () => window.nextStep())
+    $(".next").listener('click', nextStep)
 
     $('.confirm').listener('click', modalHide)
     

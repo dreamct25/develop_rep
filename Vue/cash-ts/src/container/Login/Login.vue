@@ -106,7 +106,7 @@ export default defineComponent({
     Loading
   },
   setup(){
-    const { $,Fetch,setReducer,getReducer,toast } = inject<ProviderObjType>('NewProvider')
+    const { $,Fetch,setReducer,getReducer,toast } = inject<ProviderObjType>('NewProvider')!
     const router = useRouter()
     const route = useRoute()
 

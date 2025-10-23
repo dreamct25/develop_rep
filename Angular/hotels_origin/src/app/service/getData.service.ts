@@ -38,7 +38,7 @@ export class GetDataService {
   constructor() { }
 
   async datas() {
-    let res = await fetch('https://proxyservice-1-t7335739.deta.app/test/hotels')
+    let res = await fetch('https://proxy-service-three.vercel.app/test/hotels')
     if (res.status === 200) {
       await res.json().then(res => this.data = res.XML_Head.Infos.Info)
       let dataTemp = this.data.map((item: dataKeysType) => {

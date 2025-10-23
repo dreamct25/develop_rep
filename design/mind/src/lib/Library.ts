@@ -90,7 +90,7 @@ interface fetchGroupType {
   createBase(paramters: { baseUrl: string, baseHeaders: Record<string, any> }): void
 }
 
-export interface Self extends HTMLElement {
+interface Self extends HTMLElement {
   texts(txt?: string): string | null | undefined
   html(dom?: string): string | undefined
   addClass(classText: string): any

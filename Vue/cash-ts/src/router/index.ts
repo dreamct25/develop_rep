@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory,RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHashHistory, createWebHistory,RouteRecordRaw } from 'vue-router'
 import { 
     Login,
     Main,
@@ -44,7 +44,7 @@ const routeSetting:RouteRecordRaw[] = [{
         }
     },{
         path: 'edit_income',
-        name: 'addIncome',
+        name: 'editIncome',
         components: {
             addIncome:AddIncome
         }
@@ -92,6 +92,6 @@ const routeSetting:RouteRecordRaw[] = [{
 }]
 
 export default createRouter({
-    history: createWebHistory('/cash'),
+    history: createWebHashHistory('/cash'),
     routes: routeSetting
 })

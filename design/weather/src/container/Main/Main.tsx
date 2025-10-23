@@ -76,15 +76,16 @@ const Main:FC = ():TSX => {
     const [isMoon,setIsMoon] = useState<boolean>(false)
 
     const filterOptionData:<T>(data:T[],type:string) => optionListObjType[] = (data,type) => {
+
         if(type === 'citys'){
-            const retunArr = $.maps(data as citysDatasObjType[],({ geocode:posGeoCode,locationName:posName }:citysDatasObjType) => ({ posName,posGeoCode })) as optionListObjType[]
+            const retunArr = $.maps(data,({ Geocode:posGeoCode,LocationName:posName }:citysDatasObjType) => ({ posName,posGeoCode })) as optionListObjType[]
             
             return $.maps(orderCityCode,(orderCode:string) => {
                 const pos = $.findIndexOfObj(retunArr,({ posGeoCode }:optionListObjType) => posGeoCode === orderCode)
                 return retunArr[pos]
             })
         } else {
-            const retunArr = $.maps(data as repackCitysBlocksDatasObjType[],({ blockGeoCode:posGeoCode,blockName:posName }) => ({ posName,posGeoCode })) as optionListObjType[]
+            const retunArr = $.maps(data,({ blockGeoCode:posGeoCode,blockName:posName }:repackCitysBlocksDatasObjType) => ({ posName,posGeoCode })) as optionListObjType[]
             
             return $.sort(retunArr,(a:optionListObjType,b:optionListObjType) => parseInt(a.posGeoCode) - parseInt(b.posGeoCode))
         }
@@ -108,7 +109,7 @@ const Main:FC = ():TSX => {
             }))
         }
         
-        const citysBlocksDatasRes = await Promise.all(promisAllBlocks).then(arrays => $.maps(arrays,({ data }:{ data:citysBlocksDatasType }) => data.records?.locations[0]))
+        const citysBlocksDatasRes = await Promise.all(promisAllBlocks).then<citysBlocksDatasObjType[]>(arrays => $.maps(arrays,({ data }:{ data:citysBlocksDatasType }) => data.records?.Locations[0]))
         
         const citysDatasRes = await $.fetch?.get<citysDatasType>('https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-D0047-091',{
             queryParams:{
@@ -117,22 +118,23 @@ const Main:FC = ():TSX => {
         })
 
         const getIp = await $.fetch?.get<string>('https://api.ipify.org',{ returnType:'text' })
-        const getGeo = await $.fetch?.get<{ ll:number[] }>(`https://proxyservice-1-t7335739.deta.app/uts/get_geo/${btoa(getIp?.data!)}`)
+        const getGeo = await $.fetch?.get<{ latitude:number, longitude: number }>(`https://proxy-service-three.vercel.app/uts/get_geo/${btoa(getIp?.data!)}`)
 
         if(citysDatasRes?.data){
-            citysDatasTemp = citysDatasRes.data.records?.locations[0].location
+            citysDatasTemp = citysDatasRes.data.records?.Locations[0].Location
 
             optionListTemp = filterOptionData(citysDatasTemp,'citys')
         }
 
+
         if(citysBlocksDatasRes.length > 0){
-            citysBlocksDatasTemp = $.sum($.maps(citysBlocksDatasRes,({ location }:{ location:citysBlocksDatasObjType[] }) => 
-                $.sort($.maps(location,(dataRow:citysBlocksDatasObjType) => ({
-                    blockGeoCode:dataRow.geocode,
-                    blockName:dataRow.locationName,
-                    blockLat:dataRow.lat,
-                    blockLon:dataRow.lon,
-                    blockElement:dataRow.weatherElement
+            citysBlocksDatasTemp = $.sum($.maps(citysBlocksDatasRes,({ Location }:{ Location:citysBlocksDatasObjType[] }) => 
+                $.sort($.maps(Location,(dataRow:citysBlocksDatasObjType) => ({
+                    blockGeoCode:dataRow.Geocode,
+                    blockName:dataRow.LocationName,
+                    blockLat:dataRow.Latitude,
+                    blockLon:dataRow.Longitude,
+                    blockElement:dataRow.WeatherElement
                 })),(a:repackCitysBlocksDatasObjType,b:repackCitysBlocksDatasObjType) => parseInt(a.blockGeoCode) - parseInt(b.blockGeoCode))
             ),(a:any[],b:repackCitysBlocksDatasObjType[]) => a.concat(b),[]) as repackCitysBlocksDatasObjType[]
         }
@@ -142,7 +144,7 @@ const Main:FC = ():TSX => {
             citysBlocksDatas:citysBlocksDatasTemp,
             citysDatas:citysDatasTemp,
             optionList:optionListTemp,
-            currentLatLon:getGeo?.data?.ll!,
+            currentLatLon: [getGeo?.data?.latitude!, getGeo?.data?.longitude!],
             rwdStatus: window.innerWidth <= 414
         }))
 
@@ -163,7 +165,7 @@ const Main:FC = ():TSX => {
 
     const choiceCity:(cityCode:string,type:string) => void = (cityCode,type) => {
         if(type === 'citys'){
-            let filterItem = $.filter(citysDatas,({ geocode }:citysDatasObjType):any => cityCode === geocode) as citysDatasObjType[]
+            let filterItem = $.filter(citysDatas,({ Geocode }:citysDatasObjType):any => cityCode === Geocode) as citysDatasObjType[]
             filterItem = $.maps(filterItem,item => ({
                 ...item,
                 renderAreaBlock:$.filter(citysBlocksDatas,({ blockGeoCode }:repackCitysBlocksDatasObjType):any => cityCode.slice(0,5) === blockGeoCode.slice(0,5)) as repackCitysBlocksDatasObjType[],
@@ -206,52 +208,53 @@ const Main:FC = ():TSX => {
         currrentOptionListType:type,
         optionList:filterOptionData(filterData,type)
     }))
-    
+
     const renderDataElemet:(type:string,data:citysDatasObjType[]) => TSX = (type,data) => {
         let weekItem:weekItemType | undefined = undefined
-        let singleTownData:singleTownObjType[] = []
-        const [{ locationName,weatherElement,areaBlock,renderAreaBlock }] = data
-        const [rainPercent,equalTemp,wetEqualPercent,comferMinPercent,,maxFeelTemp,weatherSignState,comferMaxPercent,minTemp,uiv,weatherDesc,minFeelTemp,maxTemp] = weatherElement
+        let singleTownData:singleTownObjType[] = [] 
+        
+        const [{ LocationName,WeatherElement,areaBlock,renderAreaBlock }] = data
+        const [equalTemp,maxTemp,minTemp,,wetEqualPercent,maxFeelTemp,minFeelTemp,comferMaxPercent,comferMinPercent,,,rainPercent,weatherSignState,uiv,weatherDesc] = WeatherElement
 
-        const filterCityObj:filterCityObjType | returnFilterCityObjType = {
+        const filterCityObj:filterCityObjType | returnFilterCityObjType = { 
             [type]:{
-                cityName: locationName,
-                minTemp: convertMatchSign<string>('temperatureSign',minTemp?.time[0].elementValue[0].value),
-                maxTemp: convertMatchSign<string>('temperatureSign',maxTemp?.time[0].elementValue[0].value),
-                minFeelTemp: convertMatchSign<string>('temperatureSign',minFeelTemp?.time[0].elementValue[0].value),
-                maxFeelTemp: convertMatchSign<string>('temperatureSign',maxFeelTemp?.time[0].elementValue[0].value),
-                equalTemp: convertMatchSign<string>('temperatureSign',equalTemp?.time[0].elementValue[0].value),
-                comferMinPerc: convertMatchSign<string>('percentSign',comferMinPercent?.time[0].elementValue[0].value),
-                comferMaxPerc: convertMatchSign<string>('percentSign',comferMaxPercent?.time[0].elementValue[0].value),
-                rainNightPerc: convertMatchSign<string>('percentSign',rainPercent?.time[1].elementValue[0].value),
-                rainMoringPerc: convertMatchSign<string>('percentSign',rainPercent?.time[0].elementValue[0].value),
-                uivLevel: uiv?.time[0].elementValue[0].value,
-                uivDesc: uiv?.time[0].elementValue[1].value,
-                wetEqualPerc: convertMatchSign<string>('percentSign',wetEqualPercent?.time[0].elementValue[0].value),
-                weatherSign: weatherSignState?.time[0].elementValue[0].value,
-                weatherSignState: convertMatchSign<TSX>('transWeatherIcon',weatherSignState?.time[0].elementValue[1].value),
-                weatherNightDesc: weatherDesc?.time[1].elementValue[0].value,
-                weatherMoringDesc:weatherDesc?.time[0].elementValue[0].value,
+                cityName: LocationName,
+                minTemp: convertMatchSign<string>('temperatureSign',minTemp?.Time[0].ElementValue[0].MinTemperature),
+                maxTemp: convertMatchSign<string>('temperatureSign',maxTemp?.Time[0].ElementValue[0].MaxTemperature),
+                minFeelTemp: convertMatchSign<string>('temperatureSign',minFeelTemp?.Time[0].ElementValue[0].MinApparentTemperature),
+                maxFeelTemp: convertMatchSign<string>('temperatureSign',maxFeelTemp?.Time[0].ElementValue[0].MaxApparentTemperature),
+                equalTemp: convertMatchSign<string>('temperatureSign',equalTemp?.Time[0].ElementValue[0].Temperature),
+                comferMinPerc: convertMatchSign<string>('percentSign',comferMinPercent?.Time[0].ElementValue[0].MinComfortIndex),
+                comferMaxPerc: convertMatchSign<string>('percentSign',comferMaxPercent?.Time[0].ElementValue[0].MaxComfortIndex),
+                rainNightPerc: convertMatchSign<string>('percentSign',rainPercent?.Time[1].ElementValue[0].ProbabilityOfPrecipitation),
+                rainMoringPerc: convertMatchSign<string>('percentSign',rainPercent?.Time[0].ElementValue[0].ProbabilityOfPrecipitation),
+                uivLevel: uiv?.Time[0].ElementValue[0].UVIndex,
+                uivDesc: uiv?.Time[0].ElementValue[0].UVExposureLevel,
+                wetEqualPerc: convertMatchSign<string>('percentSign',wetEqualPercent?.Time[0].ElementValue[0].RelativeHumidity),
+                weatherSign: weatherSignState?.Time[0].ElementValue[0].Weather,
+                weatherSignState: convertMatchSign<TSX>('transWeatherIcon',weatherSignState.Time[0].ElementValue[0].WeatherCode),
+                weatherNightDesc: weatherDesc?.Time[1].ElementValue[0].WeatherDescription,
+                weatherMoringDesc:weatherDesc?.Time[0].ElementValue[0].WeatherDescription,
                 areaBlock
             },
             tomorrow:{
-                cityName: locationName,
-                minTemp: convertMatchSign<string>('temperatureSign',minTemp.time[3].elementValue[0].value),
-                maxTemp: convertMatchSign<string>('temperatureSign',maxTemp.time[2].elementValue[0].value),
-                minFeelTemp: convertMatchSign<string>('temperatureSign',minFeelTemp.time[2].elementValue[0].value),
-                maxFeelTemp: convertMatchSign<string>('temperatureSign',maxFeelTemp.time[2].elementValue[0].value),
-                equalTemp: convertMatchSign<string>('temperatureSign',equalTemp.time[2].elementValue[0].value),
-                comferMinPerc: convertMatchSign<string>('percentSign',comferMinPercent.time[2].elementValue[0].value),
-                comferMaxPerc: convertMatchSign<string>('percentSign',comferMaxPercent.time[2].elementValue[0].value),
-                rainNightPerc: convertMatchSign<string>('percentSign',rainPercent.time[2].elementValue[0].value),
-                rainMoringPerc: convertMatchSign<string>('percentSign',rainPercent.time[3].elementValue[0].value),
-                uivLevel: uiv.time[1].elementValue[0].value,
-                uivDesc: uiv.time[1].elementValue[1].value,
-                wetEqualPerc: convertMatchSign<string>('percentSign',wetEqualPercent.time[2].elementValue[0].value),
-                weatherSign: weatherSignState.time[1].elementValue[0].value,
-                weatherSignState: convertMatchSign<TSX>('transWeatherIcon',weatherSignState.time[1].elementValue[1].value),
-                weatherNightDesc: weatherDesc.time[2].elementValue[0].value,
-                weatherMoringDesc: weatherDesc.time[3].elementValue[0].value,
+                cityName: LocationName,
+                minTemp: convertMatchSign<string>('temperatureSign',minTemp.Time[3].ElementValue[0].MinTemperature),
+                maxTemp: convertMatchSign<string>('temperatureSign',maxTemp.Time[2].ElementValue[0].MaxTemperature),
+                minFeelTemp: convertMatchSign<string>('temperatureSign',minFeelTemp.Time[2].ElementValue[0].MinApparentTemperature),
+                maxFeelTemp: convertMatchSign<string>('temperatureSign',maxFeelTemp.Time[2].ElementValue[0].MaxApparentTemperature),
+                equalTemp: convertMatchSign<string>('temperatureSign',equalTemp.Time[2].ElementValue[0].Temperature),
+                comferMinPerc: convertMatchSign<string>('percentSign',comferMinPercent.Time[2].ElementValue[0].MinComfortIndex),
+                comferMaxPerc: convertMatchSign<string>('percentSign',comferMaxPercent.Time[2].ElementValue[0].MaxComfortIndex),
+                rainNightPerc: convertMatchSign<string>('percentSign',rainPercent.Time[2].ElementValue[0].ProbabilityOfPrecipitation),
+                rainMoringPerc: convertMatchSign<string>('percentSign',rainPercent.Time[3].ElementValue[0].ProbabilityOfPrecipitation),
+                uivLevel: uiv.Time[1].ElementValue[0].UVIndex,
+                uivDesc: uiv.Time[1].ElementValue[0]?.UVExposureLevel,
+                wetEqualPerc: convertMatchSign<string>('percentSign',wetEqualPercent.Time[2].ElementValue[0].RelativeHumidity),
+                weatherSign: weatherSignState.Time[1].ElementValue[0].Weather,
+                weatherSignState: convertMatchSign<TSX>('transWeatherIcon',weatherSignState.Time[1].ElementValue[0].WeatherCode),
+                weatherNightDesc: weatherDesc.Time[2].ElementValue[0].WeatherDescription,
+                weatherMoringDesc: weatherDesc.Time[3].ElementValue[0].WeatherDescription,
                 areaBlock
             },
         }[type] as returnFilterCityObjType
@@ -260,30 +263,30 @@ const Main:FC = ():TSX => {
             const filterDate:Set<string> = new Set<string>()
             const [{ blockElement }] = areaBlock!
 
-            const [,weatherSignStateForTown,feelTempForTown,tempForTown,wetEqualPercentForTown,comferPercentForTown,] = blockElement
-            
+            const [tempForTown,,wetEqualPercentForTown,feelTempForTown,comferPercentForTown,,,,weatherSignStateForTown,] = blockElement
+
             const repackData = [
-                ...weatherSignStateForTown.time.map(({ startTime,endTime,elementValue }) => {
-                    const [{ value:value1 },{ value:value2 }] = elementValue
-                    return { startTime,endTime,valueGroup:[value1,convertMatchSign<string>('transWeatherIcon',value2)] }
+                ...weatherSignStateForTown.Time.map(({ StartTime: startTime, EndTime: endTime, ElementValue: elementValue }) => {
+                    const [{ Weather:value1 , WeatherCode: value2 }] = elementValue
+                    return { startTime,endTime,valueGroup:[value1!,convertMatchSign<string>('transWeatherIcon',value2)] }
                 }),
-                ...feelTempForTown.time.map(({ dataTime, elementValue }) => {
-                    const [{ value }] = elementValue
+                ...feelTempForTown.Time.map(({ DataTime: dataTime, ElementValue: elementValue }) => {
+                    const [{ ApparentTemperature :value }] = elementValue
                     const startTime = dataTime!
-                    return { startTime, endTime:'',valueGroup:[value] }
+                    return { startTime, endTime:'',valueGroup:[value!] }
                 }),
-                ...tempForTown.time.map(({ dataTime, elementValue }) => {
-                    const [{ value }] = elementValue
+                ...tempForTown.Time.map(({ DataTime: dataTime, ElementValue: elementValue }) => {
+                    const [{ Temperature: value }] = elementValue
                     const startTime = dataTime!
                     return { startTime,endTime:'',valueGroup:[convertMatchSign<string>('temperatureSign',value)] }
                 }),
-                ...wetEqualPercentForTown.time.map(({ dataTime, elementValue }) => {
-                    const [{ value }] = elementValue
+                ...wetEqualPercentForTown.Time.map(({ DataTime: dataTime, ElementValue: elementValue }) => {
+                    const [{ RelativeHumidity: value }] = elementValue
                     const startTime = dataTime!
                     return { startTime,endTime:'',valueGroup:[convertMatchSign<string>('percentSign',value)] }
                 }),
-                ...comferPercentForTown.time.map(({ dataTime, elementValue }) => {
-                    const [{ value }] = elementValue
+                ...comferPercentForTown.Time.map(({ DataTime: dataTime, ElementValue: elementValue }) => {
+                    const [{ ComfortIndex: value }] = elementValue
                     const startTime = dataTime!
                     return { startTime,endTime:'',valueGroup:[convertMatchSign<string>('percentSign',value)] }
                 })
@@ -300,22 +303,24 @@ const Main:FC = ():TSX => {
             },[] as { startTime:string,endTime:string,valueGroup:string[]}[]).map(item => {
                 const { startTime,endTime:endTimeTemp,valueGroup:[weatherSign,weatherSignState,feelTemp,temp,wetEqualPercent,comferPercent] } = item
                 
-                const [date,] = startTime.split(' ')
+                const startTimeRepack = startTime.split('+')[0].replace('T', ' ')
+                const endTimeRepack = endTimeTemp.split('+')[0].replace('T', ' ')
+                const [date,] = startTimeRepack.split(' ')
                 const [,month,day] = date.split('-')
-                const [,endTimes] = endTimeTemp.split(' ')
-                const endTime = endTimes.split(':').removeLast().join(':')
+                const [,endTimes] = endTimeRepack.split(' ')
+                const endTime = endTimes ? endTimes.split(':').removeLast().join(':') : ''
 
                 filterDate.append(`${month}-${day}`)
 
-                return { startTime,endTime,weatherSign,weatherSignState,feelTemp,temp,wetEqualPercent,comferPercent }
+                return { startTime: startTimeRepack,endTime,weatherSign,weatherSignState,feelTemp,temp,wetEqualPercent,comferPercent }
             })
             
             const [obj1,obj2,] = $.maps($.createArray({ type:'new',item:filterDate }) as string[],(date:string) => ({
                 date,
-                descItem:$.filter(repackData,({ startTime }:{ startTime:string }):any => startTime.match(date)).map(item => ({
+                descItem: $.filter(repackData,({ startTime }:{ startTime:string }):any => startTime.match(date)).map(item => ({
                     ...item,
                     startTime:item.startTime.split(' ')[1].split(':').removeLast().join(':')
-                }))
+                })).filter(row => row.endTime !== '')
             }))
 
             singleTownData = [obj1,obj2]
@@ -325,35 +330,33 @@ const Main:FC = ():TSX => {
             const moringData:weekItemObjType[] = []
             const nightData:weekItemObjType[] = []
 
-            $.createArray({ type:'fake',item:{ random: weatherElement[8].time.length }},(num:number) => {
-           
-                const [,month,date,hour,] = weatherElement[8].time[num].startTime.replace(' ','-').replace(/:/g,'-').split('-')
+            $.createArray({ type:'fake',item:{ random: minTemp.Time.length }},(num:number) => {
+
+                const [,month,date,hour,] = minTemp.Time[num].StartTime.replace('T','-').replace(/:/g,'-').split('+')[0].split('-')
 
                 if (parseInt(hour) === 6) {
                     moringData.push({
                         date: `${month}-${date}`,
-                        weatherDescState: convertMatchSign<TSX>('transWeatherIcon', weatherElement[6].time[num].elementValue[1].value),
-                        weatherDesc: weatherElement[6].time[num].elementValue[0].value,
-                        minTemp:  convertMatchSign<string>('temperatureSign',weatherElement[8].time[num].elementValue[0].value),
-                        maxTemp: convertMatchSign<string>('temperatureSign',weatherElement[12].time[num].elementValue[0].value),
-                        rainPerc: weatherElement[0].time[num].elementValue[0].value.trim() ? `降雨機率 ${convertMatchSign<string>('percentSign',weatherElement[0].time[num].elementValue[0].value)}` : '暫無資料'
+                        weatherDescState: convertMatchSign<TSX>('transWeatherIcon', weatherSignState.Time[num].ElementValue[0].WeatherCode),
+                        weatherDesc: weatherSignState.Time[num].ElementValue[0].WeatherDescription!,
+                        minTemp:  convertMatchSign<string>('temperatureSign',minTemp.Time[num].ElementValue[0].MinTemperature),
+                        maxTemp: convertMatchSign<string>('temperatureSign',maxTemp.Time[num].ElementValue[0].MaxTemperature),
+                        rainPerc:rainPercent.Time[num].ElementValue[0].ProbabilityOfPrecipitation!.trim() ? `降雨機率 ${convertMatchSign<string>('percentSign',rainPercent.Time[num].ElementValue[0].ProbabilityOfPrecipitation)}` : '氣象局暫無資料'
                     })
                 } else if (parseInt(hour) === 18) {
                     nightData.push({
                         date: `${month}-${date}`,
-                        weatherDescState: convertMatchSign<TSX>('transWeatherIcon',weatherElement[6].time[num].elementValue[1].value),
-                        weatherDesc: weatherElement[6].time[num].elementValue[0].value,
-                        minTemp: convertMatchSign<string>('temperatureSign',weatherElement[8].time[num].elementValue[0].value),
-                        maxTemp: convertMatchSign<string>('temperatureSign',weatherElement[12].time[num].elementValue[0].value),
-                        rainPerc: weatherElement[0].time[num].elementValue[0].value.trim() ? `降雨機率 ${convertMatchSign<string>('percentSign',weatherElement[0].time[num].elementValue[0].value)}` : '暫無資料'
+                        weatherDescState: convertMatchSign<TSX>('transWeatherIcon',weatherSignState.Time[num].ElementValue[0].WeatherCode),
+                        weatherDesc: weatherSignState.Time[num].ElementValue[0].WeatherDescription!,
+                        minTemp: convertMatchSign<string>('temperatureSign',minTemp.Time[num].ElementValue[0].MinTemperature),
+                        maxTemp: convertMatchSign<string>('temperatureSign',maxTemp.Time[num].ElementValue[0].MaxTemperature),
+                        rainPerc: rainPercent.Time[num].ElementValue[0].ProbabilityOfPrecipitation!.trim() ? `降雨機率 ${convertMatchSign<string>('percentSign',rainPercent.Time[num].ElementValue[0].ProbabilityOfPrecipitation)}` : '氣象局暫無資料'
                     })
                 }
             })
 
             weekItem = { moringData,nightData }
         }
-
-        console.log(weekItem)
 
         return (
             <div className="row justify-content-center">
@@ -570,7 +573,7 @@ const Main:FC = ():TSX => {
                                                     </div>
                                                     <div className='child-group'>
                                                         {$.maps(weekItem.moringData,({ weatherDescState,weatherDesc:weekWeatherDesc,minTemp:weekMinTemp,maxTemp:weekMaxTemp,rainPerc }:weekItemObjType,index:number) => (
-                                                            <div key={index}>
+                                                            <div className={index % 2 ? 'box-ii' : 'box-i'} key={index}>
                                                                 <span>
                                                                     {weatherDescState}
                                                                     {weekWeatherDesc}
@@ -582,15 +585,17 @@ const Main:FC = ():TSX => {
                                                     </div>
                                                     <div className='child-group'>
                                                         {$.maps(weekItem.nightData,({ weatherDescState,weatherDesc:weekWeatherDesc,minTemp:weekMinTemp,maxTemp:weekMaxTemp,rainPerc }:weekItemObjType,index:number) => (
-                                                            <div key={index}>
-                                                                <span>
-                                                                    {weatherDescState}
-                                                                    {weekWeatherDesc}
-                                                                </span>
-                                                                <span>{weekMinTemp} ~ {weekMaxTemp}</span>
-                                                                <span>{rainPerc}</span>
-                                                            </div>
-                                                        ))}
+                                                            index !== 0 && (
+                                                                <div className={index % 2 ? 'box-i' : 'box-ii'} key={index}>
+                                                                    <span>
+                                                                        {weatherDescState}
+                                                                        {weekWeatherDesc}
+                                                                    </span>
+                                                                    <span>{weekMinTemp} ~ {weekMaxTemp}</span>
+                                                                    <span>{rainPerc}</span>
+                                                                </div>
+                                                            )
+                                                        )).filter((item:weekItemObjType | boolean) => item !== false)}
                                                     </div>
                                                 </div>
                                             </div>
@@ -603,7 +608,7 @@ const Main:FC = ():TSX => {
                                                 <div className="board-body">
                                                     <div>白天</div>
                                                     {$.maps(weekItem.moringData,({ weatherDescState,weatherDesc:weekWeatherDesc,minTemp:weekMinTemp,maxTemp:weekMaxTemp,rainPerc }:weekItemObjType,index:number) => (
-                                                        <div key={index}>
+                                                        <div className={index % 2 ? 'box-ii' : 'box-i'} key={index}>
                                                             <span>
                                                                 {weatherDescState}
                                                                 {weekWeatherDesc}
@@ -614,15 +619,17 @@ const Main:FC = ():TSX => {
                                                     ))}
                                                     <div>夜晚</div>
                                                     {$.maps(weekItem.nightData,({ weatherDescState,weatherDesc:weekWeatherDesc,minTemp:weekMinTemp,maxTemp:weekMaxTemp,rainPerc }:weekItemObjType,index:number) => (
-                                                        <div key={index}>
-                                                            <span>
-                                                                {weatherDescState}
-                                                                {weekWeatherDesc}
-                                                            </span>
-                                                            <span>{weekMinTemp} ~ {weekMaxTemp}</span>
-                                                            <span>{rainPerc}</span>
-                                                        </div>
-                                                    ))}
+                                                        index !== 0 && (
+                                                            <div className={index % 2 ? 'box-i' : 'box-ii'} key={index}>
+                                                                <span>
+                                                                    {weatherDescState}
+                                                                    {weekWeatherDesc}
+                                                                </span>
+                                                                <span>{weekMinTemp} ~ {weekMaxTemp}</span>
+                                                                <span>{rainPerc}</span>
+                                                            </div>
+                                                        )
+                                                    )).filter((item:weekItemObjType | boolean) => item !== false)}
                                                 </div>
                                             </div>
                                         )}
@@ -648,8 +655,8 @@ const Main:FC = ():TSX => {
     useEffect(() => {
         if(citysDatas.length > 0 && currentLatLon.length > 0){
             const [lat,lon] = currentLatLon
-            const [{ geocode }] = $.filter(citysDatas,(item:citysDatasObjType):any => parseFloat(item.lat) + 0.02 >= lat && lon <= parseFloat(item.lon)) as citysDatasObjType[]
-            choiceCity(geocode,'citys')
+            const [{ Geocode }] = $.filter(citysDatas,(item:citysDatasObjType):any => parseFloat(item.Latitude) + 0.02 >= lat && lon <= parseFloat(item.Longitude)) as citysDatasObjType[]
+            choiceCity(Geocode,'citys')
         }
     }, [citysDatas])
     
