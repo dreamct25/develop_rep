@@ -66,5 +66,5 @@
     }
 </style>
 <script lang="ts">
-    export let loadingStatus:boolean = false
+    let { loadingStatus = false } = $props()
 </script>

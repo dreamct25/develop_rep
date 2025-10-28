@@ -8,8 +8,9 @@
                         <div>{$i18n.t('currentPath')}：</div>
                         <div>{currentDirTemp || currentDirEnv}</div>
                     </div>
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <div class="change-path-btn" on:click={() => openLocalSettingModal = true}>
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <div class="change-path-btn" onclick={() => openLocalSettingModal = true}>
                         <FontAwesomeIcon icon={faSync} />
                         <Tooltip pos={{ x:-73, y:-66 }} width={150}>{$i18n.t('changeFolderPath')}</Tooltip>
                     </div>
@@ -26,39 +27,42 @@
     <div class="main">
         {#if !rwdStatus}
             <div class="file-list-header">
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div 
                     class={currentDirTemp ? "prev-btn active" : "prev-btn"}
-                    on:click={actionDictionary}
+                    onclick={actionDictionary}
                 >
                     <FontAwesomeIcon icon={faAngleLeft} />
                     <Tooltip pos={{ x: currentLanguage === 'en' ? -68 : -33,y:-67 }} width={currentLanguage === 'en' ? 150 : 80}>{$i18n.t('prevFolder')}</Tooltip>
                 </div>
                 <div class={isUpload ? 'upload-btn disactive' : 'upload-btn'}>
                     {$i18n.t('uploadBtn')}
-                    <input type="file" title="" disabled={isUpload} class='upload' on:change={inputUploadEvent} multiple={true} />
+                    <input type="file" title="" disabled={isUpload} class='upload' onchange={inputUploadEvent} multiple={true} />
                 </div>
                 <div class="upload-progress-bar">
                     <div class={!['uploadStatus.uploading','uploadStatus.ready'].includes(progressTxt) ? 'upload-progress-bar-inner active' : 'upload-progress-bar-inner'} style="width:{count === -1 ? 0 : count}%;"></div>
                     <div class="progress-text">{['uploadStatus.ready'].includes(progressTxt) ? $i18n.t(progressTxt) : `${$i18n.t(progressTxt)} `}{count !== -1 ? `${Math.floor(count)} %` : ''}</div>
                 </div>
                 <div class="fn-group">
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <div class={listShortIcon ? "fn active" : "fn"} on:click={() => listShortIcon = true}>
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <div class={listShortIcon ? "fn active" : "fn"} onclick={() => listShortIcon = true}>
                         <FontAwesomeIcon icon={faGripHorizontal} />
                         <Tooltip pos={{ x:0,y:-40 }} width={70}>{$i18n.t('shortList')}</Tooltip>
                     </div>
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <div class={!listShortIcon ? "fn active" : "fn"} on:click={() => listShortIcon = false}>
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <div class={!listShortIcon ? "fn active" : "fn"} onclick={() => listShortIcon = false}>
                         <FontAwesomeIcon icon={faList} />
                         <Tooltip pos={{ x:0,y:-40 }} width={70}>{$i18n.t('detailList')}</Tooltip>
                     </div>
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <div class="fn" on:click={shortDate}>
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <div class="fn" onclick={shortDate}>
                         <FontAwesomeIcon icon={listDataDateSort ? faArrowUpShortWide : faArrowDownWideShort} />
                         <Tooltip pos={{ x:0,y:-40 }} width={115}>{$i18n.t(listDataDateSort ? "sortLateDate" : "sortLatestDate")}</Tooltip>
                     </div>
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
                     {#if currentIp}
                         <div class="fn">
                             <FontAwesomeIcon icon={faQrcode} />
@@ -74,14 +78,17 @@
         {:else}
             <div class="file-list-header-rwd">
                 <div class="top">
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
                     <div 
                         class={currentDirTemp ? "prev-btn active" : "prev-btn"}
-                        on:click={actionDictionary}
-                    ><FontAwesomeIcon icon={faAngleLeft} /></div>
+                        onclick={actionDictionary}
+                    >
+                        <FontAwesomeIcon icon={faAngleLeft} />
+                    </div>
                     <div class={isUpload ? 'upload-btn disactive' : 'upload-btn'}>
                         {$i18n.t('uploadBtn')}
-                        <input type="file" title="" disabled={isUpload} class='upload' on:change={inputUploadEvent} multiple={true} />
+                        <input type="file" title="" disabled={isUpload} class='upload' onchange={inputUploadEvent} multiple={true} />
                     </div>
                 </div>
                 <div class="upload-progress-bar">
@@ -89,22 +96,35 @@
                     <div class="progress-text">{['uploadStatus.ready'].includes(progressTxt) ? $i18n.t(progressTxt) : `${$i18n.t(progressTxt)} `}{count !== -1 ? `${Math.floor(count)} %` : ''}</div>
                 </div>
                 <div class="fn-group">
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <div class={listShortIcon ? "fn active" : "fn"} on:click={() => listShortIcon = true}>
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <div class={listShortIcon ? "fn active" : "fn"} onclick={() => listShortIcon = true}>
                         <FontAwesomeIcon icon={faGripHorizontal} />
                     </div>
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <div class={!listShortIcon ? "fn active" : "fn"} on:click={() => listShortIcon = false}>
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <div class={!listShortIcon ? "fn active" : "fn"} onclick={() => listShortIcon = false}>
                         <FontAwesomeIcon icon={faList} />
                     </div>
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <div class="fn" on:click={shortDate}>
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <div class="fn" onclick={shortDate}>
                         <FontAwesomeIcon icon={listDataDateSort ? faArrowUpShortWide : faArrowDownWideShort} />
                     </div>
                 </div>
             </div>
         {/if}
-        <div class="file-list-outer">
+        <div 
+            class="file-list-outer"
+            ontouchstart={e => touchsEventObj = e }
+            {...usePress(
+                () => showOptionList(touchsEventObj),
+                () => ({
+                    timeframe: 1000,
+                    triggerBeforeFinished: true 
+                })
+            )}
+        >
             {#if !listShortIcon}
                 <div class="file-list">
                     {#if foldersItem.length > 0}
@@ -112,25 +132,26 @@
                             <div class="file-list-item">
                                 {#if items.isFolder}
                                     {#if !rwdStatus}
-                                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                                        <!-- svelte-ignore a11y_click_events_have_key_events -->
+                                        <!-- svelte-ignore a11y_no_static_element_interactions -->
                                         <div
-                                            on:click={cdDictionary.bind(undefined,items.fileUrl)}
+                                            onclick={cdDictionary.bind(undefined,items.fileUrl)}
                                             class="folder file-name" 
                                         >
                                             <span><FontAwesomeIcon icon={renderIcon(items.fileType)} />{items.fileName}</span>
-                                            <span>{formatDateTime({ formatDate: items.fileCreateTime, formatType: 'yyyy-MM-dd HH:mm:ss' })}</span>
+                                            <span>{lib.formatDateTime({ formatDate: items.fileCreateTime, formatType: 'yyyy-MM-dd HH:mm:ss' })}</span>
                                         </div>
                                     {:else}
-                                        <!-- svelte-ignore a11y-click-events-have-key-events -->
                                         <div
-                                            on:click={cdDictionary.bind(undefined,items.fileUrl)}
-                                            on:touchstart={e => touchsEventObj = e }
-                                            on:press={() => showOptionList(touchsEventObj)}
-                                            use:press={{ 
-                                                timeframe:1000,
-                                                triggerBeforeFinished: true
-                                            }}
-                                            
+                                            onclick={cdDictionary.bind(undefined,items.fileUrl)}
+                                            ontouchstart={e => touchsEventObj = e }
+                                            {...usePress(
+                                                () => showOptionList(touchsEventObj),
+                                                () => ({
+                                                    timeframe: 1000,
+                                                    triggerBeforeFinished: true 
+                                                })
+                                            )}
                                             class="folder file-name" 
                                         >
                                             <span><FontAwesomeIcon icon={renderIcon(items.fileType)} />{items.fileName}</span>
@@ -143,18 +164,19 @@
                                                 <FontAwesomeIcon icon={renderIcon(items.fileType)} />
                                                 <span>{items.fileName}</span>
                                             </span>
-                                            <span>{formatDateTime({ formatDate: items.fileCreateTime, formatType: 'yyyy-MM-dd HH:mm:ss' })}</span>
+                                            <span>{lib.formatDateTime({ formatDate: items.fileCreateTime, formatType: 'yyyy-MM-dd HH:mm:ss' })}</span>
                                         </div>
                                     {:else}
                                         <div 
                                             class="file-name"
-                                            on:touchstart={e => touchsEventObj = e }
-                                            on:press={() => showOptionList(touchsEventObj)}
-                                            use:press={{ 
-                                                timeframe:1000,
-                                                triggerBeforeFinished: true
-                                            }}
-                                            
+                                            ontouchstart={e => touchsEventObj = e }
+                                            {...usePress(
+                                                () => showOptionList(touchsEventObj),
+                                                () => ({
+                                                    timeframe: 1000,
+                                                    triggerBeforeFinished: true 
+                                                })
+                                            )}
                                         >
                                             <span>
                                                 <FontAwesomeIcon icon={renderIcon(items.fileType)} />
@@ -171,12 +193,14 @@
                         {:else}
                             <div 
                                 class="no-data"
-                                on:touchstart={(e) => touchsEventObj = e }
-                                on:press={() => showOptionList(touchsEventObj)}
-                                use:press={{ 
-                                    timeframe:1000,
-                                    triggerBeforeFinished: true
-                                }}
+                                ontouchstart={(e) => touchsEventObj = e }
+                                {...usePress(
+                                    () => showOptionList(touchsEventObj),
+                                    () => ({
+                                        timeframe: 1000,
+                                        triggerBeforeFinished: true 
+                                    })
+                                )}
                                 
                             >{$i18n.t('noAnyFile')}</div>
                         {/if}
@@ -188,21 +212,23 @@
                         {#each foldersItem as items}
                             {#if items.fileType === '.folder'}
                                 {#if !rwdStatus}
-                                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                                    <div class="file-list-item-folder"on:click={cdDictionary.bind(undefined,items.fileUrl)}>
+                                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                                    <div class="file-list-item-folder"onclick={cdDictionary.bind(undefined,items.fileUrl)}>
                                         <div class="icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
                                         <div class="folder file-name" >{items.fileName}</div>
                                     </div>
                                 {:else}
-                                    <!-- svelte-ignore a11y-click-events-have-key-events -->
                                     <div class="file-list-item-folder"
-                                        on:click={cdDictionary.bind(undefined,items.fileUrl)}
-                                        on:touchstart={e => touchsEventObj = e }
-                                        on:press={() => showOptionList(touchsEventObj)}
-                                        use:press={{ 
-                                            timeframe:1000,
-                                            triggerBeforeFinished: true
-                                        }}
+                                        onclick={cdDictionary.bind(undefined,items.fileUrl)}
+                                        ontouchstart={e => touchsEventObj = e }
+                                        {...usePress(
+                                            () => showOptionList(touchsEventObj),
+                                            () => ({
+                                                timeframe: 1000,
+                                                triggerBeforeFinished: true 
+                                            })
+                                        )}
                                     >
                                         <div class="icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
                                         <div class="folder file-name" >{items.fileName}</div>
@@ -217,7 +243,7 @@
                                                 <div class="img-outer">
                                                     <div class="img-frame">
                                                         <img
-                                                            on:load={(event) => whenLoadImg(items.fileName,event)} 
+                                                            onload={whenLoadImg.bind(undefined, items.fileName)} 
                                                             src={`${API_URL}/preview?f=${btoa(encodeURIComponent(items.fileUrl))}`} 
                                                             alt="" 
                                                         />
@@ -231,12 +257,14 @@
                                     </div>
                                 {:else}
                                     <div class="file-list-item"
-                                        on:touchstart={e => touchsEventObj = e }
-                                        on:press={() => showOptionList(touchsEventObj)}
-                                        use:press={{ 
-                                            timeframe:1000,
-                                            triggerBeforeFinished: true
-                                        }}
+                                        ontouchstart={e => touchsEventObj = e }
+                                        {...usePress(
+                                            () => showOptionList(touchsEventObj),
+                                            () => ({
+                                                timeframe: 1000,
+                                                triggerBeforeFinished: true 
+                                            })
+                                        )}
                                     >
                                         {#if new RegExp('^.*\.(jpg|JPG|gif|GIF|jpeg|JPEG|png|PNG|TIFF|tiff|TIF|tif)$').test(items.fileType)}
                                             <div class="img-outer-frame">
@@ -244,7 +272,7 @@
                                                 <div class="img-outer">
                                                     <div class="img-frame">
                                                         <img
-                                                            on:load={(event) => whenLoadImg(items.fileName,event)} 
+                                                            onload={whenLoadImg.bind(undefined, items.fileName)} 
                                                             src={`${API_URL}/preview?f=${btoa(encodeURIComponent(items.fileUrl))}`} 
                                                             alt="" 
                                                         />
@@ -265,12 +293,14 @@
                         {:else}
                             <div 
                                 class="no-data"
-                                on:touchstart={e => touchsEventObj = e }
-                                on:press={() => showOptionList(touchsEventObj)}
-                                use:press={{ 
-                                    timeframe:1000,
-                                    triggerBeforeFinished: true
-                                }}
+                                ontouchstart={e => touchsEventObj = e }
+                                {...usePress(
+                                    () => showOptionList(touchsEventObj),
+                                    () => ({
+                                        timeframe: 1000,
+                                        triggerBeforeFinished: true 
+                                    })
+                                )}
                             >{$i18n.t('noAnyFile')}</div>
                         {/if}
                     {/if}
@@ -281,8 +311,9 @@
             <div class="option-menu-list">
                 {#each optionMenuItem as menuItem}
                     {#if menuItem.disabled}
-                        <!-- svelte-ignore a11y-click-events-have-key-events -->
-                        <div on:click={menuItem.useMethod} >{$i18n.t(menuItem.label)}</div>
+                        <!-- svelte-ignore a11y_click_events_have_key_events -->
+                        <!-- svelte-ignore a11y_no_static_element_interactions -->
+                        <div onclick={menuItem.useMethod}>{$i18n.t(menuItem.label)}</div>
                     {/if}
                 {/each}
             </div>
@@ -293,10 +324,13 @@
                 <div class="modal-body">
                     <input type="text" bind:value={newDirName} />
                 </div>
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <div class="modal-footer">
-                    <div on:click={toggleModalStatus.bind(undefined,false,'confirm')}>{$i18n.t('modal.footer.confirm')}</div>
-                    <div on:click={toggleModalStatus.bind(undefined,false,'cancel')}>{$i18n.t('modal.footer.cancel')}</div>
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <div onclick={toggleModalStatus.bind(undefined,false,'confirm')}>{$i18n.t('modal.footer.confirm')}</div>
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <div onclick={toggleModalStatus.bind(undefined,false,'cancel')}>{$i18n.t('modal.footer.cancel')}</div>
                 </div>
             </div>
         </div>
@@ -306,16 +340,20 @@
                 <div class="modal-body">
                     <span>{$i18n.t('deleteModal.body',{ name:newDirName })}</span>
                 </div>
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <div class="modal-footer">
-                    <div on:click={toggleDeleteModalStatus.bind(undefined,false,'confirm')}>{$i18n.t('deleteModal.footer.confirm')}</div>
-                    <div on:click={toggleDeleteModalStatus.bind(undefined,false,'cancel')}>{$i18n.t('deleteModal.footer.cancel')}</div>
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <div onclick={toggleDeleteModalStatus.bind(undefined,false,'confirm')}>{$i18n.t('deleteModal.footer.confirm')}</div>
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <div onclick={toggleDeleteModalStatus.bind(undefined,false,'cancel')}>{$i18n.t('deleteModal.footer.cancel')}</div>
                 </div>
             </div>
         </div>
         <div class="language-list">
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <div class="language-name-outer" on:click={toggleLanguageListShow}>
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <div class="language-name-outer" onclick={toggleLanguageListShow}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                     <line x1="48" y1="112" x2="336" y2="112" />
                     <line x1="192" y1="64" x2="192" y2="112" />
@@ -329,17 +367,19 @@
             <div class="options-list-outer">
                 <div class={toggleLanguageList ? 'options-list active' : 'options-list'}>
                     {#each Object.entries(languageOptionList) as item }
-                        <!-- svelte-ignore a11y-click-events-have-key-events -->
-                        <div on:click={changeLanguage.bind(undefined,item[0])}>{item[1]}</div>
+                        <!-- svelte-ignore a11y_click_events_have_key_events -->
+                        <!-- svelte-ignore a11y_no_static_element_interactions -->
+                        <div onclick={changeLanguage.bind(undefined, item[0])}>{item[1]}</div>
                     {/each}
                 </div>
             </div>
         </div>
         <div class={`download-progress-bar-outer ${toggleDownloadModal ? 'active' : ''}`}>
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <div class="close-btn" on:click={() => toggleDownloadModal = false}>
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <!-- <div class="close-btn" onclick={() => toggleDownloadModal = false}>
                 <FontAwesomeIcon icon={faTimes} />
-            </div>
+            </div> -->
             <div class="download-title">
                 <div>
                     <FontAwesomeIcon icon={faDownload} />
@@ -349,11 +389,11 @@
                     <span class={$i18n.language}>{fullFileName || 'no file'}</span>
                 </div>
                 <div>
-                    {formatDateTime({ formatDate: donwloadRemainingTime * 1000, formatType: 'mm : ss' })}
+                    {lib.formatDateTime({ formatDate: donwloadRemainingTime * 1000, formatType: 'mm : ss' })}
                 </div>
             </div>
             <div class="progress-outer">
-                {downloadStatusItem[downloadStatusCode] ? $i18n.t(downloadStatusItem[downloadStatusCode]) : `${downloadPercentCount.toFixed(2)} %`}
+                {downloadStatusItem[downloadStatusCode] ? $i18n.t(downloadStatusItem[downloadStatusCode]) : `${downloadPercentCount.toFixed(2)} % (${downloadSpeed})`}
                 <div class="progress" style={`width: ${downloadPercentCount}%;opacity: ${(downloadPercentCount / 100).toFixed(2)};`}></div>
             </div>
         </div>
@@ -364,13 +404,13 @@
         />
     </div>
 {/if}
-<Loading loadingStatus={loadingStatus} />
-<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div 
     class={`input-modal-outer-frame 
     ${(!getLoccalSettingStatus && getLoccalSettingStatus !== undefined) || openLocalSettingModal ? 'active' : ''}
     `} 
-    on:click={() => openLocalSettingModal = false}
+    onclick={() => openLocalSettingModal = false}
 >
     <div class="modal-outer">
         <div class="modal-header">{$i18n.t((!getLoccalSettingStatus && getLoccalSettingStatus !== undefined) ? 'inputModal.header' : 'inputModal.headerNotFirstTime')}</div>
@@ -381,26 +421,47 @@
             {/if}
         </div>
         <div class="modal-footer">
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <div class="setting-btn" on:click={settingEvent}>{$i18n.t('inputModal.footerBtn')}</div>
+            <div class="setting-btn" onclick={settingEvent}>{$i18n.t('inputModal.footerBtn')}</div>
+        </div>
+    </div>
+</div>
+<div class={`video-convert-time-alert-outer ${toggleVideoConverTimesModal ? 'toggle' : ''} ${toggleVideoConverTimesModalToMin ? 'to-min' : ''}`}>
+    <div class="alert-body">
+        <!-- mark place -->
+        <div class="mask-back">
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <div class="to-min-btn" onclick={() => toggleVideoConverTimesModalToMin = true}>
+                <FontAwesomeIcon icon={faAngleDown} />
+            </div> 
+            <div class="title">{$i18n.t('videoConverting.title')}</div>
+            <div class="convert-progress-bar">
+                <div class={videoConverTimes.percent === 100 ? 'convert-progress-bar-inner active' : 'convert-progress-bar-inner'} style="width:{videoConverTimes.percent === -1 ? 0 : videoConverTimes.percent}%;"></div>
+                <div class="progress-text">{`${videoConverTimes.percent === 100 ? $i18n.t('videoConverting.progressProccesingDoneText') : $i18n.t('videoConverting.progressProccesingText', { percent: videoConverTimes.percent.toFixed(2) })}`}</div>
+            </div>
+            <div class="convert-remain-time">{$i18n.t('videoConverting.progressRemainingTime', { minute: videoConverTimes.remainTime.mins, seconds: videoConverTimes.remainTime.secs })}</div>
+        </div>
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
+        <!-- svelte-ignore a11y_no_static_element_interactions -->
+        <div class="mask-front" onclick={() => toggleVideoConverTimesModalToMin = false}>
+            <div class="icon">
+                <FontAwesomeIcon icon={faFilm} />
+            </div>
+            <div class="convert-progress-bar">
+                <div class={videoConverTimes.percent === 100 ? 'convert-progress-bar-inner active' : 'convert-progress-bar-inner'} style="width:{videoConverTimes.percent === -1 ? 0 : videoConverTimes.percent}%;"></div>
+            </div>
         </div>
     </div>
 </div>
 <div class="footer">
     <h6>{$i18n.t('copyRight')}</h6>
 </div>
-<script lang="ts">
-    interface foldersItemType{
-        fileName:string,
-        fileUrl:string,
-        fileCreateTime:string,
-        isFolder:boolean,
-        fileType:string
-        fileLoadStatus?: boolean
-    }
+<Toast toastMessages={toastMessages} duration={1800} />
+<Loading loadingStatus={loadingStatus} />
 
+<script lang="ts">
     import './styles.scss'
-    import { onMount,afterUpdate } from 'svelte'
+    import { onMount } from 'svelte'
     import { 
         faList,
         faGripHorizontal,
@@ -415,146 +476,142 @@
         faQrcode,
         faFilm,
         faDownload,
-        faTimes,
-        faSync
+        faSync,
+        faAngleDown
     } from '@fortawesome/free-solid-svg-icons';
-    import { FontAwesomeIcon } from 'fontawesome-svelte';
-    import { press } from 'svelte-gestures';
+    import FontAwesomeIcon from 'svelte-fa';
+    import { usePress } from 'svelte-gestures';
     import { QRCodeImage } from "svelte-qrcode-image";
     import Tooltip from '../component/Tooltip.svelte'
     import Loading from '../component/Loading.svelte'
     import DragFrame from '../component/DragFrame.svelte';
     import Video from '../component/Video.svelte';
+    import Toast from '../component/Toast.svelte'
     import { i18n } from '../i18next'
-    // import lib from '../lib/Library'
+    import langs from '../assert/json/lang.json'
+    import lib from '../lib/Library'
     
     // get server onload props
-    let foldersItem:foldersItemType[] = []
-    let currentDirEnv:string = ''
-    let currentIp:string = ''
+    let foldersItem = $state<foldersItemType[]>([])
+    let currentDirEnv = $state<string>('')
+    let currentIp = $state<string>('')
     const API_URL = process.env.API_URL
-    let progressTxt:string = 'uploadStatus.ready'
-    let count:number = -1
-    let currentDirTemp:string = ""
-    let toggleOptionMenu:boolean = false
-    let toggleOptionMenuXY:{ x:number,y:number } = { x:0,y:0 }
-    let toggleModal:boolean = false
-    let toggleDeleteModal:boolean = false
-    let newDirName:string = ""
-    let oldDirName:string = ""
-    let haveExtendsName:boolean = false
-    let currentUseMethod:string = ""
-    let fullFolderUrl:string = ""
-    let fullFileName:string = ""
-    let disabledDisplayOptionMenuItem:boolean = false
-    let isDownload:boolean = false
-    let listShortIcon:boolean = false
-    let listDataDateSort:boolean = false
-    let loadingStatus:boolean = false
-    let fileInStatus:boolean = false
-    let rwdStatus:boolean = false
-    let optionMenuItem:{ 
-        label:string,
-        disabled:boolean
-        useMethod:(event: MouseEvent & { currentTarget: EventTarget & HTMLDivElement; }) => void
-    }[] = []
-    let touchsEventObj:TouchEvent
-    let isUpload:boolean = false
-    let toggleLanguageList:boolean = false
-    let currentLanguage:string = 'en'
-    let mediaM3U8Path:string = ''
-    let toggleDownloadModal:boolean = false
-    let toggleChangeDownloadName:boolean = false
-    let downloadStatusCode:number = 0
-    let downloadPercentCount:number = 0
-    let donwloadRemainingTime:number = 0
-    let getLoccalSettingStatus: boolean | undefined = undefined
-    let createUploadPath:string = ''
-    let isLocalService: boolean = false
-    let openLocalSettingModal: boolean = false
+    let progressTxt = $state<string>('uploadStatus.ready')
+    let count = $state<number>(-1)
+    let currentDirTemp = $state<string>("")
+    let toggleOptionMenu = $state<boolean>(false)
+    let toggleOptionMenuXY:{ x:number, y:number } = { x:0, y:0 }
+    let toggleModal = $state<boolean>(false)
+    let toggleDeleteModal = $state<boolean>(false)
+    let newDirName = $state<string>("")
+    let oldDirName = $state<string>("")
+    let haveExtendsName = $state<boolean>(false)
+    let currentUseMethod = $state<string>("")
+    let fullFolderUrl = $state<string>("")
+    let fullFileName = $state<string>("")
+    let disabledDisplayOptionMenuItem = $state<boolean>(false)
+    let isDownload = $state<boolean>(false)
+    let listShortIcon = $state<boolean>(false)
+    let listDataDateSort = $state<boolean>(false)
+    let loadingStatus = $state<boolean>(false)
+    let fileInStatus = $state<boolean>(false)
+    let rwdStatus = $state<boolean>(false)
+    let optionMenuItem = $state<{ label:string, disabled:boolean, useMethod(): any }[]>([])
+    let touchsEventObj = $state<TouchEvent | undefined>(undefined)
+    let isUpload = $state<boolean>(false)
+    let toggleLanguageList = $state<boolean>(false)
+    let currentLanguage = $state<string>('en')
+    let mediaM3U8Path = $state<string>('')
+    let toggleDownloadModal = $state<boolean>(false)
+    let downloadStatusCode = $state<number>(0)
+    let downloadPercentCount = $state<number>(0)
+    let donwloadRemainingTime = $state<number>(0)
+    let downloadSpeed = $state<string>('')
+    let getLoccalSettingStatus = $state<boolean | undefined>(undefined)
+    let createUploadPath = $state<string>('')
+    let isLocalService = $state<boolean>(false)
+    let openLocalSettingModal = $state<boolean>(false)
+    let toggleVideoConverTimesModal = $state<boolean>(false)
+    let toggleVideoConverTimesModalToMin = $state<boolean>(false)
+    let videoConverTimes = $state<{ percent: number, remainTime: { mins: number, secs: number } }>({ percent: -1, remainTime: { mins: 0, secs: 0 } })
+    let toastMessages = $state<{ message: string, status: 'success' | 'error' | 'info' }>({ message: '', status: 'success' })
     const downloadStatusItem: Record<number,string> = {
         [downloadStatusCode]: '',
         0: 'downloadStatusGroup.prepareDownload',
         4: 'downloadStatusGroup.convertFile', 
         5: 'downloadStatusGroup.done'
     }
-    const languageOptionList:{[key:string]:string} = {
-        en:'English (en-US)',
-        zh:'繁體中文 (zh-TW)'
-    }
+    const languageOptionList: Record<string, string> = langs
 
-    afterUpdate(() => {
+    $effect(() => {
         document.querySelector('.app')?.classList[!getLoccalSettingStatus ? 'add' : 'remove']('disable')
 
         document.title = $i18n.t('webTitle')
-    })
 
-    $:{ // reactive change disabled status
         optionMenuItem = [{
             label:'optionMenuItem.previewImg',
             disabled: new RegExp('^.*\.(jpg|JPG|gif|GIF|jpeg|JPEG|png|PNG|TIFF|tiff|TIF|tif)$').test(fullFolderUrl),
-            useMethod:():void => previewMedia(fullFolderUrl,true)
+            useMethod: previewMedia.bind(undefined, fullFolderUrl, true)
         },{
             label:'optionMenuItem.previewVideo',
             disabled: new RegExp('^.*\.(mp4|MP4|mkv|MKV|mpeg|MPEG|mov|MOV)$').test(fullFolderUrl),
-            useMethod:():void => previewMedia(fullFolderUrl,false)
+            useMethod: previewMedia.bind(undefined, fullFolderUrl, false)
         },{
             label:'optionMenuItem.newFolder',
-            disabled: true,
-            useMethod:():void => toggleModalStatus(true,'create_label') 
+            disabled: !disabledDisplayOptionMenuItem,
+            useMethod: toggleModalStatus.bind(undefined, true, 'create_label') 
         },{
             label:'optionMenuItem.rename',
             disabled: disabledDisplayOptionMenuItem,
-            useMethod:():void => toggleModalStatus(true,'rename_label') 
+            useMethod: toggleModalStatus.bind(undefined, true, 'rename_label') 
         },{
             label:'optionMenuItem.delete',
             disabled: disabledDisplayOptionMenuItem,
-            useMethod:():void => toggleDeleteModalStatus(true,'open')
+            useMethod: toggleDeleteModalStatus.bind(undefined, true, 'open')
         },{
             label:'optionMenuItem.download',
             disabled: isDownload,
-            useMethod:():Promise<void> => downloadFile(fullFolderUrl)
+            useMethod: downloadFile.bind(undefined, fullFolderUrl)
         }]
-
-        $i18n.changeLanguage(currentLanguage)
-    }
+    })
 
     const toggleLanguageListShow:() => void = () => toggleLanguageList = !toggleLanguageList
 
-    const changeLanguage:(lang:string) => void = lang => {
+    const changeLanguage:(lang: string) => void = lang => {
         currentLanguage = lang
 
         localStorage.setItem('lang',lang)
 
         toggleLanguageList = false
-    }
 
-    const formatDateTime = (format:{
-        formatDate: string | globalThis.Date | number
-        formatType: string
-        toROCYear?: boolean
-        localCountryTime?: number}
-    ) => {
-
-        const localCountryTime: number = ('localCountryTime' in format ? format.localCountryTime ?? 0 : 8) * 60 * 60 * 1000
-        const dateStr: string = new Date(typeof format.formatDate === 'number' ? format.formatDate : +new Date(format.formatDate) + localCountryTime).toJSON()
-        const dateSplit = dateStr.replace(/T/g, '-').replace(/:/g, '-').replace(/\./g, '-').replace(/Z/g, '').split('-')
-        const [yearTemp, month, date, hour, minute, second, milliSecond] = dateSplit
-
-        const year = format?.toROCYear ? (parseInt(yearTemp) - 1911).toString() : yearTemp // 更新方法 2023/03/08
-        return format.formatType.replace(/yyyy/g, year).replace(/MM/g, month).replace(/dd/g, date).replace(/HH/g, hour).replace(/mm/g, minute).replace(/ss/g, second).replace(/ms/g, milliSecond)
+        $i18n.changeLanguage(lang)
     }
 
     const shortDate:() => void = () => {
         listDataDateSort = !listDataDateSort
 
-        foldersItem = foldersItem.sort((a:foldersItemType,b:foldersItemType) => {
+        foldersItem = lib.sort(foldersItem, (a, b) => {
            return listDataDateSort ? +new Date(b.fileCreateTime) - +new Date(a.fileCreateTime) : +new Date(a.fileCreateTime) - +new Date(b.fileCreateTime) 
         })
     }
 
-    const whenLoadImg:(fileName: string,{ target }:Event) => any = (fileName,{ target }) => {
-        const findIndex = foldersItem.findIndex(row => row.fileName === fileName)
+    const formatVideoRemainTime:(seconds: number) => { mins: number, secs: number } = seconds => {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return { mins, secs }
+    }
+
+    const formatSpeed:(bytesPerSecond: number) => string = bytesPerSecond => {
+        
+        if (bytesPerSecond < 1024 * 1024) {
+            return `${(bytesPerSecond / 1024).toFixed(2)} KB/s`;
+        }
+
+        return `${(bytesPerSecond / (1024 * 1024)).toFixed(2)} MB/s`;
+    }
+
+    const whenLoadImg:(fileName: string) => any = fileName => {
+        const findIndex = lib.findIndexOfObj(foldersItem, row => row.fileName === fileName)
         foldersItem[findIndex].fileLoadStatus = true
     }
 
@@ -576,7 +633,7 @@
     }
 
     // create、rename modal
-    const toggleModalStatus:(status:boolean,method:string) => void = (status,method) => {
+    const toggleModalStatus:(status: boolean, method: string) => Promise<void> = async (status, method) => {
         
         if(method.includes('label')) currentUseMethod = method.split('_')[0]
 
@@ -585,29 +642,34 @@
         toggleModal = status
 
         if(method === 'confirm'){
+
             if(currentUseMethod === 'create'){
-                fetch(`${API_URL}/api/create_dir`,{
-                    method:'post',
-                    headers:{ "Content-Type":"application/json" },
-                    body:JSON.stringify({ folderName:newDirName,folderUrl:currentDirTemp || currentDirEnv })
-                }).then(res => res.json()).then(() => {
-                    newDirName = ''
-                    currentUseMethod = ''
-                    getUploadDirs(currentDirTemp)
-                }).catch(err => console.log(err))
+
+                await lib.fetch.post(`${API_URL}/api/create_dir`, {
+                    headers: { "Content-Type":"application/json" },
+                    data: { folderName:newDirName,folderUrl: btoa(encodeURIComponent(currentDirTemp || currentDirEnv)) }
+                })
+
+                newDirName = ''
+                currentUseMethod = ''
+                getUploadDirs(currentDirTemp)
             }
             
             if(currentUseMethod === 'rename'){
-                fetch(`${API_URL}/api/rename_dir`,{
-                    method:'post',
-                    headers:{ "Content-Type":"application/json" },
-                    body:JSON.stringify({ oldFolderName:oldDirName, newFolderName:newDirName,folderUrl:currentDirTemp || currentDirEnv })
-                }).then(res => res.json()).then(() => {
-                    newDirName = ''
-                    currentUseMethod = ''
-                    oldDirName = ''
-                    getUploadDirs(currentDirTemp)
-                }).catch(err => console.log(err))
+
+                await lib.fetch.post(`${API_URL}/api/rename`, {
+                    headers: { "Content-Type":"application/json" },
+                    data: { 
+                        oldName:oldDirName, 
+                        newName:newDirName, 
+                        url: btoa(encodeURIComponent(currentDirTemp || currentDirEnv)) 
+                    }
+                })
+
+                newDirName = ''
+                currentUseMethod = ''
+                oldDirName = ''
+                getUploadDirs(currentDirTemp)
             }
         }
 
@@ -617,26 +679,23 @@
         }
     }
 
-    const toggleDeleteModalStatus:(status:boolean,method:string) => void = (status,method) => {
-        if(method === 'confirm'){
-            deleteFile(fullFolderUrl)
-        }
-
+    const toggleDeleteModalStatus:(status: boolean, method: string) => Promise<void> = async (status,method) => {
+        if(method === 'confirm') await deleteFile(fullFolderUrl)
         toggleDeleteModal = status
     }
 
-    const dragenter:(e:DragEvent) => void = e => {
+    const dragenter:(e: DragEvent) => void = e => {
         e.stopPropagation();
         e.preventDefault();
     }
     
-    const dragover:(e:DragEvent) => void = e => {
+    const dragover:(e: DragEvent) => void = e => {
         e.stopPropagation();
         e.preventDefault();
         fileInStatus = true
     }
     
-    const drop:(e:DragEvent) => void = e => {
+    const drop:(e: DragEvent) => void = e => {
         e.stopPropagation();
         e.preventDefault();
 
@@ -646,18 +705,18 @@
         fileInStatus = false
     }
 
-    const inputUploadEvent:(e:Event) => void = e => {
+    const inputUploadEvent:(e: Event) => void = e => {
         const files = (e.target as HTMLInputElement).files!
         uploadFile(files);
-        (e.target as HTMLInputElement).value = '';
+        lib.typeFix<HTMLInputElement>(e.target).value = '';
     }
 
     // upload file
-    const uploadFile:(filesList:FileList) => void = filesList => {
+    const uploadFile:(filesList: FileList) => void = filesList => {
         const formData = new FormData()
         formData.append('folderUrl',currentDirTemp || currentDirEnv);
 
-        Array.from(filesList).forEach((files:any) => formData.append('files',files))
+        lib.each(lib.createArray<File, FileList>({ type: 'new', item: filesList }), files => formData.append('files',files))
         
         count = -1
         isUpload = true
@@ -690,7 +749,7 @@
     // download file
     const downloadFile:(url:string) => Promise<void> = async url => {
 
-        const [fileDetails] = foldersItem.filter(row => row.fileUrl === url)
+        const [fileDetails] = lib.filter(foldersItem, row => row.fileUrl === url)
 
         if(!fileDetails) return
 
@@ -698,7 +757,6 @@
         
         const startTime = new Date().getTime();
 
-        toggleChangeDownloadName = true
         toggleDownloadModal = true
         downloadPercentCount = 0
         downloadStatusCode = 0
@@ -730,8 +788,10 @@
 
                     const currentTime = new Date().getTime();
                     const elapsedTime = (currentTime - startTime) / 1000; // pasting time seconds
-                    const downloadSpeed = loaded / elapsedTime; // download Speed
-                    donwloadRemainingTime = (total - loaded) / downloadSpeed; // remaining time seconds
+                    const downloadSpeedTemp = loaded / elapsedTime; // download Speed
+
+                    donwloadRemainingTime = (total - loaded) / downloadSpeedTemp; // remaining time seconds
+                    downloadSpeed = formatSpeed(downloadSpeedTemp)
 
                     controller.enqueue(value);
 
@@ -747,73 +807,114 @@
 
         const a = document.createElement('a');
         a.href = createUrl;
-        a.download = fileDetails.fileName
-        document.body.appendChild(a);
-
+        a.download = fullFileName
+        lib('.app').appendDom(a)
         a.click();
 
         URL.revokeObjectURL(createUrl)
-        document.body.removeChild(a)
+        lib('.app').removeChildDom(a)
 
         downloadStatusCode = 5
-        toggleChangeDownloadName = false
+        toggleDownloadModal = false
+        toastMessages = { message: $i18n.t('downloadStatusGroup.doneMsg', { fileName: fullFileName }), status: 'success' }
     }
 
-    const previewMedia:(url:string,isImg: boolean) => void = (url,isImg) => {
+    const previewMedia:(url:string,isImg: boolean) => Promise<void> = async (url,isImg) => {
+        
         if(isImg){
             window.open(`${API_URL}/preview?f=${btoa(encodeURIComponent(url))}`)
             return
         }
 
-        fetch(`${API_URL}/api/convert?f=${btoa(encodeURIComponent(url))}`)
-            .then(res => res.json())
-            .then(async res => {
-                if(res.message === 'success'){
-                    mediaM3U8Path = `${API_URL}${atob(decodeURIComponent(res.result))}`
+        const res = await lib.fetch.get<{ message: string, result: Record<string, any> | string }>(`${API_URL}/api/is_convert_exsited?f=${btoa(encodeURIComponent(url))}`)
+        
+        if(res.data.message === 'is_converting') {
+            toastMessages = { message: $i18n.t('toastMsg.whenConverting', { fileName: (res.data.result as Record<string, any>).fileName }), status: 'info' }
+            return
+        }
+
+        if(res.data.message === 'not_exsited') {
+
+            const evtSource = new EventSource(`${API_URL}/api/convert?f=${btoa(encodeURIComponent(url))}`);
+        
+            evtSource.onmessage = e => {
+
+                const data = JSON.parse(e.data as unknown as string) as any;
+
+                if(data.message === 'progress') {
+
+                    toggleVideoConverTimesModal = true
+
+                    const { convertPer, remaining } =  data.result as { convertPer: string, remaining: number }
+                    
+                    const { mins, secs } = formatVideoRemainTime(remaining)
+                    
+                    videoConverTimes = {
+                        ...videoConverTimes,
+                        percent: parseFloat(convertPer),
+                        remainTime: { mins, secs }
+                    }
                 }
-            })
-            .catch(err => console.log(err))
+
+                if (data.message === 'success') {
+
+                    toastMessages = { message: $i18n.t('toastMsg.videoConverted', { fileName: data.result.fileName }), status: 'success' }
+
+                    if(toggleVideoConverTimesModal) {
+
+                        toggleVideoConverTimesModal = false
+
+                        if(toggleVideoConverTimesModalToMin) toggleVideoConverTimesModalToMin = false
+
+                        videoConverTimes = { percent: -1, remainTime: { mins: 0, secs: 0 } }
+                    }
+
+                    evtSource.close();
+                }
+            }
+
+            return
+        }
+
+        if (res.data.message === 'success') {
+
+            mediaM3U8Path = `${API_URL}${atob(decodeURIComponent(res.data.result as string))}`
+        }
     }
 
     // delete file
-    const deleteFile:(folderUrl:string) => void = folderUrl => {
+    const deleteFile:(folderUrl:string) => Promise<void> = async folderUrl => {
+        
         loadingStatus = true
 
-        fetch(`${API_URL}/api/delete_file`,{
-            method:'post',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({ folderUrl })
-        }).then(res => res.json()).then(res => {
-            toggleOptionMenu = false
-            loadingStatus = false
-            getUploadDirs(currentDirTemp)
-        }).catch(err => alert(err))
+        await lib.fetch.post(`${API_URL}/api/delete_file`, {
+            headers: { "Content-Type":"application/json" },
+            data: { url: btoa(encodeURIComponent(folderUrl)) }
+        })
+
+        toggleOptionMenu = false
+        loadingStatus = false
+        getUploadDirs(currentDirTemp)
     }
 
     // go dictionary
-    const cdDictionary:(url:string) => void = url => {
+    const cdDictionary:(url:string) => Promise<void> = async url => {
         loadingStatus = true
         currentDirTemp = currentDirEnv !== url ? url : ''
 
-        fetch(`${API_URL}/api/cd_dir`,{
-            method:'post',
-            headers:{ 'Content-Type':'application/json' },
-            body:JSON.stringify({ dir:url })
-        }).then(res => res.json()).then((res:any) => {
-            foldersItem = res.data
-            loadingStatus = false
-        }).catch(err => {
-            loadingStatus = false
-            console.log(err)
+        const result = await lib.fetch.post<{ data: foldersItemType[] }>(`${API_URL}/api/cd_dir`, {
+            headers: { "Content-Type":"application/json" },
+            data: { dir: btoa(encodeURIComponent(url)) }
         })
+
+        foldersItem = result.data.data
+        loadingStatus = false
     }
 
     // change current dictionary
-    const actionDictionary:() => void = () => {
+    const actionDictionary:() => Promise<void> = async () => {
         if (currentDirTemp === '') {
-            cdDictionary(currentDirEnv)
+            await cdDictionary(currentDirEnv)
             return
         }
 
@@ -827,102 +928,116 @@
     }
 
     // get upload dictionary
-    const getUploadDirs:(path:string) => void = path => {
+    const getUploadDirs:(path:string) => Promise<void> = async path => {
+        
         loadingStatus = true
 
-        fetch(`${API_URL}/api/get_upload_dirs`,{
-            method:'post',
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({ folderUrl:path || currentDirEnv })
+        const result = await lib.fetch.post<{ data: foldersItemType[] }>(`${API_URL}/api/get_upload_dirs`, {
+            headers: { "Content-Type":"application/json" },
+            data: { folderUrl: btoa(encodeURIComponent(path || currentDirEnv)) }
         })
-        .then(resDir => resDir.json())
-        .then(resDir => {
-            foldersItem = resDir.data
-            loadingStatus = false
-        })
-        .catch(err => console.log(err))
+
+        foldersItem = result.data.data
+        loadingStatus = false
     }
 
     // show option menu when click right on mouse
     const showOptionList:(e:any) => void = e => {
+        
         if(e){
-            if((e.target as HTMLDivElement).nodeName === 'A') return
 
-            if(!['upload','prev-btn'].includes((e.target as HTMLDivElement).className)){
+            // prevent dynamic auto download not working
+            if(lib.typeFix<HTMLDivElement>(e.target).nodeName === 'A') return
+
+            if(!lib.includes(['upload','prev-btn'], lib.typeFix<HTMLDivElement>(e.target).className)){
                 !rwdStatus && e.preventDefault()
 
                 disabledDisplayOptionMenuItem = false
 
-                if(['no-touch','no-data','file-list-short','file-frame'].includes((e.target as HTMLDivElement).className)){
+                if(lib.includes(['no-touch','no-data','file-list-short','file-list-outer', 'file-frame'], lib.typeFix<HTMLDivElement>(e.target).className)){
                     isDownload = false
-                } else if(['file-list-item-folder','folder file-name'].includes((e.target as HTMLDivElement).className)){
+                } else if(lib.includes(['file-list-item-folder','folder file-name'], lib.typeFix<HTMLDivElement>(e.target).className)){
                     disabledDisplayOptionMenuItem = true
                     isDownload = false
-                } else if(['file-list-item','file-name'].includes((e.target as HTMLDivElement).className)){
+                } else if(lib.includes(['file-list-item','file-name'], lib.typeFix<HTMLDivElement>(e.target).className)){
                     disabledDisplayOptionMenuItem = true
                     isDownload = true
                 }
 
-                const pe = e as PointerEvent
+                const pe = lib.typeFix<PointerEvent>(e) 
 
-                if(pe.pointerType === 'mouse'){
+                if(pe instanceof MouseEvent){
+
                     if(pe.button === 2){
                         toggleOptionMenu = true
                         toggleOptionMenuXY.x = pe.pageX
                         toggleOptionMenuXY.y = pe.pageY
 
-                        if(['file-list-item-folder','file-list-item','file-name','folder file-name'].includes((pe.target as HTMLDivElement).className)){
+                        if(lib.includes(['file-list-item-folder','file-list-item','file-name','folder file-name'], lib.typeFix<HTMLDivElement>(pe.target).className)){
+                            
+                            const element = lib.typeFix<HTMLDivElement>(pe.target);
+
                             if(listShortIcon){
-                                newDirName = ((pe.target as HTMLDivElement).children[1] as HTMLDivElement).innerText.split('\n')[0]!
-                                oldDirName = ((pe.target as HTMLDivElement).children[1] as HTMLDivElement).innerText.split('\n')[0]!
+                                newDirName = lib.typeFix<HTMLDivElement>(element.children[1]).innerText.split('\n')[0]!
+                                oldDirName = lib.typeFix<HTMLDivElement>(element.children[1]).innerText.split('\n')[0]!
                             } else {
-                                newDirName = (pe.target as HTMLDivElement).innerText.split('\n')[0]!
-                                oldDirName = (pe.target as HTMLDivElement).innerText.split('\n')[0]!
+                                const isSafari = new RegExp(/(?=.*apple)/i).test(navigator.vendor.toLowerCase())
+
+                                newDirName = element.innerText.split('\n')[isSafari ? 1 : 0]!
+                                oldDirName = element.innerText.split('\n')[isSafari ? 1 : 0]!
                             }
 
                             const [,newExtendsName] = newDirName.split('.')
 
                             haveExtendsName = newExtendsName !== undefined
 
-                            const [matchFiles] = foldersItem.filter(item => item.fileName === newDirName)
+                            const [matchFiles] = lib.filter(foldersItem, item => item.fileName === newDirName)
 
                             if(!matchFiles) return
 
                             fullFolderUrl = matchFiles.fileUrl
                         }
 
+                        if(lib.includes(['file-list-short','file-list-outer', 'file-frame'], lib.typeFix<HTMLDivElement>(e.target).className)) {
+                            fullFolderUrl = currentDirTemp || currentDirEnv
+                        }
+
                     } else {
                         toggleOptionMenu = false
                     }
-                } else {
-                    const te = e as TouchEvent
 
+                } else {
+                    const te = lib.typeFix<TouchEvent>(e)
+                    
                     if(te.targetTouches){
                         toggleOptionMenu = true
-                        toggleOptionMenuXY.x = te.targetTouches.item(0)!.pageX
+                        toggleOptionMenuXY.x = te.targetTouches.item(0)!.pageX + 20
                         toggleOptionMenuXY.y = te.targetTouches.item(0)!.pageY
-                        
 
-                        if(['file-list-item-folder','file-list-item','file-name','folder file-name'].includes((te.target as HTMLDivElement).className)){
-                            const element = (te.target as HTMLDivElement);
+                        if(lib.includes(['file-list-item-folder','file-list-item','file-name','folder file-name'], lib.typeFix<HTMLDivElement>(te.target).className)){
+                            const element = lib.typeFix<HTMLDivElement>(te.target);
                             
                             if(listShortIcon){
-                                newDirName = (element.children[1] as HTMLDivElement).innerText.split('\n')[0]!
-                                oldDirName = (element.children[1] as HTMLDivElement).innerText.split('\n')[0]!
+                                newDirName = lib.typeFix<HTMLDivElement>(element.children[1]).innerText.split('\n')[0]!
+                                oldDirName = lib.typeFix<HTMLDivElement>(element.children[1]).innerText.split('\n')[0]!
                             } else {
-                                newDirName = (element.children[0].children[1] as HTMLDivElement).innerText
-                                oldDirName = (element.children[0].children[1] as HTMLDivElement).innerText
+                                newDirName = lib.typeFix<HTMLDivElement>(element.children[0].children[1]).innerText
+                                oldDirName = lib.typeFix<HTMLDivElement>(element.children[0].children[1]).innerText
                             }
 
                             const [,newExtendsName] = newDirName.split('.')
 
                             haveExtendsName = newExtendsName !== undefined
 
-                            const [matchFiles] = foldersItem.filter(item => item.fileName === newDirName)
+                            const [matchFiles] = lib.filter(foldersItem, item => item.fileName === newDirName)
 
                             if(!matchFiles) return
 
                             fullFolderUrl = matchFiles.fileUrl
+                        }
+
+                        if(lib.includes(['file-list-short','file-list-outer', 'file-frame'], lib.typeFix<HTMLDivElement>(e.target).className)) {
+                            fullFolderUrl = currentDirTemp || currentDirEnv
                         }
                     }
                 }
@@ -933,15 +1048,15 @@
     const settingEvent:() => Promise<void> = async () => {
         
         if(createUploadPath){
-            const resultI = await fetch(`${API_URL}/api/create_setting`,{ 
-                method:'post',
+
+            const result = await lib.fetch.post<{ message: string }>(`${API_URL}/api/create_setting`,{
                 headers:{ "Content-Type":"application/json" },
-                body:JSON.stringify({ u:btoa(encodeURIComponent(createUploadPath)) }) 
+                data: { u:btoa(encodeURIComponent(createUploadPath)) }
             })
 
-            const resultI_Item = await resultI.json()
+            // const resultI_Item = await resultI.json()
 
-            if(resultI_Item.message !== 'success') return
+            if(result.data.message !== 'success') return
 
             await initFetch()
 
@@ -952,45 +1067,54 @@
     }
 
     const initFetch:() => Promise<void> = async () => {
-        const resFirst = await fetch(`${API_URL}/api/check_setting_exist`)
-        const resFirstItem = await resFirst.json()
 
-        if(resFirstItem.message === 'empty'){
+        const resCheckSettingExist = await lib.fetch.get<{ message: string }>(`${API_URL}/api/check_setting_exist`)
+        // const resFirstItem = await resFirst.json()
+
+        if(resCheckSettingExist.data.message === 'empty'){
             getLoccalSettingStatus = false
             return
         }
 
-        const res = await fetch(`${API_URL}/api/get_upload_dirs`,{ method:'post',headers:{ "Content-Type":"application/json" },body:JSON.stringify({ folderUrl:'' }) })
-        const resItem = await res.json()
+        const resGetUploadDirs = await lib.fetch.post<{ 
+            data: foldersItemType[],
+            useFolderUrl: string,
+        }>(`${API_URL}/api/get_upload_dirs`,{
+            headers:{ "Content-Type":"application/json" },
+            data: { folderUrl:'' } 
+        })
 
-        const resIp = await fetch(`${API_URL}/api/get_remote_ip`)
-        const resIpItem = await resIp.json()
+        // const resItem = await res.json()
+
+        const resIp = await lib.fetch.get<{ currentIp: string, isLocal: boolean }>(`${API_URL}/api/get_remote_ip`)
+        // const resIpItem = await resIp.json()
 
         getLoccalSettingStatus = true
 
-        foldersItem = resItem.data,
-        currentDirEnv = resItem.useFolderUrl
-        currentIp = resIpItem.currentIp
-        isLocalService = resIpItem.isLocal
-        createUploadPath = resItem.useFolderUrl
+        foldersItem = resGetUploadDirs.data.data,
+        currentDirEnv = resGetUploadDirs.data.useFolderUrl
+        currentIp = resIp.data.currentIp
+        isLocalService = resIp.data.isLocal
+        createUploadPath = resGetUploadDirs.data.useFolderUrl
     }
 
     onMount(async () => {
         rwdStatus = window.innerWidth <= 420
 
-        !rwdStatus && document.addEventListener('contextmenu',showOptionList);
-        !rwdStatus && document.addEventListener('click',showOptionList)
-        document.addEventListener('dragenter',dragenter)
-        document.addEventListener('dragover',dragover)
-        document.addEventListener('drop',drop)
-        document.addEventListener('dragleave',() => fileInStatus = false)
-        document.addEventListener('touchstart',(e) => {
+        !rwdStatus && lib(document).listener('contextmenu', showOptionList);
+        !rwdStatus && lib(document).listener('click', showOptionList)
+        lib(document).listener('dragenter', dragenter)
+        lib(document).listener('dragover', dragover)
+        lib(document).listener('drop', drop)
+        lib(document).listener('dragleave',() => fileInStatus = false)
+        lib(document).listener('touchstart',e => {
+            
             const matchRuleTextGorup:string[] = [
                 'New Folder','Rename','Delete','Download','Preview Image','Preview Video',
                 '新增資料夾','重新命名','刪除','下載','預覽圖片','預覽影片'
             ]
 
-            if(!matchRuleTextGorup.includes((e.target as HTMLDivElement).textContent!)) toggleOptionMenu =false
+            if(!lib.includes(matchRuleTextGorup, lib.typeFix<HTMLDivElement>(e.target).textContent)) toggleOptionMenu =false
         })
 
         if(localStorage.getItem('lang')) {

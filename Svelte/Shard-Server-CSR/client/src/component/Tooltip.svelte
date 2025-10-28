@@ -1,5 +1,5 @@
 <div class="tooltip" style={`transform:translate(${pos.x}px,${pos.y}px);width:${width}px;padding:${padding};`}>
-    <slot />
+    {@render children()}
 </div>
 <style lang="scss" scoped>
     .tooltip{
@@ -30,7 +30,5 @@
     }
 </style>
 <script lang="ts">
-    export let width:number = 0
-    export let pos:{ x:number,y:number } = { x:0,y:0 }
-    export let padding:string = '6px'
+    let { width = 0, pos = { x: 0,y: 0 }, padding = '6px', children } = $props()
 </script>

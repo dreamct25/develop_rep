@@ -48,5 +48,5 @@
     }
 </style>
 <script lang="ts">
-    export let fileIn:boolean = false
+    let { fileIn = false } = $props()
 </script>

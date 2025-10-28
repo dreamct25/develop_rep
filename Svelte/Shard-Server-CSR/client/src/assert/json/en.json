@@ -46,15 +46,26 @@
         "downloadFileName": "File Name",
         "prepareDownload": "Prepare Download ...",
         "convertFile": "Converting File ...", 
-        "done": "Done !"
+        "done": "Done !",
+        "doneMsg": "File {{ fileName }} is download complated !"
     },
     "loadingPhoto": "Loading Photo ...",
-    "copyRight":"CopyRight © 2022-08 ~ 2024-06 Alex Chen. Beta v0.6.5",
+    "copyRight":"CopyRight © 2022-08 ~ 2024-06 Alex Chen. Beta v0.7.0",
     "inputModal" : {
         "header": "Typing Upload Path First",
         "headerNotFirstTime": "Change Upload Path",
         "body": "（You can change path at next time）",
         "footerBtn": "Confirm Setting"
+    },
+    "videoConverting": {
+        "title": "Video Converting\n(Only at first time so\n suggest you don't close the window)",
+        "progressProccesingText": "Converted {{ percent }} %",
+        "progressProccesingDoneText": "Converted done",
+        "progressRemainingTime": "Remaining {{ minute }} m {{ seconds }} s"
+    },
+    "toastMsg": {
+        "whenConverting": "Current {{ fileName }} video is converted yet\nPlease click preview video after convertend.",
+        "videoConverted": "{{ fileName }} video is converted"
     },
     "changeFolderPath":"Change Upload Folder"
 }

@@ -46,15 +46,26 @@
         "downloadFileName": "檔名",
         "prepareDownload": "準備下載 ...",
         "convertFile": "轉換檔案中 ...", 
-        "done": "完成 !"
+        "done": "完成 !",
+        "doneMsg": "檔案 {{ fileName }} 已下載完成 !"
     },
     "loadingPhoto": "讀取圖片中 ...",
-    "copyRight":"Alex Chen 版權所有 © 2022-08 ~ 2024-06. Beta v0.6.5",
+    "copyRight":"Alex Chen 版權所有 © 2022-08 ~ 2024-06. Beta v0.7.0",
     "inputModal" : {
         "header": "請先輸入上傳路徑",
         "headerNotFirstTime": "更改上傳路徑",
         "body": "（您可在下次進行更改）",
         "footerBtn": "確認設定"
+    },
+    "videoConverting": {
+        "title": "影片轉換中\n(換僅限第一次 不建議關閉此畫面)",
+        "progressProccesingText": "已轉換 {{ percent }} %",
+        "progressProccesingDoneText": "轉換完成",
+        "progressRemainingTime": "剩餘 {{ minute }} 分 {{ seconds }} 秒"
+    },
+    "toastMsg": {
+        "whenConverting": "當前 {{ fileName }} 影片尚未轉換完成\n請在轉換完成後再預覽",
+        "videoConverted": "{{ fileName }} 影片已換完成"
     },
     "changeFolderPath":"更改上傳路徑"
 }

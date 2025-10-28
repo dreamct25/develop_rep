@@ -3,16 +3,18 @@ import devServer from 'esbuild-plugin-dev-server'
 import sveltePreprocess from 'svelte-preprocess'
 import sveltePlugin from 'esbuild-svelte'
 import { sassPlugin } from 'esbuild-sass-plugin'
+import babel from 'esbuild-plugin-babel'
 
 import fs from 'fs'
 
-const env = process.env.NODE_ENV.trim() === 'development'
+const env = process.env.NODE_ENV
 
 const envObj = {
     development:{
         outDir:'dist',
         minify:false,
         sourcemap:true,
+        isDev: true,
         useDevServer:[
             devServer({
                 public:'./dist',
@@ -30,37 +32,50 @@ const envObj = {
         outDir:'build',
         minify:true,
         sourcemap:false,
+        isDev: false,
         useDevServer:[]
     }
-}[process.env.NODE_ENV.trim()]
+}[env]
+
+console.log(envObj)
 
 build({
     entryPoints:['./src/entry.ts'],
     outfile:`./${envObj.outDir}/bundle.js`,
-    format:'cjs',
+    format: 'esm',
     minify: envObj.minify,
     bundle: true,
     sourcemap: env.sourcemap,
-    target: 'es2015',
-    loader: {
-        '.pem': 'text'
-    },
+    target: ['es2020', 'safari14'],
     plugins:[
-        sveltePlugin({ preprocess: sveltePreprocess({
-            replace:[
-                [/process\.env\.NODE_ENV/g, JSON.stringify(process.env.NODE_ENV)],
-                [/process\.env\.API_URL/g, JSON.stringify(process.env.API_URL)]
-            ],
-        }) }),
+        sveltePlugin({ 
+            preprocess: sveltePreprocess({
+                replace:[
+                    [/process\.env\.NODE_ENV/g, JSON.stringify(env)],
+                    [/process\.env\.API_URL/g, JSON.stringify(process.env.API_URL)]
+                ],
+            }),
+            compilerOptions: {
+                css: 'injected',
+                dev: env.isDev,
+                hmr: env.isDev
+            }
+        }),
+        babel({ 
+            filter: /\.(js)$/,
+            exclude: /node_modules/
+        }),
         sassPlugin(),
-        ...envObj.useDevServer
+        ...envObj.useDevServer,
     ]
 }).then(async () => {
-    if(!env){
+
+    if(!env.isDev){
         await fs.promises.copyFile('./dist/index.html','./build/index.html')
         await fs.promises.copyFile('./dist/favicon.png','./build/favicon.png')
         console.log('\x1b[1;96mProduction Compile Done !\x1b[0;37m\r')
     }
+    
 }).catch(e => {
     console.log(e)
     process.exit(1)

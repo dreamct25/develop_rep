@@ -19,6 +19,7 @@ route.use('/download',async (req,res) => {
 
     res.set({
         'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`,
+	'Content-Type': 'application/octet-stream',
         'Content-Length': size
     });
     
@@ -46,5 +47,7 @@ route.use('/preview',async (req,res) => {
 
     res.end(imgBuffer);
 })
+
+route.use('/',SiteStaticFileReader(path.join(__dirname.replace('\\server\\apis',''),'/client')))
 
 module.exports = route

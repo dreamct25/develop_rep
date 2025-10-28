@@ -4,15 +4,14 @@ const trachBin = require('trash')
 const fs = require('fs')
 const path = require('path')
 const os = require('os')
+const { createHash } = require('crypto')
 const { path: ffmpegPath } = require('@ffmpeg-installer/ffmpeg');
+const { path: ffprobePath } = require('@ffprobe-installer/ffprobe');
 const fmg = require('fluent-ffmpeg')
-const { exec } = require('child_process');
 const $ = require('../lib/Library.min')
 
-// const folderUrl = process.env.UPLOAD_URL
-
-// check folder is exists if not exists then create folder at reference path
-// !fs.existsSync(folderUrl) && fs.mkdirSync(folderUrl,{ recursive:true })
+fmg.setFfmpegPath(ffmpegPath)
+fmg.setFfprobePath(ffprobePath)
 
 const route = Router()
 
@@ -27,6 +26,76 @@ const storage = multer.diskStorage({
 })
 
 const uploadFile = multer({ storage })
+
+const getFileHash = path => $.createPromise((resolve, reject) => {
+    const hash = createHash('sha256');
+    const stream = fs.createReadStream(path);
+
+    stream.on('data', chunk => hash.update(chunk));
+    stream.on('end', () => resolve(hash.digest('hex').substring(0,6)));
+    stream.on('error', reject);
+})
+
+const getVideoInfo = path => $.createPromise((resolve, reject) => {
+    fmg.ffprobe(path, (err, metadata) => {
+        if(err){
+            reject(err)
+            return
+        }
+
+        resolve(metadata)
+    })
+})
+
+const fmgConvertStartHandler = (req, resultHandleFileName, commandLine) => {
+    console.log(`start convert: ${commandLine}`);
+
+    req.app.set('is_converting', resultHandleFileName)
+}
+
+const fmgConvertProcessingHandler = (res, startTransTime, videoDuration, progress) => {
+    const [h, m, s] = progress.timemark.split(':').map(parseFloat);
+    const currentSeconds = h * 3600 + m * 60 + s;
+    const percent = (currentSeconds / videoDuration) * 100;
+
+    const spendTime = (+new Date() - startTransTime) / 1000
+
+    const remainingTime = spendTime / (percent / 100) - spendTime
+
+    console.log(`Processing: ${percent.toFixed(2)}%`);
+
+    res.status(200).write(
+        `data: ${JSON.stringify({
+            message: 'progress', 
+            result: {
+                convertPer: percent.toFixed(2),
+                remaining: Math.abs(remainingTime.toFixed(0))
+            }
+        })}\n\n`
+    )
+}
+
+const fmgConvertEndHandler = (req, res, resultHandleFileName) => {
+    console.log('Processing finished successfully');
+
+    req.app.set('is_converting', '')
+
+    res.status(200).write(
+        `data: ${JSON.stringify({
+            message: 'success', 
+            result: { fileName: resultHandleFileName }
+        })}\n\n`
+    )
+
+    res.end()
+}
+
+const fmgConvertErrorHandler = (err, stdout, stderr) => {
+    console.error(`Error: ${err.message}`);
+    console.error(`ffmpeg stdout: ${stdout}`);
+    console.error(`ffmpeg stderr: ${stderr}`);
+}
+
 
 route.get('/check_setting_exist',async (req,res) => {
     const settingPath = path.join(__dirname.replace('apis',''),`usr/setting`)
@@ -158,7 +227,11 @@ route.post('/get_upload_dirs',async (req,res) => {
 
     const defaultUploadFolderUrl = req.app.get('upload_url')
 
-    const useFolderUrl = req.body.folderUrl || defaultUploadFolderUrl
+    const goFolderUrl = decodeURIComponent(
+        Buffer.from(req.body.folderUrl, 'base64').toString()
+    )
+
+    const useFolderUrl = goFolderUrl || defaultUploadFolderUrl
 
     const files = await fs.promises.readdir(useFolderUrl)
 
@@ -182,7 +255,9 @@ route.post('/get_upload_dirs',async (req,res) => {
 
 // change dictionary api
 route.post('/cd_dir',async (req,res) => {
-    const url = req.body.dir
+    const url = decodeURIComponent(
+        Buffer.from(req.body.dir, 'base64').toString()
+    )
 
     const files = await fs.promises.readdir(url)
 
@@ -209,48 +284,70 @@ route.post('/cd_dir',async (req,res) => {
 route.post('/create_dir',async (req,res) => {
     const { folderName,folderUrl } = req.body
 
-    await fs.promises.mkdir(`${folderUrl}/${folderName}`)
+    const path = decodeURIComponent(
+        Buffer.from(folderUrl, 'base64').toString()
+    )
+
+    await fs.promises.mkdir(`${path}/${folderName}`)
 
     res.status(200).json({ message:'success' })
 })
 
 // rename folder or file api
-route.post('/rename_dir',async (req,res) => {
-    const { oldFolderName,newFolderName,folderUrl } = req.body
+route.post('/rename',async (req,res) => {
+    const { oldName,newName,url } = req.body
 
-    await fs.promises.rename(`${folderUrl}/${oldFolderName}`,`${folderUrl}/${newFolderName}`)
+    const path = decodeURIComponent(
+        Buffer.from(url, 'base64').toString()
+    )
+
+    await fs.promises.rename(`${path}/${oldName}`,`${path}/${newName}`)
 
     res.status(200).json({ message:'success' })
 })
 
 // delete file api
 route.post('/delete_file',async (req,res) => {
-    const { folderUrl } = req.body
+    const { url } = req.body
+
+    const path = decodeURIComponent(
+        Buffer.from(url, 'base64').toString()
+    )
     
-    await trachBin(`${folderUrl}`)
+    await trachBin(path)
 
     res.status(200).json({ message:'success' })
 })
 
-route.get('/convert',async (req,res) => {
+route.get('/is_convert_exsited',async (req,res) => {
+
     const usingPath = decodeURIComponent(
         Buffer.from(req.query.f, 'base64').toString()
     )
-
-    const fmgN = new fmg()
-
-    fmgN.setFfmpegPath(ffmpegPath)
 
     const fileExtend = path.extname(usingPath)
 
     const fileName = path.basename(usingPath).replace(fileExtend,'').replace(/\s/g, '')
 
-    const saveName = Buffer.from(fileName).toString('base64').substring(0,8)
+    const saveName = await getFileHash(usingPath)
 
     const outputPath = path.join(__dirname.replace('apis',''),`.m3u8_list/${saveName}_0/${saveName}_output.m3u8`)
+
+    const getIsConvertingFileName = req.app.get('is_converting')
     
     if(fs.existsSync(outputPath)){
-        res.status(200).json({ 
+
+        if(getIsConvertingFileName === `${fileName}${fileExtend}`) {
+
+            res.status(200).json({
+                message: 'is_converting',
+                result: { fileName: getIsConvertingFileName }
+            })
+
+            return
+        }
+
+        res.status(200).json({
             message: 'success', 
             result: encodeURIComponent(
                 Buffer.from(`/stream/${saveName}_0/${saveName}_output.m3u8`).toString('base64')
@@ -259,101 +356,74 @@ route.get('/convert',async (req,res) => {
         
         return
     }
- 
-    // 設定不同比特率的規格
-    const bitrates = [
-        // { resolution: '426x240', bitrate: '400k' },
-        // { resolution: '640x360', bitrate: '700k' },
-        { resolution: '1280x720', bitrate: '2800k' },
-        // { resolution: '1920x1080', bitrate: '5000k' }
-    ];
 
-    // 添加輸入文件
-    fmgN.addInput(usingPath);
+    if(getIsConvertingFileName) {
 
-    // 設定輸出選項
-    // bitrates.forEach((rate, index) => {
-    //     fmgN.outputOptions([
-    //         `-s:v:${index} ${rate.resolution}`,
-    //         `-c:v:${index} libx264`,
-    //         `-b:v:${index} ${rate.bitrate}`,
-    //         `-c:a:${index} aac`,
-    //         `-b:a:${index} 128k`
-    //     ]);
-    // });
+        res.status(200).json({
+            message: 'is_converting',
+            result: { fileName: getIsConvertingFileName }
+        })
+
+        return
+    }
+
+    res.status(200).json({
+        message: 'not_exsited'
+    })
+})
+
+route.get('/convert',async (req,res) => {
+
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.flushHeaders();
+
+    const usingPath = decodeURIComponent(
+        Buffer.from(req.query.f, 'base64').toString()
+    )
+
+    const fileExtend = path.extname(usingPath)
+
+    const fileName = path.basename(usingPath).replace(fileExtend,'').replace(/\s/g, '')
+
+    const saveName = await getFileHash(usingPath)
+
+    const outputPath = path.join(__dirname.replace('apis',''),`.m3u8_list/${saveName}_0/${saveName}_output.m3u8`)
 
     const tsFilePath = path.join(__dirname.replace('apis',''),`.m3u8_list/${saveName}_%v/v%03d.ts`)
 
-    // 設定 HLS 相關選項
-    fmgN.outputOptions([
-        // '-vf scale_npp=1920:1080',
-        '-c:v h264_nvenc',
-        // '-b:v 5M',
-        // ...['.mkv'].includes(fileExtend) ? ['-c:a: ac3'] : [],
-        // '-b:a: 320k',
-        '-f hls',
-        '-hls_time 30',
-        '-hls_playlist_type vod',
-        '-hls_list_size 0',
+    const videoInfo = await getVideoInfo(usingPath)
+
+    const videoDuration = videoInfo.format.duration
+
+    const startTransTime = +new Date()
+
+    const resultHandleFileName = `${fileName}${fileExtend}`
+
+    const fmgN = new fmg()
+
+    // add input file
+    fmgN.addInput(usingPath);
+
+    // set HLS options
+    fmgN
+    .videoCodec('h264_nvenc')
+    .audioCodec('copy')
+    .outputOptions([
+        '-rc vbr_hq',          // 可變比特率高品質
+        // '-c:a aac',          // audio code
+        '-hls_time 5',         // split every 5 sec in hls
+        '-hls_list_size 0',    // playlist keep all
+        '-f hls',              // HLS format
         `-hls_segment_filename ${tsFilePath}`
     ])
     .output(outputPath)
-    // .on('start', function(commandLine) {
-    //     console.log('Spawned FFmpeg with command: ' + commandLine);
-    // })
-    // .on('progress', function(progress) {
-    //     console.log('Processing: ' + progress.percent + '% done');
-    // })
-    .on('end', function() {
-        console.log('Processing finished successfully');
-
-        res.status(200).json({ 
-            message: 'success', 
-            result: encodeURIComponent(
-                Buffer.from(`/stream/${saveName}_0/${saveName}_output.m3u8`).toString('base64')
-            ) 
-        })
-    })
-    .on('error', function(err, stdout, stderr) {
-        console.error('Error: ' + err.message);
-        console.error('ffmpeg stdout: ' + stdout);
-        console.error('ffmpeg stderr: ' + stderr);
-    })
+    .on('start', fmgConvertStartHandler.bind(this, req, resultHandleFileName))
+    .on('progress', fmgConvertProcessingHandler.bind(this, res, startTransTime, videoDuration))
+    .on('end', fmgConvertEndHandler.bind(this, req, res, resultHandleFileName))
+    .on('error', fmgConvertErrorHandler)
     .run();
-
-    // fmgN.addInput(usingPath).outputOptions([
-    //     '-map 0:0',
-    //     '-map 0:1',
-    //     '-map 0:0',
-    //     '-map 0:1',
-    //     '-s:v:0 2160x3840',
-    //     '-c:v:0 libx264',
-    //     '-b:v:0 2000k',
-    //     '-s:v:1 960x540',
-    //     '-c:v:1 libx264',
-    //     '-b:v:1 365k',
-    //     // '-var_stream_map', '"v:0,a:0 v:1,a:1"',
-    //     '-master_pl_name master.m3u8',
-    //     '-f hls',
-    //     '-max_muxing_queue_size 1024',
-    //     '-hls_time 1',
-    //     '-hls_list_size 0',
-    //     '-hls_segment_filename', 'v%v/fileSequence%d.ts'
-    // ]).output('./video.m3u8')
-    //     .on('start', function (commandLine) {
-    //         console.log('Spawned Ffmpeg with command: ' + commandLine);
-    //     })
-    //     .on('error', function (err, stdout, stderr) {
-    //         console.log('An error occurred: ' + err.message, err, stderr);
-    //     })
-    //     .on('progress', function (progress) {
-    //         console.log('Processing: ' + progress.percent + '% done')
-    //     })
-    //     .on('end', function (err, stdout, stderr) {
-    //         res.status(200).json({ message: 'aaaa' })
-    //         console.log('Finished processing!' /*, err, stdout, stderr*/)
-    //     })
-    //     .run()
 })
 
 module.exports = route

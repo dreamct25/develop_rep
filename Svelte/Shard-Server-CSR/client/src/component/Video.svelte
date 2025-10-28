@@ -1,10 +1,11 @@
 <div class={`video-outer ${useMediaM3U8Path ? 'active' : ''}`}>
     <div class="player-outer">
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class="close-btn" on:click={closeAction}>
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
+        <!-- svelte-ignore a11y_no_static_element_interactions -->
+        <div class="close-btn" onclick={closeAction}>
             <FontAwesomeIcon icon={faTimes} />
         </div>
-        <div class="player" bind:this={playerDom}></div>
+        <div class="player"></div>
     </div>
 </div>
 <style lang="scss" scoped>
@@ -25,7 +26,6 @@
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         
-
         &.active {
             z-index: 999;
             opacity: 1;
@@ -57,28 +57,29 @@
                 left: 0;
                 right: 0;
                 bottom: 0;
+                border-radius: 5px;
+                box-shadow: 0 0 3px rgba(255, 255, 255, .3);
+                overflow: hidden;
             }
         }
     }
 </style>
 <script lang="ts">
-    // export let loadingStatus:boolean = false
-    export let useMediaM3U8Path: string = ''
-    export let closeAction
-
     import ArtPlayers from 'artplayer'
     import HLS from 'hls.js'
     import { faTimes } from '@fortawesome/free-solid-svg-icons';
-    import { FontAwesomeIcon } from 'fontawesome-svelte';
+    import FontAwesomeIcon from 'svelte-fa';
 
     let player: ArtPlayers | undefined = undefined
-    let playerDom: HTMLDivElement | undefined = undefined
 
-    $:{
+    let { useMediaM3U8Path = '', closeAction } = $props()
+
+    $effect(() => {
+
         if(useMediaM3U8Path){
 
-            player = new ArtPlayers.default({
-                container: playerDom!,
+            player = new ArtPlayers({
+                container: '.player',
                 url: useMediaM3U8Path,
                 type: 'm3u8',
                 // autoSize: true,
@@ -91,8 +92,9 @@
                 setting: true,
                 customType: {
                     m3u8: (video, url, art) => {
+
                         if (HLS.isSupported()) {
-                            if (art.hls) art.hls.destroy();
+
                             const hls = new HLS();
                             hls.loadSource(url);
                             hls.attachMedia(video);
@@ -116,5 +118,5 @@
         if(!useMediaM3U8Path && player){
             player.destroy()
         }
-    }
+    })
 </script>
