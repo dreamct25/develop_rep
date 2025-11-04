@@ -61,7 +61,7 @@
 
         &.active{
             opacity: 1;
-            z-index: 10;
+            z-index: 990;
         }
     }
 </style>

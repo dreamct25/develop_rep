@@ -37,8 +37,6 @@ const envObj = {
     }
 }[env]
 
-console.log(envObj)
-
 build({
     entryPoints:['./src/entry.ts'],
     outfile:`./${envObj.outDir}/bundle.js`,
@@ -70,7 +68,7 @@ build({
     ]
 }).then(async () => {
 
-    if(!env.isDev){
+    if(!envObj.isDev){
         await fs.promises.copyFile('./dist/index.html','./build/index.html')
         await fs.promises.copyFile('./dist/favicon.png','./build/favicon.png')
         console.log('\x1b[1;96mProduction Compile Done !\x1b[0;37m\r')

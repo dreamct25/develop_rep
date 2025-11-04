@@ -17,6 +17,7 @@
     "optionMenuItem":{
         "previewImg":"Preview Image",
         "previewVideo":"Preview Video",
+        "previewDoc": "Preview Document",
         "newFolder":"New Folder",
         "rename":"Rename",
         "delete":"Delete",
@@ -50,7 +51,8 @@
         "doneMsg": "File {{ fileName }} is download complated !"
     },
     "loadingPhoto": "Loading Photo ...",
-    "copyRight":"CopyRight © 2022-08 ~ 2024-06 Alex Chen. Beta v0.7.0",
+    "loadingVideoPreview": "Loading Preview ...",
+    "copyRight":"CopyRight © 2022-08 ~ 2025-11 Alex Chen. Beta v0.7.5",
     "inputModal" : {
         "header": "Typing Upload Path First",
         "headerNotFirstTime": "Change Upload Path",

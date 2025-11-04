@@ -17,6 +17,7 @@
     "optionMenuItem":{
         "previewImg":"預覽圖片",
         "previewVideo":"預覽影片",
+        "previewDoc": "檢視文件",
         "newFolder":"新增資料夾",
         "rename":"重新命名",
         "delete":"刪除",
@@ -50,7 +51,8 @@
         "doneMsg": "檔案 {{ fileName }} 已下載完成 !"
     },
     "loadingPhoto": "讀取圖片中 ...",
-    "copyRight":"Alex Chen 版權所有 © 2022-08 ~ 2024-06. Beta v0.7.0",
+    "loadingVideoPreview": "讀取預覽中 ...",
+    "copyRight":"Alex Chen 版權所有 © 2022-08 ~ 2025-11. Beta v0.7.5",
     "inputModal" : {
         "header": "請先輸入上傳路徑",
         "headerNotFirstTime": "更改上傳路徑",

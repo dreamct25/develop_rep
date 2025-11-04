@@ -4,11 +4,12 @@ const trachBin = require('trash')
 const fs = require('fs')
 const path = require('path')
 const os = require('os')
-const { createHash } = require('crypto')
 const { path: ffmpegPath } = require('@ffmpeg-installer/ffmpeg');
 const { path: ffprobePath } = require('@ffprobe-installer/ffprobe');
 const fmg = require('fluent-ffmpeg')
+const { createHash } = require('crypto')
 const $ = require('../lib/Library.min')
+const { PassThrough } = require('stream')
 
 fmg.setFfmpegPath(ffmpegPath)
 fmg.setFfprobePath(ffprobePath)
@@ -47,10 +48,28 @@ const getVideoInfo = path => $.createPromise((resolve, reject) => {
     })
 })
 
-const fmgConvertStartHandler = (req, resultHandleFileName, commandLine) => {
+const fmgIsAvailableEncoders = () => $.createPromise((resolve, reject) => {
+    fmg.getAvailableEncoders((err, encoders) => {
+        if (err) {
+            reject(err);
+            return;
+        }
+
+        if (encoders['h264_nvenc']) resolve(true);
+        else resolve(false);
+    })
+})
+
+const fmgConvertStartHandler = (req, res, resultHandleFileName, commandLine) => {
     console.log(`start convert: ${commandLine}`);
 
     req.app.set('is_converting', resultHandleFileName)
+
+    res.status(200).write(
+        `data: ${JSON.stringify({
+            message: 'start_convert'
+        })}\n\n`
+    )
 }
 
 const fmgConvertProcessingHandler = (res, startTransTime, videoDuration, progress) => {
@@ -69,7 +88,7 @@ const fmgConvertProcessingHandler = (res, startTransTime, videoDuration, progres
             message: 'progress', 
             result: {
                 convertPer: percent.toFixed(2),
-                remaining: Math.abs(remainingTime.toFixed(0))
+                remaining: Math.abs(parseFloat(remainingTime.toFixed(0)))
             }
         })}\n\n`
     )
@@ -96,9 +115,8 @@ const fmgConvertErrorHandler = (err, stdout, stderr) => {
     console.error(`ffmpeg stderr: ${stderr}`);
 }
 
-
 route.get('/check_setting_exist',async (req,res) => {
-    const settingPath = path.join(__dirname.replace('apis',''),`usr/setting`)
+    const settingPath = path.join(__dirname.replace('apis','').replace('src', ''),`/usr/setting`)
 
     try {
 
@@ -121,7 +139,7 @@ route.get('/check_setting_exist',async (req,res) => {
         res.status(200).json({ message: 'success' })
 
     } catch (err) {
-        res.status(500).json({ message: err?.message || error })
+        res.status(500).json({ message: err.message || err })
     }
 })
 
@@ -130,8 +148,8 @@ route.post('/create_setting',async (req,res) => {
     if(req.body.u){
 
         try {
-            const settingPath = path.join(__dirname.replace('apis',''),`usr/setting`)
-            const settingDirPath = path.join(__dirname.replace('apis',''),'usr')
+            const settingPath = path.join(__dirname.replace('apis','').replace('src',''),`usr/setting`)
+            const settingDirPath = path.join(__dirname.replace('apis','').replace('src',''),'usr')
 
             if(!fs.existsSync(settingDirPath)) await fs.promises.mkdir(settingDirPath,{ recursive: true })
 
@@ -185,7 +203,7 @@ route.post('/create_setting',async (req,res) => {
 
             res.status(200).json({ message: 'success' })
         } catch (err) {
-            res.status(500).json({ message: err?.message || err })
+            res.status(500).json({ message: err.message || err })
         }
     }
 })
@@ -235,7 +253,7 @@ route.post('/get_upload_dirs',async (req,res) => {
 
     const files = await fs.promises.readdir(useFolderUrl)
 
-    const imgRegExp = new RegExp('^.*\.(jpg|JPG|gif|GIF|jpeg|JPEG|png|PNG|TIFF|tiff)$')
+    const imgRegExp = new RegExp('^.*\.(jpg|JPG|gif|GIF|jpeg|JPEG|png|PNG|TIFF|tiff|mp4|MP4|mkv|MKV|mpeg|MPEG|mov|MOV)$')
 
     const data = $.maps(files,fileName => {
         const { ctime,atime } = fs.statSync(`${useFolderUrl}/${fileName}`)
@@ -261,7 +279,7 @@ route.post('/cd_dir',async (req,res) => {
 
     const files = await fs.promises.readdir(url)
 
-    const imgRegExp = new RegExp('^.*\.(jpg|JPG|gif|GIF|jpeg|JPEG|png|PNG|TIFF|tiff)$')
+    const imgRegExp = new RegExp('^.*\.(jpg|JPG|gif|GIF|jpeg|JPEG|png|PNG|TIFF|tiff|mp4|MP4|mkv|MKV|mpeg|MPEG|mov|MOV)$')
 
     const data = $.maps(files,fileName=> {
         
@@ -307,7 +325,7 @@ route.post('/rename',async (req,res) => {
 })
 
 // delete file api
-route.post('/delete_file',async (req,res) => {
+route.post('/delete_file',async (req, res) => {
     const { url } = req.body
 
     const path = decodeURIComponent(
@@ -319,7 +337,7 @@ route.post('/delete_file',async (req,res) => {
     res.status(200).json({ message:'success' })
 })
 
-route.get('/is_convert_exsited',async (req,res) => {
+route.get('/is_convert_exsited',async (req, res) => {
 
     const usingPath = decodeURIComponent(
         Buffer.from(req.query.f, 'base64').toString()
@@ -331,8 +349,9 @@ route.get('/is_convert_exsited',async (req,res) => {
 
     const saveName = await getFileHash(usingPath)
 
-    const outputPath = path.join(__dirname.replace('apis',''),`.m3u8_list/${saveName}_0/${saveName}_output.m3u8`)
+    const outputPath = path.join(__dirname.replace('apis','').replace('src', ''),`cache/.m3u8_list/${saveName}_0/${saveName}_output.m3u8`)
 
+    
     const getIsConvertingFileName = req.app.get('is_converting')
     
     if(fs.existsSync(outputPath)){
@@ -389,9 +408,9 @@ route.get('/convert',async (req,res) => {
 
     const saveName = await getFileHash(usingPath)
 
-    const outputPath = path.join(__dirname.replace('apis',''),`.m3u8_list/${saveName}_0/${saveName}_output.m3u8`)
+    const outputPath = path.join(__dirname.replace('apis','').replace('src', ''),`cache/.m3u8_list/${saveName}_0/${saveName}_output.m3u8`)
 
-    const tsFilePath = path.join(__dirname.replace('apis',''),`.m3u8_list/${saveName}_%v/v%03d.ts`)
+    const tsFilePath = path.join(__dirname.replace('apis','').replace('src', ''),`cache/.m3u8_list/${saveName}_%v/v%03d.ts`)
 
     const videoInfo = await getVideoInfo(usingPath)
 
@@ -401,14 +420,11 @@ route.get('/convert',async (req,res) => {
 
     const resultHandleFileName = `${fileName}${fileExtend}`
 
-    const fmgN = new fmg()
-
-    // add input file
-    fmgN.addInput(usingPath);
+    const isAvailableEncoders = await fmgIsAvailableEncoders()
 
     // set HLS options
-    fmgN
-    .videoCodec('h264_nvenc')
+    fmg(usingPath)
+    .videoCodec(isAvailableEncoders ? 'h264_nvenc' : 'libx264')
     .audioCodec('copy')
     .outputOptions([
         '-rc vbr_hq',          // 可變比特率高品質
@@ -419,11 +435,32 @@ route.get('/convert',async (req,res) => {
         `-hls_segment_filename ${tsFilePath}`
     ])
     .output(outputPath)
-    .on('start', fmgConvertStartHandler.bind(this, req, resultHandleFileName))
+    .on('start', fmgConvertStartHandler.bind(this, req, res, resultHandleFileName))
     .on('progress', fmgConvertProcessingHandler.bind(this, res, startTransTime, videoDuration))
     .on('end', fmgConvertEndHandler.bind(this, req, res, resultHandleFileName))
     .on('error', fmgConvertErrorHandler)
     .run();
+})
+
+route.get('/preview_v',async (req,res) => {
+
+    res.type('image/jpeg');
+
+    const usingPath = decodeURIComponent(
+        Buffer.from(req.query.f, 'base64').toString()
+    )
+
+    fmg(usingPath)
+      .inputOptions(['-ss 5']) // get 5 sec's video screenshot
+      .outputOptions([
+        "-vframes 1",     // 只取一幀
+        "-f image2pipe",  // output to image stream
+        "-vcodec mjpeg"     // convert screenshot to jpeg
+      ])
+      .format("image2pipe")
+      .on("error", (err) => console.log(err))
+      .on("end", () => console.log('end'))
+      .pipe(res, { end: true });
 })
 
 module.exports = route

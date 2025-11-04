@@ -1,4 +1,4 @@
-# Share Server (Beta v0.7.0)
+# Share Server (Beta v0.7.5)
 ```
 目前為 "試作版" 功能未完成但具基本功能，後續會遷移為 Desktop 應用，現有程式為 Svelte CSR
 ```
@@ -18,7 +18,7 @@ server 為 backend
 
 2. cd 到 server 資料匣底下
 
-3. 並設定 server 資料匣底下的 .env 底下的 port
+3. npm i 後並設定 server 資料匣底下的 .env 底下的 port
 
 4. 執行 npm start 就可以了
 

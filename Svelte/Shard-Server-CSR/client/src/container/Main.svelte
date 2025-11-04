@@ -244,9 +244,24 @@
                                                     <div class="img-frame">
                                                         <img
                                                             onload={whenLoadImg.bind(undefined, items.fileName)} 
-                                                            src={`${API_URL}/preview?f=${btoa(encodeURIComponent(items.fileUrl))}`} 
+                                                            src={`${API_URL}/preview?f=${btoa(encodeURIComponent(items.fileUrl))}&scale=1`} 
                                                             alt="" 
                                                         />
+                                                        <div class="inside-icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                        {:else if new RegExp('^.*\.(mp4|MP4|mkv|MKV|mpeg|MPEG|mov|MOV)$').test(items.fileType)}
+                                            <div class="img-outer-frame">
+                                                <div class={`loading ${items.fileLoadStatus ? '' : 'active'}`}>{$i18n.t('loadingVideoPreview')}</div>
+                                                <div class="img-outer">
+                                                    <div class="img-frame">
+                                                        <img
+                                                            onload={whenLoadImg.bind(undefined, items.fileName)} 
+                                                            src={`${API_URL}/api/preview_v?f=${btoa(encodeURIComponent(items.fileUrl))}`} 
+                                                            alt="" 
+                                                        />
+                                                        <div class="inside-icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
                                                     </div>
                                                 </div> 
                                             </div>
@@ -276,6 +291,21 @@
                                                             src={`${API_URL}/preview?f=${btoa(encodeURIComponent(items.fileUrl))}`} 
                                                             alt="" 
                                                         />
+                                                        <div class="inside-icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                        {:else if new RegExp('^.*\.(mp4|MP4|mkv|MKV|mpeg|MPEG|mov|MOV)$').test(items.fileType)}
+                                            <div class="img-outer-frame">
+                                                <div class={`loading ${items.fileLoadStatus ? '' : 'active'}`}>{$i18n.t('loadingVideoPreview')}</div>
+                                                <div class="img-outer">
+                                                    <div class="img-frame">
+                                                        <img
+                                                            onload={whenLoadImg.bind(undefined, items.fileName)} 
+                                                            src={`${API_URL}/api/preview_v?f=${btoa(encodeURIComponent(items.fileUrl))}`} 
+                                                            alt="" 
+                                                        />
+                                                        <div class="inside-icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
                                                     </div>
                                                 </div> 
                                             </div>
@@ -410,7 +440,9 @@
     class={`input-modal-outer-frame 
     ${(!getLoccalSettingStatus && getLoccalSettingStatus !== undefined) || openLocalSettingModal ? 'active' : ''}
     `} 
-    onclick={() => openLocalSettingModal = false}
+    onclick={(e) => {
+        if((e.target as HTMLDivElement).className.includes('input-modal-outer-frame')) openLocalSettingModal = false
+    }}
 >
     <div class="modal-outer">
         <div class="modal-header">{$i18n.t((!getLoccalSettingStatus && getLoccalSettingStatus !== undefined) ? 'inputModal.header' : 'inputModal.headerNotFirstTime')}</div>
@@ -557,6 +589,10 @@
             disabled: new RegExp('^.*\.(mp4|MP4|mkv|MKV|mpeg|MPEG|mov|MOV)$').test(fullFolderUrl),
             useMethod: previewMedia.bind(undefined, fullFolderUrl, false)
         },{
+            label:'optionMenuItem.previewDoc',
+            disabled: new RegExp('^.*\.(txt)$').test(fullFolderUrl),
+            useMethod: previewDoc.bind(undefined, fullFolderUrl)
+        }, {
             label:'optionMenuItem.newFolder',
             disabled: !disabledDisplayOptionMenuItem,
             useMethod: toggleModalStatus.bind(undefined, true, 'create_label') 
@@ -822,24 +858,29 @@
     const previewMedia:(url:string,isImg: boolean) => Promise<void> = async (url,isImg) => {
         
         if(isImg){
-            window.open(`${API_URL}/preview?f=${btoa(encodeURIComponent(url))}`)
+            window.open(`${API_URL}/preview?f=${btoa(encodeURIComponent(url))}&full=1`)
             return
         }
+
+        loadingStatus = true
 
         const res = await lib.fetch.get<{ message: string, result: Record<string, any> | string }>(`${API_URL}/api/is_convert_exsited?f=${btoa(encodeURIComponent(url))}`)
         
         if(res.data.message === 'is_converting') {
             toastMessages = { message: $i18n.t('toastMsg.whenConverting', { fileName: (res.data.result as Record<string, any>).fileName }), status: 'info' }
+            loadingStatus = false
             return
         }
 
         if(res.data.message === 'not_exsited') {
 
             const evtSource = new EventSource(`${API_URL}/api/convert?f=${btoa(encodeURIComponent(url))}`);
-        
+            
             evtSource.onmessage = e => {
 
                 const data = JSON.parse(e.data as unknown as string) as any;
+
+                if(data.message === 'start_convert') loadingStatus = false
 
                 if(data.message === 'progress') {
 
@@ -878,8 +919,14 @@
 
         if (res.data.message === 'success') {
 
+            loadingStatus = false
+
             mediaM3U8Path = `${API_URL}${atob(decodeURIComponent(res.data.result as string))}`
         }
+    }
+
+    const previewDoc: (url:string) => Promise<void> = async url => {
+        window.open(`${API_URL}/preview_doc?f=${btoa(encodeURIComponent(url))}`)
     }
 
     // delete file
@@ -901,6 +948,8 @@
     const cdDictionary:(url:string) => Promise<void> = async url => {
         loadingStatus = true
         currentDirTemp = currentDirEnv !== url ? url : ''
+
+        foldersItem = []
 
         const result = await lib.fetch.post<{ data: foldersItemType[] }>(`${API_URL}/api/cd_dir`, {
             headers: { "Content-Type":"application/json" },
