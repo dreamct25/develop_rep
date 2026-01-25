@@ -10,18 +10,26 @@ const Main: FC = ():TSX => {
         holidays,
         currentYear,
         isScroll,
-        currentSelectDate
+        currentSelectDate,
+        highlightDate
     }, setInitState] = useState<InitStateType>({
         monthDays: [],
         holidays: [],
         currentYear: new Date().getFullYear(),
         isScroll: false,
-        currentSelectDate: ''
+        currentSelectDate: '',
+        highlightDate: ''
     })
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const isScrollRef = useRef<boolean>(false)
+
+    const scrollSnapDebounceTimer = useRef<any>(undefined)
+
+    const debounceTimer = useRef<any>(undefined)
+
+    const isScrollEventHandle = useRef<boolean>(false)
 
     const isDesktop = !navigator.userAgent.toLocaleLowerCase().includes('mobile') || !navigator.userAgent.toLocaleLowerCase().includes('iphone')
 
@@ -204,10 +212,19 @@ const Main: FC = ():TSX => {
 
         const [filterItem] = $.filter(holidays, filterRow => filterRow.month === month && filterRow.day === day)
 
-        setInitState(prevState => ({
-            ...prevState,
-            currentSelectDate: `${filterItem.month}${filterItem.day}`
-        }))
+        setInitState(prevState => {
+
+            const currentSelectDateTemp = filterItem ? `${addZero(filterItem.month)}/${addZero(filterItem.day)}` : ''
+            const highlightDateTemp = filterItem ? `${addZero(filterItem.month)}/${addZero(filterItem.day)}` : ''
+
+            if(prevState.currentSelectDate === currentSelectDateTemp || prevState.highlightDate === highlightDateTemp) return prevState
+            
+            return {
+                ...prevState,
+                currentSelectDate: filterItem ? `${addZero(filterItem.month)}/${addZero(filterItem.day)}` : '',
+                highlightDate: filterItem ? `${filterItem.month}${filterItem.day}` : ''
+            }
+        })
     }
 
     const rowOuterOnWheelRef:(element: HTMLDivElement | null) => void = element => {
@@ -219,6 +236,7 @@ const Main: FC = ():TSX => {
             event.preventDefault()
 
             const element = event.target as HTMLDivElement
+
 
             if(element.className === 'row-outer'){
                 element.scrollLeft += event.deltaY
@@ -239,7 +257,7 @@ const Main: FC = ():TSX => {
         const filterItem = $.filter(dayRow, row => row.dayType.dayName !== '')
 
         return (
-            <div className="holiday-desc-outer" >
+            <div className="holiday-desc-outer">
                 {
                     <div 
                         className="row-outer" 
@@ -249,15 +267,113 @@ const Main: FC = ():TSX => {
                                 filterItem.length === 1 ? '1fr' : 
                                 $.createArray({ type: 'fake', item: { random: filterItem.length } },() => '250px' ).join(' ')
                         }}
-                        ref={element => filterItem.length > 1 && rowOuterOnWheelRef(element)}
+                        onScroll={e => {
+
+                            const element = e.target as HTMLDivElement
+
+                            if(!e.target) return
+
+                                const doms = element.querySelectorAll<HTMLDivElement>('.row .desc-date')
+
+                                if(doms.length > 1) {
+
+                                    const toArrDoms = $.createArray({ type: 'new', item: doms }) as HTMLDivElement[]
+
+                                    const filterDom = toArrDoms.filter((dom, domIndex) => {
+                                        const plusInEnd = domIndex === toArrDoms.length - 1 ? 50 : 0
+                                        return element.scrollLeft >= ((dom.parentElement!.offsetWidth + 12) * domIndex) - 62 - plusInEnd
+                                    })
+
+                                    if(filterDom.length !== 0) {
+
+                                        const filterSingleDateDom = filterDom[filterDom.length - 1]
+
+                                        if(currentSelectDate !== filterSingleDateDom.textContent) {
+
+                                            isScrollEventHandle.current = true
+
+                                            const [month, date] = filterSingleDateDom.textContent.split('/')
+
+                                            currentSelectHoliday(parseInt(month), parseInt(date))
+
+                                            clearTimeout(debounceTimer.current)
+
+                                            debounceTimer.current = setTimeout(() => {
+                                                isScrollEventHandle.current = false
+                                            }, 200)
+                                        }
+                                    }
+                                }
+                        }}
+                        ref={element => {
+
+                            if(element) {
+
+                                if(isScrollEventHandle.current) return
+                                
+                                if(filterItem.length > 1) rowOuterOnWheelRef(element)
+
+                                const doms = element.querySelectorAll<HTMLDivElement>('.row .desc-date')
+
+                                if(doms.length > 1) {
+
+                                    const toArr = $.createArray({ type: 'new', item: doms }) as HTMLDivElement[]
+
+                                    const [filterDom] = $.filter(toArr, dom => dom.textContent === currentSelectDate)
+                                    
+                                    const filterDomPos = toArr.indexOf(filterDom)
+
+                                    if(!filterDom) return
+
+                                    $.each($.createArray({ type: 'new', item: element.children }) as HTMLDivElement[], child => $(child).removeClass('with-snap'))
+                                    
+                                    $(element).scrollToPos({ 
+                                        direction: 'left', 
+                                        scrollPos: ((filterDom.parentElement!.offsetWidth + 12) * filterDomPos) - 55,
+                                        duration: 1500
+                                    })
+
+                                    clearTimeout(scrollSnapDebounceTimer.current)
+
+                                    scrollSnapDebounceTimer.current = setTimeout(() => {
+                                        $.each($.createArray({ type: 'new', item: element.children }) as HTMLDivElement[], child => $(child).addClass('with-snap'))
+                                    }, 1500)
+                                }
+                            }
+                        }}
                     >
                         {filterItem.length !== 0 ? $.maps(filterItem, (row, index) => (
                             <div 
-                                className='row' 
+                                className='row with-snap'
                                 key={index}
-                                onClick={currentSelectHoliday.bind(this, row.month, row.day)}
                             >
-                                <div>{addZero(row.month)}/{addZero(row.day)} {row.dayType.dayName}</div>
+                                <div className='desc-date'>{addZero(row.month)}/{addZero(row.day)}</div>
+                                <div>
+                                    <span ref={element => {
+                                        
+                                        if(element) {
+
+                                            const parentElement = element.parentElement
+
+                                            if(parentElement) {
+
+                                                parentElement.classList.remove('move')
+                                                
+                                                if(element.offsetWidth !== parentElement.offsetWidth) {
+                                                    
+                                                    const paddingSpace = 6.2
+
+                                                    parentElement.classList.add('move')
+                                                    
+                                                    element.style.cssText = `
+                                                        --move: ${parentElement.offsetWidth - paddingSpace}px;
+                                                        --padding-space: ${paddingSpace}px;
+                                                    `
+                                                }
+                                            }
+                                        }
+                                    }}>{row.dayType.dayName}</span>
+                                </div>
                             </div>
                             
                         )) : (
@@ -275,6 +391,7 @@ const Main: FC = ():TSX => {
 
             if(prevState.currentSelectDate){
                 prevState.currentSelectDate = ''
+                prevState.highlightDate = ''
             }
 
             if(action === 'next'){
@@ -314,9 +431,10 @@ const Main: FC = ():TSX => {
     return (
         <StyledLayout isDesktop={isDesktop}>
             <div className={isScroll ? 'info-outer toggle' : 'info-outer'}>
-                <div className="top">
-                    <div className="year"> {currentYear} 年曆</div>
-                </div>
+                <div className="year"> {currentYear} 年曆</div>
+            </div>
+            <div className={isScroll ? 'info-outer-fixed toggle' : 'info-outer-fixed'}>
+                <div className="year"> {currentYear} 年曆</div>
             </div>
             <div className="calendar">
                 {$.maps(monthDays, (row, rowIndex) => 
@@ -330,14 +448,15 @@ const Main: FC = ():TSX => {
                                 $.maps(row.days, (daysRow, dIndex) => 
                                     <div 
                                         className={
-                                            `${daysRow.dayType.prevMonth || daysRow.dayType.nextMonth ? 'day other-month' : 'day'} ${
+                                            [
+                                                daysRow.dayType.prevMonth || daysRow.dayType.nextMonth ? 'day other-month' : 'day',
                                                 !(daysRow.dayType.prevMonth || daysRow.dayType.nextMonth) && daysRow.dayType.isHoliday && daysRow.dayType.dayName ? 
-                                                'holiday' : !(daysRow.dayType.prevMonth || daysRow.dayType.nextMonth) && daysRow.dayType.isHoliday ? 'normal-holiday' : ''
-                                            }
-                                            ${(currentSelectDate === `${daysRow.month}${daysRow.day}`) && daysRow.dayType.currentMonth ? 'highlight' : ''}
-                                            `
+                                                    'holiday' : !(daysRow.dayType.prevMonth || daysRow.dayType.nextMonth) && daysRow.dayType.isHoliday ? 'normal-holiday' : '',
+                                                (highlightDate === `${daysRow.month}${daysRow.day}`) && daysRow.dayType.currentMonth ? 'highlight' : ''
+                                            ].filter(cssText => cssText !== '').join(' ')
                                         } 
                                         key={dIndex}
+                                        onClick={currentSelectHoliday.bind(this, daysRow.month, daysRow.day)}
                                     >{daysRow.day}</div>
                                 )}
                             </div>

@@ -27,5 +27,6 @@ export interface InitStateType {
     }[],
     currentYear: number,
     isScroll: boolean,
-    currentSelectDate: string
+    currentSelectDate: string,
+    highlightDate: string
 }

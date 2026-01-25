@@ -11,42 +11,57 @@ export default styled.div<{ isDesktop: boolean }>`
     .info-outer {
         margin-bottom: 12px;
         border-radius: 5px;
+        padding: 14px 12px;
+        opacity: 1;
         transition: .5s ease;
 
-        .top {
-            color: white;
-            padding: 14px 12px;
+        &.toggle {
+            opacity: 0;
 
             .year {
-                font-size: 45px;
-                text-align: center;
-                transition: .5s ease;
+                font-size: 25px;
             }
         }
 
+        .year {
+            color: white;
+            font-size: 45px;
+            text-align: center;
+            transition: .5s ease;
+        }
+    }
+
+    .info-outer-fixed {
+        position: fixed;
+        top: 0;
+        right: 0;
+        z-index: 1;
+        pointer-events: none;
+        border-radius: 0 0 5px 5px;
+        background-color: rgba(153,153,255,.5);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding: 8px 12px 9px 12px;
+        margin: 5px;
+        border-radius: 5px;
+        box-shadow: inset 0 0 3px 1px rgba(255,255,255,.7);
+        transition: .5s ease;
+        opacity: 0;
+
+        .year {
+            color: white;
+            font-size: 45px;
+            text-align: center;
+            transition: .5s ease;
+        }
+
         &.toggle {
-            border-radius: 0 0 5px 5px;
-            background-color: transparent;
-            box-shadow: inset 0 0 3px 1px transparent;
-            pointer-events: none;
+            opacity: 1;
+            
+            pointer-events: all;
 
-            .top {
-                justify-content: space-between;
-
-
-                .year {
-                    position: fixed;
-                    top: 0;
-                    right: 0;
-                    background-color: rgba(153,153,255,.5);
-                    backdrop-filter: blur(10px);
-                    -webkit-backdrop-filter: blur(10px);
-                    font-size: 20px;
-                    padding: 8px 12px 9px 12px;
-                    margin: 5px;
-                    border-radius: 5px;
-                    box-shadow: inset 0 0 3px 1px rgba(255,255,255,.7);
-                }
+            .year {
+                font-size: 25px;
             }
         }
     }
@@ -80,7 +95,7 @@ export default styled.div<{ isDesktop: boolean }>`
                     background-color: rgb(153,153,255);
                     color: #fff;
                     margin: 0;
-                    padding: 10px;
+                    padding: 12px 0;
                     text-align: center;
                     font-size: 25px;
                     font-weight: bold;
@@ -152,6 +167,8 @@ export default styled.div<{ isDesktop: boolean }>`
                     }
 
                     .row {
+                        display: flex;
+                        justify-content: center;
                         background-color:  rgb(119,68,255);
                         padding: 15px 12px;
                         text-align: center;
@@ -160,9 +177,66 @@ export default styled.div<{ isDesktop: boolean }>`
                         font-size: 18px;
                         border-radius: 5px;
                         margin: 6px 0;
-                        scroll-snap-align: center;
-                        cursor: pointer;
-                        user-select: none;
+                        
+                        pointer-events: none;
+
+                        &.with-snap {
+                            scroll-snap-align: center;
+                        }
+
+                        div {
+
+                            &:last-child {
+                                margin-left: 8px;
+
+                                &.move {
+                                    position: relative;
+                                    overflow: hidden;
+
+                                    &::before {
+                                        content: '';
+                                        position: absolute;
+                                        top: 0;
+                                        left: 0;
+                                        bottom: 0;
+                                        width: 6px;
+                                        background: linear-gradient(to right, rgb(119,68,255), transparent);
+                                        z-index: 1;
+                                    }
+
+                                    &::after {
+                                        content: '';
+                                        position: absolute;
+                                        top: 0;
+                                        right: 0;
+                                        bottom: 0;
+                                        width: 6px;
+                                        background: linear-gradient(to left, rgb(119,68,255), transparent);
+                                        z-index: 1;
+                                    }
+                                    
+                                    span {
+                                        display: inline-block;
+                                        white-space: nowrap;
+                                        
+                                            
+                                        animation: textSlide 10s linear infinite;
+
+                                        @keyframes textSlide {
+                                            0% {
+                                                transform: translateX(var(--padding-space));
+                                            }
+                                            50% {
+                                                transform: translateX(calc(var(--move) - 100%));
+                                            }
+                                            100% {
+                                                transform: translateX(var(--padding-space));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }                       
                     }
 
                     .no-holiday {
