@@ -41,6 +41,7 @@ const MainThem:FC = ():TSX => {
         toggleLoadingStatus,
         toggleSettingBar,
         toggleShowPath,
+        toggleCalendarScroll,
         isUseAMPM,
         themColorRgba,
         clockColorRgba,
@@ -66,6 +67,7 @@ const MainThem:FC = ():TSX => {
         toggleLoadingStatus: boolean,
         toggleSettingBar: boolean,
         toggleShowPath: boolean,
+        toggleCalendarScroll: boolean,
         isUseAMPM: boolean,
         themColorRgba: RgbaColor,
         clockColorRgba: RgbaColor,
@@ -116,6 +118,7 @@ const MainThem:FC = ():TSX => {
         toggleLoadingStatus: false,
         toggleSettingBar: false,
         toggleShowPath: false,
+        toggleCalendarScroll: false,
         isUseAMPM: false,
         themColorRgba: { r: 30, g: 30, b: 30, a: 0.5 },
         clockColorRgba: { r: 255, g: 255, b: 255, a: 1 },
@@ -848,34 +851,51 @@ const MainThem:FC = ():TSX => {
                             </div>
                         </div>
                         <div className="body">
-                            <div className="calendar-outer">
-                                <div className="calendar" ref={calenderBodyDomRef}>
-                                    {$.maps(monthDays, (row, rowIndex) => 
-                                        <div className="month-outer" key={rowIndex}>
-                                            <div className='month'>
-                                                <div className='title'>{formatLanguage(`monthName.${row.monthCount - 1}`)}</div>
-                                                <div className="weekdays">
-                                                    {$.maps(row.weekdays, (weekdaysRow, wIndex) => <div className="weekday" key={wIndex}>{formatLanguage(`weekDaysShortName.${weekdaysRow}`)}</div>)}
-                                                </div>
-                                                <div className="days">{
-                                                    $.maps(row.days, (daysRow, dIndex) => 
-                                                        <div 
-                                                            className={
-                                                                `${daysRow.dayType.prevMonth || daysRow.dayType.nextMonth ? 'day other-month' : 'day'} ${
-                                                                    !(daysRow.dayType.prevMonth || daysRow.dayType.nextMonth) && daysRow.dayType.isHoliday && daysRow.dayType.dayName ? 
-                                                                    'holiday' : !(daysRow.dayType.prevMonth || daysRow.dayType.nextMonth) && daysRow.dayType.isHoliday ? 'normal-holiday' : ''
-                                                                }
-                                                                ${(dIndex + 1) % 7 === 0 ? 'last' : ''}
-                                                                ${(convertDateShow(currentDate).date === `${daysRow.month}${daysRow.day}`) && daysRow.dayType.currentMonth ? 'highlight' : ''}
-                                                                `
-                                                            } 
-                                                            key={dIndex}
-                                                        >{daysRow.day}</div>
-                                                    )}
+                            <div className={toggleCalendarScroll ? "calendar-outer-frame toggles" : "calendar-outer-frame"}>
+                                <div className="calendar-outer">
+                                    <div className="calendar" ref={calenderBodyDomRef} onScroll={({ target }) => {
+                                        const element = target as HTMLDivElement
+
+                                        if(element.scrollTop > 76){
+
+                                            if(!toggleCalendarScroll) {
+                                                setInitState(prevState => ({ ...prevState, toggleCalendarScroll: true }))
+                                            }
+                                            
+                                            return
+                                        }
+
+                                        if(toggleCalendarScroll) {
+                                            setInitState(prevState => ({ ...prevState, toggleCalendarScroll: false }))
+                                        }
+                                    }}>
+                                        {$.maps(monthDays, (row, rowIndex) => 
+                                            <div className="month-outer" key={rowIndex}>
+                                                <div className='month'>
+                                                    <div className='title'>{formatLanguage(`monthName.${row.monthCount - 1}`)}</div>
+                                                    <div className="weekdays">
+                                                        {$.maps(row.weekdays, (weekdaysRow, wIndex) => <div className="weekday" key={wIndex}>{formatLanguage(`weekDaysShortName.${weekdaysRow}`)}</div>)}
+                                                    </div>
+                                                    <div className="days">{
+                                                        $.maps(row.days, (daysRow, dIndex) => 
+                                                            <div 
+                                                                className={
+                                                                    `${daysRow.dayType.prevMonth || daysRow.dayType.nextMonth ? 'day other-month' : 'day'} ${
+                                                                        !(daysRow.dayType.prevMonth || daysRow.dayType.nextMonth) && daysRow.dayType.isHoliday && daysRow.dayType.dayName ? 
+                                                                        'holiday' : !(daysRow.dayType.prevMonth || daysRow.dayType.nextMonth) && daysRow.dayType.isHoliday ? 'normal-holiday' : ''
+                                                                    }
+                                                                    ${(dIndex + 1) % 7 === 0 ? 'last' : ''}
+                                                                    ${(convertDateShow(currentDate).date === `${daysRow.month}${daysRow.day}`) && daysRow.dayType.currentMonth ? 'highlight' : ''}
+                                                                    `
+                                                                } 
+                                                                key={dIndex}
+                                                            >{daysRow.day}</div>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    )}
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>

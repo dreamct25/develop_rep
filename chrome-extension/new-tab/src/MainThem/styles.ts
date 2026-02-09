@@ -228,13 +228,17 @@ export default styled.div<{
             top: 0;
             right: 0;
             bottom: 0;
-            width: 40px;
             z-index: 5;
 
             .tool-bar {
-                padding: 8px 0;
-                transform: translateX(40px);
+                padding: 8px 12px;
+                transform: translateX(40px) scale(.95);
                 height: 100%;
+                opacity: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 5px;
                 transition: .5s ease;
 
                 .google-login-btn,
@@ -247,31 +251,15 @@ export default styled.div<{
                     text-shadow: 0 0 8px rgba(30,30,30,.5);
                     text-align: center;
                     margin-bottom: 10px;
+                    
+                    i {
+                        font-size: 30px;
+                    }
                 }
 
                 &.toggle {
-                    transform: translateX(0);
-                }
-
-                &::after {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    opacity: 0;
-                    z-index: -1;
-                    background: linear-gradient(180deg,rgba(30,30,30,1),rgba(30,30,30,.7),rgba(30,30,30,.5),rgba(30,30,30,.3),rgba(30,30,30,0));
-                    transition: .5s ease;
-                }
-
-                &:hover {
-
-                    &::after {
-                        opacity: 1;
-                    }
-                    
+                    transform: translateX(0) scale(1);
+                    opacity: 1;
                 }
             }
         }
@@ -284,22 +272,11 @@ export default styled.div<{
             width: 100%;
             max-width: 420px;
             transform: translateX(430px);
+            backdrop-filter: blur(10px);
             z-index: 6;
             box-shadow: 0px 0 7px 2px rgba(30,30,30,.5);
+            background-color: ${props => props.useThemColor};
             transition: .5s ease;
-
-            &::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                z-index: -1;
-                background-color: ${props => props.useThemColor};
-                backdrop-filter: blur(10px);
-                transition: .5s ease;
-            }
 
             &.toggle {
                 transform: translateX(0);
@@ -520,111 +497,157 @@ export default styled.div<{
             .body {
                 border-top: 1px solid rgba(255, 255, 255, .3);
 
-                .calendar-outer {
-                    margin: 5px;
+                .calendar-outer-frame {
                     position: relative;
                     height: 100%;
-
-                    .calendar {
+                    overflow: hidden;
+                    
+                    
+                    &::before {
+                        content: '';
                         position: absolute;
                         top: 0;
                         left: 0;
                         right: 0;
-                        bottom: 10px;
-                        display: grid;
-                        gap: 12px;
-                        padding: 0 6px;
-                        overflow-y: auto;
-                        overflow-x: hidden;
+                        height: 60px;
+                        background-image: linear-gradient(180deg, rgba(0,0,0,1), rgba(0,0,0,0));
+                        z-index: 1;
+                        pointer-events: none;
+                        transition: .5s ease;
+                        opacity: 0;
+                    }
 
-                        &::-webkit-scrollbar {
-                            width: 5px;
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        height: 60px;
+                        background-image: linear-gradient(0deg, rgba(0,0,0,1), rgba(0,0,0,0));
+                        z-index: 1;
+                        pointer-events: none;
+                        transition: .5s ease;
+                        opacity: 0;
+                    }
+
+                    &.toggles {
+
+                        &::before {
+                            opacity: 1;
                         }
 
-                        &::-webkit-scrollbar-thumb {
-                            border-radius: 20px;
-                            background-color: rgba(255, 255, 255, 0.7);
+                        &::after {
+                            opacity: 1;
                         }
+                    }
 
-                        .month-outer {
+                    .calendar-outer {
+                        position: relative;
+                        margin: 5px;
+                        height: 100%;
 
-                            .month {
+                        .calendar {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 10px;
+                            display: grid;
+                            gap: 12px;
+                            padding: 0 6px;
+                            overflow-y: auto;
+                            overflow-x: hidden;
 
-                                .title {
-                                    color: #fff;
-                                    margin: 0;
-                                    padding: 10px;
-                                    text-align: center;
-                                    font-size: 25px;
-                                    font-weight: bold;
-                                    font-style: italic;
-                                    letter-spacing: 2.5px;
-                                }
+                            &::-webkit-scrollbar {
+                                width: 5px;
+                            }
 
-                                .weekdays,
-                                .days {
-                                    display: grid;
-                                    grid-template-columns: repeat(7,1fr);
+                            &::-webkit-scrollbar-thumb {
+                                border-radius: 20px;
+                                background-color: rgba(255, 255, 255, 0.7);
+                            }
 
-                                    .weekday {
+                            .month-outer {
+
+                                .month {
+
+                                    .title {
+                                        color: #fff;
+                                        margin: 0;
+                                        padding: 10px;
                                         text-align: center;
-                                        padding: 12px 5.5px;
-                                        color: rgba(255,255,255,.8);
-                                        font-size: 18px;
-                                    }
-                                    
-                                    .day {
-                                        text-align: center;
-                                        padding: 19px 5.5px;
-                                        color: rgba(255,255,255,.8);
-                                        font-size: 18px;
-                                    }
-                                }
-
-                                .days {
-                                    position: relative;
-
-                                    &::after {
-                                        content: '';
-                                        position: absolute;
-                                        left: 0;
-                                        right: 0;
-                                        bottom: 0;
-                                        background-color: rgba(255,255,255,.1);
-                                        height: .1px;
-                                        pointer-events: none;
-                                    }
-                                }
-
-                                .weekdays {
-                                    font-weight: bold;
-                                    font-style: italic;
-                                }
-
-                                .day {
-                                    box-shadow: inset -.5px .5px 0 .1px rgba(255,255,255,.1);
-                                    
-                                    &.other-month {
-                                        color: rgba(255,255,255,.3);
-                                    }
-
-                                    &.last {
-                                        box-shadow: inset 0 .5px 0 .1px rgba(255,255,255,.1);
-                                    }
-
-                                    &.holiday {
-                                        background-color: rgba(119,68,255, .3);
-                                    }
-
-                                    /* &.normal-holiday {
-                                        background-color: rgb(204,187,255);
-                                        color: white;
-                                    } */
-
-                                    &.highlight {
-                                        background-color: rgb(255,62,255, .3);
-                                        color: rgba(255,255,255);
+                                        font-size: 25px;
                                         font-weight: bold;
+                                        font-style: italic;
+                                        letter-spacing: 2.5px;
+                                    }
+
+                                    .weekdays,
+                                    .days {
+                                        display: grid;
+                                        grid-template-columns: repeat(7,1fr);
+
+                                        .weekday {
+                                            text-align: center;
+                                            padding: 12px 5.5px;
+                                            color: rgba(255,255,255,.8);
+                                            font-size: 18px;
+                                        }
+                                        
+                                        .day {
+                                            text-align: center;
+                                            padding: 19px 5.5px;
+                                            color: rgba(255,255,255,.8);
+                                            font-size: 18px;
+                                        }
+                                    }
+
+                                    .days {
+                                        position: relative;
+
+                                        &::after {
+                                            content: '';
+                                            position: absolute;
+                                            left: 0;
+                                            right: 0;
+                                            bottom: 0;
+                                            background-color: rgba(255,255,255,.1);
+                                            height: .1px;
+                                            pointer-events: none;
+                                        }
+                                    }
+
+                                    .weekdays {
+                                        font-weight: bold;
+                                        font-style: italic;
+                                    }
+
+                                    .day {
+                                        box-shadow: inset -.5px .5px 0 .1px rgba(255,255,255,.1);
+                                        
+                                        &.other-month {
+                                            color: rgba(255,255,255,.3);
+                                        }
+
+                                        &.last {
+                                            box-shadow: inset 0 .5px 0 .1px rgba(255,255,255,.1);
+                                        }
+
+                                        &.holiday {
+                                            background-color: rgba(119,68,255, .3);
+                                        }
+
+                                        /* &.normal-holiday {
+                                            background-color: rgb(204,187,255);
+                                            color: white;
+                                        } */
+
+                                        &.highlight {
+                                            background-color: rgb(255,62,255, .3);
+                                            color: rgba(255,255,255);
+                                            font-weight: bold;
+                                        }
                                     }
                                 }
                             }
