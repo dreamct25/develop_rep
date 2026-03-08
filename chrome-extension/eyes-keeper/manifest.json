@@ -1,0 +1,35 @@
+{
+    "manifest_version": 3,
+    "name": "eyes-keeper",
+    "version": "1.0",
+    "description": "eyes-keeper",
+    "content_security_policy": {
+      "extension_pages": "script-src 'self'; object-src 'self'"
+    },
+    "action": {
+      "default_popup": "index.html",
+      "default_icon": {
+        "16": "icon.png",
+        "48": "icon.png",
+        "128": "icon.png"
+      }
+    },
+    "content_scripts": [
+      {
+        "js": ["target.js"],
+        "matches": [
+          "<all_urls>"
+        ]
+      }
+    ],
+    "web_accessible_resources": [
+      {
+        "resources": ["fonts/*.woff2"],
+        "matches": ["<all_urls>"]
+      }
+    ],
+    "permissions": ["activeTab", "scripting","storage"],
+    "background": {
+      "service_worker": "background.js"
+    }
+}
