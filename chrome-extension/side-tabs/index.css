@@ -1,0 +1,87 @@
+html {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 300px;
+    padding: 6px 3px;
+    margin: 0;
+    background-color: rgb(30,30,30);
+    color: white;
+
+
+}
+
+body .header .title {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+body .main .switch-group {
+    padding: 6px 10px;
+}
+
+body .main .switch-group.disabled {
+    display: none;
+}
+
+body .main .switch-group .sub-1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+body .main .switch-group .sub-1 .switch-btn {
+    width: 40px;
+    height: 20px;
+    background-color: rgba(0,255,0,0);
+    box-shadow: 0 0 0 .5px rgba(255,255,255,.7);
+    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    transition: .5s ease;
+}
+
+body .main .switch-group .sub-1 .switch-btn.active {
+    background-color: rgba(0,221,0,1);
+}
+
+body .main .switch-group .sub-1 .switch-btn.active .circle {
+    transform: translateX(19px);
+}
+
+body .main .switch-group .sub-1 .title {
+    font-size: 13px;
+}
+
+body .main .switch-group .sub-1 .switch-btn .circle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 3px;
+    width: 15px;
+    transform: translateX(0);
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 0 0 0 .5px rgba(30,30,30,.7);
+    transition: .5s ease;
+    pointer-events: none;
+}
+
+body .main .info {
+    padding: 6px 10px;
+    text-align: center;
+}
+
+body .footer {
+    padding: 2px 10px 0 10px;
+    text-align: center;
+    font-size: 8px;
+}
