@@ -52,7 +52,8 @@
     },
     "loadingPhoto": "讀取圖片中 ...",
     "loadingVideoPreview": "讀取預覽中 ...",
-    "copyRight":"Alex Chen 版權所有 © 2022-08 ~ 2025-11. Beta v0.7.5",
+    "photoConvertFail": "圖片讀取失敗",
+    "copyRight":"Alex Chen 版權所有 © 2022-08 ~ 2025-11. Beta v0.8.0",
     "inputModal" : {
         "header": "請先輸入上傳路徑",
         "headerNotFirstTime": "更改上傳路徑",
@@ -67,7 +68,8 @@
     },
     "toastMsg": {
         "whenConverting": "當前 {{ fileName }} 影片尚未轉換完成\n請在轉換完成後再預覽",
-        "videoConverted": "{{ fileName }} 影片已換完成"
+        "videoConverted": "{{ fileName }} 影片已換完成",
+        "notSupportedConvert": "該本地機器不支援轉換功能"
     },
     "changeFolderPath":"更改上傳路徑"
 }

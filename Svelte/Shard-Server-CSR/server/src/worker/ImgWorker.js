@@ -10,19 +10,26 @@ threadProcessHandler(async (data) => {
 
     const usingPath = data.usingPath
 
-    const read = await fs.promises.readFile(usingPath)
+    try {
 
-    const files = await imgConvert(read,  { failOn: 'error' })
+        const read = await fs.promises.readFile(usingPath)
 
-    const isNotJPG = imgsTypeFilter.includes(path.extname(usingPath))
+        const files = await imgConvert(read,  { failOn: 'error' })
 
-    if(data?.scale) await files.resize({ width: 200 })
+        const isNotJPG = imgsTypeFilter.includes(path.extname(usingPath))
 
-    if(data?.full) {
-        buffer = isNotJPG ? await files.rotate().toFormat('jpeg').toBuffer() : read
-    } else {
-        buffer = await files.rotate().toFormat('jpeg',{ mozjpeg: true }).toBuffer()
+        if(data?.scale) await files.resize({ width: 200 })
+
+        if(data?.full) {
+            buffer = isNotJPG ? await files.rotate().toFormat('jpeg').toBuffer() : read
+        } else {
+            buffer = await files.rotate().toFormat('jpeg',{ mozjpeg: true }).toBuffer()
+        }
+
+        return { result: buffer, error: '' }
+
+    } catch(err) {
+
+        return { result: undefined, error: err?.message }
     }
-
-    return { result: buffer }
 })

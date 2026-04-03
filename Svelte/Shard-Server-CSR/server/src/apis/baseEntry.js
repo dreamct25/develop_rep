@@ -46,7 +46,14 @@ route.use('/preview',async (req, res) => {
 
     pool.destroy()
 
-    res.end(imgBuffer)
+    if(imgBuffer instanceof Uint8Array) {
+
+        res.end(imgBuffer)
+
+        return
+    }
+
+    res.end('no')
 })
 
 route.use('/preview_doc',async (req, res) => {

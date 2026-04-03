@@ -51,8 +51,9 @@
         "doneMsg": "File {{ fileName }} is download complated !"
     },
     "loadingPhoto": "Loading Photo ...",
+    "photoConvertFail": "Load Fail",
     "loadingVideoPreview": "Loading Preview ...",
-    "copyRight":"CopyRight © 2022-08 ~ 2025-11 Alex Chen. Beta v0.7.5",
+    "copyRight":"CopyRight © 2022-08 ~ 2025-11 Alex Chen. Beta v0.8.0",
     "inputModal" : {
         "header": "Typing Upload Path First",
         "headerNotFirstTime": "Change Upload Path",
@@ -67,7 +68,8 @@
     },
     "toastMsg": {
         "whenConverting": "Current {{ fileName }} video is converted yet\nPlease click preview video after convertend.",
-        "videoConverted": "{{ fileName }} video is converted"
+        "videoConverted": "{{ fileName }} video is converted",
+        "notSupportedConvert": "This local machine is not supported to convert"
     },
     "changeFolderPath":"Change Upload Folder"
 }

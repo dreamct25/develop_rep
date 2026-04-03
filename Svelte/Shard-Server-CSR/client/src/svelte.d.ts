@@ -17,5 +17,6 @@ declare interface foldersItemType {
     fileCreateTime:string,
     isFolder:boolean,
     fileType:string
-    fileLoadStatus?: boolean
+    fileLoadStatus: boolean,
+    isConvertSuccess: boolean
 }

@@ -208,70 +208,132 @@
                 </div>
             {:else}
                 <div class={foldersItem.length > 0 ? "file-list-short" : "file-list-short disgrid"}>
-                    {#if foldersItem.length > 0}
-                        {#each foldersItem as items}
-                            {#if items.fileType === '.folder'}
-                                {#if !rwdStatus}
-                                    <!-- svelte-ignore a11y_no_static_element_interactions -->
-                                    <!-- svelte-ignore a11y_click_events_have_key_events -->
-                                    <div class="file-list-item-folder"onclick={cdDictionary.bind(undefined,items.fileUrl)}>
-                                        <div class="icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
-                                        <div class="folder file-name" >{items.fileName}</div>
-                                    </div>
-                                {:else}
-                                    <div class="file-list-item-folder"
-                                        onclick={cdDictionary.bind(undefined,items.fileUrl)}
-                                        ontouchstart={e => touchsEventObj = e }
-                                        {...usePress(
-                                            () => showOptionList(touchsEventObj),
-                                            () => ({
-                                                timeframe: 1000,
-                                                triggerBeforeFinished: true 
-                                            })
-                                        )}
-                                    >
-                                        <div class="icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
-                                        <div class="folder file-name" >{items.fileName}</div>
-                                    </div>
-                                {/if}
+                    <InfinitiScroll
+                        list={foldersItem}
+                        pageSize={rwdStatus ? 8 : 24}
+                    >
+                        {#snippet renderList(splitItems: typeof foldersItem)}
+                            {#if splitItems.length > 0}
+                                {#each splitItems as items}
+                                    {#if items.fileType === '.folder'}
+                                        {#if !rwdStatus}
+                                            <!-- svelte-ignore a11y_no_static_element_interactions -->
+                                            <!-- svelte-ignore a11y_click_events_have_key_events -->
+                                            <div class="file-list-item-folder"onclick={cdDictionary.bind(undefined,items.fileUrl)}>
+                                                <div class="icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
+                                                <div class="folder file-name" >{items.fileName}</div>
+                                            </div>
+                                        {:else}
+                                            <div class="file-list-item-folder"
+                                                onclick={cdDictionary.bind(undefined,items.fileUrl)}
+                                                ontouchstart={e => touchsEventObj = e }
+                                                {...usePress(
+                                                    () => showOptionList(touchsEventObj),
+                                                    () => ({
+                                                        timeframe: 1000,
+                                                        triggerBeforeFinished: true 
+                                                    })
+                                                )}
+                                            >
+                                                <div class="icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
+                                                <div class="folder file-name" >{items.fileName}</div>
+                                            </div>
+                                        {/if}
+                                    {:else}
+                                        {#if !rwdStatus}
+                                            <div class="file-list-item">
+                                                {#if new RegExp('^.*\.(jpg|JPG|gif|GIF|jpeg|JPEG|png|PNG|TIFF|tiff|TIF|tif)$').test(items.fileType)}
+                                                    <div class="img-outer-frame">
+                                                        <div class={`loading ${items.fileLoadStatus ? items.isConvertSuccess ? '' : 'active' : 'active'}`}>
+                                                            {$i18n.t(items.fileLoadStatus ? items.isConvertSuccess ? 'loadingPhoto' : 'photoConvertFail' : 'loadingPhoto')}
+                                                        </div>
+                                                        <div class="img-outer">
+                                                            <div class="img-frame">
+                                                                <img
+                                                                    onload={whenLoadImg.bind(undefined, items.fileName)}
+                                                                    onerror={whenLoadImg.bind(undefined, items.fileName)}
+                                                                    src={`${API_URL}/preview?f=${btoa(encodeURIComponent(items.fileUrl))}&scale=1`} 
+                                                                    alt="" 
+                                                                />
+                                                                <div class="inside-icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
+                                                            </div>
+                                                        </div> 
+                                                    </div>
+                                                {:else if new RegExp('^.*\.(mp4|MP4|mkv|MKV|mpeg|MPEG|mov|MOV)$').test(items.fileType)}
+                                                    <div class="img-outer-frame">
+                                                        <div class={`loading ${items.fileLoadStatus ? '' : 'active'}`}>{$i18n.t('loadingVideoPreview')}</div>
+                                                        <div class="img-outer">
+                                                            <div class="img-frame">
+                                                                <img
+                                                                    onload={whenLoadImg.bind(undefined, items.fileName)}
+                                                                    src={`${API_URL}/api/preview_v?f=${btoa(encodeURIComponent(items.fileUrl))}`} 
+                                                                    alt="" 
+                                                                />
+                                                                <div class="inside-icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
+                                                            </div>
+                                                        </div> 
+                                                    </div>
+                                                {:else}
+                                                    <div class="icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
+                                                {/if}
+                                                <div class="file-name">{items.fileName}</div>
+                                            </div>
+                                        {:else}
+                                            <div class="file-list-item"
+                                                ontouchstart={e => touchsEventObj = e }
+                                                {...usePress(
+                                                    () => showOptionList(touchsEventObj),
+                                                    () => ({
+                                                        timeframe: 1000,
+                                                        triggerBeforeFinished: true 
+                                                    })
+                                                )}
+                                            >
+                                                {#if new RegExp('^.*\.(jpg|JPG|gif|GIF|jpeg|JPEG|png|PNG|TIFF|tiff|TIF|tif)$').test(items.fileType)}
+                                                    <div class="img-outer-frame">
+                                                        <div class={`loading ${items.fileLoadStatus ? items.isConvertSuccess ? '' : 'active' : 'active'}`}>
+                                                            {$i18n.t(items.fileLoadStatus ? items.isConvertSuccess ? 'loadingPhoto' : 'photoConvertFail' : 'loadingPhoto')}
+                                                        </div>
+                                                        <div class="img-outer">
+                                                            <div class="img-frame">
+                                                                <img
+                                                                    onload={whenLoadImg.bind(undefined, items.fileName)}
+                                                                    onerror={whenLoadImg.bind(undefined, items.fileName)}
+                                                                    src={`${API_URL}/preview?f=${btoa(encodeURIComponent(items.fileUrl))}`} 
+                                                                    alt="" 
+                                                                />
+                                                                <div class="inside-icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
+                                                            </div>
+                                                        </div> 
+                                                    </div>
+                                                {:else if new RegExp('^.*\.(mp4|MP4|mkv|MKV|mpeg|MPEG|mov|MOV)$').test(items.fileType)}
+                                                    <div class="img-outer-frame">
+                                                        <div class={`loading ${items.fileLoadStatus ? '' : 'active'}`}>{$i18n.t('loadingVideoPreview')}</div>
+                                                        <div class="img-outer">
+                                                            <div class="img-frame">
+                                                                <img
+                                                                    onload={whenLoadImg.bind(undefined, items.fileName)} 
+                                                                    src={`${API_URL}/api/preview_v?f=${btoa(encodeURIComponent(items.fileUrl))}`} 
+                                                                    alt="" 
+                                                                />
+                                                                <div class="inside-icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
+                                                            </div>
+                                                        </div> 
+                                                    </div>
+                                                {:else}
+                                                    <div class="icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
+                                                {/if}
+                                                <div class="file-name">{items.fileName}</div>
+                                            </div>
+                                        {/if}
+                                    {/if}
+                                {/each}
                             {:else}
                                 {#if !rwdStatus}
-                                    <div class="file-list-item">
-                                        {#if new RegExp('^.*\.(jpg|JPG|gif|GIF|jpeg|JPEG|png|PNG|TIFF|tiff|TIF|tif)$').test(items.fileType)}
-                                            <div class="img-outer-frame">
-                                                <div class={`loading ${items.fileLoadStatus ? '' : 'active'}`}>{$i18n.t('loadingPhoto')}</div>
-                                                <div class="img-outer">
-                                                    <div class="img-frame">
-                                                        <img
-                                                            onload={whenLoadImg.bind(undefined, items.fileName)} 
-                                                            src={`${API_URL}/preview?f=${btoa(encodeURIComponent(items.fileUrl))}&scale=1`} 
-                                                            alt="" 
-                                                        />
-                                                        <div class="inside-icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
-                                                    </div>
-                                                </div> 
-                                            </div>
-                                        {:else if new RegExp('^.*\.(mp4|MP4|mkv|MKV|mpeg|MPEG|mov|MOV)$').test(items.fileType)}
-                                            <div class="img-outer-frame">
-                                                <div class={`loading ${items.fileLoadStatus ? '' : 'active'}`}>{$i18n.t('loadingVideoPreview')}</div>
-                                                <div class="img-outer">
-                                                    <div class="img-frame">
-                                                        <img
-                                                            onload={whenLoadImg.bind(undefined, items.fileName)} 
-                                                            src={`${API_URL}/api/preview_v?f=${btoa(encodeURIComponent(items.fileUrl))}`} 
-                                                            alt="" 
-                                                        />
-                                                        <div class="inside-icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
-                                                    </div>
-                                                </div> 
-                                            </div>
-                                        {:else}
-                                            <div class="icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
-                                        {/if}
-                                        <div class="file-name">{items.fileName}</div>
-                                    </div>
+                                    <div class="no-data">{$i18n.t('noAnyFile')}</div>
                                 {:else}
-                                    <div class="file-list-item"
+                                    <div 
+                                        class="no-data"
                                         ontouchstart={e => touchsEventObj = e }
                                         {...usePress(
                                             () => showOptionList(touchsEventObj),
@@ -280,60 +342,12 @@
                                                 triggerBeforeFinished: true 
                                             })
                                         )}
-                                    >
-                                        {#if new RegExp('^.*\.(jpg|JPG|gif|GIF|jpeg|JPEG|png|PNG|TIFF|tiff|TIF|tif)$').test(items.fileType)}
-                                            <div class="img-outer-frame">
-                                                <div class={`loading ${items.fileLoadStatus ? '' : 'active'}`}>{$i18n.t('loadingPhoto')}</div>
-                                                <div class="img-outer">
-                                                    <div class="img-frame">
-                                                        <img
-                                                            onload={whenLoadImg.bind(undefined, items.fileName)} 
-                                                            src={`${API_URL}/preview?f=${btoa(encodeURIComponent(items.fileUrl))}`} 
-                                                            alt="" 
-                                                        />
-                                                        <div class="inside-icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
-                                                    </div>
-                                                </div> 
-                                            </div>
-                                        {:else if new RegExp('^.*\.(mp4|MP4|mkv|MKV|mpeg|MPEG|mov|MOV)$').test(items.fileType)}
-                                            <div class="img-outer-frame">
-                                                <div class={`loading ${items.fileLoadStatus ? '' : 'active'}`}>{$i18n.t('loadingVideoPreview')}</div>
-                                                <div class="img-outer">
-                                                    <div class="img-frame">
-                                                        <img
-                                                            onload={whenLoadImg.bind(undefined, items.fileName)} 
-                                                            src={`${API_URL}/api/preview_v?f=${btoa(encodeURIComponent(items.fileUrl))}`} 
-                                                            alt="" 
-                                                        />
-                                                        <div class="inside-icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
-                                                    </div>
-                                                </div> 
-                                            </div>
-                                        {:else}
-                                            <div class="icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
-                                        {/if}
-                                        <div class="file-name">{items.fileName}</div>
-                                    </div>
+                                    >{$i18n.t('noAnyFile')}</div>
                                 {/if}
                             {/if}
-                        {/each}
-                    {:else}
-                        {#if !rwdStatus}
-                            <div class="no-data">{$i18n.t('noAnyFile')}</div>
-                        {:else}
-                            <div 
-                                class="no-data"
-                                ontouchstart={e => touchsEventObj = e }
-                                {...usePress(
-                                    () => showOptionList(touchsEventObj),
-                                    () => ({
-                                        timeframe: 1000,
-                                        triggerBeforeFinished: true 
-                                    })
-                                )}
-                            >{$i18n.t('noAnyFile')}</div>
-                        {/if}
-                    {/if}
+                        {/snippet}
+
+                    </InfinitiScroll>
                 </div>
             {/if}
         </div>
@@ -522,6 +536,7 @@
     import { i18n } from '../i18next'
     import langs from '../assert/json/lang.json'
     import lib from '../lib/Library'
+    import InfinitiScroll from '../component/InfinitiScroll.svelte';
     
     // get server onload props
     let foldersItem = $state<foldersItemType[]>([])
@@ -646,9 +661,10 @@
         return `${(bytesPerSecond / (1024 * 1024)).toFixed(2)} MB/s`;
     }
 
-    const whenLoadImg:(fileName: string) => any = fileName => {
+    const whenLoadImg:(fileName: string, event: Event) => any = (fileName, event) => {
         const findIndex = lib.findIndexOfObj(foldersItem, row => row.fileName === fileName)
         foldersItem[findIndex].fileLoadStatus = true
+        foldersItem[findIndex].isConvertSuccess = event.type !== 'error'
     }
 
     // render icon in file-list-short
@@ -910,6 +926,12 @@
                         videoConverTimes = { percent: -1, remainTime: { mins: 0, secs: 0 } }
                     }
 
+                    
+                }
+
+                if (data.message === 'fail') {
+                    toastMessages = { message: $i18n.t('toastMsg.notSupportedConvert'), status: 'error' }
+                    loadingStatus = false
                     evtSource.close();
                 }
             }

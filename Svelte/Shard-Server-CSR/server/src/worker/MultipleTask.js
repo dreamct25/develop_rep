@@ -16,6 +16,9 @@ if(parentPort !== null) {
 
     try {
       const result = await taskHandler(data, parentPort);
+      
+      if(result.error) throw new Error(result.error)
+
       parentPort.postMessage(result);
     } catch (err) {
       parentPort.postMessage({ error: err.message });
