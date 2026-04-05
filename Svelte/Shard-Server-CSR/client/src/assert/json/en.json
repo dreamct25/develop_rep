@@ -50,10 +50,10 @@
         "done": "Done !",
         "doneMsg": "File {{ fileName }} is download complated !"
     },
-    "loadingPhoto": "Loading Photo ...",
+    "loadingPhoto": "Loading Photo",
     "photoConvertFail": "Load Fail",
     "loadingVideoPreview": "Loading Preview ...",
-    "copyRight":"CopyRight © 2022-08 ~ 2025-11 Alex Chen. Beta v0.8.0",
+    "copyRight":"CopyRight © 2022-08 ~ 2025-11 Alex Chen. Beta v0.8.1",
     "inputModal" : {
         "header": "Typing Upload Path First",
         "headerNotFirstTime": "Change Upload Path",

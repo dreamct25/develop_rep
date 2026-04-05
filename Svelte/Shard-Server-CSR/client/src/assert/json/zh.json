@@ -50,10 +50,10 @@
         "done": "完成 !",
         "doneMsg": "檔案 {{ fileName }} 已下載完成 !"
     },
-    "loadingPhoto": "讀取圖片中 ...",
+    "loadingPhoto": "讀取圖片中",
     "loadingVideoPreview": "讀取預覽中 ...",
     "photoConvertFail": "圖片讀取失敗",
-    "copyRight":"Alex Chen 版權所有 © 2022-08 ~ 2025-11. Beta v0.8.0",
+    "copyRight":"Alex Chen 版權所有 © 2022-08 ~ 2025-11. Beta v0.8.1",
     "inputModal" : {
         "header": "請先輸入上傳路徑",
         "headerNotFirstTime": "更改上傳路徑",

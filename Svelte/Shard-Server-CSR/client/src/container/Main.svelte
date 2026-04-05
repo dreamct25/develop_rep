@@ -124,6 +124,7 @@
                     triggerBeforeFinished: true 
                 })
             )}
+            bind:this={folderViewListRef}
         >
             {#if !listShortIcon}
                 <div class="file-list">
@@ -209,8 +210,10 @@
             {:else}
                 <div class={foldersItem.length > 0 ? "file-list-short" : "file-list-short disgrid"}>
                     <InfinitiScroll
+                        mountedElement={folderViewListRef}
                         list={foldersItem}
                         pageSize={rwdStatus ? 8 : 24}
+                        triggerOffset={100}
                     >
                         {#snippet renderList(splitItems: typeof foldersItem)}
                             {#if splitItems.length > 0}
@@ -544,6 +547,7 @@
     let currentIp = $state<string>('')
     const API_URL = process.env.API_URL
     let progressTxt = $state<string>('uploadStatus.ready')
+    let folderViewListRef = $state<Element>()
     let count = $state<number>(-1)
     let currentDirTemp = $state<string>("")
     let toggleOptionMenu = $state<boolean>(false)
@@ -984,6 +988,7 @@
 
     // change current dictionary
     const actionDictionary:() => Promise<void> = async () => {
+        
         if (currentDirTemp === '') {
             await cdDictionary(currentDirEnv)
             return
