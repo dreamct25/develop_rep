@@ -270,7 +270,8 @@ route.get('/get_remote_ip',(req,res) => {
 
     res.status(200).json({
         currentIp:`http://${addressIp}:19621`,
-        isLocal: req.hostname === 'localhost'
+        isLocal: req.hostname === 'localhost',
+        platform: process.platform
     })
 })
 

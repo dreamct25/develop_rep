@@ -541,7 +541,7 @@
     import lib from '../lib/Library'
     import InfinitiScroll from '../component/InfinitiScroll.svelte';
     
-    // get server onload props
+    //#region states
     let foldersItem = $state<foldersItemType[]>([])
     let currentDirEnv = $state<string>('')
     let currentIp = $state<string>('')
@@ -581,6 +581,7 @@
     let getLoccalSettingStatus = $state<boolean | undefined>(undefined)
     let createUploadPath = $state<string>('')
     let isLocalService = $state<boolean>(false)
+    let currentPlatform = $state<string>('')
     let openLocalSettingModal = $state<boolean>(false)
     let toggleVideoConverTimesModal = $state<boolean>(false)
     let toggleVideoConverTimesModalToMin = $state<boolean>(false)
@@ -593,6 +594,7 @@
         5: 'downloadStatusGroup.done'
     }
     const languageOptionList: Record<string, string> = langs
+    //#endregion
 
     $effect(() => {
         document.querySelector('.app')?.classList[!getLoccalSettingStatus ? 'add' : 'remove']('disable')
@@ -688,7 +690,7 @@
         return faFile
     }
 
-    // create、rename modal
+    //#region create、rename modal
     const toggleModalStatus:(status: boolean, method: string) => Promise<void> = async (status, method) => {
         
         if(method.includes('label')) currentUseMethod = method.split('_')[0]
@@ -734,6 +736,7 @@
             oldDirName = ''
         }
     }
+    //#endregion
 
     const toggleDeleteModalStatus:(status: boolean, method: string) => Promise<void> = async (status,method) => {
         if(method === 'confirm') await deleteFile(fullFolderUrl)
@@ -767,7 +770,7 @@
         lib.typeFix<HTMLInputElement>(e.target).value = '';
     }
 
-    // upload file
+    //#region upload file
     const uploadFile:(filesList: FileList) => void = filesList => {
         const formData = new FormData()
         formData.append('folderUrl',currentDirTemp || currentDirEnv);
@@ -801,8 +804,9 @@
 
         xhr.send(formData)
     }
+    //#endregion
 
-    // download file
+    //#region download file
     const downloadFile:(url:string) => Promise<void> = async url => {
 
         const [fileDetails] = lib.filter(foldersItem, row => row.fileUrl === url)
@@ -874,6 +878,7 @@
         toggleDownloadModal = false
         toastMessages = { message: $i18n.t('downloadStatusGroup.doneMsg', { fileName: fullFileName }), status: 'success' }
     }
+    //#endregion
 
     const previewMedia:(url:string,isImg: boolean) => Promise<void> = async (url,isImg) => {
         
@@ -955,7 +960,7 @@
         window.open(`${API_URL}/preview_doc?f=${btoa(encodeURIComponent(url))}`)
     }
 
-    // delete file
+    //#region delete file
     const deleteFile:(folderUrl:string) => Promise<void> = async folderUrl => {
         
         loadingStatus = true
@@ -969,8 +974,9 @@
         loadingStatus = false
         getUploadDirs(currentDirTemp)
     }
+    //#endregion
 
-    // go dictionary
+    //#region go dictionary
     const cdDictionary:(url:string) => Promise<void> = async url => {
         loadingStatus = true
         currentDirTemp = currentDirEnv !== url ? url : ''
@@ -985,8 +991,9 @@
         foldersItem = result.data.data
         loadingStatus = false
     }
+    //#endregion
 
-    // change current dictionary
+    //#region change current dictionary
     const actionDictionary:() => Promise<void> = async () => {
         
         if (currentDirTemp === '') {
@@ -994,16 +1001,24 @@
             return
         }
 
-        const splitPath = currentDirTemp.replace(/[\\//]/g, '|').split('|')
-        
-        const currentDirTempRef = currentDirTemp.replace(/[\\//]/g, '|').split('|')[splitPath.length - 1]
+        const regs = {
+            [currentPlatform]: /\//g,
+            win32: /[\\//]/g
+        }[currentPlatform]
 
-        currentDirTemp = currentDirTemp.replace(`\\${currentDirTempRef}`,'')
+        const splitPath = currentDirTemp.replace(regs, '|').split('|')
+            
+        const currentDirTempRef = currentDirTemp.replace(regs, '|').split('|')[splitPath.length - 1]
+
+        currentDirTemp = currentDirTemp.replace(
+            currentPlatform === 'win32' ? `\\${currentDirTempRef}` : currentDirTempRef,
+        '')
 
         cdDictionary(currentDirTemp)
     }
+    //#endregion
 
-    // get upload dictionary
+    //#region get upload dictionary
     const getUploadDirs:(path:string) => Promise<void> = async path => {
         
         loadingStatus = true
@@ -1016,8 +1031,9 @@
         foldersItem = result.data.data
         loadingStatus = false
     }
+    //#endregion
 
-    // show option menu when click right on mouse
+    //#region show option menu when click right on mouse
     const showOptionList:(e:any) => void = e => {
         
         if(e){
@@ -1120,6 +1136,7 @@
             }
         }
     }
+    //#endregion
 
     const settingEvent:() => Promise<void> = async () => {
         
@@ -1129,8 +1146,6 @@
                 headers:{ "Content-Type":"application/json" },
                 data: { u:btoa(encodeURIComponent(createUploadPath)) }
             })
-
-            // const resultI_Item = await resultI.json()
 
             if(result.data.message !== 'success') return
 
@@ -1145,7 +1160,6 @@
     const initFetch:() => Promise<void> = async () => {
 
         const resCheckSettingExist = await lib.fetch.get<{ message: string }>(`${API_URL}/api/check_setting_exist`)
-        // const resFirstItem = await resFirst.json()
 
         if(resCheckSettingExist.data.message === 'empty'){
             getLoccalSettingStatus = false
@@ -1160,10 +1174,11 @@
             data: { folderUrl:'' } 
         })
 
-        // const resItem = await res.json()
-
-        const resIp = await lib.fetch.get<{ currentIp: string, isLocal: boolean }>(`${API_URL}/api/get_remote_ip`)
-        // const resIpItem = await resIp.json()
+        const resIp = await lib.fetch.get<{ 
+            currentIp: string, 
+            isLocal: boolean,
+            platform: string
+        }>(`${API_URL}/api/get_remote_ip`)
 
         getLoccalSettingStatus = true
 
@@ -1171,6 +1186,7 @@
         currentDirEnv = resGetUploadDirs.data.useFolderUrl
         currentIp = resIp.data.currentIp
         isLocalService = resIp.data.isLocal
+        currentPlatform = resIp.data.platform
         createUploadPath = resGetUploadDirs.data.useFolderUrl
     }
 

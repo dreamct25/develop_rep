@@ -53,7 +53,7 @@
     "loadingPhoto": "讀取圖片中",
     "loadingVideoPreview": "讀取預覽中 ...",
     "photoConvertFail": "圖片讀取失敗",
-    "copyRight":"Alex Chen 版權所有 © 2022-08 ~ 2025-11. Beta v0.8.1",
+    "copyRight":"Alex Chen 版權所有 © 2022-08 ~ 2025-11. Beta v0.8.2",
     "inputModal" : {
         "header": "請先輸入上傳路徑",
         "headerNotFirstTime": "更改上傳路徑",
