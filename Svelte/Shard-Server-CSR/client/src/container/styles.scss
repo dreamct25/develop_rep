@@ -3,18 +3,19 @@ html{
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
     body{
-        margin: 0 auto;
-        max-width: 70vw;
+        margin: 0;
         padding-top: env(safe-area-inset-top);
         padding-right: env(safe-area-inset-right);
         padding-bottom: env(safe-area-inset-bottom);
         padding-left: env(safe-area-inset-left);
-        height: 100%;
 
         .app {
-            min-height: 100vh;
             display: grid;
-            grid-template-rows: 0fr 2fr 0fr;
+            grid-template-rows: 0fr auto 0fr;
+            min-height: calc(100vh - 0px);
+            width: 95%;
+            max-width: 850px;
+            margin: 0 auto;
 
             &.disable {
                 grid-template-rows: 1fr;
@@ -23,18 +24,18 @@ html{
 
             .header{
                 display: flex;
+                justify-content: space-between;
                 color: white;
     
                 h1{
                     letter-spacing: 5px;
                     font-size: 40px;
                     font-style: italic;
-                    width: 70%;
+                    margin: 40px 12px 12px 0;
                 }
 
                 .right {
                     align-self: flex-end;
-                    margin-left: auto;
 
                     div {
                         letter-spacing: 2px;
@@ -46,6 +47,7 @@ html{
 
                     .right-sub-area {
                         display: flex;
+                        justify-content: space-between;
                         align-items: center;
 
                         .change-path-btn {
@@ -80,7 +82,7 @@ html{
                     }
                 }
     
-                @media screen and (max-width:420px) {
+                @media screen and (max-width:720px) {
                     display: block;
     
                     h1{
@@ -105,7 +107,7 @@ html{
                         position: relative;
                         color: white;
                         text-align: center;
-                        padding: 4px 10px 5px 10px;
+                        padding: 4px 10px 3px 10px;
                         border-radius: 3px;
                         width: 100px;
                         background-color: rgb(0,162,255);
@@ -151,7 +153,7 @@ html{
                         user-select: none;
                         opacity: .5;
                         transition: .5s ease;
-                        padding: 5px 8px 3px 8px;
+                        padding: 5.5px 8px 3px 8px;
                         color: white;
                         text-align: center;
                         border-radius: 3px;
@@ -214,7 +216,7 @@ html{
     
                     .fn-group{
                         display: grid;
-                        grid-template-columns: repeat(5,1fr);
+                        grid-template-columns: repeat(4,1fr);
                         gap: 5px;
                         
                         .fn{
@@ -443,12 +445,16 @@ html{
                             display: flex;
                             align-items: center;
                             justify-content: space-between;
-                            margin-bottom: 10px;
+                            margin-bottom: 6px;
                             overflow: hidden;
                             border-radius: 5px;
                             color: white;
                             box-shadow:inset 0 0 0 .5px rgba(255,255,255,.7);
                             padding: 5px 10px 7px 10px;
+
+                            &:last-child {
+                                margin-bottom: 0;
+                            }
     
                             @media screen and (max-width:420px) {
                                 padding: 10px;
@@ -514,12 +520,15 @@ html{
                             font-size: 25px;
                             font-weight: bold;
                             color: white;
-                            min-height: 50vh;
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
     
                             @media screen and (max-width:420px) {
                                 user-select: none;
                                 -webkit-user-select: none;
-                                min-height: 32vh;
                             }
                         }
                     }
@@ -606,7 +615,7 @@ html{
                                 }
 
                                 & ~ .file-name {
-                                    padding: 8px 0 6px 0;
+                                    padding: 3px 0 4px 0;
                                 }
                             }
                         }
@@ -657,19 +666,23 @@ html{
                             font-size: 25px;
                             font-weight: bold;
                             color: white;
-                            min-height: 50vh;
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
     
                             @media screen and (max-width:420px) {
                                 user-select: none;
                                 -webkit-user-select: none;
-                                min-height: 32vh;
                             }
                         }
         
                         &.disgrid{
-                            display: unset;
+                            display: block;
                             grid-template-columns: unset;
                             gap: unset;
+                            height: 99%;
                         }
                     }
                 }
@@ -1249,10 +1262,6 @@ html{
                     }
                 }
             }
-        }
-
-        @media screen and (max-width:420px) {
-            max-width: 90vw;
         }
     }
 }

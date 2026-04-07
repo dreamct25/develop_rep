@@ -1,6 +1,6 @@
-{#if items.length > 0}
+<!-- {#if items.length > 0} -->
 	{@render renderList(items)}
-{/if}
+<!-- {/if} -->
 
 {#if hasMore}
 	<div class="check-line" bind:this={sentinel}></div>

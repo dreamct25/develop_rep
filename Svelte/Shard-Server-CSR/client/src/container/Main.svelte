@@ -12,7 +12,7 @@
                     <!-- svelte-ignore a11y_no_static_element_interactions -->
                     <div class="change-path-btn" onclick={() => openLocalSettingModal = true}>
                         <FontAwesomeIcon icon={faSync} />
-                        <Tooltip pos={{ x:-73, y:-66 }} width={150}>{$i18n.t('changeFolderPath')}</Tooltip>
+                        <Tooltip pos={{ x: '-131px', y: '-66px' }} width={'150px'} arrowPosX={'52px'}>{$i18n.t('changeFolderPath')}</Tooltip>
                     </div>
                     
                 </div>
@@ -34,7 +34,7 @@
                     onclick={actionDictionary}
                 >
                     <FontAwesomeIcon icon={faAngleLeft} />
-                    <Tooltip pos={{ x: currentLanguage === 'en' ? -68 : -33,y:-67 }} width={currentLanguage === 'en' ? 150 : 80}>{$i18n.t('prevFolder')}</Tooltip>
+                    <Tooltip pos={{ x: currentLanguage === 'en' ? '-68px' : '-33px',y: '-67px' }} width={currentLanguage === 'en' ? '150px' : '80px'}>{$i18n.t('prevFolder')}</Tooltip>
                 </div>
                 <div class={isUpload ? 'upload-btn disactive' : 'upload-btn'}>
                     {$i18n.t('uploadBtn')}
@@ -49,24 +49,24 @@
                     <!-- svelte-ignore a11y_no_static_element_interactions -->
                     <div class={listShortIcon ? "fn active" : "fn"} onclick={() => listShortIcon = true}>
                         <FontAwesomeIcon icon={faGripHorizontal} />
-                        <Tooltip pos={{ x:0,y:-40 }} width={70}>{$i18n.t('shortList')}</Tooltip>
+                        <Tooltip pos={{ x: '-1px', y: '-40px' }} width={'70px'} arrowPosX={'-4px'}>{$i18n.t('shortList')}</Tooltip>
                     </div>
                     <!-- svelte-ignore a11y_click_events_have_key_events -->
                     <!-- svelte-ignore a11y_no_static_element_interactions -->
                     <div class={!listShortIcon ? "fn active" : "fn"} onclick={() => listShortIcon = false}>
                         <FontAwesomeIcon icon={faList} />
-                        <Tooltip pos={{ x:0,y:-40 }} width={70}>{$i18n.t('detailList')}</Tooltip>
+                        <Tooltip pos={{ x: '-1px', y: '-40px' }} width={'70px'} arrowPosX={'-5px'} >{$i18n.t('detailList')}</Tooltip>
                     </div>
                     <!-- svelte-ignore a11y_click_events_have_key_events -->
                     <!-- svelte-ignore a11y_no_static_element_interactions -->
                     <div class="fn" onclick={shortDate}>
                         <FontAwesomeIcon icon={listDataDateSort ? faArrowUpShortWide : faArrowDownWideShort} />
-                        <Tooltip pos={{ x:0,y:-40 }} width={115}>{$i18n.t(listDataDateSort ? "sortLateDate" : "sortLatestDate")}</Tooltip>
+                        <Tooltip pos={{ x: '-13px', y: '-40px' }} width={'115px'} arrowPosX={'7px'}>{$i18n.t(listDataDateSort ? "sortLateDate" : "sortLatestDate")}</Tooltip>
                     </div>
                     {#if currentIp}
                         <div class="fn">
                             <FontAwesomeIcon icon={faQrcode} />
-                            <Tooltip pos={{ x:0,y:-72 }} width={95} padding="0px">
+                            <Tooltip pos={{ x: '-30px', y: '-72px' }} width={'95px'} arrowPosX={'25px'} padding={'0px'}>
                                 <div class="qr-code-outer">
                                     <QRCodeImage displayType="canvas" text={currentIp} width={110} />
                                 </div>
@@ -996,10 +996,7 @@
     //#region change current dictionary
     const actionDictionary:() => Promise<void> = async () => {
         
-        if (currentDirTemp === '') {
-            await cdDictionary(currentDirEnv)
-            return
-        }
+        if (currentDirTemp === '') return
 
         const regs = {
             [currentPlatform]: /\//g,
@@ -1011,7 +1008,7 @@
         const currentDirTempRef = currentDirTemp.replace(regs, '|').split('|')[splitPath.length - 1]
 
         currentDirTemp = currentDirTemp.replace(
-            currentPlatform === 'win32' ? `\\${currentDirTempRef}` : currentDirTempRef,
+            currentPlatform === 'win32' ? `\\${currentDirTempRef}` : `/${currentDirTempRef}`,
         '')
 
         cdDictionary(currentDirTemp)
