@@ -255,7 +255,7 @@
                                                                 <img
                                                                     onload={whenLoadImg.bind(undefined, items.fileName)}
                                                                     onerror={whenLoadImg.bind(undefined, items.fileName)}
-                                                                    src={`${API_URL}/preview?f=${btoa(encodeURIComponent(items.fileUrl))}&scale=1`} 
+                                                                    src={`${API_URL}/preview/${convertFileName(items.fileUrl)}?f=${btoa(encodeURIComponent(items.fileUrl))}&scale=1`} 
                                                                     alt="" 
                                                                 />
                                                                 <div class="inside-icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
@@ -302,7 +302,7 @@
                                                                 <img
                                                                     onload={whenLoadImg.bind(undefined, items.fileName)}
                                                                     onerror={whenLoadImg.bind(undefined, items.fileName)}
-                                                                    src={`${API_URL}/preview?f=${btoa(encodeURIComponent(items.fileUrl))}`} 
+                                                                    src={`${API_URL}/preview/${convertFileName(items.fileUrl)}?f=${btoa(encodeURIComponent(items.fileUrl))}`} 
                                                                     alt="" 
                                                                 />
                                                                 <div class="inside-icon"><FontAwesomeIcon icon={renderIcon(items.fileType)} /></div>
@@ -587,12 +587,12 @@
     let toggleVideoConverTimesModalToMin = $state<boolean>(false)
     let videoConverTimes = $state<{ percent: number, remainTime: { mins: number, secs: number } }>({ percent: -1, remainTime: { mins: 0, secs: 0 } })
     let toastMessages = $state<{ message: string, status: 'success' | 'error' | 'info' }>({ message: '', status: 'success' })
-    const downloadStatusItem: Record<number,string> = {
+    const downloadStatusItem = $derived({
         [downloadStatusCode]: '',
         0: 'downloadStatusGroup.prepareDownload',
         4: 'downloadStatusGroup.convertFile', 
         5: 'downloadStatusGroup.done'
-    }
+    })
     const languageOptionList: Record<string, string> = langs
     //#endregion
 
@@ -880,10 +880,27 @@
     }
     //#endregion
 
-    const previewMedia:(url:string,isImg: boolean) => Promise<void> = async (url,isImg) => {
+    const convertFileName: (url: string) => string = url => {
         
+        const pathSplitType = currentPlatform === 'win32' ? '\\' : '/'
+
+        const { length, [length - 1]: fileName } = url.split(pathSplitType)
+
+        const [filterCurrentFile] = lib.filter(foldersItem, row => row.fileName === fileName)
+
+        if(!filterCurrentFile) return ''
+
+        return filterCurrentFile.fileName
+    }
+
+    const previewMedia:(url:string,isImg: boolean) => Promise<void> = async (url,isImg) => {
+
+        const currentFileName = convertFileName(url)
+
+        if(!currentFileName) return
+
         if(isImg){
-            window.open(`${API_URL}/preview?f=${btoa(encodeURIComponent(url))}&full=1`)
+            window.open(`${API_URL}/preview/${currentFileName}?f=${btoa(encodeURIComponent(url))}&full=1`)
             return
         }
 
@@ -935,7 +952,7 @@
                         videoConverTimes = { percent: -1, remainTime: { mins: 0, secs: 0 } }
                     }
 
-                    
+                    evtSource.close();
                 }
 
                 if (data.message === 'fail') {
@@ -957,7 +974,12 @@
     }
 
     const previewDoc: (url:string) => Promise<void> = async url => {
-        window.open(`${API_URL}/preview_doc?f=${btoa(encodeURIComponent(url))}`)
+
+        const currentFileName = convertFileName(url)
+
+        if(!currentFileName) return
+
+        window.open(`${API_URL}/preview_doc/${currentFileName}?f=${btoa(encodeURIComponent(url))}`)
     }
 
     //#region delete file
@@ -1002,10 +1024,8 @@
             [currentPlatform]: /\//g,
             win32: /[\\//]/g
         }[currentPlatform]
-
-        const splitPath = currentDirTemp.replace(regs, '|').split('|')
-            
-        const currentDirTempRef = currentDirTemp.replace(regs, '|').split('|')[splitPath.length - 1]
+        
+        const { length, [length - 1]: currentDirTempRef } = currentDirTemp.replace(regs, '|').split('|')
 
         currentDirTemp = currentDirTemp.replace(
             currentPlatform === 'win32' ? `\\${currentDirTempRef}` : `/${currentDirTempRef}`,

@@ -53,7 +53,7 @@
     "loadingPhoto": "Loading Photo",
     "photoConvertFail": "Load Fail",
     "loadingVideoPreview": "Loading Preview ...",
-    "copyRight":"CopyRight © 2022-08 ~ 2025-11 Alex Chen. Beta v0.8.3",
+    "copyRight":"CopyRight © 2022-08 ~ 2025-11 Alex Chen. Beta v0.8.4",
     "inputModal" : {
         "header": "Typing Upload Path First",
         "headerNotFirstTime": "Change Upload Path",

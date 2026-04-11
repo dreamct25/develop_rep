@@ -29,34 +29,43 @@ route.use('/download',async (req, res) => {
 })
 
 // preview file api
-route.use('/preview',async (req, res) => {
+route.use('/preview/:fileName',async (req, res) => {
     const usingPath = decodeURIComponent(
         Buffer.from(req.query.f, 'base64').toString()
     )
 
-    const pool = new MultipleThreads(path.join(__dirname.replace('apis',''), 'worker', 'ImgWorker.js'))
+    const { length, [length - 1]: matchFileName } = usingPath.split(process.platform === 'win32' ? '\\' : '/')
 
-    const runObj = { usingPath }
+    if(req.params.fileName === matchFileName) {
 
-    if(Boolean(req.query?.scale)) runObj.scale = true
+        const pool = new MultipleThreads(path.join(__dirname.replace('apis',''), 'worker', 'ImgWorker.js'))
 
-    if(Boolean(req.query?.full)) runObj.full = true
+        const runObj = { usingPath }
 
-    const imgBuffer = await pool.run(runObj)
+        if(Boolean(req.query?.scale)) runObj.scale = true
 
-    pool.destroy()
+        if(Boolean(req.query?.full)) runObj.full = true
 
-    if(imgBuffer instanceof Uint8Array) {
+        const imgBuffer = await pool.run(runObj)
 
-        res.end(imgBuffer)
+        pool.destroy()
+
+        if(imgBuffer instanceof Uint8Array) {
+
+            res.end(imgBuffer)
+
+            return
+        }
+
+        res.end('Is not have the photo .')
 
         return
     }
 
-    res.end('no')
+    res.end('Is not have the photo .')
 })
 
-route.use('/preview_doc',async (req, res) => {
+route.use('/preview_doc/:fileName',async (req, res) => {
     const usingPath = decodeURIComponent(
         Buffer.from(req.query.f, 'base64').toString()
     )

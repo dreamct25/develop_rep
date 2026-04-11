@@ -1,4 +1,4 @@
-# Share Server (Beta v0.8.1)
+# Share Server (Beta v0.8.4)
 ```
 目前為 "試作版" 功能未完成但具基本功能，後續會遷移為 Desktop 應用，現有程式為 Svelte CSR
 ```

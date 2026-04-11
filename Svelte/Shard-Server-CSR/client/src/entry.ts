@@ -5,3 +5,8 @@ mount(
     App,
     { target: document.querySelector('.app')! }
 )
+
+        const x = document.createElement('base')
+        x.href = '/'
+
+        document.head.appendChild(x)
