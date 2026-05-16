@@ -1,17 +1,11 @@
-// CopyRight © 2021-08 - 2024-08 Alex Chen. Library Language - Typescript Ver 1.6.6
-// Work Environment Typescript v5.5.4、ESlint v8.57.0
-//
-/* eslint-disable no-return-assign */
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-redeclare */
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
-/* eslint-disable @typescript-eslint/no-invalid-void-type */
-/* eslint-disable @typescript-eslint/method-signature-style */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
+// CopyRight © 2021-08 - 2026-05 Alex Chen. Library Language - Typescript Ver 1.7.1
+// Work Environment Typescript v6.0.2、ESlint v10.2.1
 //
 // Use in ESModule
 // export default $
+
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 // String tips when use method
 type objDetailsMethod = 'keys' | 'values' | 'entries'
@@ -19,7 +13,7 @@ type createArrayType = 'fake' | 'new'
 type localDataActionType = 'get' | 'set'
 type stylesMethod = 'set' | 'remove'
 type consoleMethod = 'log' | 'dir' | 'error' | 'info' | 'warn' | 'assert' | 'clear' | 'context' | 'count' | 'countReset' | 'debug' | 'dirxml' | 'group' | 'groupCollapsed' | 'groupEnd' | 'memory' | 'profile' | 'profileEnd' | 'table' | 'time' | 'timeEnd' | 'timeLog' | 'timeStamp' | 'trace'
-type convertType = 'string' | 'number' | 'float' | 'boolean' | 'json' | 'stringify'
+type convertType = 'string' | 'number' | 'float' | 'boolean' | 'json' | 'stringify' | 'deepCopy'
 type requestMethod = 'get' | 'post' | 'patch' | 'put' | 'delete'
 type retunType = 'json' | 'text' | 'blob' | 'formData' | 'arrayBuffer' | 'clone'
 type SHAType = 'SHA-1' | 'SHA-256' | 'SHA-384' | 'SHA-512'
@@ -91,9 +85,9 @@ export interface Self extends HTMLElement {
   addClass(classText: string): any
   removeClass(classText: string): any
   toggleClass(classText: string): boolean
-  on(eventType: string, fn: (self: any, t: Event) => void): void
-  listener(eventType: string, fn: (event: any) => void): void
-  removeListener(eventType: string, fn: (event: any) => void): void
+  on<K extends keyof (WindowEventMap & DocumentEventMap)>(eventType: K, callBack: (event:  (WindowEventMap & DocumentEventMap)[K]) => void): void
+  listener<K extends keyof (WindowEventMap & DocumentEventMap)>(eventType: K, callBack: (event: (WindowEventMap & DocumentEventMap)[K]) => void): void
+  removeListener<K extends keyof (WindowEventMap & DocumentEventMap)>(eventType: K, callBack: (event: (WindowEventMap & DocumentEventMap)[K]) => void): void
   val(valTemp?: string): string | undefined
   attr(props: string, val?: string): string | void | null
   props(props: string, val?: any): any
@@ -104,7 +98,7 @@ export interface Self extends HTMLElement {
   parent(): ParentNode | null
   appendDom(el: HTMLElement): void
   removeDom(): void
-  removeChildDom(): void
+  removeChildDom(childDom: Node): void
   appendDomText(el: Text): void
   easyAppendDom(orderBy: string, domStr: string): void
   styles(method: stylesMethod, cssType: string, cssParameter: string): Self | undefined
@@ -123,7 +117,8 @@ declare interface $ { // 更新 2022/06/29
   filter<T>(item: T[], callBack: (items: T) => boolean): T[]
   find<T>(item: T[], callBack: (items: T) => T | undefined): T | undefined
   sort<T>(item: T[], callBack: (a: T, b: T) => number): T[]
-  sum<T, R>(item: T[], callBack: (a: T, b: T) => any, initialVal?: any): R
+  sum<T>(item: T[], callBack: (a: T, b: T, index?: number, arr?: T[]) => T): T // 更新 2025/04/10 調整為多載
+  sum<T, I>(item: T[], callBack: (a: I, b: T, index?: number, arr?: T[]) => I, initialVal: I): I // 更新 2025/04/10 調整為多載
   indexOf<T>(item: T, x: string | number): number
   includes<T>(item: T, x: string | number): boolean
   findIndexOfObj<T>(item: T[], callBack: (items: T) => boolean): number
@@ -131,20 +126,21 @@ declare interface $ { // 更新 2022/06/29
   mergeArray<T, M>(item: T[], mergeItem: M[], callBack?: ((items: T[]) => T[])): T[]
   typeOf<T>(item: T, classType?: typeOfClassType | string): string | boolean
   console(type: consoleMethod, ...item: any): undefined
-  localData<T>(action: localDataActionType, keyName: string, item?: string): (T extends undefined ? any : T)
+  localData<T = undefined>(action: localDataActionType, keyName: string, item?: string): T
   getNumberOfDecimal(num: number, digits: number): number
   createCustomEvent(eventName: string, setEventResposeContext?: any): CustomEvent
   registerCustomEvent(eventName: string, fn: () => void): void
   useCustomEvent(eventObj: CustomEvent): void
   removeCustomEvent(eventName: string, fn: () => void): void
   createPromise<T>(callBack: (success: (value: any) => void, error: (reason?: any) => void) => void): Promise<T>
-  createPromiseAll<T>(paramaters: Array<Promise<Awaited<T>>>): Promise<Array<Awaited<T>>>
+  createPromiseAll<T extends readonly unknown[]>(paramaters: T): Promise<{ [K in keyof T]: Awaited<T[K]> }> // 更新 2025/04/10
   createDomText: (text: string) => Text
   objDetails<T, R extends objDetailsMethod, V extends T>(obj: T, method: R): R extends 'keys' ? Array<keyof T> : R extends 'values' ? Array<V[keyof T]> : R extends 'entries' ? [keyof T, V[keyof T]] : undefined
   createArray<R, T, TypeName = createArrayType>({ type, item }: { type: TypeName, item: T | { random: number } }, repack?: ((y: number) => R) | undefined): TypeName extends string ? R[] : undefined
   convert<T>(val: any, type: convertType): T
-  createDom(tag: string, props: Record<string, any>): HTMLElement
-  currencyTranser(formatNumber: number, currencyType: string, withCurrencyStyle: boolean): string | undefined
+  createDom<K extends keyof HTMLElementTagNameMap, N extends HTMLElement[]>(options: Partial<HTMLElementTagNameMap[K]> & { elementTag: K, treeNodes?: [...N] }, selfHandler?: (elementSelf: HTMLElementTagNameMap[K]) => void): HTMLElementTagNameMap[K]
+  createDom<K extends keyof HTMLElementTagNameMap, N extends HTMLElement[]>(options: Partial<HTMLElementTagNameMap[K]> & { elementTag: undefined, treeNodes?: [...N] }, selfHandler?: (elementSelf: HTMLElementTagNameMap[K]) => void): undefined
+  currencyTranser(formatNumber: number, withCurrencyStyle: boolean, currencyLocale?: Intl.LocalesArgument, currencyType?: string): string | undefined
   isObjectTheSame<T1, T2>(objI: T1, obj: T2): boolean
   useSleep(sleepTime: number): Promise<void>
   useBase64(method: codeType, str: string): string
@@ -152,6 +148,26 @@ declare interface $ { // 更新 2022/06/29
   useUnicode(str: string, codeType: codeType): string | undefined
   jwtDeocde<R>(token: string): R
   rebuildObject<R extends Record<string, any>, T extends Record<string, any>>(obj: T, callback: (keyName: keyof T, value: any) => [keyof T, any]): R
+  useEventSource<T>(url: string | URL, config?: EventSourceInit): {
+    events: EventSource
+    getStreamResults: (callback: (result: T, event: MessageEvent) => void) => void
+    getStreamError: (callback: (result: MessageEvent) => void) => void
+    closeStream: () => void
+  },
+  elementObserver<E, W>(
+    elements: E[],
+    setting: { watchRootElement: W, triggerPos?: string, threshold?: number },
+    callback: (singleElement: IntersectionObserverEntry, elementArrayIndex: number) => void
+  ): {
+    allWatch(): void,
+    unWatchSingleElement<UWE>(element: UWE): void,
+    allUnWatch(): void
+  }
+
+  /**
+  * This is a super fix type useing be carefully.
+  */
+  typeFix<T, F>(o: F): T
   formatDateTime<T>(format: {
     formatDate: string | globalThis.Date | number
     formatType: string
@@ -179,12 +195,11 @@ const $: $ = (target) => {
   self.addClass = (classText) => { self.classList.add(classText); return self } // 更新方法 2022/03/12 變形為可鏈式寫法
   self.removeClass = (classText) => { self.classList.remove(classText); return self } // 更新方法 2022/03/12 變形為可鏈式寫法
   self.toggleClass = (classText) => self.classList.toggle(classText) // 更新方法 2021/09/20
-  self.on = (eventType, fn) => { (self as Record<string, any>)[['on', eventType].join('')] = (t: Event) => { fn.call(fn, self, t) } } // 更新方法 2021/09/20
-  self.listener = (eventType, fn) => { self.addEventListener(eventType, fn) }
-  self.removeListener = (eventType, fn) => { self.removeEventListener(eventType, fn) } // 更新方法 2022/01/04
+  self.on = (eventType, callBack) => { (self as Record<string, any>)[['on', eventType].join('')] = callBack } // 更新方法 2021/09/20
+  self.listener = (eventType, callBack) => { self.addEventListener(eventType, callBack as any) }
+  self.removeListener = (eventType, callBack) => { self.removeEventListener(eventType, callBack as any) } // 更新方法 2022/01/04
   self.val = (valTemp) => { if (valTemp !== undefined) { (self as unknown as HTMLInputElement).value = valTemp } else { return (self as unknown as HTMLInputElement).value } }
-  // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
-  self.attr = (props, val) => val !== undefined ? self.setAttribute(props, val) : self.getAttribute(props)
+  self.attr = (props, val) => { val !== undefined ? self.setAttribute(props, val) : self.getAttribute(props) }
   self.props = (props, val) => val ? (self as Record<string, any>)[props] = val : (self as Record<string, any>)[props]
   self.sibling = (num) => (self as unknown as HTMLElement[])[num] // 更新方法 2021/08/31
   self.child = (num) => (self.children as unknown as HTMLElement[])[num] // 更新方法 2021/08/31
@@ -193,8 +208,8 @@ const $: $ = (target) => {
   self.parent = () => self.parentNode // 更新方法 2021/08/31
   self.appendDom = (el) => { self.append(el) } // 更新方法 2021/09/12
   self.removeDom = () => { self.remove() } // 更新方法 2021/09/12
-  self.removeChildDom = () => { self.replaceChildren() } // 更新方法 2021/10/25
-  self.appendDomText = (el) => self.appendChild(el) // 更新方法 2021/09/12
+  self.removeChildDom = childDom => { self.removeChild(childDom) } // 更新方法 2025/10/28
+  self.appendDomText = (el) => self.appendDomText(el) // 更新方法 2021/09/12
   self.easyAppendDom = (orderBy, domStr) => { self.insertAdjacentHTML(orderBy !== 'afterDom' ? 'afterbegin' : 'beforeend', domStr) } // 更新方法 2021/11/25
   self.styles = (method, cssType, cssParameter) => {
     // 更新方法 2021/10/26
@@ -272,7 +287,7 @@ const $: $ = (target) => {
     const vm = self
     if (typeof self === 'object') {
       if ($.typeOf(vm, 'HTMLDocument')) {
-        vm.listener('readystatechange', ({ target }: { target: HTMLDocument }) => { target.readyState === 'interactive' && willMountCallBack.call(willMountCallBack, target) })
+        vm.listener('readystatechange', ({ target }) => { (target as HTMLDocument).readyState === 'interactive' && willMountCallBack.call(willMountCallBack, (target as HTMLDocument)) })
       } else {
         $.console('error', 'UseWillMount hook just use when selector document.')
       }
@@ -285,7 +300,7 @@ const $: $ = (target) => {
     const vm = self
     if (typeof self === 'object') {
       if ($.typeOf(vm, 'HTMLDocument')) {
-        vm.listener('readystatechange', ({ target }: { target: HTMLDocument }) => { target.readyState === 'complete' && useMountedCallBack.call(useMountedCallBack, target) })
+        vm.listener('readystatechange', ({ target }) => { (target as HTMLDocument).readyState === 'complete' && useMountedCallBack.call(useMountedCallBack, (target as HTMLDocument)) })
       } else {
         $.console('error', 'UseMounted Hook just use when selector document.')
       }
@@ -303,7 +318,12 @@ $.maps = (item, callBack) => item.map((items, index) => callBack.call(callBack, 
 $.filter = (item, callBack) => item.filter(items => callBack.call(callBack, items))
 $.find = (item, callBack) => item.find(items => callBack.call(callBack, items)) // 更新方法 2022/03/12
 $.sort = (item, callBack) => item.sort((a, b) => callBack.call(callBack, a, b))
-$.sum = (item, callBack, initialVal) => initialVal ? item.reduce((a, b) => callBack.call(callBack, a, b), initialVal) : item.reduce((a, b) => callBack.call(callBack, a, b))
+$.sum = <T>(...args: any[]) => { // 更新方法 2025/04/10 調整為通用多載
+  const [item, callBack, initialVal] = args as [T[], (a: T, b: T, index?: number, arr?: T[]) => T, T]
+  return initialVal
+    ? item.reduce((a, b, index, arr) => callBack.call(callBack, a, b, index, arr), initialVal)
+    : item.reduce((a, b, index, arr) => callBack.call(callBack, a, b, index, arr))
+}
 $.indexOf = (item, x) => (item as any).indexOf(x)
 $.includes = (item, x) => (item as any).includes(x)
 $.findIndexOfObj = (item, callBack) => item.findIndex(items => callBack.call(callBack, items))
@@ -311,7 +331,17 @@ $.findObjProperty = (obj, propertyName) => Object.prototype.hasOwnProperty.call(
 $.mergeArray = (item, mergeItem, callBack) => callBack ? callBack.call(callBack, (item as any).concat(mergeItem)) : (item as any).concat(mergeItem) // 更新方法 2022/03/23
 $.typeOf = (item, classType) => classType ? (item as any).constructor.name === classType : (item as any).constructor.name // 更新方法 2021/10/26
 $.console = (type, ...item) => (console as Record<string, any>)[type](...item) // 更新方法 2021/10/26
-$.localData = (action, keyName, item) => { if (action === 'get') { return ($.convert<any>(localStorage.getItem(keyName), 'json') || []) } else { localStorage.setItem(keyName, $.convert<string>(item, 'stringify')) } } // 更新方法 2021/11/29
+$.localData = (action, keyName, item) => { // 更新方法 2025/10/29
+  if (action === 'get') {
+    try {
+      return ($.convert<any>(localStorage.getItem(keyName), 'json') || [])
+    } catch {
+      return localStorage.getItem(keyName)
+    }
+  }
+
+  localStorage.setItem(keyName, $.convert<string>(item, 'stringify'))
+}
 $.getNumberOfDecimal = (num, digits) => parseInt(num.toFixed(digits)) // 更新方法 2022/09/28
 $.createCustomEvent = (eventName, setEventResposeContext) => setEventResposeContext ? new CustomEvent(eventName, { detail: setEventResposeContext }) : new CustomEvent(eventName) // 更新方法 2022/07/13
 $.registerCustomEvent = (eventName, fn) => { window.addEventListener(eventName, fn) } // 更新方法 2022/07/13
@@ -398,8 +428,8 @@ $.createArray = ({ type, item }, repack) => { // 更新方法 2022/03/14
 }
 
 $.convert = (val, type) => {
-  // 更新方法 2021/10/22
   // 更新泛型回傳值 2022/03/19
+  // 更新方法 2024/12/14
   if (!val || !type) {
     $.console('error', "Please enter first parameters value who want to convert and seconde paramters value is convert type 'string' or 'number' or 'float' or 'boolean' or 'json' or 'stringify'.")
     return
@@ -415,38 +445,59 @@ $.convert = (val, type) => {
     boolean: boolean
     json: Record<string, any> | boolean
     stringify: string | boolean
+    deepCopy: any
   } = {
     string: String(val),
     number: parseInt(val),
     float: parseFloat(val),
     boolean: Boolean(val),
     json: type === 'json' && JSON.parse(val),
-    stringify: type === 'stringify' && JSON.stringify(val)
+    stringify: type === 'stringify' && JSON.stringify(val),
+    deepCopy: type === 'deepCopy' && JSON.parse(JSON.stringify(val))
   }
 
   return (returnItem as Record<string, any>)[type]
 }
 
-$.createDom = (tag, props) => { // 更新方法 2021/09/12
-  const el: HTMLElement & Record<string, any> = document.createElement(tag)
-  const propsArr: Array<[string, any]> = Object.entries(props)
-  $.each(propsArr, (getProps: [string, any]) => {
-    const [propertyI, valueI]: [string, any] = getProps
-    if ($.typeOf(valueI, 'Object')) { // 更新方法 2021/12/07，解析 data-* 建構屬性內容
-      const [propertyII, obj]: [string, Record<string, any>] = getProps
-      const [[key, valueII]]: Array<[string, any]> = Object.entries(obj)
-      el[propertyII][key] = valueII
-    } else {
-      el[propertyI] = $.typeOf(valueI, 'String') ? valueI.trim() : valueI
-    }
-  })
-  return el
+$.createDom = (options, elementSelfHandler) => { // 更新方法v2 2026/02/15
+
+  if(options?.elementTag) {
+
+    const elementTag = options.elementTag
+
+    delete (options as Record<string, any>).elementTag
+
+    const element = document.createElement(elementTag)
+
+    $.each(Object.entries(options), ([properties, value]) => {
+      
+      if(properties === 'treeNodes') return
+      
+      (element as Record<string, any>)[properties] = value
+    })
+
+    if(options?.treeNodes) $.each(options.treeNodes, row => $<HTMLElement>(element).appendDom(row))
+
+    if(elementSelfHandler) elementSelfHandler.call(elementSelfHandler, element)
+
+    return element
+  }
+
+  $.console('error', 'Need elementTag key in options, and value will like div or else .')
+
+  return undefined
 }
 
-$.currencyTranser = (formatNumber, currencyType, withCurrencyStyle) => { // 更新方法 2022/06/24
+$.currencyTranser = (formatNumber, withCurrencyStyle, currencyLocale ,currencyType) => { 
+  // 更新方法 2022/06/24
+  // 修正方法 2026/04/27
   if ($.typeOf(formatNumber, 'Number')) {
-    const currencyOptionalObj: Intl.NumberFormatOptions = !withCurrencyStyle ? {} : { style: 'currency', currency: currencyType }
-    return new Intl.NumberFormat(currencyType || 'TWN', currencyOptionalObj).format(formatNumber)
+    
+    return formatNumber.toLocaleString(
+      currencyLocale || 'zh-TW', 
+      !withCurrencyStyle ? undefined : { style: 'currency', currency: currencyType || 'TWN' }
+    )
+
   } else {
     $.console('error', 'First argument formatNumber type must use number.')
   }
@@ -516,7 +567,48 @@ $.formatDateTime = format => { // 更新方法 2021/12/01
 
 $.rebuildObject = (obj, callback) => Object.fromEntries(Object.entries(obj).map(([keyName, value]) => callback.call(callback, keyName, value))) as any // 更新方法內容 2023/09/12
 
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
+$.typeFix = <T, F>(item: F) => item as unknown as T // 更新方法 2025/10/28
+
+$.useEventSource = (url, config) => { // 更新方法 2025/10/28
+  const events = new EventSource(url, config)
+  return {
+    events,
+    getStreamResults: callback => events.onmessage = event => { callback($.convert<any>(event.data, 'json'), event) },
+    getStreamError: callback => events.onerror = event => { callback(event as any) },
+    closeStream: () => { events.close() }
+  }
+}
+
+$.elementObserver = (elements, setting, callback) => { // 更新方法 2026/04/27
+
+  const repackSetting: Record<string, any> = {}
+
+  if(setting?.triggerPos) repackSetting.rootMargin = setting.triggerPos
+  if(setting?.threshold) repackSetting.threshold = setting.threshold
+
+  const observer = new IntersectionObserver((entries) => {
+    $.each(
+      entries,
+      (wathSingleElement, elementArrayIndex) => callback.call(callback, wathSingleElement, elementArrayIndex)
+    )
+  }, {
+    root: setting.watchRootElement as Element,
+    ...repackSetting
+  })
+  
+  return {
+    allWatch: () => {
+      $.each(elements as Element[], el => observer.observe(el))
+    },
+    unWatchSingleElement: element => {
+      observer.unobserve(element as Element)
+    },
+    allUnWatch: () => {
+      observer.disconnect()
+    }
+  }
+}
+
 class FetchClass { // 更新 FetchClass 類封裝方法內容 2022/03/24
   private static baseUrl: string = ''
   private static baseHeaders: Record<string, any> = {}
@@ -595,34 +687,34 @@ class FetchClass { // 更新 FetchClass 類封裝方法內容 2022/03/24
     if (($.objDetails(this.baseHeaders, 'keys').length > 0 || headers) && data) {
       settings.headers = $.objDetails(this.baseHeaders, 'keys').length > 0 ? this.baseHeaders : { ...headers }
       settings.body = useFormData ? this.convertFormData(data) : $.convert(data, 'stringify')
-    };
+    }
 
     if (!usePromise && !useXMLHttpRequest) {
       if (beforePost) {
         beforePost.call(beforePost)
-      };
+      }
 
       if (!successFn) {
         $.console('error', 'Function Name successFn is required in obejct parameters.')
         return
-      };
+      }
 
       if (!errorFn) {
         $.console('error', 'Function Name errorFn is required in obejct parameters.')
         return
-      };
+      }
     }
 
     if (useXMLHttpRequest) {
       if (successFn) {
         $.console('error', 'successFn not necessary parameters.')
         return
-      };
+      }
 
       if (errorFn) {
         $.console('error', 'errorFn not necessary parameters.')
         return
-      };
+      }
 
       if (usePromise) {
         return this.XMLHttpRequest<T>({
@@ -651,8 +743,8 @@ class FetchClass { // 更新 FetchClass 類封裝方法內容 2022/03/24
 
     if (usePromise) {
       // 更新 Promise 導出 Request 成功與錯誤回傳內容 2022/05/01
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises, no-async-promise-executor
-      return await new Promise<fetchClassReturnType<T>>(async (resolve, reject) => {
+      // eslint-disable-next-line no-async-promise-executor
+      return await new Promise<fetchClassReturnType<T>>(async (resolve) => {
         if (res.status >= 200 && res.status < 400) {
           const result: T = await (res as Record<string, any>)[returnTypeUse]()
 
@@ -672,7 +764,7 @@ class FetchClass { // 更新 FetchClass 類封裝方法內容 2022/03/24
         }
 
         const result: T = await (res as Record<string, any>)[returnTypeUse]()
-        // eslint-disable-next-line prefer-promise-reject-errors
+
         resolve({
           bodyUsed: res.bodyUsed,
           headers: res.headers,
@@ -704,7 +796,6 @@ class FetchClass { // 更新 FetchClass 類封裝方法內容 2022/03/24
           data: result
         } as fetchClassReturnType<T>)
 
-        // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
         excuteDone && excuteDone.call(excuteDone)
 
         return
@@ -722,8 +813,8 @@ class FetchClass { // 更新 FetchClass 類封裝方法內容 2022/03/24
       }))
     } catch (err: any) {
       errorFn?.call(errorFn, JSON.parse((err as Error).message))
-    };
-  };
+    }
+  }
 
   private static XMLHttpRequest<T>(setting: { // 更新方法 XMLHttpRequest 2023/04/22
     url: string
@@ -839,7 +930,7 @@ declare global {
   }
 
   interface String {
-    format(formatStr: string, value: any[]):(string | undefined)
+    format(formatStr: string, value: any[]): (string | undefined)
     appendText(txt: string): string
     appendDirection(direction: padDirection, pos: number, txt: string): string
     range(startPos: number, endPos: number): string
@@ -1055,7 +1146,5 @@ Set.prototype.isValueInSet = function (value) { return this.has(value) } // 更�
 Set.prototype.removeAll = function () { this.clear() } // 更新方法 2022/08/02
 
 Set.prototype.toArray = function () { return [...this] } // 更新方法 2022/08/02
-
-// Object.prototype.toMap = function (obj) { return new Map(Object.entries(obj)) } // 更新方法 2022/08/02
 
 export default $

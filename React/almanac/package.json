@@ -1,8 +1,9 @@
 {
   "name": "almanac",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.5.0",
   "type": "module",
+  "productName": "Almanac",
   "scripts": {
     "start": "vite",
     "build": "tsc -b && vite build",
@@ -31,6 +32,7 @@
     "globals": "^15.9.0",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.7.0",
-    "vite": "^5.4.8"
+    "vite": "^5.4.8",
+    "vite-plugin-pwa": "^1.2.0"
   }
 }
