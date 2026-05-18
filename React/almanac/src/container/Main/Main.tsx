@@ -181,19 +181,18 @@ const Main: FC = ():TSX => {
 
             setIsLoading(true)
 
-            const result = await $.fetch.get<{
-                date: string,
-                week: string,
-                isHoliday: boolean,
-                description: string
-            }[]>(
-                'https://raw.githubusercontent.com/ruyut/TaiwanCalendar/refs/heads/master/data',
-                { routeParams: { year: `${year}.json` } }
+            const result = await fetch(
+                `https://raw.githubusercontent.com/ruyut/TaiwanCalendar/refs/heads/master/data/${year}.json`
             )
 
             if(result.status !== 200) throw new Error()
 
-            const data = result.data
+            const data = await result.json() as {
+                date: string,
+                week: string,
+                isHoliday: boolean,
+                description: string
+            }[]
 
             const repack = $.maps(monthDaysResult, row => {
 
