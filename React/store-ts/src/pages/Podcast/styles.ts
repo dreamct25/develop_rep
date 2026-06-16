@@ -41,6 +41,10 @@ export default styled.div`
                         background-color: rgba(30, 30, 30, .7);
                         transition: opacity .2s ease;
 
+                        @media screen and (max-width: 512px) {
+                            height: 250px;
+                        }
+
                         &.toggle {
                             opacity: 1;
                         }
@@ -103,6 +107,10 @@ export default styled.div`
 
                     .img-outer {
                         height: 235px;
+
+                        @media screen and (max-width: 512px) {
+                            height: 250px;
+                        }
 
                         img {
                             width: 100%;
