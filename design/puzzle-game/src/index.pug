@@ -1,0 +1,61 @@
+.wrap
+    .main.hide-scroll
+        .back
+            .header
+                h1 Puzzle Game
+            .explain
+                h2 How To Play
+                p Click the button of bottom to choose you want to use image , recommended to use width and height the
+                    | same image , make sure image doesn't transform , after enter the game , click the square block to
+                    | make it move to right position on the board
+            .upload
+                label(for="file")
+                    | Choose Your Image
+                    input#file(type="file")
+        .puzzle-outer-frame
+            .puzzle-outer
+                canvas#puzzle
+            .display
+                .preview-img-outer
+                    img(src="#", alt="")
+                .counter
+                    .partI
+                        div Cost Time：
+                            span.time-count 00：00
+                        div Step Count：
+                            span.step-count 0
+                    .partII
+                        span Choose Level
+                        -
+                            const levelData = [
+                                { name: 'Level 1', hard: 2 },
+                                { name: 'Level 2', hard: 3 },
+                                { name: 'Level 3', hard: 4 },
+                                { name: 'Level 4', hard: 5 },
+                                { name: 'Level 5', hard: 6 },
+                                { name: 'Level 6', hard: 7 },
+                                { name: 'Level 7', hard: 8 },
+                                { name: 'Level 8', hard: 9 },
+                                { name: 'Level 9', hard: 10 },
+                                { name: 'Level 10', hard: 11 }
+                            ]
+                        select.set-level
+                            each item in levelData
+                                option(value=item.hard) #{item.name} 
+                    .partIII
+                        .go-back Choose Another Image
+    .footer
+        h3 CopyRight &copy; 2020 Alex Chen
+.modal
+    .modal-body
+        .modal-header
+            h2 Message
+        .modal-content
+            div You have finish the game.
+            div Do you want to play agian？
+                br 
+                |You can choose another image or level to challenge.
+            div Thank for your playing.
+        .modal-footer
+            .btn.cancel No
+            .btn.confirm Yes
