@@ -1,25 +1,27 @@
 import { FC,createContext } from 'react'
 import { TFunction, useTranslation } from 'react-i18next'
-import { t } from 'i18next'
-import { Main } from './container'
-import { $,PickerUtils } from './utils'
+import { t as formatLanguage } from 'i18next'
+import { RouterProvider } from '@tanstack/react-router'
+import { $, PickerUtils } from './utils'
+import routes from '@/router'
 
 export const NewContext = createContext<{
-    $:$,
-    PickerUtils:PickerUtils,
-    formatLanguage:TFunction<"translation", undefined>
+    $: $,
+    PickerUtils: typeof PickerUtils,
+    formatLanguage: TFunction<"translation", undefined>
 }>({
-    $:$,
-    PickerUtils:new PickerUtils(),
-    formatLanguage:t
+    $,
+    PickerUtils,
+    formatLanguage
 })
 
-const App:FC = ():JSX.Element => {
-    const { t:formatLanguage }: { t: TFunction<"translation", undefined> } = useTranslation()
+const App: FC = (): TSX => {
+
+    const { t: formatLanguage }: { t: TFunction<"translation", undefined> } = useTranslation()
 
     return (
-        <NewContext.Provider value={{ $,PickerUtils:new PickerUtils(),formatLanguage }}>
-            <Main />
+        <NewContext.Provider value={{ $, PickerUtils, formatLanguage }}>
+            <RouterProvider router={routes} />
         </NewContext.Provider>
     )
 }

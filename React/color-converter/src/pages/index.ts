@@ -4,4 +4,4 @@ import { ColorCard } from './ColorCard'
 import { ImageColorPicker } from './ImageColorPicker'
 import { Main } from './Main'
 
-export { Main,Converter,ColorPicker,ColorCard,ImageColorPicker }
+export { Main, Converter, ColorPicker, ColorCard, ImageColorPicker }

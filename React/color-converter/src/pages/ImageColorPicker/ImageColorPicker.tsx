@@ -1,8 +1,8 @@
-import { DetailedHTMLProps, DragEventHandler, FC,ImgHTMLAttributes,MouseEventHandler,useContext, useEffect, useRef, useState } from "react";
+import { DragEventHandler, MouseEventHandler,useContext, useEffect, useRef, useState } from "react";
 import { NewContext } from '../../App'
 import { Container,initStateType,convertType } from '.'
 
-const ImageColorPicker:FC = ():TSX => {
+const ImageColorPicker: FC = (): TSX => {
     const { $,PickerUtils,formatLanguage } = useContext(NewContext)
     
     const [{
@@ -12,11 +12,11 @@ const ImageColorPicker:FC = ():TSX => {
         isVertical,
         zoomSize
     },setInitState] = useState<initStateType>({
-        fileUrl:'',
-        toggleImg:false,
-        rgb:[],
+        fileUrl: '',
+        toggleImg: false,
+        rgb: [],
         isVertical: false,
-        zoomSize:1
+        zoomSize: 1
     })
 
     const [startMousePos,setStartMousePosition] = useState<{
@@ -74,27 +74,32 @@ const ImageColorPicker:FC = ():TSX => {
             canvas.current!.getContext('2d')!.clearRect(0, 0, canvas.current!.width, canvas.current!.height);
 
             insideImge.onload = () => {
-                convertRGB(canvas.current!, img.current!)
 
                 setInitState(prevState => ({
                     ...prevState,
                     toggleImg: true,
                     isVertical: insideImge.width < insideImge.height,
-                    zoomSize:1
+                    zoomSize: 1
                 }))
 
                 setPointPosition(prevState => ({
                     ...prevState,
-                    pointX:0,
-                    pointY:0
+                    pointX: 0,
+                    pointY: 0
                 }))
 
                 setStartMousePosition(prevState => ({
                     ...prevState,
-                    mouseX:0,
-                    mouseY:0,
-                    inUsing:false
+                    mouseX: 0,
+                    mouseY: 0,
+                    inUsing: false
                 }))
+
+                if(
+                    startMousePos.inUsing && 
+                    canvas.current && 
+                    img.current
+                ) convertRGB(canvas.current, img.current)
             }
         }
     }
@@ -113,6 +118,7 @@ const ImageColorPicker:FC = ():TSX => {
     }
     
     const convertRGB:(canvasElement: HTMLCanvasElement, imageElement: HTMLImageElement,xyItem?:{ x:number,y:number }) => void = (canvasElement,imageElement,{ x,y } = { x:0,y:0 }) => {
+        
         canvasElement.width = imageElement.width; // element / img width
         canvasElement.height = imageElement.height; // element /img height
         // draw image in canvas tag
@@ -141,6 +147,7 @@ const ImageColorPicker:FC = ():TSX => {
     }
 
     const dragImgMove:MouseEventHandler<HTMLImageElement> = event => {
+        
         event.preventDefault();
 
         const { inUsing,mouseX,mouseY } = startMousePos
@@ -157,6 +164,7 @@ const ImageColorPicker:FC = ():TSX => {
     }
 
     const dragImgEnd:MouseEventHandler<HTMLImageElement> = () => {
+        
         setStartMousePosition(prevState => ({
             ...prevState,
             useMouseUp: true,
@@ -176,6 +184,7 @@ const ImageColorPicker:FC = ():TSX => {
     }
 
     const changeZoom:(isZoomIn:boolean) => void = isZoomIn => {
+
         setInitState(prevState => ({
             ...prevState,
             zoomSize: isZoomIn ? prevState.zoomSize + 0.2 : prevState.zoomSize - 0.2 < 1 ? 1 : prevState.zoomSize - 0.2
@@ -183,15 +192,17 @@ const ImageColorPicker:FC = ():TSX => {
     }
 
     useEffect(() => {
+
         $(img.current!).styles('set', 'transform', `translate(${pointPos.pointX}px,${pointPos.pointY}px) scale(${zoomSize})`)
-    },[pointPos,zoomSize])
+    
+    },[pointPos, zoomSize])
   
 
     return (
         <Container>
             <div className="area-outer">
                 <div className="left-area">
-                    <div className={`img-outer ${toggleImg && isVertical ? 'outer-vertical' : 'outer-horizontal'}`}>
+                    <div className={`img-outer ${toggleImg ? 'show' : ''} ${toggleImg && isVertical ? 'outer-vertical' : 'outer-horizontal'}`}>
                         <img className={`img ${toggleImg && isVertical ? 'toggle vertical' : 'toggle horizontal'}`}
                             ref={img}
                             src={fileUrl}
@@ -216,14 +227,14 @@ const ImageColorPicker:FC = ():TSX => {
                                 <div className="line"></div>
                             </div>
                         </div>
-                        <div 
-                            className={toggleImg ? "img-frame toggle" : "img-frame"}
-                            onDragEnter={dragenter}
-                            onDragOver={dragover}
-                            onDrop={drop}
-                        >
-                            {formatLanguage('pages.imagePicker.dragImgContent')}
-                        </div>
+                    </div>
+                    <div 
+                        className={toggleImg ? "img-frame toggle" : "img-frame"}
+                        onDragEnter={dragenter}
+                        onDragOver={dragover}
+                        onDrop={drop}
+                    >
+                        {formatLanguage('pages.imagePicker.dragImgContent')}
                     </div>
                 </div>
                 <div className="right-area">

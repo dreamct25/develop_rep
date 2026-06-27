@@ -1,6 +1,6 @@
 {
-    "zh":"繁中（TW）",
-    "en":"English（US）",
+    "zh":"繁中 (TW)",
+    "en":"English (US)",
     "nav":{
         "converter":"Color Converter",
         "picker":"Color Picker",
@@ -25,6 +25,9 @@
             "cathColorTitle":"Get Color Info",
             "cathMsg":"No color information",
             "previewColor": "Preview Color"
+        },
+        "colorCard":{
+            "pickColorYet": "Picker color yet"
         },
         "colorPicker":{
             "previewColor": "Preview Color"

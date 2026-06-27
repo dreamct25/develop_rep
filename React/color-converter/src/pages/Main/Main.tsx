@@ -1,32 +1,33 @@
-import { FC, useState,useContext,createElement } from "react";
-import { Routes,Route,useNavigate, Navigate } from 'react-router-dom'
+import { useState, useContext } from "react";
+import { useNavigate, Outlet } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGlobeAsia } from '@fortawesome/free-solid-svg-icons'
 import { NewContext } from '../../App'
 import { Container,initStateType } from '.'
-import routerItem from '../../router'
 
-const Main:FC = ():JSX.Element => {
-    const { $,formatLanguage } = useContext(NewContext)
+const Main: FC = (): TSX => {
 
-    const { i18n:i18next } = useTranslation()
+    const { formatLanguage } = useContext(NewContext)
+
+    const { i18n: i18next } = useTranslation()
 
     const router = useNavigate()
 
     const [{
         toggleLanguageList,
         toggleNavStatus
-    },setInitState] = useState<initStateType>({
+    }, setInitState] = useState<initStateType>({
         toggleLanguageList: false,
         toggleNavStatus: false
     })
 
     const goPage:(path: string) => void = path => {
-        router({ pathname:path })
+        router({ to: path })
     }
 
     const toggleNavBar:() => void = () => {
+
         setInitState(prevState => ({
             ...prevState,
             toggleNavStatus: !toggleNavStatus
@@ -34,14 +35,17 @@ const Main:FC = ():JSX.Element => {
     }
 
     const changeLanguage:(language: string) => void = language => {
+
         setInitState(prevState => ({
             ...prevState,
             toggleLanguageList: false
         }))
+
         i18next.changeLanguage(language)
     }
 
     const toggleLanguageListStatus:() => void = () => {
+
         setInitState(prevState => ({
             ...prevState,
             toggleLanguageList: !toggleLanguageList
@@ -74,11 +78,8 @@ const Main:FC = ():JSX.Element => {
                 </div>
             </div>
             <div className="container">
-                <Routes>
-                    <Route path="/" element={<Navigate replace={true} to={'/converter'} />} />
-                    {$.maps(routerItem,({ path,component }:{ path:string,component:FC },index:number) => <Route key={index} path={path} element={createElement(component)} />)}
-                </Routes>
-                <div className="footer">&copy; CopyRight By Alex Chen</div>
+                <Outlet />
+                <div className="footer">CopyRight &copy; 2023-06 Alex Chen</div>
             </div>
         </Container>
     )

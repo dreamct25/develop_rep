@@ -1,6 +1,6 @@
 {
-    "zh":"繁中（TW）",
-    "en":"English（US）",
+    "zh":"繁中 (TW)",
+    "en":"English (US)",
     "nav":{
         "converter":"色碼轉換",
         "picker":"色盤檢視",
@@ -9,7 +9,7 @@
     },
     "pages":{
         "converter":{
-            "rgbToHex" : "Rgb 轉 Hex",
+            "rgbToHex" : "RGB 轉 Hex",
             "toHex" : "轉換為 Hex",
             "previewColor": "預覽顏色",
             "toggleConverter": "切換轉換器",
@@ -25,6 +25,9 @@
             "cathColorTitle":"取得顏色資訊",
             "cathMsg":"尚未取得顏色資訊",
             "previewColor": "預覽顏色"
+        },
+        "colorCard":{
+            "pickColorYet": "未 選 擇 色 卡"
         },
         "colorPicker":{
             "previewColor": "預覽顏色"

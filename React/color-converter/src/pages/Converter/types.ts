@@ -1,7 +1,3 @@
-import { StyledComponent } from 'styled-components'
-
-export type containerType = StyledComponent<'div',any>
-
 export interface initStateType {
     toggleMode: boolean
     inRGB_RVal: string,

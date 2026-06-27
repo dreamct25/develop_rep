@@ -1,10 +1,10 @@
-import { FC, useState,useRef,useContext, useEffect } from "react";
+import { useState,useRef,useContext, useEffect } from "react";
 import { NewContext } from '../../App'
 import { Container,initStateType } from '.'
 
-const ColorPicker:FC = ():JSX.Element => {
+const ColorPicker: FC = (): TSX => {
 
-    const { $,PickerUtils,formatLanguage } = useContext(NewContext)
+    const { $, PickerUtils, formatLanguage } = useContext(NewContext)
 
     const [{
         width,
@@ -29,57 +29,62 @@ const ColorPicker:FC = ():JSX.Element => {
         angle:360 / 40,
         rgbVal: '',
         hexVal: '',
-        hslVal: '',
+        hslVal: [],
     })
 
     const parent = useRef<HTMLDivElement>(null);
-    const outerRef = useRef<HTMLCanvasElement>(null)
-    const ctxARef = useRef<CanvasRenderingContext2D>(null)
-    const innerRef = useRef<HTMLCanvasElement>(null)
-    const ctxBRef = useRef<CanvasRenderingContext2D>(null)
-    const dotRef = useRef<HTMLCanvasElement>(null)
-    const ctxCRef = useRef<CanvasRenderingContext2D>(null)
+    const outerRef = useRef<HTMLCanvasElement>(undefined)
+    const ctxARef = useRef<CanvasRenderingContext2D | null>(null)
+    const innerRef = useRef<HTMLCanvasElement>(undefined)
+    const ctxBRef = useRef<CanvasRenderingContext2D | null>(null)
+    const dotRef = useRef<HTMLCanvasElement>(undefined)
+    const ctxCRef = useRef<CanvasRenderingContext2D | null>(null)
     const triRef = useRef<any>(undefined)
     const activeRef = useRef<boolean>(false)
 
     const init:() => void = () => {
         // outer canvas
-        const outer:HTMLCanvasElement = $.createDom('canvas',{
-            width:width,
-            height:height,
-        }) as HTMLCanvasElement
+        const outer = $.createDom({
+            elementTag: 'canvas',
+            width: width,
+            height: height,
+        })
 
         const ctxA = outer.getContext('2d')!;
 
         // inner canvas
-        const inner = $.createDom('canvas',{
-            width:width,
-            height:height,
-        }) as HTMLCanvasElement
+        const inner = $.createDom({
+            elementTag: 'canvas',
+            width: width,
+            height: height,
+        })
 
         const ctxB = inner.getContext('2d')!;
         ctxB.globalCompositeOperation = 'hard-light';
 
         // dot canvas
-        const dot:HTMLCanvasElement = $.createDom('canvas',{
+        const dot = $.createDom({
+            elementTag: 'canvas',
             width:width,
             height:height,
-            onmouseup:() => (activeRef.current as boolean) = false,
-            onmousemove:(e:MouseEvent) => activeRef.current && updateCanvas(e),
-            onmousedown:(e:MouseEvent) => {
-                (activeRef.current as boolean) = true;
+            onmouseup:() => activeRef.current = false,
+            onmousemove: e => activeRef.current && updateCanvas(e),
+            onmousedown: e => {
+                activeRef.current = true;
                 activeRef.current && updateCanvas(e)
             }
-        }) as HTMLCanvasElement
+        })
 
-        const ctxC = dot.getContext('2d')!;
+        const ctxC = dot.getContext('2d')
 
-        (outerRef.current as HTMLCanvasElement) = outer;
-        (ctxARef.current as CanvasRenderingContext2D) = ctxA;
-        (innerRef.current as HTMLCanvasElement) = inner;
-        (ctxBRef.current as CanvasRenderingContext2D) = ctxB;
-        (dotRef.current as HTMLCanvasElement) = dot;
-        (ctxCRef.current as CanvasRenderingContext2D) = ctxC;
+        if(!ctxC) return
+
+        outerRef.current = outer;
+        ctxARef.current = ctxA;
+        innerRef.current = inner;
+        ctxBRef.current = ctxB;
+        dotRef.current = dot;
+        ctxCRef.current = ctxC;
 
         $(parent.current!).appendDom(outer);
         $(parent.current!).appendDom(inner);
@@ -91,7 +96,7 @@ const ColorPicker:FC = ():JSX.Element => {
         draw(298, 25, false);
     }
   
-    const circle:(ctx:CanvasRenderingContext2D,...parameters:any[]) => void = (ctx,...parameters) => {
+    const circle: (ctx: CanvasRenderingContext2D, ...parameters: any[]) => void = (ctx, ...parameters) => {
         const [x, y, r, style, start, end]:any[] = parameters
 
         ctx.beginPath();
@@ -112,9 +117,12 @@ const ColorPicker:FC = ():JSX.Element => {
         }
     }
   
-    const triangle:(ctx:CanvasRenderingContext2D, points:any[], fill:CanvasGradient) => void = (ctx,points,fill) => {
+    const triangle:(ctx: CanvasRenderingContext2D, points: { x: number, y: number }[], fill:CanvasGradient) => void = (ctx,points,fill) => {
         ctx.beginPath();
-        ctx.moveTo(points[0].x, points[0].y);
+        
+        const firstPoint = points.first()
+
+        ctx.moveTo(firstPoint.x, firstPoint.y);
 
         for (let i = points.length - 2; i >= 0; i--) {
             ctx.lineTo(points[i].x, points[i].y);
@@ -125,6 +133,7 @@ const ColorPicker:FC = ():JSX.Element => {
     }
   
     const spectrum:() => void = () => {
+
         for (let i = 1; i <= points; i++) {
             // arc points
             const a = i * angle;
@@ -152,12 +161,18 @@ const ColorPicker:FC = ():JSX.Element => {
     }
   
     // convert angle to radians
-    const toRadians:(angleR:number) => number = angleR => angleR * (Math.PI / 180)
+    const toRadians:(angleR: number) => number = angleR => angleR * (Math.PI / 180)
   
     // center of circle (x0,y0), mouse coordinates (x1,y1), radius (r)
-    const inCircle:(x0:number, y0:number, x1:number, y1:number, r:number) => boolean = (x0, y0, x1, y1, r) => Math.sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0)) < r
+    const inCircle:(x0: number, y0: number, x1: number, y1: number, r: number) => boolean = (x0, y0, x1, y1, r) => Math.sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0)) < r
   
-    const inTriangle:(p:{[key:string]:any}, p0:{[key:string]:any}, p1:{[key:string]:any}, p2:{[key:string]:any}) => boolean = (p, p0, p1, p2) => {
+    const inTriangle:(
+        p: { x: number, y: number }, 
+        p0: { x: number, y: number }, 
+        p1: { x: number, y: number }, 
+        p2: { x: number, y: number }
+    ) => boolean = (p, p0, p1, p2) => {
+
         // point in circle (p), triangle points (p0, p1, p2)
         const A = 1/2 * (-p1.y * p2.x + p0.y * (-p1.x + p2.x) + p0.x * (p1.y - p2.y) + p1.x * p2.y);
         const sign = A < 0 ? -1 : 1;
@@ -167,39 +182,51 @@ const ColorPicker:FC = ():JSX.Element => {
     }
   
     const updateCanvas:(e:MouseEvent) => void = e => {
-        let triTemp:any;
+
+        let triTemp:boolean = false
         // get mouse pos
         const x = e.clientX - innerRef.current!.offsetLeft;
         const y = e.clientY - innerRef.current!.offsetTop;
         const pos = {x: x, y: y};
+
         // check mouse is within bounds
         const outer = inCircle(cx, cy, x, y, radLarge)
         const inners = inCircle(cx, cy, x, y, radSmall)
+
+        const [pos0, pos1, pos2] = triRef.current
+
         // check mouse in triangle
-        if (triRef.current) triTemp = inTriangle(pos, triRef.current[0], triRef.current[1], triRef.current[2]);
+        if (triRef.current) triTemp = inTriangle(pos, pos0, pos1, pos2);
+        
         // draw
         if (outer && !inners) {
             draw(x, y, false);
-        } else if (triTemp) {
+            return
+        } 
+        
+        if (triTemp) {
             draw(x, y, true)
         }
     }
   
-    const draw:(x:number, y:number, tris:boolean) => void = (x, y, tris) => {
+    const draw:(x: number, y: number, tris: boolean) => void = (x, y, tris) => {
+        
         // get pixel data
         const da = Array.from(ctxARef.current!.getImageData(x, y, 1, 1).data);
         const db = Array.from(ctxBRef.current!.getImageData(x, y, 1, 1).data);
+        
         // draw equilateral triangle
         if (!tris) {
+            
             // clear triangle canvas
             ctxBRef.current!.clearRect(0, 0, innerRef.current!.width, innerRef.current!.height);
             const ang = Math.atan2(y - cy, x - cx) * (180 / Math.PI);
             const color = `rgb(${da[0]},${da[1]},${da[2]})`;
             const angs = [0, 120, 240, 180];
 
-            const pts:{ x:number,y:number }[] = triRef.current = [];
+            const pts:{ x: number, y: number }[] = triRef.current = [];
 
-            $.each(angs,((num:number) => {
+            $.each(angs,(num => {
                 pts.push({
                     x: Math.cos(toRadians(ang + num)) * radSmall + cx,
                     y: Math.sin(toRadians(ang + num)) * radSmall + cy
@@ -209,60 +236,70 @@ const ColorPicker:FC = ():JSX.Element => {
             // gradient 1 = black => white
             const ctxB1Shape = ctxBRef.current!.createLinearGradient(pts[1].x, pts[1].y, pts[2].x, pts[2].y);
             
-            const hsl = PickerUtils.rgbToHsl(da[0], da[1], da[2]).fomat<number[]>('toArray'); // mark place
+            const hsl = PickerUtils.rgbToHsl(da[0], da[1], da[2]).fomat('toArray'); // mark place
             
             ctxB1Shape.addColorStop(0, 'hsl(' + hsl[0] * 360 + ',0%,100%)');
             ctxB1Shape.addColorStop(1, 'hsl(' + hsl[0] * 360 + ',0%,0%)');
+
             // gradient 2 = hue => transparent
             const ctxB2Shape = ctxBRef.current!.createLinearGradient(pts[0].x, pts[0].y, pts[3].x, pts[3].y);
             ctxB2Shape.addColorStop(0, color);
             ctxB2Shape.addColorStop(1, `rgb(${da[0]},${da[1]},${da[2]})`);
+            
             // draw
             triangle(ctxBRef.current!, pts, ctxB2Shape);
             triangle(ctxBRef.current!, pts, ctxB1Shape);
         }
+
         // clear dot canvas
         ctxCRef.current!.clearRect(0, 0, dotRef.current!.width, dotRef.current!.height);
         
-        const [choiceR,choiceG,choiceB]:number[] = tris ? db : da;
-        const choiceColor:string = `rgb(${choiceR},${choiceG},${choiceB})`
+        const [choiceR,choiceG,choiceB]: number[] = tris ? db : da;
+        const choiceColor: string = `rgb(${choiceR}, ${choiceG}, ${choiceB})`
 
         setInitState(prevState => ({
             ...prevState,
-            rgbVal:choiceColor,
-            hexVal:PickerUtils.rgbToHex(choiceR,choiceG,choiceB),
-            hslVal:`HSL：${PickerUtils.rgbToHsl(choiceR,choiceG,choiceB).fomat<string>('toElement')}`
+            rgbVal: choiceColor,
+            hexVal: PickerUtils.rgbToHex(choiceR,choiceG,choiceB),
+            hslVal: PickerUtils.rgbToHsl(choiceR,choiceG,choiceB).fomat('toElement')
         }))
 
-        circle(ctxCRef.current!, x, y, 10, {stroke: '#fff', lineWidth: 3, fill: choiceColor});
+        circle(ctxCRef.current!, x, y, 10, { stroke: '#fff', lineWidth: 3, fill: choiceColor });
     }
 
     useEffect(() => {
         width && height && init()
-    },[width,height])
+    },[width, height])
 
     useEffect(() => {
-        parent.current && setInitState(prevState => ({
-            ...prevState,
-            radLarge:($(parent.current!).props('offsetWidth') / 2) - 5,
-            radSmall:(($(parent.current!).props('offsetHeight') / 2) - 5) - 40,
-            width:$(parent.current!).props('offsetWidth'),
-            height:$(parent.current!).props('offsetHeight'),
-            cx:$(parent.current!).props('offsetWidth') / 2,
-            cy:$(parent.current!).props('offsetHeight') / 2,
-        }))
+
+        if(parent.current) {
+
+            setInitState(prevState => ({
+                ...prevState,
+                radLarge: ($(parent.current).props('offsetWidth') / 2) - 5,
+                radSmall: (($(parent.current).props('offsetHeight') / 2) - 5) - 40,
+                width: $(parent.current).props('offsetWidth'),
+                height: $(parent.current).props('offsetHeight'),
+                cx: $(parent.current).props('offsetWidth') / 2,
+                cy: $(parent.current).props('offsetHeight') / 2,
+            }))
+        }
+
     },[parent.current])
 
     return (
         <Container>
             <div className="picker" ref={parent}></div>
             <div className="board-info">
-              <div>RGB：{rgbVal}</div>
-              <div>Hex：{hexVal}</div>
-              <div dangerouslySetInnerHTML={{ __html:hslVal }}></div>
-            </div>
-            <div className="color-preview" style={{ backgroundColor: rgbVal }}>
-                <div className="color-preview-frame">{formatLanguage('pages.colorPicker.previewColor')}</div>
+                <div className="left">
+                    <div className="color-preview" style={{ backgroundColor: rgbVal }}></div>
+                </div>
+                <div className="right">
+                    <div>RGB：{rgbVal}</div>
+                    <div>Hex：{hexVal}</div>
+                    <div>HSL：hsl({hslVal.at(0)}&deg;, {hslVal.at(1)}, {hslVal.at(2)})</div>
+                </div>
             </div>
         </Container>
     )

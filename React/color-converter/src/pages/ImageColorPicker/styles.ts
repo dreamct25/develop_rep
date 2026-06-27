@@ -1,9 +1,9 @@
-import styled from 'styled-components'
-import { containerType } from '.'
+import { styled } from '@linaria/react'
 
-const container:containerType = styled.div`
+export default styled.div`
     align-self: center;
     margin-top: 10px;
+
     .area-outer{
         display: grid;
         grid-template-columns: 70vw 20vw;
@@ -18,13 +18,25 @@ const container:containerType = styled.div`
             justify-content: center;
 
             .img-outer{
+                position: relative;
                 overflow: hidden;
                 border-radius: 5px;
-                box-shadow: 3px 3px 13px 3px rgba(0,0,0,.5);
+                background-color: rgba(30, 30 , 30, .4);
+                backdrop-filter: blur(6px);
+                box-shadow: 
+                    inset 0 0 2px 0 rgba(255, 255, 255, .7),
+                    3px 3px 13px 3px rgba(0,0,0,.5)
+                ;
+                opacity: 0;
+                transition: .5s ease;
+
+                &.show {
+                    opacity: 1;
+                }
 
                 .img{
                     width: 100%;
-                    height: auto;
+                    height: 100%;
                     opacity: 0;
                     border-radius: 5px;
                     user-select: none;
@@ -41,22 +53,23 @@ const container:containerType = styled.div`
                     bottom: 0;
                     opacity: 1;
                     border-radius: 5px;
-                    box-shadow: 0 0 2px rgba(30,30,30,.7);
-                    background-color: white;
+                    box-shadow: inset 0 0 2px 0 rgba(255, 255, 255, .7);
+                    background-color: rgba(30, 30 , 30, .4);
                     transform: translate(-8px, -8px);
+                    backdrop-filter: blur(6px);
                     
                     .plus{
                         display: flex;
                         justify-content: center;
                         padding: 13px 8px 10px 8px;
-                        border-bottom: .5px solid rgba(30,30,30,.5);
+                        border-bottom: .5px solid rgba(255,255,255, .2);
                         cursor: pointer;
                         user-select: none;
 
                         .line{
                             width: 15px;
                             height: 3px;
-                            background-color: rgba(30,30,30);
+                            background-color: rgb(255, 255, 255);
 
                             &:nth-of-type(2){
                                 transform: translateY(-3px) rotate(90deg);
@@ -74,41 +87,47 @@ const container:containerType = styled.div`
                         .line{
                             width: 15px;
                             height: 3px;
-                            background-color: rgba(30,30,30);
+                            background-color: rgb(255, 255, 255);
                         }
                     }
                 }
+            }
 
-                .img-frame{
-                    color: white;
-                    font-weight: bold;
-                    display: flex;
-                    justify-content: center;
-                    flex-direction: column;
-                    align-items: center;
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    opacity: 1;
-                    pointer-events: all;
-                    border-radius: 5px;
-                    background-color: rgb(60,60,60);
-                    box-shadow: 3px 3px 13px 3px rgba(0,0,0,.5);
-                    transition: .7s ease;
-        
-                    &.toggle{
-                        opacity: 0;
-                        pointer-events: none;
-                    }
+            .img-frame{
+                color: white;
+                font-weight: bold;
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                align-items: center;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                opacity: 1;
+                pointer-events: all;
+                border-radius: 5px;
+                background-color: rgba(30, 30 , 30, .4);
+                backdrop-filter: blur(6px);
+                box-shadow: 
+                    inset 0 0 2px 0 rgba(255, 255, 255, .7),
+                    3px 3px 13px 3px rgba(0,0,0,.5)
+                ;
+                transition: .7s ease;
+    
+                &.toggle{
+                    opacity: 0;
+                    pointer-events: none;
                 }
             }
         }
+
         .right-area{
             display: flex;
             flex-direction: column;
             justify-content: center;
+
             .color-view-outer{
                 display: grid;
                 grid-template-rows: 300px auto;
@@ -117,7 +136,12 @@ const container:containerType = styled.div`
                 .color-box{
                     position: relative;
                     border-radius: 5px;
-                    box-shadow: 3px 3px 13px 3px rgba(0,0,0,.5);
+                    box-shadow: 
+                        inset 0 0 2px 0 rgba(255, 255, 255, .7),
+                        3px 3px 13px 3px rgba(0,0,0,.5)
+                    ;
+                    background-color: rgba(30, 30 , 30, .4);
+                    backdrop-filter: blur(6px);
                     transition: .3s ease;
 
                     .color-box-frame{
@@ -142,8 +166,12 @@ const container:containerType = styled.div`
                     line-height: 30px;
                     border-radius: 5px;
                     color: white;
-                    background-color: rgb(60,60,60);
-                    box-shadow: 3px 3px 13px 3px rgba(0,0,0,.5);
+                    background-color: rgba(30, 30 , 30, .4);
+                    backdrop-filter: blur(6px);
+                    box-shadow: 
+                        inset 0 0 2px 0 rgba(255, 255, 255, .7),
+                        3px 3px 13px 3px rgba(0,0,0,.5)
+                    ;
                 }
             }
         }
@@ -158,5 +186,3 @@ const container:containerType = styled.div`
         height: 100px;
     }
 `
-
-export default container

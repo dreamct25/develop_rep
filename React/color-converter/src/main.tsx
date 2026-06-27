@@ -1,15 +1,15 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
+import { createRoot } from 'react-dom/client'
 import GlobalStyle from './globalStyles'
 import App from './App'
 import './i18Init'
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <BrowserRouter basename='/color_converter'>
-      <GlobalStyle />
+const root = document.getElementById('root')
+
+if(root) {
+
+  createRoot(root).render(
+    <div className={GlobalStyle}>
       <App />
-    </BrowserRouter>
-  </React.StrictMode>
-)
+    </div>
+  )
+}

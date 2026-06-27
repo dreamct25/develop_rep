@@ -1,26 +1,63 @@
-import { FC } from "react"
-import {
+import { 
+    createRootRoute,
+    createRoute,
+    createRouter,
+    redirect
+} from '@tanstack/react-router'
+import { createHashHistory } from '@tanstack/history'
+import $ from '@/utils/Library'
+import { 
+    Main,
     Converter,
     ColorPicker,
     ColorCard,
     ImageColorPicker
-} from './container'
+} from '@/pages'
 
-const router:{ 
-    path:string,
-    component:FC
-}[] = [{
-    path:'/converter',
-    component:Converter
-},{
-    path:'/picker',
-    component:ColorPicker
-},{
-    path:'/color_card',
-    component:ColorCard
-},{
-    path:'/image_picker',
-    component:ImageColorPicker
-}]
+const rootRoute = createRootRoute({
+    component: Main,
+    // notFoundComponent: () => createElement(NotFound)
+})
 
-export default router
+const routeSetting = {
+    homeRoute: createRoute({
+        getParentRoute: () => rootRoute,
+        path: '/',
+        beforeLoad: 
+            redirect.bind(undefined,{ to: '/converter', replace: true })
+    }),
+    converterRoute: createRoute({
+        getParentRoute: () => rootRoute,
+        path: '/converter',
+        component: Converter
+    }),
+    colorPickerRoute: createRoute({
+        getParentRoute: () => rootRoute,
+        path: '/picker',
+        component: ColorPicker
+    }),
+    colorCardRoute: createRoute({
+        getParentRoute: () => rootRoute,
+        path: '/color_card',
+        component: ColorCard
+    }),
+    imageColorPickerRoute: createRoute({
+        getParentRoute: () => rootRoute,
+        path: '/image_picker',
+        component: ImageColorPicker
+    })
+}
+
+const routeTree = rootRoute.addChildren(
+    $.maps(
+        $.objDetails(routeSetting, 'values'), 
+        row => row
+    )
+)
+
+const routes = createRouter({ 
+    routeTree, 
+    history: createHashHistory()
+})
+
+export default routes

@@ -1,7 +1,7 @@
-import styled from 'styled-components'
-import { containerType } from '.'
+import { styled } from '@linaria/react'
 
-const container:containerType = styled.div`
+export default styled.div`
+
     .language-list-outer{
         position: fixed;
         top: 0;
@@ -10,15 +10,16 @@ const container:containerType = styled.div`
         margin: 5px;
         overflow: hidden;
         border-radius: 5px;
-        height: 32px;
         transition: .5s ease;
+        background-color: rgba(30, 30 , 30, .4);
+        backdrop-filter: blur(6px);
+        box-shadow: inset 0 0 2px 0 rgba(255, 255, 255, .7);
 
         .language-display-outer{
             display: flex;
             align-items: center;
             color: white;
-            padding: 8px 3px 8px 8px;
-            background-color: rgb(60, 60, 60);
+            padding: 8px;
             cursor: pointer;
             user-select: none;
 
@@ -27,51 +28,54 @@ const container:containerType = styled.div`
             }
         }
 
-        .language-list{
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: -1;
+        .language-list {
+            max-height: 0vh;
+            overflow: hidden;
+            opacity: 0;
             transition: .5s ease;
 
             .language-list-item{
                 color: white;
-                padding: 8px 3px 8px 8px;
-                background-color: rgb(60, 60, 60);
+                padding: 8px;
+                margin: 0 1px;
                 cursor: pointer;
                 user-select: none;
                 text-align: center;
 
-                &:nth-of-type(2){
-                    padding: 0 8px 8px 8px;
+                &:first-child {
+                    border: 1px solid rgba(255, 255, 255, .2);
+                    border-left: unset;
+                    border-right: unset;
+                }
+
+                &:last-child {
+                    padding: 8px 8px 12px 8px;
                 }
             }
 
             &.toggle{
-                top: 32%;
+                max-height: 9vh;
+                opacity: 1;
             }
         }
-
-        &.toggle{
-            height: 82px;
-        }
     }
+
     .nav-list{
         position: fixed;
         right: 0;
         bottom: 0;
         border-radius: 50%;
-        background-color: rgb(0, 179, 255);
-        box-shadow: inset 0 0 3px 1px rgba(255,255,255,.7);
+        backdrop-filter: blur(6px);
+        box-shadow: inset 0 0 2px 0 rgba(255,255,255,.7);
         padding: 9px 11px;
         z-index: 5;
         transform: translate(-90%, -75%);
         cursor: pointer;
         user-select: none;
+        background-color: rgba(60, 60 , 60);
 
         .line-icon{
+
             .line{
                 width: 18px;
                 height: 2px;
@@ -94,13 +98,15 @@ const container:containerType = styled.div`
             height: 128px;
             opacity: 0;
             transform: scale(0.8) translate(-118px, -126px);
-            background-color: rgb(255,255,255,.5);
-            box-shadow: 0 0 5px 0 rgba(0,0,0,.3);
+            box-shadow: inset 0 0 2px 0 rgba(255, 255, 255, .7),  0 0 5px 0 rgba(0,0,0,.3);
             border-radius: 5px;
+            overflow: hidden;
             padding: 4px 2px;
             pointer-events: none;
             transition: .3s ease;
-            backdrop-filter: blur(10px);
+            color: white;
+            background-color: rgba(60, 60 , 60);
+
             div{
                 cursor: pointer;
                 user-select: none;
@@ -125,13 +131,17 @@ const container:containerType = styled.div`
         }
 
         &.toggle{
+
             .line-icon{
+
                 .line:nth-of-type(1){
                     transform: translate(0px,6px) rotate(135deg);
                 }
+
                 .line:nth-of-type(2){
                     width: 0;
                 }
+
                 .line:nth-of-type(3){
                     transform: translate(0px,-6px) rotate(-135deg);
                 }
@@ -140,14 +150,15 @@ const container:containerType = styled.div`
     }
 
     .container{
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-rows: 1fr auto;
         justify-content: center;
         min-height: 100vh;
-        max-width: 1270px;
+        max-width: 960px;
         margin: 0 auto;
+
         .footer{
-            margin: 30px 0;
+            margin: 25px 0;
             color: white;
             text-align: center;
             font-weight: bold;
@@ -155,5 +166,3 @@ const container:containerType = styled.div`
         }
     }
 `
-
-export default container

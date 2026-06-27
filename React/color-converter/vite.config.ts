@@ -1,26 +1,56 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import wyw from '@wyw-in-js/vite'
+import { fileURLToPath, URL } from 'url'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base:'./',
+  plugins: [
+    react(),
+    wyw({
+      include: ['**/*.{ts,tsx}'],
+      exclude: ['node_modules'],
+      babelOptions: {
+        presets: [
+          '@babel/preset-typescript',
+          '@babel/preset-react'
+        ],
+        plugins: [
+          '@babel/plugin-transform-class-properties'
+        ]
+      },
+    })
+  ],
+  build:{
+     minify: true,
+      target: ['es2019','chrome58','safari14'],
+      commonjsOptions: {
+        sourceMap: false
+      },
+      rollupOptions: {
+        output: {
+          dir: 'build',
+          entryFileNames: 'js/[name].[hash].js',
+          chunkFileNames: 'js/[name].[hash].js',
+          sourcemap: false,
+          assetFileNames: (file) => {
+            const { name } = file
+            if(name?.match(/\.html$/)) return '[name].[hash][extname]'
+            if(name?.match(/\.css$/)) return 'css/[name].[hash][extname]'
+  
+            return 'media/[name].[hash][extname]';
+          },
+        }
+      }
+  },
   server:{
-    port:9806,
+    port: 9806,
     host: '0.0.0.0'
   },
-  build:{
-    assetsDir: 'static',
-    commonjsOptions:{
-      sourceMap: false,
-    },
-    rollupOptions: {
-      output: {
-        dir: 'build',
-        entryFileNames: 'js/[name].[hash].js',
-        chunkFileNames: 'js/[name].[hash].js',
-        sourcemap: false
-      },
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     }
-  },
-  base:'/color_converter/',
-  plugins: [react()]
+  }
 })

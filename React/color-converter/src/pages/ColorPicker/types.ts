@@ -1,7 +1,3 @@
-import { StyledComponent } from 'styled-components'
-
-export type containerType = StyledComponent<'div',any>
-
 export interface initStateType {
     width:number,
     height:number,
@@ -13,5 +9,5 @@ export interface initStateType {
     angle:number,
     rgbVal:string,
     hexVal:string,
-    hslVal:string
+    hslVal:string[]
 }
