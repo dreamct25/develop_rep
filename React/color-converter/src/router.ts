@@ -1,3 +1,4 @@
+import { createElement } from 'react'
 import { 
     createRootRoute,
     createRoute,
@@ -11,12 +12,13 @@ import {
     Converter,
     ColorPicker,
     ColorCard,
-    ImageColorPicker
+    ImageColorPicker,
+    NotFound
 } from '@/pages'
 
 const rootRoute = createRootRoute({
     component: Main,
-    // notFoundComponent: () => createElement(NotFound)
+    notFoundComponent: () => createElement(NotFound)
 })
 
 const routeSetting = {

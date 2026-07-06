@@ -27,7 +27,8 @@
             "previewColor": "預覽顏色"
         },
         "colorCard":{
-            "pickColorYet": "未 選 擇 色 卡"
+            "pickColorYet": "未 選 擇 色 卡",
+            "copyToastText": "已複製 {{ copyType }}：{{ colorCode }}"
         },
         "colorPicker":{
             "previewColor": "預覽顏色"

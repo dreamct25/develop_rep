@@ -10,7 +10,7 @@ export default styled.div`
         right: 0;
         bottom: 0;
         overflow-y: auto;
-        margin: 75px auto 66px auto;
+        margin: 84px auto 66px auto;
 
         &::-webkit-scrollbar {
             width: 8px;
@@ -50,9 +50,9 @@ export default styled.div`
             max-width: 772px;
             
             .inside {
-                max-width: 230px;
+                max-width: max-content;
                 display: grid;
-                grid-template-columns: 48px auto;
+                grid-template-columns: 60px auto;
                 gap: 8px;
                 margin-top: 6px;
                 transform: translateX(10px);
@@ -76,10 +76,44 @@ export default styled.div`
 
                 .right {
                     color: white;
-                    text-align: center;
                     line-height: 24px;
+
+                    .rgb,
+                    .hex {
+                        display: grid;
+                        grid-template-columns: 1fr 0fr;
+                        gap: 6px;
+                        align-items: center;
+
+                        .copy-btn {
+                            padding: 3px 5px 3px 7px;
+                            cursor: pointer;
+                            user-select: none;
+                        }
+                    }
                 }
             }
+        }
+    }
+
+    .copy-info-toast {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -30%);
+        background-color: rgba(30, 30, 30, .5);
+        padding: 6px 9px;
+        border-radius: 5px;
+        box-shadow: inset 0 0 2px rgba(255, 255, 255, .5);
+        opacity: 0;
+        backdrop-filter: blur(6px);
+        color: white;
+        font-size: 18px;
+        transition: .5s ease;
+
+        &.active {
+            opacity: 1;
+            transform: translate(-50%, -50%);
         }
     }
 `

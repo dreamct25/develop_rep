@@ -30,7 +30,7 @@ const globalStyle = css`
         }
         html{
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-image: url('/img/bg.jpg');
+            background-image: url('/static/img/bg.jpg');
             background-position: center center;
             background-repeat: no-repeat;
             background-size: cover;

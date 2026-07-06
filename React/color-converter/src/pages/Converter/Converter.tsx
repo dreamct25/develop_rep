@@ -205,7 +205,6 @@ const Converter: FC = (): TSX => {
                                         inputVal={inHex_HexVal} 
                                         changeEvent={setInputVal.bind(undefined, 'inHex_HexVal')}
                                     />
-                                    {/* <input type="text" value={inHex_HexVal} onChange={setInputVal.bind(undefined, 'inHex_HexVal')}/> */}
                                 </div>
                                 <div className="converter-hex-footer">{formatLanguage('pages.converter.toRGB')}</div>
                                 <div className="hex-RGB-input-group">
@@ -223,8 +222,6 @@ const Converter: FC = (): TSX => {
                                             inputVal={inHex_RVal}
                                             readOnly
                                         />
-                                        {/* <input type="number" inputMode="numeric" readOnly value={inHex_RVal} />
-                                        <p>R</p> */}
                                     </div>
                                     <div className="to-G-input-group">
                                         <CustomInput 
@@ -240,8 +237,6 @@ const Converter: FC = (): TSX => {
                                             inputVal={inHex_GVal}
                                             readOnly
                                         />
-                                        {/* <input type="number" inputMode="numeric" readOnly value={inHex_GVal} />
-                                        <p>G</p> */}
                                     </div>
                                     <div className="to-B-input-group">
                                         <CustomInput 
@@ -257,8 +252,6 @@ const Converter: FC = (): TSX => {
                                             inputVal={inHex_BVal}
                                             readOnly
                                         />
-                                        {/* <input type="number" inputMode="numeric" readOnly value={inHex_BVal} />
-                                        <p>B</p> */}
                                     </div>
                                 </div>
                                 <div className="full-rgb-input-group">

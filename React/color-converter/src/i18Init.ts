@@ -1,14 +1,19 @@
-import i18n from 'i18next'
+import i18next from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import { result } from './assets/i18n'
+import i18nextHttpBackend from 'i18next-http-backend'
 
-i18n.use(initReactI18next).init({
-    resources:result,
-    lng: 'zh',
-    fallbackLng: 'zh',
-    interpolation: {
-        escapeValue: false
-    }
-})
+i18next.
+    use(initReactI18next)
+    .use(i18nextHttpBackend)
+    .init({
+        lng: 'zh',
+        fallbackLng: 'zh',
+        interpolation: {
+            escapeValue: false
+        },
+        backend: {
+            loadPath: './static/i18n/{{lng}}.json'
+        },
+    })
 
-export default i18n
+export default i18next

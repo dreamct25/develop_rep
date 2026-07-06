@@ -190,6 +190,7 @@ export default styled.div`
                                 transform: translate(-65%,50%);
                                 cursor: pointer;
                                 user-select: none;
+                                z-index: 2;
 
                                 svg{
                                     color: white;
@@ -205,7 +206,7 @@ export default styled.div`
                                     transform: translate(-28px, -52px);
                                     width: 55px;
                                     opacity: 0;
-                                    z-index: -1;
+                                    pointer-events: none;
                                     transition: .7s ease;
                                     background-color:rgb(80,80,80);
 
@@ -227,6 +228,7 @@ export default styled.div`
 
                                     .tooltip {
                                         opacity: 1;
+                                        pointer-events: all;
                                     }
                                 }
                             }

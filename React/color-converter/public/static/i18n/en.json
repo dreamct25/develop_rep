@@ -27,7 +27,8 @@
             "previewColor": "Preview Color"
         },
         "colorCard":{
-            "pickColorYet": "Picker color yet"
+            "pickColorYet": "Picker color yet",
+            "copyToastText": "Copied {{ copyType }}：{{ colorCode }}"
         },
         "colorPicker":{
             "previewColor": "Preview Color"
