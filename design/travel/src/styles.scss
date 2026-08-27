@@ -1,17 +1,19 @@
-html{
+html {
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
 
-    body{
+    body {
 
-        #map{
+        #map {
             height: 100vh;
-			.leaflet-tile{
-				&.active{
+
+			.leaflet-tile {
+
+				&.active {
 					filter: brightness(0.7) invert(1) contrast(2) hue-rotate(200deg);
 				}
 			}
 
-			.leaflet-popup-content{
+			.leaflet-popup-content {
 				margin: 5px 8px 3px 8px;
 				text-align: center;
 				font-size: 16px;
@@ -19,7 +21,7 @@ html{
 				line-height: unset;
 			}
 
-			.leaflet-popup-close-button{
+			.leaflet-popup-close-button {
 				top: -30%;
 				transform: translate(11px,-2px);
 				background-color: red;
@@ -31,7 +33,19 @@ html{
 				height: 23px;
 			}
 
-			.leaflet-control-attribution{
+			.leaflet-bottom {
+
+				@media screen and (max-width: 414px) {
+					
+					&.leaflet-right {
+						left: 0;
+						display: flex;
+						justify-content: center;
+					}
+				}
+			}
+
+			.leaflet-control-attribution {
 				padding: 3px 4px 1px 6px;
 				margin: 5px;
 				border-radius: 5px;
@@ -39,9 +53,9 @@ html{
 			}
         }
 
-		.left-side{
+		.left-side {
 
-			.search-bar-outer{
+			.search-bar-outer {
 				position: fixed;
 				top: 0;
 				left: 0;
@@ -78,13 +92,13 @@ html{
 					}
 				}
 
-				.search-bar{
+				.search-bar {
 					display: flex;
 					align-items: center;
 					background-color: rgba(30,30,30,.7);
 					border-radius: 5px;
 
-					input{
+					input {
 						padding: 7px 5px 7px 8px;
 						border: none;
 						outline: none;
@@ -92,7 +106,10 @@ html{
 						color: white;
 						background-color: transparent;
 						width: 100%;
-						&::placeholder{
+						box-sizing: border-box;
+						line-height: 22px;
+
+						&::placeholder {
 							transform: translateY(1px);
 							color: rgba(255,255,255,.7);
 							text-align: center;
@@ -100,19 +117,19 @@ html{
 						}
 					}
 		
-					.search-btn{
+					.search-btn {
 						padding: 0 9px 0 5px;
 						color: white;
 						cursor: pointer;
 						user-select: none;
 		
-						i{
+						i {
 							pointer-events: none;
 						}
 					}
 				}
 
-				.dark-mode{
+				.dark-mode {
 					display: flex;
 					flex-direction: column;
 					justify-content: center;
@@ -126,11 +143,11 @@ html{
 					user-select: none;
 					transition: .5s ease;
 
-					i{
+					i {
 						pointer-events: none;
 					}
 
-					&.active{
+					&.active {
 						color: yellow;
 						box-shadow: 0 0 2px 1px rgba(30,30,30,.7),inset 0 0 2px 1px rgba(30,30,30,.7);
 					}
@@ -142,7 +159,6 @@ html{
 				top: 45px;
 				left: 0;
 				right: 0;
-				bottom: 0;
 				z-index: 500;
 				width: 330px;
 				background-color: rgba(30,30,30,.7);
@@ -154,6 +170,9 @@ html{
 				display: grid;
 				grid-template-rows: 1fr 13fr 1fr;
 				transform: translateY(102%);
+				height: calc(100vh - 60px);
+				-webkit-backdrop-filter: blur(10px);
+				backdrop-filter: blur(10px);
 
 				@media screen and (max-width: 414px) {
 					top: 0;
@@ -161,6 +180,7 @@ html{
 					z-index: 1700;
 					-webkit-backdrop-filter: blur(10px);
 					backdrop-filter: blur(10px);
+					height: calc(100vh - 16px);
 				}
 
 				.list-title {
@@ -187,11 +207,11 @@ html{
 					}
 				}
 
-				.search-list-outer{
+				.search-list-outer {
 					position: relative;
 					height: 100%;
 	
-					.search-list{
+					.search-list {
 						position: absolute;
 						top: 0;
 						left: 0;
@@ -200,7 +220,7 @@ html{
 						overflow-y: auto;
 						overflow-x: hidden;
 		
-						.list-item{
+						.list-item {
 							margin: 0 10px 10px 10px;
 							padding: 1px 12px 10px 14px;
 							color: white;
@@ -208,43 +228,70 @@ html{
 							border-radius: 5px;
 							cursor: pointer;
 							user-select: none;
+
+							.title {
+								font-size: 20px;
+								margin:10px 0 3px 0;
+								font-weight: bold;
+							}
+
+							i {
+								margin-right: 6px;
+							}
 		
-							div{
+							.info-1 {
 								line-height: 25px;
 								font-size: 15px;
-		
-								&:nth-of-type(1){
-									font-size: 20px;
-									margin:10px 0 3px 0;
-									font-weight: bold;
+
+								i {
+									color: #FF0000;
+								}
+							}
+
+							.info-2 {
+								line-height: 25px;
+								font-size: 15px;
+
+								i {
+									color: #00BBFF;
+								}
+							}
+
+							.info-3 {
+								line-height: 25px;
+								font-size: 15px;
+
+								i {
+									color: #FF1493;
 								}
 
-								i{
-									margin-right: 6px;
-								}
-	
-								&:nth-of-type(2){
-									i{
-										color: #FF0000;
-										margin-right: unset;
+								.day-row-outer {
+
+									.day-row {
+
+										.group-outer {
+											display: flex;
+											justify-content: space-between;
+											align-items: center;
+										}
 									}
 								}
-	
-								&:nth-of-type(3){
-									i{
-										color: #00BBFF;
-									}
+							}
+
+							.info-4 {
+								line-height: 25px;
+								font-size: 15px;
+
+								i {
+									color: #F5D005;
 								}
-								
-								&:nth-of-type(4){
-									i{
-										color: #FF1493;
-									}
-								}
-								
-								&:nth-of-type(5){
-									i{
-										color: #F5D005;
+
+								.ticket-info-outer {
+
+									.ticket-info {
+										display: flex;
+										justify-content: space-between;
+										align-items: center;
 									}
 								}
 							}
@@ -253,12 +300,12 @@ html{
 								margin: 10px 10px 0 10px;
 							}
 		
-							&:nth-of-type(1){
+							&:nth-of-type(1) {
 								border-top: unset;
 								border-top-color: unset;
 							}
 	
-							&.active{
+							&.active {
 								background-color: rgba(255,255,255,.3);
 								box-shadow: inset 0 0 2px 1px rgba(30,30,30,.3);
 							}
@@ -291,7 +338,7 @@ html{
 					user-select: none;
 				}
 
-				&.active{
+				&.active {
 					transform: translateY(0);
 
 					@media screen and (max-width: 414px) {
@@ -314,20 +361,21 @@ html{
 			overflow: hidden;
 			box-shadow: 0 0 4px 0.5px rgba(30,30,30,.7);
 			transform: translateX(104%);
+			-webkit-backdrop-filter: blur(10px);
+			backdrop-filter: blur(10px);
 			transition: .5s ease;
 
 			@media screen and (max-width: 414px) {
 				left: 0;
 				width: unset;
-				-webkit-backdrop-filter: blur(10px);
-				backdrop-filter: blur(10px);
 			}
 
-			&.active{
+			&.active {
 				transform: translateX(0);
 			}
 
-			.single-list-outer{
+			.single-list-outer {
+				height: 100%;
 
 				.close-btn {
 					display: none;
@@ -340,34 +388,36 @@ html{
 					font-size: 30px;
 					padding: 3px 8px;
 					text-shadow: 0 0 3px rgba(30,30,30,.7);
+					cursor: pointer;
+					user-select: none;
 
 					@media screen and (max-width: 414px) {
 						display: block;
 					}
 				}
 
-				.single-list{
+				.single-list {
 					position: relative;
 					height: 100%;
 
-					.list-item{
+					.list-item {
 						display: grid;
 						grid-template-rows: 300px auto;
 						height: 100%;
 
-						.top{
+						.top {
 							position: sticky;
 							top: 0;
 							height: 100%;
 
-							.img{
+							.img {
 								background-repeat: no-repeat;
 								background-position: center center;
 								background-size: cover;
 								height: 100%;
 							}
 
-							.no-img{
+							.no-img {
 								display: flex;
 								flex-direction: column;
 								justify-content: center;
@@ -378,7 +428,7 @@ html{
 								height: 100%;
 							}
 
-							.img-desc{
+							.img-desc {
 								color: #fff;
 								font-weight: bold;
 								position: absolute;
@@ -391,7 +441,7 @@ html{
 								padding: 7px 6px 5px 6px;
 								border-radius: 5px;
 
-								&.hide{
+								&.hide {
 									display: none;
 								}
 
@@ -402,26 +452,55 @@ html{
 						}
 
 						.middle-outer {
-							overflow-y: auto;
-								overflow-x: hidden;
+							position: relative;
 
-							.middle{
+							.middle {
+								position: absolute;
+								top: 0;
+								left: 0;
+								right: 0;
+								bottom: 0;
+								overflow-y: auto;
 								color: white;
 								font-size: 15px;
-	
-								div{
-									&:nth-of-type(1),
-									&:nth-of-type(3){
-										padding: 12px 10px 2px 10px;
-										font-weight: bold;
-										font-size: 20px;
+
+								.inside-top {
+
+									div {
+
+										&:nth-of-type(1) {
+											padding: 12px 10px 2px 10px;
+											font-weight: bold;
+											font-size: 20px;
+										}
+		
+										&:nth-of-type(2) {
+											padding: 5px 10px;
+											line-height: 26px;
+											text-align: justify;
+											overflow-y: auto;
+										}
 									}
-	
-									&:nth-of-type(2),
-									&:nth-of-type(4){
-										padding: 5px 10px;
-										line-height: 26px;
-										text-align: justify;
+								}
+
+								.inside-bottom {
+
+									div {
+										
+										&:nth-of-type(1) {
+											padding: 12px 10px 2px 10px;
+											font-weight: bold;
+											font-size: 20px;
+										}
+		
+										&:nth-of-type(2) {
+											padding: 5px 10px;
+											line-height: 26px;
+											text-align: justify;
+											overflow-y: auto;
+											overflow-x: hidden;
+											white-space: pre-line;
+										}
 									}
 								}
 							}
@@ -431,7 +510,7 @@ html{
 			}
 		}
 
-		.loading-outer{
+		.loading-outer {
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
@@ -448,8 +527,9 @@ html{
 			backdrop-filter: blur(10px);
 			background-color: rgba(30,30,30,.5);
 
-			.loading-circle{
-				svg{
+			.loading-circle {
+
+				svg {
 					width: 210px;
 					height: 210px;
 					transform:rotate(0deg);
@@ -457,16 +537,18 @@ html{
 				}
 				
 				@keyframes loadingFram {
+
 					0%{
 						transform:rotate(0deg);
 					}
+
 					100%{
 						transform:rotate(360deg);
 					}
 				}
 			}
 
-			.loading-text{
+			.loading-text {
 				position: absolute;
 				top: 50%;
 				left: 50%;
@@ -477,13 +559,13 @@ html{
 				font-size: 18px;
 			}
 
-			&.active{
+			&.active {
 				opacity: 1;
 				z-index: 1600;
 			}
 		}
 
-		.footer{
+		.footer {
 			position: fixed;
 			left: 50%;
 			bottom: 0;
@@ -500,6 +582,7 @@ html{
 		width: 6px;
 		background-color: rgb(100, 100, 100);
 	}
+	
 	*::-webkit-scrollbar-thumb {
 		background-color: rgba(255, 255, 255, 0.7);
 		border-radius: 20px;
