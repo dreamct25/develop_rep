@@ -1,4 +1,4 @@
-.collect-outer{
+.collect-outer {
     position: fixed;
     top: 0;
     right: 0;
@@ -6,9 +6,18 @@
     bottom: 0;
     z-index: 50;
     background-color: rgba(0,0,0,.8);
-    transition: .7s ease;
+    transition: .5s ease;
     transform: translateY(100%);
-    .close-btn{
+    opacity: 0;
+    backdrop-filter: blur(6px);
+    padding: 0 20px;
+
+    &.collect-outer-active {
+        opacity: 1;
+        transform: translateY(0%);
+    }
+
+    .close-btn {
         cursor: pointer;
         user-select: none;
         position: absolute;
@@ -17,260 +26,455 @@
         padding:15px 10px;
         transform: translate(-10px, 5px);
         z-index: 3;
-        .line{
+
+        .line {
             width: 20px;
             height: 3px;
             background-color: white;
-        }
-        .line:nth-of-type(1){
-            transform:translate(-1px,2px) rotate(45deg);
-        }
-        .line:nth-of-type(2){
-            transform:translate(-1px,-1px) rotate(-45deg);
+
+            &:nth-of-type(1) {
+                transform:translate(-1px,2px) rotate(45deg);
+            }
+
+            &:nth-of-type(2) {
+                transform:translate(-1px,-1px) rotate(-45deg);
+            }
         }
     }
-    .collect-container{
-        .collect-item-title{
+
+    .collect-container {
+        display: grid;
+        grid-template-rows: 0fr auto;
+        height: 100%;
+
+        .collect-item-title {
             position: relative;
             z-index: 2;
             color: white;
             font-size: 35px;
+            font-weight: bold;
             text-align: center;
-            padding: 10px 0 18px 0;
-            background-color: rgba(0,0,0.1);
-            box-shadow: 0 8px 8px 0 black;
-        }
-        @media screen and (max-width:768px) {
-            .collect-item-title{
+            padding: 16px 0 18px 0;
+            letter-spacing: 2px;
+
+            @media screen and (max-width:768px) {
                 padding: 10px 0 5px 0;
             }
+
+            &::after {
+                content: '';
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(255,255,255, .3);
+                height: 1px;
+            }
         }
-        .collect-item-list{
-            padding: 0 20px 80px 20px;
-            height: 100vh;
-            overflow-y: scroll;
-            overflow-x: hidden;
-            .collect-item{
-                color: white;
-                padding:10px 0 20px 0;
-                border-bottom: 1px solid rgba(255,255,255,.7);
-                .title{
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    font-size: 25px;
-                    span{
-                        display: block;
-                    }
-                    .title-left-group{
-                        display: flex;
-                        align-items: center;
-                        span{
-                            display: inline;
-                            padding: 5px;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            display: -webkit-box;
-                            -webkit-line-clamp: 1;
-                            -webkit-box-orient: vertical;
-                        }
-                    }
-                    .title-right-group{
-                        display: flex;
-                        .details-btn{
-                            display: inline;
-                            padding: 5px;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            display: -webkit-box;
-                            -webkit-line-clamp: 1;
-                            -webkit-box-orient: vertical;
-                            align-self: center;
-                            cursor: pointer;
-                            user-select: none;
-                            font-size: 18px;
-                            margin: 0 10px;
-                            padding: 0 15px;
-                            text-align: center;
-                            background-color: rgb(0,162,255);
-                            border-radius: 20px;
-                        }
-                        .mark-btn,.delete-btn{
-                            cursor: pointer;
-                            user-select: none;
-                            margin: 0 8px;
-                        }
-                    }
+
+        .collect-item-list-outer {
+            display: grid;
+            grid-template-rows: 1fr 0fr;
+
+            .collect-item-list {
+                height: calc(100vh - 130px);
+                overflow-y: auto;
+                overflow-x: hidden;
+
+                &::-webkit-scrollbar {
+                    width: 6px;
+                    box-shadow: inset 0 0 1px 1px rgba(255,255,255, .3);
+                    border-radius: 20px;
                 }
-                .collect-content-outer{
+
+                &::-webkit-scrollbar-thumb {
+                    background-color: rgba(255, 255, 255, 0.7);
+                    border-radius: 20px;
+                }
+
+                .collect-item {
+                    color: white;
+                    margin: 12px;
+                    box-shadow: inset 0 0 2px 1px rgba(255, 255, 255, .3);
+                    border-radius: 12px;
                     overflow: hidden;
-                    .collect-content{
-                        padding: 10px 15px 20px 15px;
-                        margin: -50% 0;
-                        transition: .7s ease;
-                        .collect-img-outer{
-                            width: 100%;
+
+                    &:last-child {
+                        border-bottom: unset;
+                    }
+
+                    .title {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        font-size: 25px;
+                        padding: 2px 8px;
+
+                        @media screen and (max-width: 565px) {
+                            flex-direction: column;
+                            align-items: unset;
+
+                            .title-left-group {
+                                justify-content: center
+                            }
+                        }
+
+                        span {
+                            display: block;
+                        }
+
+                        .title-left-group {
                             display: flex;
-                            overflow: hidden;
-                            .collect-img{
-                                position: relative;
-                                min-height: 70vh;
-                                background-repeat: no-repeat;
-                                background-position: center center;
-                                flex-grow: 1;
-                                flex-basis: 0%;
-                                transition: .7s ease;
+
+                            span{
+                                display: inline;
+                                padding: 5px;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                display: -webkit-box;
+                                -webkit-line-clamp: 1;
+                                -webkit-box-orient: vertical;
+                            }
+                        }
+
+                        .title-right-group {
+                            display: grid;
+                            grid-template-columns: 1fr 1fr 1fr;
+
+                            @media screen and (max-width: 565px) {
+                                margin-bottom: 6px;
+                            }
+
+                            .details-btn,
+                            .mark-btn,
+                            .delete-btn {
+                                text-align: center;
+                                cursor: pointer;
                                 user-select: none;
-                                .collect-img-inside-fram{
-                                    display: flex;
+                                margin: 0 8px;
+                            }
+                        }
+                    }
+
+                    .collect-content-outer {
+
+                        .collect-content {
+                            height: 0;
+                            transition: .7s ease;
+                            display: grid;
+                            grid-template-rows: 50vh auto;
+
+                            &.collect-content-active {
+                                height: 93vh;
+                            }
+
+                            .collect-img-outer {
+                                position: relative;
+                                display: flex;
+                                overflow: hidden;
+                                padding: 1px;
+
+                                &.no-imgs {
                                     justify-content: center;
                                     flex-direction: column;
-                                    align-items: center;
+                                    min-height: calc(100vh - 432px);
+                                }
+
+                                &::before {
+                                    content: '';
                                     position: absolute;
                                     top: 0;
                                     left: 0;
                                     right: 0;
+                                    z-index: 2;
+                                    height: 1px;
+                                    margin: 0 1px;
+                                    background-color: rgba(255, 255, 255, .3);
+                                }
+
+                                &::after {
+                                    content: '';
+                                    position: absolute;
+                                    left: 0;
+                                    right: 0;
                                     bottom: 0;
-                                    opacity: .7;
-                                    background-color: rgb(0,0,0);
+                                    z-index: 2;
+                                    height: 1px;
+                                    margin: 0 1px;
+                                    background-color: rgba(255, 255, 255, .3);
+                                }
+
+                                &:has(.collect-img.active) {
+
+                                    .collect-img:not(.active) {
+
+                                        span {
+                                            transition: .1s ease;
+                                            color: transparent;
+                                            transform: scale(0);
+                                        }
+                                    }
+                                }
+
+                                .collect-img {
+                                    position: relative;
+                                    background-image: var(--url);
+                                    background-repeat: no-repeat;
+                                    background-position: center center;
+                                    background-size: contain;
+                                    flex-grow: 1;
+                                    flex-basis: 0%;
                                     transition: .7s ease;
-                                    z-index: 1;
-                                    span{
+                                    user-select: none;
+
+                                    &.active {
+                                        flex-basis: 100%;
+
+                                        .collect-img-inside-fram {
+                                            opacity: 0;
+
+                                            span {
+                                                color: transparent;
+                                            }
+                                        }
+
+                                        .collect-img-desc {
+                                            opacity: 1;
+                                            transform: translateY(0px);
+                                        }
+                                    }
+
+                                    .collect-img-inside-fram {
+                                        display: flex;
+                                        justify-content: center;
+                                        flex-direction: column;
+                                        align-items: center;
                                         position: absolute;
-                                        font-size: 35px;
-                                        color: white;
+                                        top: 0;
+                                        left: 0;
+                                        right: 0;
+                                        bottom: 0;
+                                        opacity: .7;
+                                        background-color: rgb(0,0,0);
                                         transition: .7s ease;
+                                        z-index: 1;
+
+                                        span {
+                                            position: absolute;
+                                            font-size: 35px;
+                                            color: white;
+                                            transform: scale(1);
+                                            transition: .7s ease;
+
+                                            @media screen and (max-width: 768px) {
+                                                font-size: 25px;
+                                            }
+                                        }
                                     }
-                                    .active{
-                                        color: transparent;
+
+                                    .collect-img-desc {
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: flex-end;
+                                        position: absolute;
+                                        top: 0;
+                                        left: 0;
+                                        right: 0;
+                                        bottom: 0;
+                                        background: linear-gradient(
+                                            transparent,
+                                            transparent,
+                                            transparent,
+                                            transparent,
+                                            rgba(0,0,0,.7)
+                                        );
+                                        opacity: 0;
+                                        transform: translateY(100%);
+                                        transition: .7s ease;
+
+                                        span {
+                                            display: block;
+                                            padding: 15px;
+                                        }
                                     }
                                 }
-                                .active{
-                                    opacity: 0;
-                                }
-                                .collect-img-desc{
-                                    display: flex;
-                                    justify-content: center;
-                                    align-items: flex-end;
-                                    position: absolute;
-                                    top: 0;
-                                    left: 0;
-                                    right: 0;
-                                    bottom: 0;
-                                    background: linear-gradient(transparent,transparent,transparent,transparent,rgba(0,0,0,.7));
-                                    opacity: 0;
-                                    transform: translateY(100%);
-                                    transition: .7s ease;
-                                    span{
-                                        display: block;
-                                        padding: 15px;
-                                    }
-                                }
-                                .collect-img-desc-active{
-                                    opacity: 1;
-                                    transform: translateY(0px);
-                                }
-                            }
-                            .active{
-                                flex-basis: 100%;
-                            }
-                        }
-                        .description{
-                            font-size: 20px;
-                            margin: 10px 0;
-                        }
-                        .info-1{
-                            overflow: hidden;
-                            border-radius: 10px;
-                            margin-top: 10px;
-                            span{
-                                display: block;
-                                text-align: center;
-                                font-size: 16px;
-                                padding: 8px 0;
-                                background-color: rgb(0,162,255);
-                            }
-                            .price{
-                                background-color: white;
-                                padding: 5px 0;
-                                span{
+
+                                .no-imgs-info {
                                     text-align: center;
-                                    padding: 3px 5px;
-                                    font-size: 16px;
-                                    color: black;
-                                    background-color: unset;
+                                    font-weight: bold;
+                                    font-size: 45px;
+                                    letter-spacing: 2px;
                                 }
                             }
-                        }
-                    }
-                    @media screen and (max-width:414px){
-                        .collect-content{
-                            margin: -1000px 0;
-                        }
-                    }
-                    .collect-content-active{
-                        margin: 0 0;
-                    }
-                }
-                .collect-footer{
-                    .info-2,
-                    .info-3,
-                    .info-4{
-                        overflow: hidden;
-                        border-radius: 10px;
-                        margin-top: 10px;
-                        display: flex;
-                        span{
-                            display: inline;
-                            padding: 3px 5px;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            display: -webkit-box;
-                            -webkit-line-clamp: 1;
-                            -webkit-box-orient: vertical;
-                        }
-                        span:nth-of-type(1){
-                            text-align: center;
-                            font-size: 16px;
-                            background-color: rgb(0,162,255);
-                            width: 20%;
-                        }
-                        span:nth-of-type(2){
-                            font-size: 16px;
-                            color: black;
-                            background-color: white;
-                            width: 80%;
-                        }
-                    }
-                    .info-4{
-                        span:nth-of-type(2){
-                            text-align: center;
+
+                            .collect-info {
+                                padding: 0 16px 16px 16px;
+                                overflow-y: auto;
+
+                                &::-webkit-scrollbar {
+                                    width: 6px;
+                                    box-shadow: inset 0 0 1px 1px rgba(255,255,255, .3);
+                                    border-radius: 20px;
+                                }
+
+                                &::-webkit-scrollbar-thumb {
+                                    background-color: rgba(255, 255, 255, 0.7);
+                                    border-radius: 20px;
+                                }
+
+                                .description {
+                                    font-size: 20px;
+                                    margin: 10px 0;
+                                }
+
+                                .info-outer {
+
+                                    .info-1 {
+                                        display: grid;
+                                        grid-template-columns: 80px 1fr;
+                                        align-items: center;
+                                        overflow: hidden;
+                                        border-radius: 12px;
+                                        margin-top: 10px;
+                                        box-shadow: inset 0 0 1px 1px rgba(255, 255, 255, .3);
+
+                                        @media screen and (max-width: 430px) {
+                                            display: block;
+                                        }
+
+                                        .info-title {
+                                            display: flex;
+                                            flex-direction: column;
+                                            justify-content: center;
+                                            text-align: center;
+                                            font-size: 16px;
+                                            padding: 8px 0;
+                                            position: relative;
+                                            height: 100%;
+                                            margin: unset !important;
+
+                                            &::after {
+                                                content: '';
+                                                position: absolute;
+                                                top: 0;
+                                                right: 0;
+                                                bottom: 0;
+                                                width: 1px;
+                                                background-color: rgba(255, 255, 255, .3);
+                                                margin: 1px 0;
+                                            }
+
+                                            @media screen and (max-width: 430px) {
+                                                
+                                                &::after {
+                                                    top: unset;
+                                                    right: 0;
+                                                    left: 0;
+                                                    bottom: 0;
+                                                    width: auto;
+                                                    height: 1px;
+                                                    margin: 0 1px;
+                                                }
+                                            }
+                                        }
+
+                                        .price {
+                                            display: grid;
+                                            grid-template-columns: 1fr 1fr 1fr;
+                                            padding: 5px 0;
+                                            color: white;
+
+                                            span {
+                                                display: block;
+                                                text-align: center;
+                                                padding: 3px 5px;
+                                                font-size: 16px;
+                                                background-color: unset;
+                                            }
+                                        }
+                                    }
+
+                                    .info-2,
+                                    .info-3,
+                                    .info-4,
+                                    .info-5 {
+                                        display: grid;
+                                        grid-template-columns: 80px 1fr;
+                                        align-items: center;
+                                        overflow: hidden;
+                                        border-radius: 12px;
+                                        margin-top: 10px;
+                                        box-shadow: inset 0 0 1px 1px rgba(255, 255, 255, .3);
+
+                                        @media screen and (max-width: 430px) {
+                                            display: block;
+                                        }
+
+                                        .info-title {
+                                            display: flex;
+                                            flex-direction: column;
+                                            justify-content: center;
+                                            text-align: center;
+                                            font-size: 16px;
+                                            padding: 8px 0;
+                                            position: relative;
+                                            height: 100%;
+                                            margin: unset !important;
+
+                                            &::after {
+                                                content: '';
+                                                position: absolute;
+                                                top: 0;
+                                                right: 0;
+                                                bottom: 0;
+                                                width: 1px;
+                                                background-color: rgba(255, 255, 255, .3);
+                                                margin: 1px 0;
+                                            }
+
+                                            @media screen and (max-width: 430px) {
+                                                
+                                                &::after {
+                                                    top: unset;
+                                                    right: 0;
+                                                    left: 0;
+                                                    bottom: 0;
+                                                    width: auto;
+                                                    height: 1px;
+                                                    margin: 0 1px;
+                                                }
+                                            }
+                                        }
+
+                                        span {
+                                            text-align: center;
+                                            margin: 6px 10px 8px 10px;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                            display: -webkit-box;
+                                            -webkit-line-clamp: 1;
+                                            -webkit-box-orient: vertical;
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
-            
-        }
-        .collect-item-list::-webkit-scrollbar {
-            width: 2px;
-            background-color: rgb(100, 100, 100);
-        }
-        .collect-item-list::-webkit-scrollbar-thumb {
-            background-color: rgba(255, 255, 255, 0.7);
-        }
-        .collect-item-list-no-data{
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            align-items: center;
-            min-height: 90vh;
-            .no-data{
-                font-size: 28px;
-                color: white;
+
+            .collect-item-list-no-data {
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                align-items: center;
+                min-height: 90vh;
+
+                .no-data {
+                    font-size: 28px;
+                    color: white;
+                }
             }
         }
     }
-}
-.collect-outer-active{
-    transform: translateY(0%);
 }

@@ -1,0 +1,32 @@
+.container {
+
+    .render-item-outer {
+
+        @media screen and (max-width:414px) {
+            margin-top: 110px;
+        }
+    
+        app-pagination {
+            
+            ::ng-deep {
+                
+                .pagination {
+                    margin-top: 16px;
+                }
+            }
+        }
+        
+    }
+
+    .no-data {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        min-height: calc(100vh - 59px);
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+        padding-top: 64px;
+    }
+}

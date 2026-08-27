@@ -1,0 +1,43 @@
+@let templateParams = {
+  dataOnly: state.dataOnly(),
+  pagination: state.pagination()
+};
+
+@let loadingProps = {
+  haveLoading: state.haveLoading()
+};
+
+@let alertModalProps = {
+  modalToggle: state.modalToggle(),
+  msObj: state.msObj()
+};
+
+<div class="container">
+  @if (templateParams.dataOnly.length > 0) {
+
+    <div class="render-item-outer">
+      <app-render-item 
+        [propsData]="templateParams.dataOnly" 
+        (idPost)="goSingleInfo($event)"
+      />
+      <app-pagination 
+        [paginationObjProps]="templateParams.pagination" 
+        (goCurrent)="goNext($event)"
+      />
+    </div>
+
+  } @else {
+
+    <div class="no-data">
+      查無資料，請重新搜尋
+    </div>
+
+  }
+  
+  <app-loading [propsHaveLoading]="loadingProps.haveLoading" />
+  <app-alert-modal 
+    [propsModalToggle]="alertModalProps.modalToggle" 
+    [propsModalContent]="alertModalProps.msObj" 
+    (postClose)="state.modalToggle.set($event)"
+  />
+</div>

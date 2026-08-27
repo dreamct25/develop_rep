@@ -1,27 +1,41 @@
-<div class="main">
-  <div class="header">
-    <div class="row g-0 align-items-center">
-      <div class="col-md-2">
-        <div class="title">
-          <h1 [class.title-toggle]="currentSingleName !== null">Hotels</h1>
-        </div>
-      </div>
-      <div class="col-md-8">
-        <div class="search-switch">
-          <div class="search-groups-outer" [class.search-toggle]="currentSingleName === null">
-            <app-search-group></app-search-group>
-          </div>
-          <div class="current-single-name" [class.single-name-toggle]="currentSingleName !== null">
-            {{ currentSingleName }}
-          </div>
-        </div>
-      </div>
-    </div>
+@let stores = {
+  currentSingleName: store.currentSingleName()
+};
+
+@let collectProps = {
+  toggleCollect: toggleCollect()
+};
+
+<div class="header">
+  <div class="title">
+    <h1 [class]="{ 'title-toggle': stores.currentSingleName !== '' }">Hotels</h1>
+    <div class="collect-btn" (click)="toggleCollect.set(true)">收藏旅館</div>
   </div>
+  <div 
+    class="current-single-name" 
+    [class]="{ 'single-name-toggle': stores.currentSingleName !== '' }"
+  >
+    {{ stores.currentSingleName || '' }}
+  </div>
+  <div class="right">
+    <div 
+      class="search-groups-outer" 
+      [class]="{ 'search-toggle': stores.currentSingleName === '' }"
+    >
+      <app-search-group />
+    </div>
+    <div class="collect-btn" (click)="toggleCollect.set(true)">收藏旅館</div>
+  </div>
+</div>
+<div class="main">
   <router-outlet></router-outlet>
-  <div class="collect-btn" (click)="toggleCollect = true">收藏旅館</div>
-  <app-collect [propsToggle]="toggleCollect" (postToggle)="toggleCollect = $event"></app-collect>
 </div>
 <div class="footer">
-  <h6><i class="fal fa-copyright"></i>Copyright Chen</h6>
+  <h6>CopyRight &copy; 2024-10 Alex Chen .</h6>
 </div>
+
+<app-filter-box />
+<app-collect 
+  [propsToggle]="collectProps.toggleCollect" 
+  (postToggle)="toggleCollect.set($event)"
+/>

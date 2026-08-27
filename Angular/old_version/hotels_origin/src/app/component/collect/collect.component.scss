@@ -1,0 +1,276 @@
+.collect-outer{
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 50;
+    background-color: rgba(0,0,0,.8);
+    transition: .7s ease;
+    transform: translateY(100%);
+    .close-btn{
+        cursor: pointer;
+        user-select: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding:15px 10px;
+        transform: translate(-10px, 5px);
+        z-index: 3;
+        .line{
+            width: 20px;
+            height: 3px;
+            background-color: white;
+        }
+        .line:nth-of-type(1){
+            transform:translate(-1px,2px) rotate(45deg);
+        }
+        .line:nth-of-type(2){
+            transform:translate(-1px,-1px) rotate(-45deg);
+        }
+    }
+    .collect-container{
+        .collect-item-title{
+            position: relative;
+            z-index: 2;
+            color: white;
+            font-size: 35px;
+            text-align: center;
+            padding: 10px 0 18px 0;
+            background-color: rgba(0,0,0.1);
+            box-shadow: 0 8px 8px 0 black;
+        }
+        @media screen and (max-width:768px) {
+            .collect-item-title{
+                padding: 10px 0 5px 0;
+            }
+        }
+        .collect-item-list{
+            padding: 0 20px 80px 20px;
+            height: 100vh;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            .collect-item{
+                color: white;
+                padding:10px 0 20px 0;
+                border-bottom: 1px solid rgba(255,255,255,.7);
+                .title{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    font-size: 25px;
+                    span{
+                        display: block;
+                    }
+                    .title-left-group{
+                        display: flex;
+                        align-items: center;
+                        span{
+                            display: inline;
+                            padding: 5px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            display: -webkit-box;
+                            -webkit-line-clamp: 1;
+                            -webkit-box-orient: vertical;
+                        }
+                    }
+                    .title-right-group{
+                        display: flex;
+                        .details-btn{
+                            display: inline;
+                            padding: 5px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            display: -webkit-box;
+                            -webkit-line-clamp: 1;
+                            -webkit-box-orient: vertical;
+                            align-self: center;
+                            cursor: pointer;
+                            user-select: none;
+                            font-size: 18px;
+                            margin: 0 10px;
+                            padding: 0 15px;
+                            text-align: center;
+                            background-color: rgb(0,162,255);
+                            border-radius: 20px;
+                        }
+                        .mark-btn,.delete-btn{
+                            cursor: pointer;
+                            user-select: none;
+                            margin: 0 8px;
+                        }
+                    }
+                }
+                .collect-content-outer{
+                    overflow: hidden;
+                    .collect-content{
+                        padding: 10px 15px 20px 15px;
+                        margin: -50% 0;
+                        transition: .7s ease;
+                        .collect-img-outer{
+                            width: 100%;
+                            display: flex;
+                            overflow: hidden;
+                            .collect-img{
+                                position: relative;
+                                min-height: 70vh;
+                                background-repeat: no-repeat;
+                                background-position: center center;
+                                flex-grow: 1;
+                                flex-basis: 0%;
+                                transition: .7s ease;
+                                user-select: none;
+                                .collect-img-inside-fram{
+                                    display: flex;
+                                    justify-content: center;
+                                    flex-direction: column;
+                                    align-items: center;
+                                    position: absolute;
+                                    top: 0;
+                                    left: 0;
+                                    right: 0;
+                                    bottom: 0;
+                                    opacity: .7;
+                                    background-color: rgb(0,0,0);
+                                    transition: .7s ease;
+                                    z-index: 1;
+                                    span{
+                                        position: absolute;
+                                        font-size: 35px;
+                                        color: white;
+                                        transition: .7s ease;
+                                    }
+                                    .active{
+                                        color: transparent;
+                                    }
+                                }
+                                .active{
+                                    opacity: 0;
+                                }
+                                .collect-img-desc{
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: flex-end;
+                                    position: absolute;
+                                    top: 0;
+                                    left: 0;
+                                    right: 0;
+                                    bottom: 0;
+                                    background: linear-gradient(transparent,transparent,transparent,transparent,rgba(0,0,0,.7));
+                                    opacity: 0;
+                                    transform: translateY(100%);
+                                    transition: .7s ease;
+                                    span{
+                                        display: block;
+                                        padding: 15px;
+                                    }
+                                }
+                                .collect-img-desc-active{
+                                    opacity: 1;
+                                    transform: translateY(0px);
+                                }
+                            }
+                            .active{
+                                flex-basis: 100%;
+                            }
+                        }
+                        .description{
+                            font-size: 20px;
+                            margin: 10px 0;
+                        }
+                        .info-1{
+                            overflow: hidden;
+                            border-radius: 10px;
+                            margin-top: 10px;
+                            span{
+                                display: block;
+                                text-align: center;
+                                font-size: 16px;
+                                padding: 8px 0;
+                                background-color: rgb(0,162,255);
+                            }
+                            .price{
+                                background-color: white;
+                                padding: 5px 0;
+                                span{
+                                    text-align: center;
+                                    padding: 3px 5px;
+                                    font-size: 16px;
+                                    color: black;
+                                    background-color: unset;
+                                }
+                            }
+                        }
+                    }
+                    @media screen and (max-width:414px){
+                        .collect-content{
+                            margin: -1000px 0;
+                        }
+                    }
+                    .collect-content-active{
+                        margin: 0 0;
+                    }
+                }
+                .collect-footer{
+                    .info-2,
+                    .info-3,
+                    .info-4{
+                        overflow: hidden;
+                        border-radius: 10px;
+                        margin-top: 10px;
+                        display: flex;
+                        span{
+                            display: inline;
+                            padding: 3px 5px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            display: -webkit-box;
+                            -webkit-line-clamp: 1;
+                            -webkit-box-orient: vertical;
+                        }
+                        span:nth-of-type(1){
+                            text-align: center;
+                            font-size: 16px;
+                            background-color: rgb(0,162,255);
+                            width: 20%;
+                        }
+                        span:nth-of-type(2){
+                            font-size: 16px;
+                            color: black;
+                            background-color: white;
+                            width: 80%;
+                        }
+                    }
+                    .info-4{
+                        span:nth-of-type(2){
+                            text-align: center;
+                        }
+                    }
+                }
+            }
+            
+        }
+        .collect-item-list::-webkit-scrollbar {
+            width: 2px;
+            background-color: rgb(100, 100, 100);
+        }
+        .collect-item-list::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        .collect-item-list-no-data{
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            min-height: 90vh;
+            .no-data{
+                font-size: 28px;
+                color: white;
+            }
+        }
+    }
+}
+.collect-outer-active{
+    transform: translateY(0%);
+}

@@ -1,9 +1,20 @@
-<div class="modal-c-outer-frame" [class.modal-c-outer-frame-active]="propsModalToggle">
-  <div class="modal-c-outer" [class.modal-c-outer-active]="propsModalToggle">
-    <div class="modal-c">
-      <div class="modal-c-header">{{ propsModalContent.msTitle }}</div>
-      <div class="modal-c-body">{{ propsModalContent.msContent }}</div>
-      <div class="modal-c-footer">
+@let props = {
+  propsModalToggle: propsModalToggle(),
+  propsModalContent: propsModalContent()
+};
+
+<div 
+  class="alert-modal-outer-frame" 
+  [class]="{ 'alert-modal-outer-frame-active': props.propsModalToggle }"
+>
+  <div 
+    class="alert-modal-outer" 
+    [class]="{ 'alert-modal-outer-active': props.propsModalToggle }"
+  >
+    <div class="alert-modal">
+      <div class="alert-modal-header">{{ props.propsModalContent.msTitle }}</div>
+      <div class="alert-modal-body">{{ props.propsModalContent.msContent }}</div>
+      <div class="alert-modal-footer">
         <div class="confirm-c" (click)="closeModal()">確定</div>
       </div>
     </div>

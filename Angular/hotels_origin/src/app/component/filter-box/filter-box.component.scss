@@ -1,159 +1,233 @@
-.filter-box-outer-frame{
+.filter-box-outer-frame {
     position: fixed;
-    z-index: -1;
+    z-index: 40;
     background-color: rgba(0,0,0,.7);
-    top: -10vh;
-    left: -100%;
-    right: -100%;
+    backdrop-filter: blur(6px);
+    top: 0;
+    left: 0;
+    right: 0;
     bottom: 0;
     opacity: 0;
-    transition: .7s ease;
-    .filter-box-outer{
+    pointer-events: none;
+    transition: opacity .5s ease;
+
+    &.filter-box-outer-frame-active {
+        opacity: 1;
+        pointer-events: all;
+
+        .filter-box-outer {
+            opacity: 1;
+            transform: translate(-50%,-50%);
+        }
+    }
+
+    .filter-box-outer {
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%,0%);
-        min-width: 365px;
-        transition: .7s ease;
+        transform: translate(-50%, -35%);
+        max-width: 365px;
+        width: 95%;
+        margin: 0 auto;
+        transition: .5s ease;
         opacity: 0;
-        .filter-box{
-            .filter-box-header{
-                border-radius: 10px 10px 0 0;
-                padding: 7px 12px;
+        box-shadow: inset 0 0 2px 1px rgba(255, 255, 255, .3);
+        border-radius: 12px;
+
+        .filter-box {
+
+            .filter-box-header {
+                padding: 6px 12px;
                 font-size: 20px;
-                border-bottom: .1px solid rgba(0,0,0,.3);
-                background-color: white;
+                color: white;
+                background-color: rgba(0, 132, 255, .7);
+                margin: .5px .5px 0 .5px;
+                border-radius: 12px 12px 0 0;
             }
-            .filter-box-body{
+
+            .filter-box-body {
                 padding:1px 12px;
                 text-align: center;
-                background-color: white;
                 border-bottom: .1px solid rgba(0,0,0,.3);
-                .select-group-I,.select-group-II{
-                    overflow: hidden;
+                position: relative;
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: -1px;
+                    left: 0;
+                    right: 0;
+                    background-color: rgba(255, 255, 255, .2);
+                    height: 1px;
+                    margin: 0 1px;
+                }
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    bottom: -2px;
+                    background-color: rgba(255, 255, 255, .2);
+                    height: 1px;
+                    margin: 0 1px;
+                }
+
+                .select-group-I,
+                .select-group-II {
                     font-size: 18px;
                     border-radius: 5px;
                     margin: 10px 0;
-                    .select-I-title,.select-II-title{
-                        padding: 5px 0;
+                    position: relative;
+                    box-shadow: inset 0 0 1px 1px rgba(255, 255, 255, .3);
+
+                    .select-I-title,
+                    .select-II-title {
+                        padding: 8px 0 6px 0;
                         color: white;
-                        background-color: rgb(0,132,255);
+                        background-color: rgba(0, 132, 255, .7);
+                        border-radius: 5px 5px 0 0;
+                        position: relative;
+                        font-weight: bold;
+
+                        &::after {
+                            content: '';
+                            position: absolute;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            background-color: rgba(255, 255, 255, .3);
+                            height: 1px;
+                            margin: 0 1px;
+                        }
                     }
-                    .select-type,.select-hotel-type{
+
+                    .select-type,
+                    .select-hotel-type {
                         display: flex;
                         flex-direction: column;
                         justify-content: center;
                         align-items: center;
-                        width: 100%;
-                        height: 100%;
-                        background-color: white;
                         cursor: pointer;
                         user-select: none;
-                        box-shadow: inset 0 0 1px 1px rgba(0,0,0,.3);
                         padding: 5px 0;
+                        color: white;
                     }
-                    .select-list-outer{
+
+                    .select-list-outer {
                         overflow: hidden;
-                        .select-list{
-                            cursor: pointer;
-                            user-select: none;
+                        margin-top: 8px;
+                        position: absolute;
+                        top: 74px;
+                        left: 0;
+                        right: 0;
+                        z-index: 1;
+                        border-radius: 5px;
+                        background-color: rgba(30, 30, 30, .7);
+                        backdrop-filter: blur(6px);
+                        box-shadow: inset 0 0 1px 1px rgba(255, 255, 255, .3);
+
+                        .select-list {
+                            padding: 7px 3px;
                             margin-top: -100%;
-                            transition: .7s ease;
-                            overflow: hidden;
-                            background-color: rgb(30,30,30);
-                            box-shadow: inset 0 0 3px 0 rgba(255,255,255,.7);
-                            .lists{
+                            transition: .5s ease;
+                            
+                            &.select-list-toggle {
+                                margin-top: 0;
+                            }
+
+                            .lists {
                                 cursor: pointer;
                                 user-select: none;
                                 color: white;
                                 padding: 5px 0;
                                 text-align: center;
                                 background-color: rgba(255,255,255,0);
-                                transition: .7s ease;
+                                transition: .5s ease;
+                                position: relative;
+
+                                &.selected {
+                                    
+                                    &::after {
+                                        content: '';
+                                        position: absolute;
+                                        top: 0;
+                                        left: 0;
+                                        right: 0;
+                                        bottom: 0;
+                                        margin: 0 5px;
+                                        border-radius: 4px;
+                                        box-shadow: inset 0 0 1px 1px rgba(255, 255, 255, .3);
+                                    }
+                                }
                             }
-                            .selected{
-                                box-shadow: inset 0 0 1px 1px rgba(0,0,0,.3);
-                                background-color: rgba(255,255,255,1);
-                                color: black;
-                            }
-                        }
-                        .select-list-toggle{
-                            margin-top: 0;
                         }
                     }
         
                 }
-                .check-boxs{
+
+                .check-box-outer {
                     display: flex;
                     justify-content: center;
                     align-items: center;
                     padding: 5px 0;
                     border-radius: 5px;
-                    box-shadow:inset 0 0 1px 1px rgba(0,0,0,.3);
+                    box-shadow: inset 0 0 1px 1px rgba(255, 255, 255, .3);
                     margin-bottom: 10px;
-                    .check-box{
+
+                    .check-box {
                         position: relative;
                         width: 20px;
                         height: 20px;
                         margin: 0 8px;
                         border-radius: 3px;
-                        box-shadow:inset 0 0 1px .5px rgba(0,0,0,.3);
+                        box-shadow: inset 0 0 1px 1px rgba(255, 255, 255, .3);
                         background-color: rgba(0,132,255,0);
                         overflow: hidden;
                         transition: .3s ease;
-                        .check-confirm{
+
+                        i {
                             position: absolute;
                             top: 0;
                             left: 0;
                             right: 0;
                             bottom: 0;
-                            font-size: 14px;
+                            font-size: 12px;
                             color: white;
                             transform: translate(1px, 20px);
                             transition: .3s ease;
                         }
-                        .check-toggle{
-                            transform: translate(1px, 3px);
+
+                        &.toggle {
+                            background-color: rgba(0,132,255, .7);
+
+                            i {
+                                transform: translate(0px, 4.5px);
+                            }
                         }
                     }
-                    .check-box-toggle{
-                        background-color: rgba(0,132,255,1);
-                    }
-                    .check-label{
+
+                    .label {
                         cursor: default;
                         user-select: none;
+                        color: white;
                     }
                 }
             }
-            .filter-box-footer{
-                overflow: hidden;
-                border-radius: 0 0 10px 10px;
-                .confirm-c{
+
+            .filter-box-footer {
+                margin: 0 .5px .5px .5px;
+
+                .confirm {
                     cursor: pointer;
                     user-select: none;
                     text-align: center;
                     padding: 7px 0;
                     color: white;
-                    background-color: rgb(0,132,255);
+                    background-color: rgba(0, 132, 255, .7);
+                    border-radius: 0 0 12px 12px;
                 }
             }
         }
     }
-    .filter-box-outer-active{
-        opacity: 1;
-        transform: translate(-50%,-50%);
-    }
-    @media screen and (max-width:414px) {
-        .filter-box-outer-active{
-            opacity: 1;
-            transform: translate(-50%,-65%);
-        }
-    }
-}
-.filter-box-outer-frame-height-active{
-    bottom: -100vh;
-}
-.filter-box-outer-frame-active{
-    opacity: 1;
-    z-index: 40;
 }

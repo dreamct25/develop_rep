@@ -1,0 +1,35 @@
+<div class="render-item-outer">
+  <div class="row g-0">
+    <div *ngFor="let item of propsData;let int = index" class="col-lg-3 col-md-4">
+      <div class="item-outer" (touchstart)="topFrameToggleFn(true,int)" (touchend)="topFrameToggleFn(false,int)" (mouseenter)="topFrameToggleFn(true,int)" (mouseleave)="topFrameToggleFn(false,int)">
+        <div class="item" [style.background-image]="'url('+ item.Picture1 +')'" *ngIf="item.Picture1 != ''; else noImg">
+          <div class="top">
+            <div class="top-frame" [class.top-frame-toggle]="topFrameToggle && currentIndex === int">
+              <span *ngIf="item.Description !== '' else noDesc">{{ item.Description }}</span>
+              <ng-template #noDesc>
+                <span>暫無說明資訊</span>
+              </ng-template>
+            </div>
+            <span class="float-title">{{ item.Name }}</span>
+          </div>
+          <div class="bottom">
+            <div class="details-btn" (click)="getSingleId(item.Id)">詳細內容</div>
+          </div>
+        </div>
+        <ng-template #noImg>
+          <div class="no-item">
+            <div class="top">
+              <div class="top-frame" [class.top-frame-toggle]="topFrameToggle && currentIndex === int">
+                <span>{{ item.Description }}</span>
+              </div>
+              <span class="float-title">{{ item.Name }}</span>
+            </div>
+            <div class="bottom">
+              <div class="details-btn" (click)="getSingleId(item.Id)">詳細內容</div>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

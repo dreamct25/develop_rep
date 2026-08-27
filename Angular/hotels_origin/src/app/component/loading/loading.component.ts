@@ -1,18 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-loading',
   templateUrl: './loading.component.html',
-  styleUrls: ['./loading.component.scss']
+  styleUrls: ['./loading.component.scss'],
+  standalone: true
 })
-export class LoadingComponent implements OnInit {
 
-  @Input()
-  public propsHaveLoading: boolean = false
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+export class AppLoading {
+  propsHaveLoading = input.required<boolean>()
 }

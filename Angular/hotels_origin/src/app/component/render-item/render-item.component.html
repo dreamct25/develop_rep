@@ -1,35 +1,78 @@
-<div class="render-item-outer">
-  <div class="row g-0">
-    <div *ngFor="let item of propsData;let int = index" class="col-lg-3 col-md-4">
-      <div class="item-outer" (touchstart)="topFrameToggleFn(true,int)" (touchend)="topFrameToggleFn(false,int)" (mouseenter)="topFrameToggleFn(true,int)" (mouseleave)="topFrameToggleFn(false,int)">
-        <div class="item" [style.background-image]="'url('+ item.Picture1 +')'" *ngIf="item.Picture1 != ''; else noImg">
+@let props = {
+  propsData: propsData(),
+};
+
+@let templateParams = {
+  currentIndex: currentIndex(),
+  topFrameToggle: topFrameToggle()
+};
+
+<div class="render-item">
+  @for (item of props.propsData; track item.HotelID; let int = $index) {
+    <div 
+      class="item-outer" 
+      (touchstart)="topFrameToggleFn(true,int)" 
+      (touchend)="topFrameToggleFn(false,int)" 
+      (mouseenter)="topFrameToggleFn(true,int)" 
+      (mouseleave)="topFrameToggleFn(false,int)"
+    >
+      @let image = item.Images[0];
+
+      @if (image) {
+        <div 
+          class="item" 
+          #itemRef 
+          [style]="{ '--url': image.URL }"
+        >
+          <div class="img"></div>
+          <div class="img-loading active">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+              <g class="spinner">
+                <circle class="path" cx="25" cy="25" r="20" />
+              </g>
+            </svg>
+          </div>
           <div class="top">
-            <div class="top-frame" [class.top-frame-toggle]="topFrameToggle && currentIndex === int">
-              <span *ngIf="item.Description !== '' else noDesc">{{ item.Description }}</span>
-              <ng-template #noDesc>
-                <span>暫無說明資訊</span>
-              </ng-template>
+            <div 
+              class="top-frame" 
+              [class]="{ toggle: templateParams.currentIndex === int }"
+            >
+              <span>{{ item.Description || '暫無說明資訊' }}</span>
             </div>
-            <span class="float-title">{{ item.Name }}</span>
+            <span class="float-title">{{ item.HotelName }}</span>
           </div>
           <div class="bottom">
-            <div class="details-btn" (click)="getSingleId(item.Id)">詳細內容</div>
+            <div 
+              class="details-btn"
+              [class]="{ toggle: templateParams.currentIndex === int }"
+              (click)="getSingleId(item.HotelID)"
+            >
+              更多
+            </div>
           </div>
         </div>
-        <ng-template #noImg>
-          <div class="no-item">
-            <div class="top">
-              <div class="top-frame" [class.top-frame-toggle]="topFrameToggle && currentIndex === int">
-                <span>{{ item.Description }}</span>
-              </div>
-              <span class="float-title">{{ item.Name }}</span>
+      } @else {
+        <div class="no-item hidden">
+          <div class="top">
+            <div 
+              class="top-frame" 
+              [class]="{ toggle: templateParams.currentIndex === int }"
+            >
+              <span>{{ item.Description }}</span>
             </div>
-            <div class="bottom">
-              <div class="details-btn" (click)="getSingleId(item.Id)">詳細內容</div>
+            <span class="float-title">{{ item.HotelName }}</span>
+          </div>
+          <div class="bottom">
+            <div 
+              class="details-btn"
+              [class]="{ toggle: templateParams.currentIndex === int }"
+              (click)="getSingleId(item.HotelID)"
+            >
+              更多
             </div>
           </div>
-        </ng-template>
-      </div>
+        </div>
+      }
     </div>
-  </div>
+  }
 </div>

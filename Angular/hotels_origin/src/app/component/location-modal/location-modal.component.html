@@ -1,0 +1,44 @@
+@let props = {
+  propsLsModalToggle: propsLsModalToggle(),
+  propsLsModalContent: propsLsModalContent(),
+};
+
+<div 
+  class="location-modal-outer-frame" 
+  [class]="{
+    'location-modal-outer-frame-active': props.propsLsModalToggle 
+  }">
+  <div class="location-modal-outer">
+    <div class="location-modal">
+      <div class="info">
+        @if(props.propsLsModalContent.msTitle) {
+          <div class="text-outer">
+            <div>{{ props.propsLsModalContent.msTitle }}</div>
+            <div>{{ props.propsLsModalContent.msItem.detailsParams.Address }}</div>
+          </div>
+          <a 
+            [href]="[
+              'https://www.google.com.tw/maps/search/',
+              props.propsLsModalContent.msTitle,
+              '/@',
+              props.propsLsModalContent.msItem.detailsParams.PositionLon,
+              ',',
+              props.propsLsModalContent.msItem.detailsParams.PositionLat,
+              '?hl=zh-TW'
+            ].join('')"
+            target="${+new Date()}"
+          >
+            <i class="fas fa-external-link-alt"></i>
+          </a>
+        }
+      </div>
+      <div class="close-btn-outer" (click)="closeModal()">
+        <div class="close-btn">
+          <div class="line"></div>
+          <div class="line"></div>
+        </div>
+      </div>
+      <div class="map" #map></div>
+    </div>
+  </div>
+</div>

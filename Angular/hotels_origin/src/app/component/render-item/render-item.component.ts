@@ -1,29 +1,59 @@
-import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
-import { dataType } from '../../types/types'
+import { Component, input, output, signal, viewChildren, ElementRef, effect, afterNextRender } from '@angular/core';
+import { CommonModule } from '@angular/common'
+import { type dataType } from '@/app/types'
 
 @Component({
   selector: 'app-render-item',
   templateUrl: './render-item.component.html',
-  styleUrls: ['./render-item.component.scss']
+  styleUrls: ['./render-item.component.scss'],
+  standalone: true,
+  imports: [CommonModule]
 })
-export class RenderItemComponent implements OnInit {
+export class AppRenderItem {
 
-  @Input()
-  public propsData!: dataType[]
+  propsData = input.required<dataType[]>()
 
-  @Output()
-  public idPost: EventEmitter<string> = new EventEmitter()
+  idPost = output<string>()
 
-  public topFrameToggle: boolean = false
-  public currentIndex!: number
-  constructor() { }
+  topFrameToggle = signal<boolean>(false)
+  currentIndex = signal<number>(-1)
 
-  ngOnInit() { }
+  private elements = viewChildren<ElementRef<HTMLDivElement>>('itemRef')
 
-  topFrameToggleFn(haveToggle: boolean, currentIndex: number) {
-    this.topFrameToggle = haveToggle
-    this.currentIndex = currentIndex
+  topFrameToggleFn(haveToggle: boolean, currentIndex: number): void {
+    this.topFrameToggle.set(haveToggle)
+    this.currentIndex.set(currentIndex)
   }
 
-  getSingleId = (id: string) => this.idPost.emit(id)
+  getSingleId(id: string): void {
+    this.idPost.emit(id)
+  }
+
+  constructor() {
+    
+    effect(() => {
+
+      if(this.elements().length > 0) {
+
+        this.elements().forEach(row => {
+          const element = getComputedStyle(row.nativeElement)
+          const imgUrl = element.getPropertyValue('--url')
+          
+          const img = new Image()
+          img.src = imgUrl
+
+          img.onload = () => {
+            row.nativeElement.style.cssText = `--picture: url(${imgUrl})`
+            row.nativeElement.querySelector('.img').classList.add('active')
+            row.nativeElement.querySelector('.img-loading').classList.remove('active')
+          }
+
+          img.onerror = () => {
+            row.nativeElement.querySelector('.img-loading').classList.remove('active')
+            row.nativeElement.classList.add('hidden')
+          }
+        })
+      }
+    })
+  }
 }

@@ -1,9 +1,6 @@
 
 import { Injectable } from '@angular/core';
-
-type dataKeysType = {
-  [key: string]: any
-}
+import type { dataType, respDataType } from '@/app/types'
 
 @Injectable({
   providedIn: 'root'
@@ -11,66 +8,173 @@ type dataKeysType = {
 
 export class GetDataService {
 
-  public data!: {}[]
-  public dataKeys: string[] = [
-    "Id",
-    "Name",
-    "Tel",
+  private dataKeys: keyof respDataType = [
+    "HotelID",
+    "HotelName",
     "Description",
-    "Add",
-    "Zipcode",
-    "Grade",
-    "Spec",
-    "Region",
-    "Town",
-    "Picture1",
-    "Picdescribe1",
-    "Picture2",
-    "Picdescribe2",
-    "Picture3",
-    "Picdescribe3",
-    "Parkinginfo",
-    "Serviceinfo",
+    "Telephones",
+    "PostalAddress",
+    "AccessibilityRooms",
+    "HotelClasses",
     "CeilingPrice",
     "LowestPrice",
-    "Px",
-    "Py"]
-  constructor() { }
+    "ParkingInfo",
+    "Images",
+    "PositionLon",
+    "PositionLat",
+    "ServiceInfo",
+    "RoomInfo"
+  ]
 
-  async datas() {
-    let res = await fetch('https://proxy-service-three.vercel.app/test/hotels')
+  async datas(obj: {
+    page: number, 
+    per_page: number,
+    have_img?: boolean,
+    s?: string
+    col?: string,
+    type?: string
+  }): Promise<{
+    message: string,
+    data: {
+      data: dataType[],
+      page: number
+      perPage: number
+      total: number
+      totalPage: number
+    } | undefined
+  }> {
+
+    const queryStr = Object.entries(obj)
+      .map(([key, value]) => value ? `${key === 'page' ? 'cur_page' : key}=${value}` : '')
+      .filter(row => row !== '')
+      .join('&')
+
+    let data = []
+    
+    const res = await fetch(`https://proxy-service-three.vercel.app/test/hotels?${queryStr}`)
+    
     if (res.status === 200) {
-      await res.json().then(res => this.data = res.XML_Head.Infos.Info)
-      let dataTemp = this.data.map((item: dataKeysType) => {
-        let obj: dataKeysType = {}
-        Object.keys(item).forEach((useKey: string) =>
-          this.dataKeys.forEach((matchKey: string) => {
-            if (matchKey === useKey) {
-              obj[matchKey] = item[useKey]
-              switch (matchKey) {
-                case "Px":
-                case "Py":
-                  obj[matchKey] = item[useKey].toFixed(3)
-                  break
-                case "Tel":
-                  obj[matchKey] = obj[matchKey].replace(/886-/g, "0")
-                  break
-                case "Spec":
-                case "Serviceinfo":
-                  obj[matchKey] = obj[matchKey] === "" ? [] : obj[matchKey].split(";").filter((str: string) => str !== "")
-                  break
-              }
-            }
-          })
-        )
-        obj.inCollect = false
-        return obj
+
+      const result = await res.json() as { data: { data: respDataType[] } }
+      
+      data = result.data.data.map(item => {
+        
+        const matchObj = Object.fromEntries(this.dataKeys.map(keyRow => 
+          [keyRow, (item as Record<string, any>)[keyRow]]
+        ))
+
+        if(matchObj['ParkingInfo']) {
+
+          matchObj.ParkingInfo = 
+            item.ParkingInfo ?
+              item.ParkingInfo
+                .replace('車位:', '')
+                .replace(/(\d+)/g, ' $1 ')
+                .replace(/\s+/g, ' ')
+                .trim()
+              : ''
+        }
+
+        if(matchObj['RoomInfo']) {
+
+          matchObj.RoomInfo = 
+            Array.from(
+              new Set(
+                item.RoomInfo ?
+                  item.RoomInfo
+                    .split(";")
+                    .filter(str => str !== "")
+                    .map(roomRow => 
+                      roomRow
+                        .replace(/(\d+)/g, ' $1 ')
+                        .replace(/\s+/g, ' ')
+                        .trim()
+                    )
+                  : []
+              )
+            )
+        }
+
+        if(matchObj['ServiceInfo']) {
+
+          matchObj.ServiceInfo = 
+            item.ServiceInfo ?
+              item.ServiceInfo
+                .split(",")
+                .filter(str => str !== "") 
+              : []
+        }
+
+        if(matchObj['Telephones']) {
+
+          matchObj.Telephones = 
+            item.Telephones.length > 0 ?
+              item.Telephones.map(row => row.Tel) : []
+        }
+
+        matchObj.inCollect = false
+
+        return matchObj
       })
-      this.data = dataTemp
-      return [{ message: "success", data: this.data }]
-    } else {
-      return [{ message: "error", data: res.statusText }]
+
+      return { message: "success", data: { ...result.data, data } }
     }
+
+    return { message: res.statusText, data: undefined }
   }
 
+  async single(itemID: string): Promise<{
+    message: string,
+    data: dataType
+  }> {
+    
+    const res = await fetch(`https://proxy-service-three.vercel.app/test/hotels?i=${itemID}`)
+    
+    if (res.status === 200) {
+
+      const result = await res.json()
+
+      const data: dataType = Object.fromEntries(
+        this.dataKeys.map(row => {
+
+          const returnVals = {
+            [row]: undefined,
+            ParkingInfo: row === 'ParkingInfo' ? 
+              result.data[row]
+                .replace('車位:', '')
+                .replace(/(\d+)/g, ' $1 ')
+                .replace(/\s+/g, ' ')
+                .trim() 
+              : '',
+            RoomInfo: row === 'RoomInfo' ? 
+              Array.from(
+                new Set(
+                  result.data[row]
+                    .split(";")
+                    .filter(str => str !== "")
+                    .map(roomRow => 
+                      roomRow
+                        .replace(/(\d+)/g, ' $1 ')
+                        .replace(/\s+/g, ' ')
+                        .trim()
+                    )
+                )
+              ) : [],
+            ServiceInfo: row === 'ServiceInfo' ? result.data[row].split(",").filter((str: string) => str !== "") : [],
+            Telephones: row === 'Telephones' ? result.data[row].map(telRow => telRow.Tel) : []
+          }[row]
+
+          if(returnVals) return [row, returnVals]
+
+          return [row, result.data[row]]
+        })
+      )
+
+      data.inCollect = false
+
+      return { message: "success", data }
+    }
+    
+    return { message: res.statusText, data: {} as dataType }
+  }
 }

@@ -1,0 +1,166 @@
+@let templateParams = {
+  getSingleData: state.getSingleData(),
+  currentIndex: state.currentIndex(),
+  haveOpen: state.haveOpen(),
+  toggleFloatText: state.toggleFloatText(),
+  backBtnToggle: state.backBtnToggle()
+};
+
+@let loadingProps = {
+  haveLoading: state.haveLoading()
+};
+
+@let locationModalProps = {
+  lsModalToggle: state.lsModalToggle(),
+  lsObj: state.lsObj()
+};
+
+@let alertModalProps = {
+  modalToggle: state.modalToggle(),
+  msObj: state.msObj()
+};
+
+<div class="container">
+  <div 
+    class="back-btn" 
+    [class]="{ 'back-btn-toggle': templateParams.backBtnToggle }" 
+    (click)="goBack()"
+  >
+    返回
+  </div>
+  
+  @if (templateParams.getSingleData) {
+
+    <div class="single-item-outer">
+      <div 
+        class="single-img-outer"
+        [class]="{ 'no-imgs': templateParams.getSingleData.Images.length === 0 }"
+      >
+
+        @if(templateParams.getSingleData.Images.length > 0) {
+
+          @for (item of templateParams.getSingleData.Images; track $index) {
+            
+            @let index = $index + 1;
+
+            <div
+              class="single-img"
+              [class]="{ active: templateParams.currentIndex === index }"
+              [style]="{ '--url': `url('${item.URL}')` }"
+              (touchstart)="toggleImg(index,true)" 
+              (touchend)="toggleImg(-1,false)" 
+              (mouseenter)="toggleImg(index,true)" 
+              (mouseleave)="toggleImg(-1,false)"
+            >
+              <div class="single-img-inside-fram">
+                <span>旅館圖</span>
+              </div>
+              <div class="single-img-desc">
+                <span>{{ item.Name }}</span>
+              </div>
+            </div>
+          }
+
+        } @else {
+          <div class="no-imgs-info">無旅館圖片</div>
+        }
+      </div>
+      <div class="single-content">
+        <div class="title">
+          <span>旅館簡介</span>
+          <div class="title-side-group">
+            <div 
+              class="mark-btn" 
+              (click)="goMap()"
+            >
+              <i class="fas fa-1x fa-map-marked-alt" ></i>
+            </div>
+            <div 
+              class="star-btn" 
+              [class]="{ 'star-btn-active': templateParams.getSingleData.inCollect }" 
+              (click)="addToCollect(templateParams.getSingleData)"
+            >
+              <i class="fas fa-1x fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <div class="description">{{ templateParams.getSingleData.Description }}</div>
+        <div class="info-outer">
+          <div class="info-1">
+            <div class="info-title">房價</div>
+            <div class="price">
+              <div class="common-price">
+                <span>平日</span>
+                <span>{{ templateParams.getSingleData.CeilingPrice || '無資訊' }}</span>
+              </div>
+              <div class="special-price">
+                <span>低價</span>
+                <span>{{ templateParams.getSingleData.LowestPrice || '無資訊' }}</span>
+              </div>
+              <div class="room-info">
+                <span>房型</span>
+                @if (templateParams.getSingleData.RoomInfo.length > 0) {
+
+                  @for (price of templateParams.getSingleData.RoomInfo; track $index) {
+                    <span>{{ price }}</span>
+                  }
+                  
+                } @else {
+                  <span>無資訊</span>
+                }
+              </div>
+            </div>
+          </div>
+          <div class="info-2">
+            <div class="info-title">車位</div>
+            <span>{{ templateParams.getSingleData.ParkingInfo }}</span>
+          </div>
+          <div class="info-3">
+            <div class="info-title">地址</div>
+            <span>
+              
+              @let addr = [
+                templateParams.getSingleData.PostalAddress.City,
+                templateParams.getSingleData.PostalAddress.Town,
+                templateParams.getSingleData.PostalAddress.StreetAddress
+              ].join('');
+
+              {{ templateParams.getSingleData.PostalAddress.ZipCode }}
+              {{ addr }}
+            </span>
+          </div>
+          <div class="info-4">
+            <div class="info-title">服務</div>
+            <span>{{ 
+              templateParams.getSingleData.ServiceInfo.length > 0 ?
+                templateParams.getSingleData.ServiceInfo.join('、') : '無' 
+            }}</span>
+          </div>
+          <div class="info-5">
+            <div class="info-title">電話</div>
+            <span>{{ 
+              templateParams.getSingleData.Telephones.length > 0 ?
+                templateParams.getSingleData.Telephones.join('、') : '無'
+            }}</span>
+          </div>
+        </div>
+      </div>
+      <div 
+        class="have-add-float-text-outer" 
+        [class]="{ 'have-add-float-text-outer-active': templateParams.toggleFloatText }"
+      >
+        <span>{{ templateParams.getSingleData.inCollect ? "已加入收藏中":"已從收藏移除" }}</span>
+      </div>
+    </div>
+  }
+</div>
+<app-loading [propsHaveLoading]="loadingProps.haveLoading" />
+<app-location-modal 
+  [propsLsModalContent]="locationModalProps.lsObj" 
+  [propsLsModalToggle]="locationModalProps.lsModalToggle" 
+  (postClose)="state.lsModalToggle.set($event)"
+/>
+<app-alert-modal 
+  [propsModalToggle]="alertModalProps.modalToggle" 
+  [propsModalContent]="alertModalProps.msObj"
+/>

@@ -1,37 +1,21 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { modalContentType } from '../../types/types'
+import { Component, input, output } from '@angular/core';
+import { type modalContentType } from '@/app/types'
 
 @Component({
   selector: 'app-interactive-modal',
   templateUrl: './interactive-modal.component.html',
-  styleUrls: ['./interactive-modal.component.scss']
+  styleUrls: ['./interactive-modal.component.scss'],
+  standalone: true
 })
-export class InteractiveModalComponent implements OnInit {
+export class AppInteractiveModal {
 
-  @Input()
-  public propsItemId: string = ""
+  propsModalToggle = input.required<boolean>()
+  propsModalContent = input.required<modalContentType>()
 
-  @Input()
-  public propsModalToggle: boolean = false
+  postClose = output<{ targetID: any, haveDeleteState: boolean }>()
 
-  @Input()
-  public propsModalContent: modalContentType = {
-    msTitle: "",
-    msContent: "",
-    msItem: {}
-  }
-
-  @Output()
-  public postClose: EventEmitter<{ [key: string]: any }> = new EventEmitter()
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-  closeModal(haveDelete: boolean) {
-    let { msItem: { id } } = this.propsModalContent
+  closeModal(haveDelete: boolean): void {
+    const { msItem: { id } } = this.propsModalContent()
     this.postClose.emit({ targetID: id, haveDeleteState: haveDelete })
   }
-
 }

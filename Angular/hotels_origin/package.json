@@ -1,39 +1,35 @@
 {
   "name": "hotels",
-  "version": "0.0.0",
+  "version": "3.0.0",
+  "description": "",
+  "type": "module",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve --port=9999",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "start": "set NODE_ENV=development && vite",
+    "build": "set NODE_ENV=production && vite build",
+    "preview": "vite preview"
   },
-  "private": true,
-  "dependencies": {
-    "@angular/animations": "~12.1.2",
-    "@angular/common": "~12.1.2",
-    "@angular/compiler": "~12.1.2",
-    "@angular/core": "~12.1.2",
-    "@angular/forms": "~12.1.2",
-    "@angular/platform-browser": "~12.1.2",
-    "@angular/platform-browser-dynamic": "~12.1.2",
-    "@angular/router": "~12.1.2",
-    "rxjs": "~6.6.0",
-    "tslib": "^2.2.0",
-    "zone.js": "~0.11.4"
-  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
-    "@angular-devkit/build-angular": "~12.1.2",
-    "@angular/cli": "~12.1.2",
-    "@angular/compiler-cli": "~12.1.2",
-    "@types/jasmine": "~3.8.0",
-    "@types/node": "^12.11.1",
-    "jasmine-core": "~3.8.0",
-    "karma": "~6.3.0",
-    "karma-chrome-launcher": "~3.1.0",
-    "karma-coverage": "~2.0.3",
-    "karma-jasmine": "~4.0.0",
-    "karma-jasmine-html-reporter": "~1.7.0",
-    "typescript": "~4.3.2"
+    "@analogjs/vite-plugin-angular": "^2.6.4",
+    "@angular/build": "^21.2.19",
+    "@angular/compiler-cli": "^21.2.19",
+    "@types/leaflet": "^1.9.22",
+    "@types/node": "^26.1.2",
+    "typescript": "^6.0.3",
+    "vite": "^6.4.0"
+  },
+  "dependencies": {
+    "@angular/common": "21.2.19",
+    "@angular/compiler": "21.2.19",
+    "@angular/core": "21.2.19",
+    "@angular/forms": "21.2.19",
+    "@angular/platform-browser": "21.2.19",
+    "@angular/router": "21.2.19",
+    "@ngrx/signals": "^21.1.1",
+    "leaflet": "^1.9.4",
+    "rxjs": "^7.8.2",
+    "tslib": "^2.8.1"
   }
 }

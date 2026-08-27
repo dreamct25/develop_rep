@@ -1,32 +1,40 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { modalContentType } from '../../types/types'
+import { Component, input, output, effect, inject } from '@angular/core';
+import { UtilesService } from '@/app/service'
+import { type modalContentType } from '@/app/types'
+
 @Component({
   selector: 'app-alert-modal',
   templateUrl: './alert-modal.component.html',
-  styleUrls: ['./alert-modal.component.scss']
+  styleUrls: ['./alert-modal.component.scss'],
+  standalone: true
 })
-export class AlertModalComponent implements OnInit {
 
-  @Input()
-  public propsModalToggle: boolean = false
+export class AppAlertModal {
+  
+  propsModalToggle = input.required<boolean>()
 
-  @Input()
-  public propsModalContent: modalContentType = {
-    msTitle: "",
-    msContent: "",
-    msItem: {}
+  propsModalContent = input.required<modalContentType>()
+
+  postClose = output<boolean>()
+
+  utiles = inject(UtilesService)
+
+  constructor() {
+
+    effect(() => {
+
+      if(this.propsModalToggle()) {
+        
+        this.utiles.hideBodyScollBar(true)
+        
+        return
+      }
+
+      this.utiles.hideBodyScollBar(false)
+    })
   }
 
-  @Output()
-  public postClose: EventEmitter<boolean> = new EventEmitter()
-
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-  closeModal() {
+  closeModal(): void {
     this.postClose.emit(false)
   }
 }

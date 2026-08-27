@@ -1,20 +1,158 @@
-<nav class="pagination-outer" aria-label="Page navigation">
-  <ul class="pagination justify-content-center align-items-center">
-      <li class="page-item" [class.disabled]="!paginationObjProps.hasPrev">
-          <a class="page-link" [class.page-link-active]="paginationObjProps.hasPrev" href="/#" (click)="current($event,paginationObjProps.currentPage - 1)">
-              <span aria-hidden="true"><i class="far fa-chevron-double-left"></i></span>
-          </a>
-      </li>
-      <li
-        class="page-item"
-        *ngFor="let pages of paginationObjProps.pageTotalToArray"
+@let templateParams = {
+  pageTotalToArray: pageTotalToArray()
+};
+
+@let props = {
+  isWithLocal: isWithLocal(),
+  paginationObjWithLocalProps: paginationObjWithLocalProps(),
+  paginationObjProps: paginationObjProps()
+};
+
+<nav 
+  class="pagination-outer" 
+  aria-label="Page navigation"
+>
+  @if(props.isWithLocal) {
+    <ul class="pagination justify-content-center align-items-center">
+      <li 
+        class="page-item" 
+        [class]="{ disabled: !props.paginationObjWithLocalProps.hasPrev }"
       >
-        <a class="page-link" [class.active]="paginationObjProps.currentPage == pages" href="#" (click)="current($event,pages)">{{ pages }}</a>
-      </li>
-      <li class="page-item" [class.disabled]="!paginationObjProps.hasNext">
-        <a class="page-link" [class.page-link-active]="paginationObjProps.hasNext" href="/#" (click)="current($event,paginationObjProps.currentPage + 1)">
-            <span aria-hidden="true"><i class="far fa-chevron-double-right"></i></span>
+        <a 
+          class="page-link" 
+          href="#"
+          (click)="current(
+            $event,
+            props.paginationObjWithLocalProps.currentPage - 10 < 0 ? 
+              1 : props.paginationObjWithLocalProps.currentPage - 10
+          )"
+        >
+          <i class="far fa-chevron-double-left"></i>
         </a>
       </li>
-  </ul>
+      <li 
+        class="page-item" 
+        [class]="{ disabled: !props.paginationObjWithLocalProps.hasPrev }"
+      >
+        <a 
+          class="page-link" 
+          href="#"
+          (click)="current($event,props.paginationObjWithLocalProps.currentPage - 1)"
+        >
+          <i class="fas fa-angle-left"></i>
+        </a>
+      </li>
+      @for (pages of props.paginationObjWithLocalProps.pageTotalToArray; track $index) {
+        <li class="page-item">
+          <a 
+            class="page-link" 
+            [class]="{ active: props.paginationObjWithLocalProps.currentPage === pages }" 
+            href="#" 
+            (click)="current($event, pages)"
+          >
+            {{ pages }}
+          </a>
+        </li>
+      }
+      <li 
+        class="page-item" 
+        [class]="{ disabled: !props.paginationObjWithLocalProps.hasNext }"
+      >
+        <a 
+          class="page-link" 
+          href="#"
+          (click)="current($event,props.paginationObjWithLocalProps.currentPage + 1)"
+        >
+          <i class="fas fa-angle-right"></i>
+        </a>
+      </li>
+      <li 
+        class="page-item" 
+        [class]="{ disabled: !props.paginationObjWithLocalProps.hasNext }"
+      >
+        <a 
+          class="page-link" 
+          href="#" 
+          (click)="current(
+            $event,
+            props.paginationObjWithLocalProps.currentPage + 10 > props.paginationObjWithLocalProps.totalLength - 1 ? 
+              props.paginationObjWithLocalProps.totalLength - 1: props.paginationObjWithLocalProps.currentPage + 10
+          )"
+        >
+          <i class="far fa-chevron-double-right"></i>
+        </a>
+      </li>
+    </ul>
+  } @else {
+    <ul class="pagination justify-content-center align-items-center">
+      <li 
+        class="page-item" 
+        [class]="{ disabled: props.paginationObjProps.currentPage <= 1 }"
+      >
+        <a 
+          class="page-link" 
+          href="#"
+          (click)="current(
+            $event,
+            props.paginationObjProps.currentPage - 10 < 0 ? 
+              1 : props.paginationObjProps.currentPage - 10
+          )"
+        >
+          <i class="far fa-chevron-double-left"></i>
+        </a>
+      </li>
+      <li 
+        class="page-item" 
+        [class]="{ disabled: props.paginationObjProps.currentPage <= 1 }"
+      >
+        <a 
+          class="page-link" 
+          href="#"
+          (click)="current($event,props.paginationObjProps.currentPage - 1)"
+        >
+          <i class="fas fa-angle-left"></i>
+        </a>
+      </li>
+      @for (pages of templateParams.pageTotalToArray; track $index) {
+        <li class="page-item">
+          <a 
+            class="page-link" 
+            [class]="{ active: props.paginationObjProps.currentPage === pages }" 
+            href="#" 
+            (click)="current($event, pages)"
+          >
+            {{ pages }}
+          </a>
+        </li>
+      }
+      <li 
+        class="page-item" 
+        [class]="{ disabled: props.paginationObjProps.currentPage >= props.paginationObjProps.totalPage }"
+      >
+        <a 
+          class="page-link" 
+          href="#" 
+          (click)="current($event,props.paginationObjProps.currentPage + 1)"
+        >
+          <i class="fas fa-angle-right"></i>
+        </a>
+      </li>
+      <li 
+        class="page-item" 
+        [class]="{ disabled: props.paginationObjProps.currentPage >= props.paginationObjProps.totalPage }"
+      >
+        <a 
+          class="page-link" 
+          href="#" 
+          (click)="current(
+            $event,
+            props.paginationObjProps.currentPage + 10 > props.paginationObjProps.totalPage ? 
+              props.paginationObjProps.totalPage : props.paginationObjProps.currentPage + 10
+          )"
+        >
+          <i class="far fa-chevron-double-right"></i>
+        </a>
+      </li>
+    </ul>
+  }
 </nav>

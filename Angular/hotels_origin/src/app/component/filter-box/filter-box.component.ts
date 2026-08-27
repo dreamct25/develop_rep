@@ -1,90 +1,86 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { modalContentType } from '../../types/types'
+import { Component, signal, inject, effect, type WritableSignal } from '@angular/core';
+import { CommonModule } from '@angular/common'
+import { UtilesService } from '@/app/service'
+import store from '@/app/store';
 
 @Component({
   selector: 'app-filter-box',
   templateUrl: './filter-box.component.html',
-  styleUrls: ['./filter-box.component.scss']
+  styleUrls: ['./filter-box.component.scss'],
+  standalone: true,
+  imports: [CommonModule]
 })
-export class FilterBoxComponent implements OnInit, OnChanges {
+export class AppFilterBox {
 
-  @Input()
-  public propsModalToggle: boolean = false
+  readonly store = inject(store)
+  utiles = inject(UtilesService)
 
-  @Input()
-  public propsModalContent: modalContentType = {
-    msTitle: "",
-    msContent: "",
-    msItem: {}
+  state: {
+    modalContentOuterHeightToggle: WritableSignal<boolean>
+    modalContentOuterToggle: WritableSignal<boolean>
+    modalContentToggle: WritableSignal<boolean>
+    selectListToggle: WritableSignal<boolean>
+    openListToggleI: WritableSignal<boolean>
+    openListToggleII: WritableSignal<boolean>
+  } = {
+    modalContentOuterHeightToggle: signal(false),
+    modalContentOuterToggle: signal(false),
+    modalContentToggle: signal(false),
+    selectListToggle: signal(false),
+    openListToggleI: signal(false),
+    openListToggleII: signal(false),
   }
 
-  @Output()
-  public postClose: EventEmitter<boolean> = new EventEmitter()
+  constructor() {
 
-  @Output()
-  public postSelectListValI: EventEmitter<{ [key: string]: any }> = new EventEmitter()
+    effect(() => {
 
-  @Output()
-  public postSelectListValII: EventEmitter<{ [key: string]: any }> = new EventEmitter()
+      if(this.store.filterBox().modalToggle) {
 
-  @Output()
-  public postCheckBoxToggle: EventEmitter<boolean> = new EventEmitter()
+        this.utiles.hideBodyScollBar(true)
 
-  public modalContentOuterHeightToggle: boolean = false
-  public modalContentOuterToggle: boolean = false
-  public modalContentToggle: boolean = false
-  public checkBoxToggle: boolean = false
-  public selectTextI: string = "全部"
-  public selectTextII: string = "不限定"
-  public selectListToggle: boolean = false
-  public openListToggleI: boolean = false
-  public openListToggleII: boolean = false
-  public currentIndexI: number = 0
-  public currentIndexII: number = 0
-  constructor() { }
+        return
+      }
 
-  ngOnInit() { }
+      this.utiles.hideBodyScollBar(false)
+    })
+  }
 
-  ngOnChanges() {
-    if (this.propsModalToggle) {
-      this.modalContentOuterHeightToggle = true
-      setTimeout(() => {
-        this.modalContentOuterToggle = true
-        this.modalContentToggle = true
-      }, 700)
-    } else {
-      this.modalContentToggle = false
-      this.modalContentOuterToggle = false
-      setTimeout(() => this.modalContentOuterHeightToggle = false, 700)
+  checkBoxToggles(): void {
+    this.store.setFilterBoxCheckBoxToggle(!this.store.filterBox().checkBoxToggle)
+  }
+
+  selectListValI({ columnText, columnName, currentIndex }: { columnText: string, columnName: string, currentIndex: number }): void {
+
+    this.store.setFilterBoxSelectListValI({
+      columnText: columnText === '全部' ? '' : columnText, 
+      columnName, 
+      currentIndex
+    })
+
+    setTimeout(() => this.state.openListToggleI.set(false), 650)
+  }
+
+  selectListValII({ columnText, columnName, currentIndex }: { columnText: string, columnName: string, currentIndex: number }): void {
+
+    this.store.setFilterBoxSelectListValII({
+      columnText: columnText === '不限定' ? '' : columnText, 
+      columnName, 
+      currentIndex
+    })
+
+    setTimeout(() => this.state.openListToggleII.set(false), 650)
+  }
+
+  closeModal(e: PointerEvent): void {
+    const element = e.target as HTMLDivElement
+    
+    if(element.classList.contains('filter-box-outer-frame-active')) {
+      this.store.setFilterBoxModalToggle(false)
     }
-
   }
 
-  openListI = () => this.openListToggleI = !this.openListToggleI
-
-  openListII = () => this.openListToggleII = !this.openListToggleII
-
-  checkBoxToggles() {
-    this.checkBoxToggle = !this.checkBoxToggle
-    this.postCheckBoxToggle.emit(this.checkBoxToggle)
+  closeModalWithAction(): void {
+    this.store.setFilterBoxSearhAction(true)
   }
-
-  selectListValI({ columnText, columnName, currentIndex }: { [key: string]: any }) {
-    this.currentIndexI = currentIndex
-    this.selectTextI = columnText
-    this.postSelectListValI.emit({ columnText: columnText, columnName: columnName, currentIndex: currentIndex })
-    setTimeout(() => this.openListToggleI = false, 650)
-  }
-
-  selectListValII({ columnText, columnName, currentIndex }: { [key: string]: any }) {
-    this.currentIndexII = currentIndex
-    this.selectTextII = columnText
-    this.postSelectListValII.emit({ columnText: columnText, columnName: columnName, currentIndex: currentIndex })
-    setTimeout(() => this.openListToggleII = false, 650)
-  }
-
-  closeModal() {
-    this.postClose.emit(false)
-  }
-
 }
