@@ -1,0 +1,26 @@
+{
+  "name": "robot-chat",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@lucide/vue": "^1.38.0",
+    "self-libraries": "file:self-libraries-1.7.1.tgz",
+    "vue": "^3.5.41"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "@vue/tsconfig": "^0.9.1",
+    "sass": "^1.103.1",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.2",
+    "vite-plugin-pug": "^0.4.1",
+    "vue-tsc": "^3.3.11"
+  }
+}
