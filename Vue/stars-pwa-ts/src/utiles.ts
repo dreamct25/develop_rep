@@ -1,8 +1,7 @@
-import $ from '@/lib/Library'
-import { Converter } from 'opencc-js'
+import $, { type fetchClassReturnType } from '@/lib/Library'
 
 interface respDataType {
-    status: boolean,
+    message: string,
     data: {
         type: string,
         name: string,
@@ -71,9 +70,13 @@ interface repackResultType {
 
 class Utiles {
 
-    private static fetchInfo:{ starName: string, time: 'today' | 'nextday' | 'week' | 'month' } = { starName: '', time: 'today' }
-
-    private static convertlang: (text: string) => string = text => Converter({ from: 'cn', to: 'tw' })(text)
+    private static fetchInfo: { 
+        starName: string, 
+        time: 'today' | 'week' | 'month' | 'year' 
+    } = { 
+        starName: '', 
+        time: 'today' 
+    }
 
     public static overrideStyle(obj: { templateStr: string, deep?: boolean }, ionDom: { $el?: HTMLElement }): void{
 
@@ -100,8 +103,13 @@ class Utiles {
         $el.append(style)
     }
 
-    public static async fetchFortuneResult(starName: string, time: 'today' | 'nextday' | 'week' | 'month'): Promise<{ 
-        status: string, message: string, result: repackResultType | undefined
+    public static async fetchFortuneResult(
+        starName: string, 
+        time: 'today' | 'week' | 'month' | 'year'
+    ): Promise<{ 
+        status: string, 
+        message: string, 
+        result: repackResultType | undefined
     }> {
 
         let repackResult: repackResultType | undefined = undefined
@@ -111,7 +119,7 @@ class Utiles {
         
         try {
 
-            const resp = await fetch(`https://api.vvhan.com/api/horoscope?type=${starName}&time=${time}`)
+            const resp = await fetch(`https://proxy-service-three.vercel.app/test/horoscope?type=${starName}&time=${time}`)
 
             if(resp.status >= 200 && resp.status <= 399){
 
@@ -121,29 +129,29 @@ class Utiles {
                 
                 repackResult = {
                     fortuneDate: { month, date },
-                    canDo: this.convertlang(result.data.todo.yi),
-                    noToDo: this.convertlang(result.data.todo.ji),
+                    canDo: result.data.todo.yi,
+                    noToDo: result.data.todo.ji,
                     lucky: {
                         num: result.data?.luckynumber || '',
-                        color: this.convertlang(result.data?.luckycolor || ''),
-                        constellation: this.convertlang(result.data?.luckyconstellation || '')
+                        color: result.data?.luckycolor || '',
+                        constellation: result.data?.luckyconstellation || ''
                     },
                     fortune: {
                         overall: { 
                             score: result.data.fortune.all,
-                            scoreDesc: this.convertlang(result.data.fortunetext.all)
+                            scoreDesc: result.data.fortunetext.all
                         },
                         love: { 
                             score: result.data.fortune.love,
-                            scoreDesc: this.convertlang(result.data.fortunetext.love)
+                            scoreDesc: result.data.fortunetext.love
                         },
                         work: { 
                             score: result.data.fortune.work,
-                            scoreDesc: this.convertlang(result.data.fortunetext.work)
+                            scoreDesc: result.data.fortunetext.work
                         },
                         wealth: { 
                             score: result.data.fortune.money,
-                            scoreDesc: this.convertlang(result.data.fortunetext.money)
+                            scoreDesc: result.data.fortunetext.money
                         }
                     }
                 }
@@ -156,9 +164,7 @@ class Utiles {
             throw new Error('fetch error')
 
         } catch(err: any) {
-            // await $.useSleep(3000)
-            // this.fetchFortuneResult(this.fetchInfo.starName, this.fetchInfo.time)
-            console.log(err)
+
             return { status: 'error', message: err?.message || err, result: undefined }
         }
     }
@@ -167,11 +173,11 @@ class Utiles {
 class Fetch {
     static baseUrl: string = 'https://collect-service.vercel.app/stars/v1'
 
-    private static bindUrl(url: string){
+    private static bindUrl(url: string): string {
         return `${this.baseUrl}${url}`
     }
     
-    static get<T>(url:string,setting?:{[key:string]:any}) {
+    static get<T>(url: string, setting?: {[key: string]: any}): Promise<fetchClassReturnType<T>> {
         
         if(setting?.token) setting = {
             headers:{
@@ -182,7 +188,8 @@ class Fetch {
         return $.fetch.get<T>(this.bindUrl(url),setting)
     }
 
-    static post<T>(url:string,setting?:{[key:string]:any}) {
+    static post<T>(url: string, setting?: {[key: string]: any}): Promise<fetchClassReturnType<T>> {
+        
         if('token' in setting!) {
             setting = {
                 ...setting,
@@ -198,7 +205,8 @@ class Fetch {
         return $.fetch.post<T>(this.bindUrl(url),setting!)
     }
 
-    static put<T>(url:string,setting?:{[key:string]:any}) {
+    static put<T>(url: string, setting?: {[key: string]: any}): Promise<fetchClassReturnType<T>> {
+        
         if('token' in setting!) {
             setting = {
                 ...setting,
@@ -214,7 +222,7 @@ class Fetch {
         return $.fetch.put<T>(this.bindUrl(url),setting!)
     }
 
-    static delete<T>(url:string,setting?:{[key:string]:any}) {
+    static delete<T>(url: string, setting?: {[key: string]: any}): Promise<fetchClassReturnType<T>> {
         if('token' in setting!) {
             setting = {
                 ...setting,

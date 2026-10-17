@@ -13,6 +13,11 @@ declare global {
     };
 
     type PageName = keyof typeof pages
+
+    interface Navigator {
+        /** iOS Safari 專有：判斷 PWA 是否以全螢幕獨立模式開啟 */
+        standalone?: boolean;
+    }
 }
 
 export {}

@@ -1,12 +1,12 @@
 <template lang="pug">
-    teleport(to="#app")
-        Transition(name="toggle")
-            template(v-if="toggleLoadingStatus")
-                .loading-outer
-                    .loading
-                        .icon
-                            i.fas.fa-star.fa-5x
-                        .text Loading
+teleport(to="#app")
+    Transition(name="toggle")
+        template(v-if="toggleLoadingStatus")
+            .loading-outer
+                .loading
+                    .icon
+                        i.fas.fa-star.fa-5x
+                    .text Loading
 </template>
 <style lang="scss" scoped>
     .loading-outer {

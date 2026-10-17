@@ -1,43 +1,43 @@
 <template lang="pug">
-    IonContentWrapper
-        .layout(:class="{ show: renderResult.length > 0 }")
-            .top
-                .stars-title
-                    .img-outer
-                        img(:src="`/stars/img/stars_icon/${currentSearchStar}.png`")
-                    .text {{ starsKeyPare ? starsKeyPare[currentSearchStar] : '' }}
-            .middle
-                template(v-if="renderResult.length > 0")
-                    .content(v-for="(item, index) in renderResult",:key="index")
-                        .top
-                            .top-content
-                                div 時間區間：{{ item.starBirth }}
-                                div 守護星：{{ item.starGuard }}
-                                div 黃道十二宮：{{ item.starPose }}
-                                div 宮位代表：{{ item.starPoseRep }}
-                                div 
-                                    span 宮位解釋：
-                                    span {{ item.starPoseDec }}
-                                div 象位：{{ item.starType }} {{ starTypeIconMapping[item.starType] }}
-                        .bottom
+IonContentWrapper
+    .layout(:class="{ show: renderResult.length > 0 }")
+        .top
+            .stars-title
+                .img-outer
+                    img(:src="`./img/stars_icon/${currentSearchStar}.png`")
+                .text {{ starsKeyPare ? starsKeyPare[currentSearchStar] : '' }}
+        .middle
+            template(v-if="renderResult.length > 0")
+                .content(v-for="(item, index) in renderResult",:key="index")
+                    .top
+                        .top-content
+                            div 時間區間：{{ item.starBirth }}
+                            div 守護星：{{ item.starGuard }}
+                            div 黃道十二宮：{{ item.starPose }}
+                            div 宮位代表：{{ item.starPoseRep }}
                             div 
-                                span 生活
-                                span {{ item.starLife.replace(/\\n/g, '\n') }}
-                            div 
-                                span 交友
-                                span {{ item.starFriend.replace(/\\n/g, '\n') }}
-                            div 
-                                span 愛情
-                                span {{ item.starLove.replace(/\\n/g, '\n') }}
-                            div 
-                                span 婚姻
-                                span {{ item.starMarry.replace(/\\n/g, '\n') }}
-                            div 
-                                span 建議
-                                span {{ item.starAdvice.replace(/\\n/g, '\n') }}
-            .bottom
-                .back-btn(@click="goPrev") 返回
-        Loading(:toggleLoadingStatus="isLoading")
+                                span 宮位解釋：
+                                span {{ item.starPoseDec }}
+                            div 象位：{{ item.starType }} {{ starTypeIconMapping[item.starType] }}
+                    .bottom
+                        div 
+                            span 生活
+                            span {{ item.starLife.replace(/\\n/g, '\n') }}
+                        div 
+                            span 交友
+                            span {{ item.starFriend.replace(/\\n/g, '\n') }}
+                        div 
+                            span 愛情
+                            span {{ item.starLove.replace(/\\n/g, '\n') }}
+                        div 
+                            span 婚姻
+                            span {{ item.starMarry.replace(/\\n/g, '\n') }}
+                        div 
+                            span 建議
+                            span {{ item.starAdvice.replace(/\\n/g, '\n') }}
+        .bottom
+            .back-btn(@click="goPrev") 返回
+    Loading(:toggleLoadingStatus="isLoading")
 </template>
 <style lang="scss" scoped>
 
@@ -181,6 +181,7 @@
                 border-radius: 20px;
                 box-shadow: inset 0 0 0 .5px rgba(255,255,255,.5);
                 padding: 12px 0;
+                margin-bottom: 6px;
                 cursor: pointer;
                 user-select: none;
                 text-align: center;

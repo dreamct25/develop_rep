@@ -1,20 +1,20 @@
 <template lang="pug">
-    IonContentWrapper
-        .layout
-            .title-group
-                .icon(:class="{ active: enterView }")
-                    i.fas.fa-star.fa-5x
-                .title(:class="{ active: enterView }") Stars App
-            .loading-progress-outer
-            .progress-outer
+IonContentWrapper
+    .layout
+        .title-group
+            .icon(:class="{ active: enterView }")
+                i.fas.fa-star.fa-5x
+            .title(:class="{ active: enterView }") Stars App
+        .loading-progress-outer
+        .progress-outer
 </template>
 <style lang="scss" scoped>
     .layout {
         display: grid;
         grid-template-rows: 1fr 0fr;
-        justify-content: center;
+        justify-content: safe center;
         align-items: center;
-        height: 100%;
+        height: 100vh;
 
         .title-group {
             
@@ -75,6 +75,8 @@ import { useIonRouter, onIonViewDidEnter } from '@ionic/vue'
 import { ProviderObjType } from '@/App.vue'
 import { reducerAssimbleType } from '@/store/reducerAssimbleType'
 import { IonContentWrapper } from '@/components'
+import packageJson from '../../../package.json'
+
 
 export default defineComponent({
     components: {
@@ -82,15 +84,18 @@ export default defineComponent({
     },
     setup(){
 
-        const { setReducer, Fetch, $ } = inject<ProviderObjType>('NewProvider')!
+        const { setReducer, Fetch, $, isPWA } = inject<ProviderObjType>('NewProvider')!
 
         const router = useIonRouter()
 
         const enterView = ref<boolean>(false)
 
+
         const onInit: () => Promise<boolean> = async () => {
 
             try {
+
+                if(isPWA) document.title = `v${packageJson.version}`
 
                 const tempStars = localStorage.getItem('stars')
 

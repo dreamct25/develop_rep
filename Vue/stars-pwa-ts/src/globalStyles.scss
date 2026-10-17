@@ -2,9 +2,12 @@ html {
     background-color: rgb(30,30,30);
 
     body {
-        max-width: 390px;
-        margin: 0 auto;
         position: relative;
+
+        @media screen and (min-width: 501px) {
+           max-width: 390px;
+           margin: 0 auto;
+        }
 
         ion-picker {
             overflow: hidden;
@@ -17,13 +20,12 @@ html {
 
     ion-content {
 
-        --background: url('/img/bg.jpg') center center / cover;
+        --background: url('/stars/img/bg.jpg') center center / cover;
 
         .bg {
-            height: 100%;
             background-color: rgba(30,30,30, .7);
+            height: 100%;
         }
-        
     }
 
     *::-webkit-scrollbar {

@@ -1,8 +1,8 @@
 <template lang="pug">
-    IonPage
-        IonContent
-            .bg
-                slot
+IonPage
+    IonContent
+        .bg
+            slot
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'

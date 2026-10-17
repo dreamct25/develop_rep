@@ -26,7 +26,7 @@ type padDirection = 'left' | 'right'
 type typeOfClassType = 'String' | 'Number' | 'Boolean' | 'Array' | 'Object'
 type codeType = 'encode' | 'decode'
 
-type fetchClassReturnType<T> = T extends undefined ? fetchClassReturnTypeBase : fetchClassReturnTypeBase & { data: T }
+export type fetchClassReturnType<T> = T extends undefined ? fetchClassReturnTypeBase : fetchClassReturnTypeBase & { data: T }
 
 interface fetchClassReturnTypeBase {
   bodyUsed: boolean

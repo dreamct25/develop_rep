@@ -1,46 +1,46 @@
 <template lang="pug">
-    IonContentWrapper
-        .layout
-            .top
-                .title 設定你的星座
-                .picker-select(@click="() => {\
-                    settingStarsSelectPrevVal = settingStarsSelectVal;\
-                    toggleModalStatus = true;\
-                }")
-                    .stars-title
-                        .img-outer(v-if="settingStarsSelectVal")
-                            img(:src="`/stars/img/stars_icon/${settingStarsSelectVal}.png`")
-                        .text {{ starsKeyPare ? settingStarsSelectVal ? starsKeyPare[settingStarsSelectVal] : '－－ 尚未設定 －－' : '' }}
-                    .select-sign
-                        i.far.fa-angle-up
-                        i.far.fa-angle-down
-                .setting-btn(@click="saveSetting") 確定
-            .bottom
-                .about-btn(@click="goAbout") 關於此 PWA
-        Modal(addClass="forecast-modal",:toggleModalStatus="toggleModalStatus")
-            .top
-                template(v-if="repackAllStars.length > 0")
-                    IonPicker
-                        IonPickerColumn(
-                            :ref="overrideStyle.bind(this, {\
-                                templateStr: '.picker-opts { width: 100% }',\
-                                deep: true\
-                            })"
-                            :value="settingStarsSelectVal",
-                            @ionChange="starsPickerChange"
-                        )
-                            IonPickerColumnOption(
-                                v-for="(item, index) in repackAllStars"
-                                :key="index",
-                                :value="item.optionVal"
-                            ) {{ item.option }}
-            .bottom.mutiple
-                .confirm-btn(@click="toggleModalStatus = false") 確定
-                .cancel-btn(@click="() => {\
-                    settingStarsSelectVal = settingStarsSelectPrevVal;\
-                    toggleModalStatus = false;\
-                }") 取消
-        Toast(:toggleToastStatus="toggleToastStatus", :toastText="toastText", :iconStatus="toastIconStatus")
+IonContentWrapper
+    .layout
+        .top
+            .title 設定你的星座
+            .picker-select(@click=`() => {
+                settingStarsSelectPrevVal = settingStarsSelectVal
+                toggleModalStatus = true
+            }`)
+                .stars-title
+                    .img-outer(v-if="settingStarsSelectVal")
+                        img(:src="`./img/stars_icon/${settingStarsSelectVal}.png`")
+                    .text {{ starsKeyPare ? settingStarsSelectVal ? starsKeyPare[settingStarsSelectVal] : '－－ 尚未設定 －－' : '' }}
+                .select-sign
+                    i.far.fa-angle-up
+                    i.far.fa-angle-down
+            .setting-btn(@click="saveSetting") 確定
+        .bottom
+            .about-btn(@click="goAbout") 關於此 PWA
+    Modal(addClass="forecast-modal",:toggleModalStatus="toggleModalStatus")
+        .top
+            template(v-if="repackAllStars.length > 0")
+                IonPicker
+                    IonPickerColumn(
+                        :ref="overrideStyle.bind(this, {\
+                            templateStr: '.picker-opts { width: 100% }',\
+                            deep: true\
+                        })"
+                        :value="settingStarsSelectVal",
+                        @ionChange="starsPickerChange"
+                    )
+                        IonPickerColumnOption(
+                            v-for="(item, index) in repackAllStars"
+                            :key="index",
+                            :value="item.optionVal"
+                        ) {{ item.option }}
+        .bottom.mutiple
+            .confirm-btn(@click="toggleModalStatus = false") 確定
+            .cancel-btn(@click=`() => {
+                settingStarsSelectVal = settingStarsSelectPrevVal
+                toggleModalStatus = false
+            }`) 取消
+    Toast(ref="toastRef")
 </template>
 <style lang="scss" scoped>
     .layout {
@@ -176,21 +176,17 @@ export default defineComponent({
             settingStarsSelectPrevVal: Ref<string>
             starsKeyPare: reducerAssimbleType['Base']['starsKeyPare'],
             toggleModalStatus: Ref<boolean>,
-            toggleToastStatus: Ref<boolean>,
-            toastIconStatus: Ref<string>,
-            toastText: Ref<string>,
             repackAllStars: Ref<{ option: string, optionVal: string }[]>
-            currentSelectStar: typeof currentSelectStar
+            currentSelectStar: typeof currentSelectStar,
+            toastRef: Ref<typeof Toast | null>
         } = {
             settingStarsSelectVal: ref(''),
             settingStarsSelectPrevVal: ref(''),
             toggleModalStatus: ref(false),
-            toggleToastStatus: ref(false),
-            toastText: ref(''),
-            toastIconStatus: ref(''),
             currentSelectStar,
             starsKeyPare,
-            repackAllStars: ref([])
+            repackAllStars: ref([]),
+            toastRef: ref(null)
         }
 
         const method: {
@@ -210,31 +206,29 @@ export default defineComponent({
             },
             saveSetting: async () => {
 
-                pageState.toggleToastStatus.value = true
+                // pageState.toggleToastStatus.value = true
+                if(!pageState.toastRef.value) return
 
                 if(!pageState.settingStarsSelectVal.value) {
 
-                    pageState.toastIconStatus.value = 'info'
+                    // pageState.toastIconStatus.value = 'info'
 
-                    pageState.toastText.value = '您尚未選擇預設星座'
+                    // pageState.toastText.value = '您尚未選擇預設星座'
+
+                    pageState.toastRef.value.show('您尚未選擇預設星座', 'info')
 
                 } else {
                     setReducer('Base/currentSelectStar', pageState.settingStarsSelectVal.value)
 
                     localStorage.setItem('stars', pageState.settingStarsSelectVal.value)
                    
-                    pageState.toastIconStatus.value = 'success'
+                    // pageState.toastIconStatus.value = 'success'
 
-                    pageState.toastText.value = 
-                        `已將預設星座改為：${starsKeyPare.value![pageState.settingStarsSelectVal.value]}`
+                    pageState.toastRef.value.show(`已將預設星座改為：${starsKeyPare.value![pageState.settingStarsSelectVal.value]}`, 'success')
+
+                    // pageState.toastText.value = 
+                    //     `已將預設星座改為：${starsKeyPare.value![pageState.settingStarsSelectVal.value]}`
                 }
-
-                await $.useSleep(2500)
-
-                pageState.toggleToastStatus.value = false
-                pageState.toastIconStatus.value = ''
-
-                await $.useSleep(500)
             },
             goAbout: () => {
                 router.push('/setting/about')

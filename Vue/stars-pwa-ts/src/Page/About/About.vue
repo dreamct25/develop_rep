@@ -1,12 +1,12 @@
 <template lang="pug">
-    IonContentWrapper
-        .layout
-            .top
-                |CopyRight &copy; 2021-09 v3.0.0
-                br
-                | PWA Designer - Alex Chen .
-            .bottom
-                .back-btn(@click="goPrev") 返回
+IonContentWrapper
+    .layout
+        .top
+            |CopyRight &copy; 2021-09 v{{ version }}
+            br
+            | PWA Designer - Alex Chen .
+        .bottom
+            .back-btn(@click="goPrev") 返回
 </template>
 <style lang="scss" scoped>
     .layout {
@@ -34,6 +34,7 @@
                 border-radius: 20px;
                 box-shadow: inset 0 0 0 .5px rgba(255,255,255,.5);
                 padding: 12px 0;
+                margin-bottom: 6px;
                 cursor: pointer;
                 user-select: none;
                 text-align: center;
@@ -42,9 +43,10 @@
     }
 </style>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, toRefs } from 'vue'
 import { useIonRouter } from '@ionic/vue'
 import { IonContentWrapper } from '@/components'
+import packageJson from '../../../package.json'
 
 export default defineComponent({
     components: {
@@ -53,12 +55,13 @@ export default defineComponent({
     setup(){
 
         const router = useIonRouter()
+        const packageJsonRef = toRefs(packageJson)
 
         const goPrev: () => void = () => {
             router.navigate('/setting','back','pop')
         }
         
-        return { goPrev }
+        return { goPrev, ...packageJsonRef }
     }
 })
 

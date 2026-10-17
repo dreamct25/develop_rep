@@ -1,43 +1,43 @@
 <template lang="pug">
-    IonContentWrapper
-        .layout
-            .title 選擇查詢星座
-            .picker-select(@click="() => {\
-                searchStarsSelectPrevVal = searchStarsSelectVal;\
-                toggleModalStatus = true;\
-            }")
-                .stars-title
-                    .img-outer
-                        img(:src="`/stars/img/stars_icon/${searchStarsSelectVal}.png`")
-                    .text {{ starsKeyPare ? starsKeyPare[searchStarsSelectVal] : '' }}
-                .select-sign
-                    i.far.fa-angle-up
-                    i.far.fa-angle-down
-            .search-btn(@click="searchAction") 查詢
-        Modal(addClass="forecast-modal",:toggleModalStatus="toggleModalStatus")
-            .top
-                template(v-if="repackAllStars.length > 0")
-                    IonPicker
-                        IonPickerColumn(
-                            :ref="overrideStyle.bind(this, {\
-                                templateStr: '.picker-opts { width: 100% }',\
-                                deep: true\
-                            })"
-                            :value="searchStarsSelectVal",
-                            @ionChange="starsPickerChange"
-                        )
-                            IonPickerColumnOption(
-                                v-for="(item, index) in repackAllStars"
-                                :key="index",
-                                :value="item.optionVal"
-                            ) {{ item.option }}
-            .bottom.mutiple
-                .confirm-btn(@click="toggleModalStatus = false") 確定
-                .cancel-btn(@click="() => {\
-                    searchStarsSelectVal = searchStarsSelectPrevVal;\
-                    searchStarsSelectPrevVal = '';\
-                    toggleModalStatus = false;\
-                }") 取消
+IonContentWrapper
+    .layout
+        .title 選擇查詢星座
+        .picker-select(@click=`() => {\
+            searchStarsSelectPrevVal = searchStarsSelectVal
+            toggleModalStatus = true
+        }`)
+            .stars-title
+                .img-outer
+                    img(:src="`./img/stars_icon/${searchStarsSelectVal}.png`")
+                .text {{ starsKeyPare ? starsKeyPare[searchStarsSelectVal] : '' }}
+            .select-sign
+                i.far.fa-angle-up
+                i.far.fa-angle-down
+        .search-btn(@click="searchAction") 查詢
+    Modal(addClass="forecast-modal",:toggleModalStatus="toggleModalStatus")
+        .top
+            template(v-if="repackAllStars.length > 0")
+                IonPicker
+                    IonPickerColumn(
+                        :ref=`overrideStyle.bind(this, {
+                            templateStr: '.picker-opts { width: 100% }',
+                            deep: true
+                        })`
+                        :value="searchStarsSelectVal",
+                        @ionChange="starsPickerChange"
+                    )
+                        IonPickerColumnOption(
+                            v-for="(item, index) in repackAllStars"
+                            :key="index",
+                            :value="item.optionVal"
+                        ) {{ item.option }}
+        .bottom.mutiple
+            .confirm-btn(@click="toggleModalStatus = false") 確定
+            .cancel-btn(@click=`() => {
+                searchStarsSelectVal = searchStarsSelectPrevVal
+                searchStarsSelectPrevVal = ''
+                toggleModalStatus = false
+            }`) 取消
 </template>
 <style lang="scss" scoped>
     .layout {

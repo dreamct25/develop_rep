@@ -1,11 +1,13 @@
 <template lang="pug">
-  .bottom-bar(:class="{ toggle: route.path !== '/wel_come' ? isUsingNotExiste()  ? true : false : false }")
-    .tab-btn(
-      v-for="(item, index) in tabPathGroup"
-      :key="index"
-      :class="{ active: route.path.match(item.path) }", 
-      @click="controlTab(item.path)"
-    ) {{ item.pathName }}
+.bottom-bar(:class=`{ 
+  toggle: route.path !== '/wel_come' ? isUsingNotExiste()  ? true : false : false 
+}`)
+  .tab-btn(
+    v-for="(item, index) in tabPathGroup"
+    :key="index"
+    :class="{ active: route.path.match(item.path) }", 
+    @click="controlTab(item.path)"
+  ) {{ item.pathName }}
 </template>
 <style lang="scss" scoped>
   .bottom-bar {

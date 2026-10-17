@@ -1,33 +1,33 @@
 <template lang="pug">
-    IonContentWrapper
-        .layout(:class="{ show: renderResult.length > 0 }")
-            .top
-                .stars-title
-                    .img-outer
-                        img(:src="`/stars/img/stars_icon/${currentMatchIStar}.png`")
-                    .text {{ starsKeyPare ? starsKeyPare[currentMatchIStar] : '' }}
-                .middle-lines
-                    .line
-                    .line
-                .stars-title
-                    .img-outer
-                        img(:src="`/stars/img/stars_icon/${currentMatchIIStar}.png`")
-                    .text {{ starsKeyPare ? starsKeyPare[currentMatchIIStar] : '' }}
-            .middle-sign
-                template(v-if="renderResult.length > 0")
-                    .heart-line(:ref="e => starsMatchProgressDom = e")
-                    i.fas.fa-heart.fa-3x.heart(:ref="e => starsMatchProgressHeartIconDom = e")
-                    i.fas.fa-walking.fa-4x.left-person(:ref="e => starsMatchProgressLeftIconDom = e")
-                    i.fas.fa-walking.fa-4x.right-person(:ref="e => starsMatchProgressRightIconDom = e")
-            .middle
-                template(v-if="renderResult.length > 0")
-                    .content(v-for="(item, index) in renderResult",:key="index")
-                        .content-inside
-                            span(:ref="countingDyMl.bind(this, item.matchShortDesc)") {{ item.matchShortDesc }}
-                            span {{ item.matchDesc.replace(/\\n/g, '\n') }}
-            .bottom
-                .back-btn(@click="goPrev") 返回
-        Loading(:toggleLoadingStatus="isLoading")
+IonContentWrapper
+    .layout(:class="{ show: renderResult.length > 0 }")
+        .top
+            .stars-title
+                .img-outer
+                    img(:src="`./img/stars_icon/${currentMatchIStar}.png`")
+                .text {{ starsKeyPare ? starsKeyPare[currentMatchIStar] : '' }}
+            .middle-lines
+                .line
+                .line
+            .stars-title
+                .img-outer
+                    img(:src="`./img/stars_icon/${currentMatchIIStar}.png`")
+                .text {{ starsKeyPare ? starsKeyPare[currentMatchIIStar] : '' }}
+        .middle-sign
+            template(v-if="renderResult.length > 0")
+                .heart-line(:ref="e => starsMatchProgressDom = e")
+                i.fas.fa-heart.fa-3x.heart(:ref="e => starsMatchProgressHeartIconDom = e")
+                i.fas.fa-walking.fa-4x.left-person(:ref="e => starsMatchProgressLeftIconDom = e")
+                i.fas.fa-walking.fa-4x.right-person(:ref="e => starsMatchProgressRightIconDom = e")
+        .middle
+            template(v-if="renderResult.length > 0")
+                .content(v-for="(item, index) in renderResult",:key="index")
+                    .content-inside
+                        span(:ref="countingDyMl.bind(this, item.matchShortDesc)") {{ item.matchShortDesc }}
+                        span {{ item.matchDesc.replace(/\\n/g, '\n') }}
+        .bottom
+            .back-btn(@click="goPrev") 返回
+    Loading(:toggleLoadingStatus="isLoading")
 </template>
 <style lang="scss" scoped>
     .layout {
@@ -216,6 +216,7 @@
                 border-radius: 20px;
                 box-shadow: inset 0 0 0 .5px rgba(255,255,255,.5);
                 padding: 12px 0;
+                margin-bottom: 6px;
                 cursor: pointer;
                 user-select: none;
                 text-align: center;

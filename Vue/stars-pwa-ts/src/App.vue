@@ -1,9 +1,9 @@
 <template lang="pug">
-  IonApp
-    IonContent
-      IonRouterOutlet
-    BottomBar
-    Base
+IonApp
+  IonContent
+    IonRouterOutlet
+  BottomBar
+  Base
 </template>
 <script lang="ts">
 import { defineComponent, provide, reactive, readonly } from 'vue'
@@ -21,7 +21,8 @@ export interface ProviderObjType {
   Utiles: typeof Utiles,
   getReducer<T>(callBack: (states: reducerAssimbleType) => T): T,
   setReducer<T extends GetMatchReducerKey>(storeMember:T,setVal:GetMatchReducerValue<T>): void,
-  Fetch: typeof Fetch
+  Fetch: typeof Fetch,
+  isPWA: boolean
 }
 
 export default defineComponent({
@@ -39,7 +40,8 @@ export default defineComponent({
       Utiles,
       getReducer: callBack => callBack.call(callBack,Object.fromEntries(Object.entries(store).map(([keyName,value]) => [keyName,storeToRefs(value())])) as unknown as reducerAssimbleType),
       setReducer: (storeMember,setVal) => ((store as Record<string,any>)[storeMember.split('/')[0]]()).$patch({ [storeMember.split('/')[1]]:setVal }),
-      Fetch
+      Fetch,
+      isPWA: window.matchMedia('(display-mode: standalone)').matches || navigator?.standalone === true
     }
 
     provide("NewProvider",

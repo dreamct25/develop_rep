@@ -1,105 +1,105 @@
 <template lang="pug">
-    IonContentWrapper
-        .layout(:class="{ show: startPredictFortuneTypeI || startPredictFortuneTypeII }")
-            .top
-                .title {{ titleMatch[currentSelectDayType] }}
-            .middle
-                template(v-if="startPredictFortuneTypeI")
-                    .content
-                        .group-i
-                            .list
-                                .list-row
-                                    .stars-title 整體
-                                    .stars-outer
-                                        template(v-for="(num, index) in 5",:key="index")
-                                            i.fas.fa-star.star.light(v-if="num <= startPredictFortuneTypeI.fortune.overall.score")
-                                            i.far.fa-star.star(v-else)
-                                .list-row
-                                    .stars-title 愛情
-                                    .stars-outer
-                                        template(v-for="(num, index) in 5",:key="index")
-                                            i.fas.fa-star.star.light(v-if="num <= startPredictFortuneTypeI.fortune.love.score")
-                                            i.far.fa-star.star(v-else)
-                                .list-row
-                                    .stars-title 工作
-                                    .stars-outer
-                                        template(v-for="(num, index) in 5",:key="index")
-                                            i.fas.fa-star.star.light(v-if="num <= startPredictFortuneTypeI.fortune.work.score")
-                                            i.far.fa-star.star(v-else)
-                                .list-row
-                                    .stars-title 財運
-                                    .stars-outer
-                                        template(v-for="(num, index) in 5",:key="index")
-                                            i.fas.fa-star.star.light(v-if="num <= startPredictFortuneTypeI.fortune.wealth.score")
-                                            i.far.fa-star.star(v-else)
-                        .group-ii
-                            div
-                                span 事宜：{{ startPredictFortuneTypeI.canDo }}
-                                span 不宜：{{ startPredictFortuneTypeI.noToDo }}
-                                span 幸運色：{{ startPredictFortuneTypeI.lucky.color }}
-                                span 幸運數字：{{ startPredictFortuneTypeI.lucky.num }}
-                                span 帶來幸運的星座：{{ startPredictFortuneTypeI.lucky.constellation }}
-                        .group-iii
-                            .list-row 
-                                .title 整體運
-                                .desc {{ startPredictFortuneTypeI.fortune.overall.scoreDesc }}
-                            .list-row  
-                                .title 愛情運
-                                .desc {{ startPredictFortuneTypeI.fortune.love.scoreDesc }}
-                            .list-row 
-                                .title 工作運
-                                .desc {{ startPredictFortuneTypeI.fortune.work.scoreDesc }}
-                            .list-row  
-                                .title 財運
-                                .desc {{ startPredictFortuneTypeI.fortune.wealth.scoreDesc }}
-                template(v-if="startPredictFortuneTypeII")
-                    .content
-                        .group-i
-                            .list
-                                .list-row
-                                    .stars-title 整體
-                                    .stars-outer
-                                        template(v-for="(num, index) in 5",:key="index")
-                                            i.fas.fa-star.star.light(v-if="num <= startPredictFortuneTypeII.fortune.overall.score")
-                                            i.far.fa-star.star(v-else)
-                                .list-row
-                                    .stars-title 愛情
-                                    .stars-outer
-                                        template(v-for="(num, index) in 5",:key="index")
-                                            i.fas.fa-star.star.light(v-if="num <= startPredictFortuneTypeII.fortune.love.score")
-                                            i.far.fa-star.star(v-else)
-                                .list-row
-                                    .stars-title 工作
-                                    .stars-outer
-                                        template(v-for="(num, index) in 5",:key="index")
-                                            i.fas.fa-star.star.light(v-if="num <= startPredictFortuneTypeII.fortune.work.score")
-                                            i.far.fa-star.star(v-else)
-                                .list-row
-                                    .stars-title 財運
-                                    .stars-outer
-                                        template(v-for="(num, index) in 5",:key="index")
-                                            i.fas.fa-star.star.light(v-if="num <= startPredictFortuneTypeII.fortune.wealth.score")
-                                            i.far.fa-star.star(v-else)
-                        .group-ii
-                            div
-                                span 事宜：{{ startPredictFortuneTypeII.canDo }}
-                                span 不宜：{{ startPredictFortuneTypeII.noToDo }}
-                        .group-iii
-                            .list-row  
-                                .title 整體運
-                                .desc {{ startPredictFortuneTypeII.fortune.overall.scoreDesc }}
-                            .list-row  
-                                .title 愛情運
-                                .desc {{ startPredictFortuneTypeII.fortune.love.scoreDesc }}
-                            .list-row  
-                                .title 工作運
-                                .desc {{ startPredictFortuneTypeII.fortune.work.scoreDesc }}
-                            .list-row  
-                                .title 財運
-                                .desc {{ startPredictFortuneTypeII.fortune.wealth.scoreDesc }}
-            .bottom
-                .back-btn(@click="goPrev") 返回
-        Loading(:toggleLoadingStatus="isLoading")
+IonContentWrapper
+    .layout(:class="{ show: startPredictFortuneTypeI || startPredictFortuneTypeII }")
+        .top
+            .title {{ titleMatch[currentSelectDayType] }}
+        .middle
+            template(v-if="startPredictFortuneTypeI")
+                .content
+                    .group-i
+                        .list
+                            .list-row
+                                .stars-title 整體
+                                .stars-outer
+                                    template(v-for="(num, index) in 5",:key="index")
+                                        i.fas.fa-star.star.light(v-if="num <= startPredictFortuneTypeI.fortune.overall.score")
+                                        i.far.fa-star.star(v-else)
+                            .list-row
+                                .stars-title 愛情
+                                .stars-outer
+                                    template(v-for="(num, index) in 5",:key="index")
+                                        i.fas.fa-star.star.light(v-if="num <= startPredictFortuneTypeI.fortune.love.score")
+                                        i.far.fa-star.star(v-else)
+                            .list-row
+                                .stars-title 工作
+                                .stars-outer
+                                    template(v-for="(num, index) in 5",:key="index")
+                                        i.fas.fa-star.star.light(v-if="num <= startPredictFortuneTypeI.fortune.work.score")
+                                        i.far.fa-star.star(v-else)
+                            .list-row
+                                .stars-title 財運
+                                .stars-outer
+                                    template(v-for="(num, index) in 5",:key="index")
+                                        i.fas.fa-star.star.light(v-if="num <= startPredictFortuneTypeI.fortune.wealth.score")
+                                        i.far.fa-star.star(v-else)
+                    .group-ii
+                        div
+                            span 事宜：{{ startPredictFortuneTypeI.canDo }}
+                            span 不宜：{{ startPredictFortuneTypeI.noToDo }}
+                            span 幸運色：{{ startPredictFortuneTypeI.lucky.color }}
+                            span 幸運數字：{{ startPredictFortuneTypeI.lucky.num }}
+                            span 帶來幸運的星座：{{ startPredictFortuneTypeI.lucky.constellation }}
+                    .group-iii
+                        .list-row 
+                            .title 整體運
+                            .desc {{ startPredictFortuneTypeI.fortune.overall.scoreDesc }}
+                        .list-row  
+                            .title 愛情運
+                            .desc {{ startPredictFortuneTypeI.fortune.love.scoreDesc }}
+                        .list-row 
+                            .title 工作運
+                            .desc {{ startPredictFortuneTypeI.fortune.work.scoreDesc }}
+                        .list-row  
+                            .title 財運
+                            .desc {{ startPredictFortuneTypeI.fortune.wealth.scoreDesc }}
+            template(v-if="startPredictFortuneTypeII")
+                .content
+                    .group-i
+                        .list
+                            .list-row
+                                .stars-title 整體
+                                .stars-outer
+                                    template(v-for="(num, index) in 5",:key="index")
+                                        i.fas.fa-star.star.light(v-if="num <= startPredictFortuneTypeII.fortune.overall.score")
+                                        i.far.fa-star.star(v-else)
+                            .list-row
+                                .stars-title 愛情
+                                .stars-outer
+                                    template(v-for="(num, index) in 5",:key="index")
+                                        i.fas.fa-star.star.light(v-if="num <= startPredictFortuneTypeII.fortune.love.score")
+                                        i.far.fa-star.star(v-else)
+                            .list-row
+                                .stars-title 工作
+                                .stars-outer
+                                    template(v-for="(num, index) in 5",:key="index")
+                                        i.fas.fa-star.star.light(v-if="num <= startPredictFortuneTypeII.fortune.work.score")
+                                        i.far.fa-star.star(v-else)
+                            .list-row
+                                .stars-title 財運
+                                .stars-outer
+                                    template(v-for="(num, index) in 5",:key="index")
+                                        i.fas.fa-star.star.light(v-if="num <= startPredictFortuneTypeII.fortune.wealth.score")
+                                        i.far.fa-star.star(v-else)
+                    .group-ii
+                        div
+                            span 事宜：{{ startPredictFortuneTypeII.canDo }}
+                            span 不宜：{{ startPredictFortuneTypeII.noToDo }}
+                    .group-iii
+                        .list-row  
+                            .title 整體運
+                            .desc {{ startPredictFortuneTypeII.fortune.overall.scoreDesc }}
+                        .list-row  
+                            .title 愛情運
+                            .desc {{ startPredictFortuneTypeII.fortune.love.scoreDesc }}
+                        .list-row  
+                            .title 工作運
+                            .desc {{ startPredictFortuneTypeII.fortune.work.scoreDesc }}
+                        .list-row  
+                            .title 財運
+                            .desc {{ startPredictFortuneTypeII.fortune.wealth.scoreDesc }}
+        .bottom
+            .back-btn(@click="goPrev") 返回
+    Loading(:toggleLoadingStatus="isLoading")
 </template>
 <style lang="scss" scoped>
 
@@ -232,6 +232,7 @@
                 border-radius: 20px;
                 box-shadow: inset 0 0 0 .5px rgba(255,255,255,.5);
                 padding: 12px 0;
+                margin-bottom: 6px;
                 cursor: pointer;
                 user-select: none;
                 text-align: center;
@@ -261,19 +262,19 @@ export default defineComponent({
 
         const pageState: {
             currentSelectDayStars: Ref<string>,
-            currentSelectDayType: Ref<'today' | 'nextday' | 'week' | 'month'>,
+            currentSelectDayType: Ref<'today' | 'week' | 'month' | 'year'>,
             startPredictFortuneTypeI: reducerAssimbleType['Base']['startPredictFortuneToday'],
             startPredictFortuneTypeII: Omit<reducerAssimbleType['Base']['startPredictFortuneToday'], 'lucky'>,
             isLoading: Ref<boolean>,
-            titleMatch: Ref<Record<'today' | 'nextday' | 'week' | 'month', any>>
+            titleMatch: Ref<Record<'today' | 'week' | 'month' | 'year', any>>
         } = {
             currentSelectDayStars: ref(''),
             currentSelectDayType: ref('today'),
             titleMatch: ref({
                 today: "本日說明",
-                nextday: "明日運勢",
                 week: "本周運勢",
-                month: "本月運勢"
+                month: "本月運勢",
+                year: "本年運勢",
             }),
             isLoading: ref(false),
             startPredictFortuneTypeI: ref(undefined),
@@ -294,7 +295,7 @@ export default defineComponent({
                     
                     const resp = await Utiles.fetchFortuneResult(pageState.currentSelectDayStars.value, pageState.currentSelectDayType.value)
 
-                    if(['today','nextday'].includes(pageState.currentSelectDayType.value)){
+                    if(['today', 'nextday'].includes(pageState.currentSelectDayType.value)){
 
                         pageState.startPredictFortuneTypeI.value = resp.result
 

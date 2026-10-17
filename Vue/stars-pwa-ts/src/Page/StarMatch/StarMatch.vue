@@ -1,80 +1,80 @@
 <template lang="pug">
-    IonContentWrapper
-        .layout
-            .title 星座配對
-            .picker-outer
-                .picker-select(@click="() => {\
-                    matchStarsSelectIPrevVal = matchStarsSelectIVal;\
-                    toggleModalIStatus = true;\
-                }")
-                    .stars-title
-                        .img-outer
-                            img(:src="`/stars/img/stars_icon/${matchStarsSelectIVal}.png`")
-                        .text {{ starsKeyPare ? starsKeyPare[matchStarsSelectIVal] : '' }}
-                    .select-sign
-                        i.far.fa-angle-up
-                        i.far.fa-angle-down
-                .middle-lines
-                    .line
-                    .line
-                .picker-select(@click="() => {\
-                    matchStarsSelectIIPrevVal = matchStarsSelectIIVal;\
-                    toggleModalIIStatus = true;\
-                }")
-                    .stars-title
-                        .img-outer
-                            img(:src="`/stars/img/stars_icon/${matchStarsSelectIIVal}.png`")
-                        .text {{ starsKeyPare ? starsKeyPare[matchStarsSelectIIVal] : '' }}
-                    .select-sign
-                        i.far.fa-angle-up
-                        i.far.fa-angle-down
-            .search-btn(@click="searchAction") 查詢
-        Modal(addClass="forecast-modal",:toggleModalStatus="toggleModalIStatus")
-            .top
-                template(v-if="repackAllStars.length > 0")
-                    IonPicker
-                        IonPickerColumn(
-                            :ref="overrideStyle.bind(this, {\
-                                templateStr: '.picker-opts { width: 100% }',\
-                                deep: true\
-                            })"
-                            :value="matchStarsSelectIVal",
-                            @ionChange="starsPickerChange($event, 'matchStarsSelectIVal')"
-                        )
-                            IonPickerColumnOption(
-                                v-for="(item, index) in repackAllStars"
-                                :key="index",
-                                :value="item.optionVal"
-                            ) {{ item.option }}
-            .bottom.mutiple
-                .confirm-btn(@click="toggleModalIStatus = false") 確定
-                .cancel-btn(@click="() => {\
-                    matchStarsSelectIVal = matchStarsSelectIPrevVal;\
-                    toggleModalIStatus = false;\
-                }") 取消
-        Modal(addClass="forecast-modal",:toggleModalStatus="toggleModalIIStatus")
-            .top
-                template(v-if="repackAllStars.length > 0")
-                    IonPicker
-                        IonPickerColumn(
-                            :ref="overrideStyle.bind(this, {\
-                                templateStr: '.picker-opts { width: 100% }',\
-                                deep: true\
-                            })"
-                            :value="matchStarsSelectIIVal",
-                            @ionChange="starsPickerChange($event, 'matchStarsSelectIIVal')"
-                        )
-                            IonPickerColumnOption(
-                                v-for="(item, index) in repackAllStars"
-                                :key="index",
-                                :value="item.optionVal"
-                            ) {{ item.option }}
-            .bottom.mutiple
-                .confirm-btn(@click="toggleModalIIStatus = false") 確定
-                .cancel-btn(@click="() => {\
-                    matchStarsSelectIIVal = matchStarsSelectIIPrevVal;\
-                    toggleModalIIStatus = false;\
-                }") 取消
+IonContentWrapper
+    .layout
+        .title 星座配對
+        .picker-outer
+            .picker-select(@click=`() => {
+                matchStarsSelectIPrevVal = matchStarsSelectIVal
+                toggleModalIStatus = true
+            }`)
+                .stars-title
+                    .img-outer
+                        img(:src="`./img/stars_icon/${matchStarsSelectIVal}.png`")
+                    .text {{ starsKeyPare ? starsKeyPare[matchStarsSelectIVal] : '' }}
+                .select-sign
+                    i.far.fa-angle-up
+                    i.far.fa-angle-down
+            .middle-lines
+                .line
+                .line
+            .picker-select(@click=`() => {
+                matchStarsSelectIIPrevVal = matchStarsSelectIIVal
+                toggleModalIIStatus = true
+            }`)
+                .stars-title
+                    .img-outer
+                        img(:src="`./img/stars_icon/${matchStarsSelectIIVal}.png`")
+                    .text {{ starsKeyPare ? starsKeyPare[matchStarsSelectIIVal] : '' }}
+                .select-sign
+                    i.far.fa-angle-up
+                    i.far.fa-angle-down
+        .search-btn(@click="searchAction") 查詢
+    Modal(addClass="forecast-modal",:toggleModalStatus="toggleModalIStatus")
+        .top
+            template(v-if="repackAllStars.length > 0")
+                IonPicker
+                    IonPickerColumn(
+                        :ref=`overrideStyle.bind(this, {
+                            templateStr: '.picker-opts { width: 100% }',
+                            deep: true
+                        })`
+                        :value="matchStarsSelectIVal",
+                        @ionChange="starsPickerChange($event, 'matchStarsSelectIVal')"
+                    )
+                        IonPickerColumnOption(
+                            v-for="(item, index) in repackAllStars"
+                            :key="index",
+                            :value="item.optionVal"
+                        ) {{ item.option }}
+        .bottom.mutiple
+            .confirm-btn(@click="toggleModalIStatus = false") 確定
+            .cancel-btn(@click=`() => {
+                matchStarsSelectIVal = matchStarsSelectIPrevVal
+                toggleModalIStatus = false
+            }`) 取消
+    Modal(addClass="forecast-modal",:toggleModalStatus="toggleModalIIStatus")
+        .top
+            template(v-if="repackAllStars.length > 0")
+                IonPicker
+                    IonPickerColumn(
+                        :ref="overrideStyle.bind(this, {\
+                            templateStr: '.picker-opts { width: 100% }',\
+                            deep: true\
+                        })"
+                        :value="matchStarsSelectIIVal",
+                        @ionChange="starsPickerChange($event, 'matchStarsSelectIIVal')"
+                    )
+                        IonPickerColumnOption(
+                            v-for="(item, index) in repackAllStars"
+                            :key="index",
+                            :value="item.optionVal"
+                        ) {{ item.option }}
+        .bottom.mutiple
+            .confirm-btn(@click="toggleModalIIStatus = false") 確定
+            .cancel-btn(@click=`() => {
+                matchStarsSelectIIVal = matchStarsSelectIIPrevVal
+                toggleModalIIStatus = false
+            }`) 取消
 </template>
 <style lang="scss" scoped>
     .layout {

@@ -1,93 +1,100 @@
 <template lang="pug">
-    IonContentWrapper
-        .layout(:class="{ toggle: startPredictFortuneToday }")
-            .top
-                .block-1(@click="() => {\
-                    currentSelectPrevStar = currentSelectStar;\
-                    toggleModalStatus = true;\
-                }")
-                    .img-outer
-                        img(:src="`/stars/img/stars_icon/${currentSelectStar}.png`")
-                    .stars-title {{ starsKeyPare ? starsKeyPare[currentSelectStar] : '' }}
-                    .select-sign
-                        i.far.fa-angle-up
-                        i.far.fa-angle-down
-                .block-2(v-if="startPredictFortuneToday")
-                    .title 本日運勢
-                    .group
-                        .list
-                            .list-row
-                                .stars-title 整體運勢
-                                .stars-outer
-                                    template(v-for="(num, index) in 5",:key="index")
-                                        i.fas.fa-star.star.light(v-if="num <= startPredictFortuneToday.fortune.overall.score")
-                                        i.far.fa-star.star(v-else)
-                            .list-row
-                                .stars-title 愛情運勢
-                                .stars-outer
-                                    template(v-for="(num, index) in 5",:key="index")
-                                        i.fas.fa-star.star.light(v-if="num <= startPredictFortuneToday.fortune.love.score")
-                                        i.far.fa-star.star(v-else)
-                            .list-row
-                                .stars-title 工作運勢
-                                .stars-outer
-                                    template(v-for="(num, index) in 5",:key="index")
-                                        i.fas.fa-star.star.light(v-if="num <= startPredictFortuneToday.fortune.work.score")
-                                        i.far.fa-star.star(v-else)
-                            .list-row
-                                .stars-title 財運運勢
-                                .stars-outer
-                                    template(v-for="(num, index) in 5",:key="index")
-                                        i.fas.fa-star.star.light(v-if="num <= startPredictFortuneToday.fortune.wealth.score")
-                                        i.far.fa-star.star(v-else)
-            .bottom(v-if="startPredictFortuneToday")
-                .box(@click="goDetails('today')") 
-                    div 詳細本日說明 ({{ fortuneDates.today }})
-                    div 
-                        i.fas.fa-angle-right
-                .box(@click="goDetails('nextday')") 
-                    div 明日運勢 ({{ fortuneDates.tomorrow }})
-                    div 
-                        i.fas.fa-angle-right
-                .box(@click="goDetails('week')") 
-                    div 本周運勢 ({{ fortuneDates.week }})
-                    div 
-                        i.fas.fa-angle-right
-                .box(@click="goDetails('month')") 
-                    div 本月運勢 ({{ fortuneDates.month }})
-                    div 
-                        i.fas.fa-angle-right
-        Loading(:toggleLoadingStatus="isLoading")
-        Modal(addClass="forecast-modal",:toggleModalStatus="toggleModalStatus")
-            .top
-                template(v-if="repackAllStars.length > 0")
-                    IonPicker
-                        IonPickerColumn(
-                            :ref="overrideStyle.bind(this, {\
-                                templateStr: '.picker-opts { width: 100% }',\
-                                deep: true\
-                            })"
-                            :value="currentSelectStar",
-                            @ionChange="starsPickerChange"
-                        )
-                            IonPickerColumnOption(
-                                v-for="(item, index) in repackAllStars"
-                                :key="index",
-                                :value="item.optionVal"
-                            ) {{ item.option }}
-            .bottom.mutiple
-                .confirm-btn(@click="closeModal(true)") 確定
-                .cancel-btn(@click="closeModal(false)") 取消
+IonContentWrapper
+    .layout(:class="{ toggle: startPredictFortuneToday }")
+        .top
+            .block-1(@click=`() => {
+                currentSelectPrevStar = currentSelectStar
+                toggleModalStatus = true
+            }`)
+                .img-outer
+                    img(:src="`./img/stars_icon/${currentSelectStar}.png`")
+                .stars-title {{ starsKeyPare ? starsKeyPare[currentSelectStar] : '' }}
+                .select-sign
+                    i.far.fa-angle-up
+                    i.far.fa-angle-down
+            .block-2(v-if="startPredictFortuneToday")
+                .title 本日運勢
+                .group
+                    .list
+                        .list-row
+                            .stars-title 整體運勢
+                            .stars-outer
+                                template(v-for="(num, index) in 5",:key="index")
+                                    i.fas.fa-star.star.light(v-if="num <= startPredictFortuneToday.fortune.overall.score")
+                                    i.far.fa-star.star(v-else)
+                        .list-row
+                            .stars-title 愛情運勢
+                            .stars-outer
+                                template(v-for="(num, index) in 5",:key="index")
+                                    i.fas.fa-star.star.light(v-if="num <= startPredictFortuneToday.fortune.love.score")
+                                    i.far.fa-star.star(v-else)
+                        .list-row
+                            .stars-title 工作運勢
+                            .stars-outer
+                                template(v-for="(num, index) in 5",:key="index")
+                                    i.fas.fa-star.star.light(v-if="num <= startPredictFortuneToday.fortune.work.score")
+                                    i.far.fa-star.star(v-else)
+                        .list-row
+                            .stars-title 財運運勢
+                            .stars-outer
+                                template(v-for="(num, index) in 5",:key="index")
+                                    i.fas.fa-star.star.light(v-if="num <= startPredictFortuneToday.fortune.wealth.score")
+                                    i.far.fa-star.star(v-else)
+        .bottom(v-if="startPredictFortuneToday")
+            .box(@click="goDetails('today')") 
+                div 詳細本日說明 ({{ fortuneDates.today }})
+                div 
+                    i.fas.fa-angle-right
+            .box(@click="goDetails('week')") 
+                div 本周運勢 ({{ fortuneDates.week }})
+                div 
+                    i.fas.fa-angle-right
+            .box(@click="goDetails('month')") 
+                div 本月運勢 ({{ fortuneDates.month }})
+                div 
+                    i.fas.fa-angle-right
+            .box(@click="goDetails('year')") 
+                div 本年運勢 ({{ fortuneDates.year }} 年)
+                div 
+                    i.fas.fa-angle-right
+    Loading(:toggleLoadingStatus="isLoading")
+    Modal(addClass="forecast-modal",:toggleModalStatus="toggleModalStatus")
+        .top
+            template(v-if="repackAllStars.length > 0")
+                IonPicker
+                    IonPickerColumn(
+                        :ref=`overrideStyle.bind(this, {
+                            templateStr: '.picker-opts { width: 100% }',
+                            deep: true
+                        })`
+                        :value="currentSelectStar",
+                        @ionChange="starsPickerChange"
+                    )
+                        IonPickerColumnOption(
+                            v-for="(item, index) in repackAllStars"
+                            :key="index",
+                            :value="item.optionVal"
+                        ) {{ item.option }}
+        .bottom.mutiple
+            .confirm-btn(@click="closeModal(true)") 確定
+            .cancel-btn(@click="closeModal(false)") 取消
 </template>
 <style lang="scss" scoped>
 
     .layout {
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        height: 100%;
+        justify-content: safe center;
+        height: calc(100vh - 50px);
         opacity: 0;
         transition: .5s ease;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
 
         &.toggle {
             opacity: 1;
@@ -311,7 +318,7 @@ export default defineComponent({
             startPredictFortuneToday: reducerAssimbleType['Base']['startPredictFortuneToday']
             currentSelectStar: reducerAssimbleType['Base']['currentSelectStar']
             currentSelectPrevStar: Ref<string>,
-            fortuneDates: Ref<{ today: string, tomorrow: string, week: string, month: string }>,
+            fortuneDates: Ref<{ today: string, week: string, month: string, year: string }>,
             toggleModalStatus: Ref<boolean>
             isLoading: Ref<boolean>,
             repackAllStars: Ref<{ option: string, optionVal: string }[]>
@@ -323,9 +330,9 @@ export default defineComponent({
             currentSelectPrevStar: ref(''),
             fortuneDates: ref({
                 today: '',
-                tomorrow: '',
                 week: '',
-                month: ''
+                month: '',
+                year: ''
             }),
             toggleModalStatus: ref(false),
             isLoading: ref(false),
@@ -347,7 +354,7 @@ export default defineComponent({
 
                 const [todayMonth, todayDate] = $.formatDateTime({ formatDate: currentDate, formatType: 'MM-dd' }).split('-')
                 const addOneDate = currentDate.calculateFullDateTime(undefined, undefined, 1)!
-                const [tomorrowMonth, tomorrowDate] = $.formatDateTime({ formatDate: addOneDate, formatType: 'MM-dd' }).split('-')
+                // const [tomorrowMonth, tomorrowDate] = $.formatDateTime({ formatDate: addOneDate, formatType: 'MM-dd' }).split('-')
                 const getWeekFirstDate = new Date(currentDate)
 
                 getWeekFirstDate.setDate(currentDate.getDate() - currentDate.getDay())
@@ -361,9 +368,10 @@ export default defineComponent({
 
                 pageState.fortuneDates.value = {
                     today: `${parseInt(todayMonth)} 月 ${parseInt(todayDate)}`,
-                    tomorrow: `${parseInt(tomorrowMonth)} 月 ${parseInt(tomorrowDate)}`,
+                    // tomorrow: `${parseInt(tomorrowMonth)} 月 ${parseInt(tomorrowDate)}`,
                     week: `${parseInt(weekFirstMonth)} 月 ${parseInt(weekFirstDate)} ~ ${parseInt(weekLastMonth)} 月 ${parseInt(weekLastDate)}`,
-                    month: `${parseInt(todayMonth)} 月`
+                    month: `${parseInt(todayMonth)} 月`,
+                    year: `${new Date().getFullYear()}`
                 }
 
                 await method.fetchResult(isSettingStars.value)

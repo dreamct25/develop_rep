@@ -1,10 +1,9 @@
 <template lang="pug">
-     teleport(to="#app")
-        Transition(name="toggle")
-            template(v-if="toggleModalStatus")
-                .modal-outer(:class="addClass")
-                    slot
-
+teleport(to="#app")
+    Transition(name="toggle")
+        template(v-if="toggleModalStatus")
+            .modal-outer(:class="addClass")
+                slot
 </template>
 <style lang="scss" scoped>
 

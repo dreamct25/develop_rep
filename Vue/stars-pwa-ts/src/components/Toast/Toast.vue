@@ -1,81 +1,128 @@
 <template lang="pug">
-    teleport(to="#app")
-       Transition(name="toggle")
-           template(v-if="toggleToastStatus")
-               .toast-outer
-                    template(v-if="iconStatus ? true : false")
-                        .icon
-                            template(v-if="iconStatus === 'success'")
-                                i.fas.fa-check-circle.success
-                            template(v-if="iconStatus === 'info'")
-                                i.fas.fa-info-circle.info
-                            template(v-if="iconStatus === 'error'")
-                                i.fas.fa-times-circle.error
-                    div {{ toastText }}
-
+teleport(to="#app")
+    .toast-outer-frame(ref="toastOuterFrameRef")
 </template>
-<style lang="scss" scoped>
+<style lang="scss">
 
-   .toast-outer {
-       position: fixed;
-       top: 0;
-       left: 0;
-       right: 0;
-       z-index: 500;
-       background-color: rgba(30,30,30,.5);
-       backdrop-filter: blur(10px);
-       -webkit-backdrop-filter: blur(10px);
-       margin: 12px;
-       border-radius: 5px;
-       box-shadow: 0 0 0 .5px rgba(255,255,255,.7);
-
-       .icon {
-        position: absolute;
-        top: 50%;
+   .toast-outer-frame {
+        position: fixed;
+        top: 0;
+        right: 0;
         left: 0;
-        transform: translateY(-50%);
-        margin-left: 16px;
+        width: 390px;
+        margin: 0 auto;
+        z-index: 400;
 
-        .success {
-            color: rgb(0,221,0);
+        @media screen and (max-width: 430px) {
+            width: auto;
         }
 
-        .info {
-            color: rgb(0,187,255);
+        .toast-message-box {
+            position: relative;
+            margin: 6px;
+            padding: 12px;
+            display: grid;
+            grid-template-columns: 0fr 1fr;
+            gap: 8px;
+            opacity: 0;
+            transform: translateY(-100%) scale(.5);
+            color: white;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 0 2px 0px rgba(255, 255, 255, .5);
+            border-radius: 5px;
+            background-color: rgba(30, 30, 30, .5);
+            align-items: center;
+
+            .box-text {
+                text-align: center;
+                word-break: break-word;
+                white-space: pre-line;
+                line-height: 24px;
+            }
+
+            i {
+
+                &.success {
+                    color: rgb(0,221,0);
+                    font-size: 20px;
+                }
+
+                &.error {
+                    color: rgb(255,51,51);
+                    font-size: 20px;
+                }
+
+                &.info {
+                    color: rgb(0,221,221);
+                    font-size: 20px;
+                }
+            }
         }
-
-        .error {
-            color: rgb(255,51,51);
-        }
-       }
-
-       div {
-        padding: 12px 0;
-        text-align: center;
-       }
-   }
-
-   .toggle-enter-active,
-   .toggle-leave-active {
-       transition: opacity .5s ease, transform .5s ease;
-   }
-
-   .toggle-enter-from,
-   .toggle-leave-to {
-       opacity: 0;
-       transform: translateY(-100%);
-   }
+    }
 </style>
 <script lang="ts">
-import { defineComponent, toRefs } from 'vue'
+import { defineComponent, ref, nextTick, render, h, inject, Fragment } from 'vue'
+import { type ProviderObjType } from '@/App.vue'
 
-export default defineComponent({
-    props:['toggleToastStatus', 'toastText', 'iconStatus'],
-    setup(props: { toggleToastStatus: boolean, toastText: string, iconStatus?: string }){
+export default defineComponent<any>({
+    expose: ['show'],
+    setup(){
 
-        const propsRefs = toRefs(props)
+        const { $ } = inject<ProviderObjType>('NewProvider')!
 
-        return { ...propsRefs }
+        const toastOuterFrameRef = ref<HTMLDivElement | null>(null)
+
+        const show:(toastText: string, iconStatus: string) => Promise<void> = async (toastText, iconStatus) => {
+
+            await nextTick()
+
+            if(!toastOuterFrameRef.value) return
+
+            if(toastText === '') return
+
+            const duration = 2500
+
+            const signIcon: Record<string, string> = {
+                'success': 'fas fa-check-circle success',
+                'error': 'fas fa-times-circle error',
+                'info': 'fas fa-info-circle info'
+            }
+
+            const toastMessageBox = $.createDom('div', {
+                className: 'toast-message-box'
+            })
+
+            render(
+                h(Fragment, null, [
+                    h('i', { class: signIcon[iconStatus] }),
+                    h('div', {
+                        class: 'box-text',
+                        textContent: toastText
+                    })
+                ]),
+                toastMessageBox
+            )
+
+            toastOuterFrameRef.value.prepend(toastMessageBox)
+
+            toastMessageBox.animate(
+                { transform: 'translateY(0%) scale(1)', opacity: 1 }, 
+                { duration: 500, fill: 'forwards', easing: 'ease' }
+            )
+
+            await $.useSleep(duration)
+
+            toastMessageBox.animate(
+                { transform: 'translateY(-100%) scale(.5)', opacity: 0 }, 
+                { duration: 500, fill: 'forwards', easing: 'ease' }
+            )
+
+            await $.useSleep(duration)
+
+            toastMessageBox.remove()
+        }
+
+        return { toastOuterFrameRef, show }
     }
 })
 
